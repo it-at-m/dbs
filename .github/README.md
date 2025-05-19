@@ -12,7 +12,7 @@
 <!-- Project specific links -->
 [refarch-documentation]: https://refarch.oss.muenchen.de/
 [refarch-code]: https://github.com/it-at-m/refarch
-[spring-documentation]: https://spring.io/ 
+[spring-documentation]: https://spring.io/
 [vuejs-documentation]:  https://vuejs.org/
 [getting-started-documentation]: https://refarch.oss.muenchen.de/templates/getting-started
 [develop-documentation]: https://refarch.oss.muenchen.de/templates/develop
@@ -25,35 +25,40 @@
 [made-with-love-shield]: https://img.shields.io/badge/made%20with%20%E2%9D%A4%20by-it%40M-yellow?style=for-the-badge
 [license-shield]: https://img.shields.io/github/license/it-at-m/refarch-templates?style=for-the-badge
 
-# RefArch Templates
-
-[![Documentation][documentation-shield]][documentation]
-[![New issue][new-issue-shield]][new-issue]
+# dbs
 [![Made with love by it@M][made-with-love-shield]][itm-opensource]
 [![GitHub license][license-shield]][license]
 
-This project acts as a template and provides starter files for web application projects based on the RefArch (reference architecture) of it@M.
+The repository contains components for the Digital Citizen Service of the City of Munich. It currently includes the personalization service. In the future, the repository will be expanded to include web components for the Digital Citizen Service.
 
-To learn more about the architecture itself, checkout its [documentation][refarch-documentation] or [code][refarch-code].
+## Build with
+The project is built with technologies we use in our projects ([reference architecture][refarch-documentation]):
 
-The templates are based on [Spring][spring-documentation] and [Vue.js][vuejs-documentation].
+- [Spring][spring-documentation]
+- [Vue.js][vuejs-documentation]
 
-## Usage
+## Getting Started
 
-To get set up and learn more about the templates, please check out the [Getting Started][getting-started-documentation] page.
-Also check the respective pages with suggestions on how to [develop][develop-documentation], [document][document-documentation] and [organize][organize-documentation] your project.
-
-## Roadmap
-
-See the [open issues][open-issues] for a full list of proposed features (and known issues).
-To get a better overview on what's currently being worked on, check out our [project board][project-board].
-We often also plan our issues in [milestones][milestones].
+1. Build it with `mvn clean install`
+2. Run the stack using `docker-compose` in the stack folder
+3. Run the PersonalizationServiceApplication
 
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-To learn more about how you can contribute, please read our [contribution documentation][contribution-documentation].
+If you have a suggestion that would make this better, please open an issue with the tag "enhancement", fork the repo and
+create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Open an issue with the tag "enhancement"
+2. Fork the Project
+3. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the Branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
+
+More about this in the [CODE_OF_CONDUCT](/CODE_OF_CONDUCT.md) file.
 
 ## License
 
