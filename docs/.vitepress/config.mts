@@ -4,7 +4,8 @@ import { withMermaid } from "vitepress-plugin-mermaid";
 // https://vitepress.dev/reference/site-config
 const vitepressConfig = defineConfig({
   title: "DBS",
-  description: "Documentation for the Digital Citizen Service of the City of Munich",
+  description:
+    "Documentation for the Digital Citizen Service of the City of Munich",
   head: [
     [
       "link",
@@ -17,9 +18,7 @@ const vitepressConfig = defineConfig({
   lastUpdated: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    socialLinks: [
-      { icon: "github", link: "https://github.com/it-at-m/dbs" },
-    ],
+    socialLinks: [{ icon: "github", link: "https://github.com/it-at-m/dbs" }],
     search: {
       provider: "local",
     },
