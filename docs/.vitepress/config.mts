@@ -3,8 +3,8 @@ import { withMermaid } from "vitepress-plugin-mermaid";
 
 // https://vitepress.dev/reference/site-config
 const vitepressConfig = defineConfig({
-  title: "RefArch Docs Template",
-  description: "Documentation template from the RefArch Templates",
+  title: "DBS",
+  description: "Documentation for the Digital Citizen Service of the City of Munich",
   head: [
     [
       "link",
@@ -17,34 +17,9 @@ const vitepressConfig = defineConfig({
   lastUpdated: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      { text: "Home", link: "/" },
-      {
-        text: "Docs",
-        items: [
-          { text: "Example", link: "/example" },
-          { text: "External link", link: "https://refarch.oss.muenchen.de" },
-        ],
-      },
-    ],
-    sidebar: [
-      { text: "Example", link: "/example" },
-      { text: "External link", link: "https://refarch.oss.muenchen.de" },
-    ],
     socialLinks: [
-      { icon: "github", link: "https://github.com/it-at-m/refarch-templates" },
+      { icon: "github", link: "https://github.com/it-at-m/dbs" },
     ],
-    editLink: {
-      pattern:
-        "https://github.com/it-at-m/refarch-templates/blob/main/docs/:path",
-      text: "View this page on GitHub",
-    },
-    footer: {
-      message: `<a href="https://opensource.muenchen.de/impress.html">Impress and Contact</a>`,
-    },
-    outline: {
-      level: "deep",
-    },
     search: {
       provider: "local",
     },
