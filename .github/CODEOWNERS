@@ -5,4 +5,4 @@
 /.github/CODEOWNERS @it-at-m/dbs-admin
 
 # Work from SPS-Team
-/.github/workflows @it-at-m/sps @it-at-m/dbs-maintainer
+/.github/workflows @it-at-m/dbs-maintainer
