@@ -2,3 +2,6 @@
   - head-branch: [ '^feat', '-feature-' ]
 "Type: Bug":
   - head-branch: [ '^bug', '-bug-' ]
+"Template: personalization-service":
+  - changed-files:
+      - any-glob-to-any-file: [ 'personalization-service/**' ]
