@@ -7,6 +7,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      issues: write # permission to create labels if not exist
     runs-on: ubuntu-latest
     steps:
       - uses: it-at-m/lhm_actions/action-templates/actions/action-pr-labeler@0f8ed45a5eb72bf1cc2fe1d3dbcbcfb852549c27 # v1.0.17
