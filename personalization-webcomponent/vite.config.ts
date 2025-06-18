@@ -35,8 +35,9 @@ export default defineConfig(({ mode }) => {
       manifest: true, // required for post build logic in 'processes' folder
       rollupOptions: {
         input: {
-          "personalization-hello-world-webcomponent":
-            "./src/personalization-hello-world-webcomponent.ts",
+          "checklist-detail": "./src/checklist-detail-webcomponent.ts",
+          "checklist-overview": "./src/checklist-overview-webcomponent.ts",
+          "my-checklists": "./src/my-checklists-webcomponent.ts",
         },
         output: {
           entryFileNames: "entry-[name]-[hash].js",
