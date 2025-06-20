@@ -29,7 +29,7 @@
 [![Made with love by it@M][made-with-love-shield]][itm-opensource]
 [![GitHub license][license-shield]][license]
 
-The repository contains components for the Digital Citizen Service of the City of Munich. It currently includes the personalization service and it's corresponding webcomponents. 
+The repository contains components for the Digital Citizen Service of the City of Munich. It currently includes the personalization service and it's corresponding webcomponents.
 
 In the future, the repository will be expanded to include the other artifacts which form the Digital Citizen Service.
 
