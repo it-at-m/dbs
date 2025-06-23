@@ -1,35 +1,38 @@
 <template>
-  <div>
+  <main>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
-    <muc-callout>
-      <template #header>
-        <p>my-checklists Webcomponent</p>
-      </template>
-      <template #content>
-        <p>{{ calloutContent }}</p>
-      </template>
-    </muc-callout>
-  </div>
+    <h1>Aktive Checklisten ({{ checklists.length }})</h1>
+    <muc-card-container
+      style="grid-template-columns: repeat(auto-fit,589px)"
+    >
+      <checklist-card
+          v-for="(checklist, index) in checklists"
+          :key="index"
+          :checklist="checklist">
+      </checklist-card>
+    </muc-card-container>
+  </main>
 </template>
 
 <script setup lang="ts">
-import { MucCallout } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { computed } from "vue";
+import {onMounted, ref} from "vue";
+import {MucCardContainer} from "@muenchen/muc-patternlab-vue";
+import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
+import ChecklistCard from "@/components/ChecklistCard.vue";
 
-import { FIRSTNAME_DEFAULT } from "@/util/constants";
+const checklists = ref<DummyChecklist[]>([]);
 
-const { firstName = FIRSTNAME_DEFAULT } = defineProps<{
-  firstName?: string;
-}>();
+onMounted(() => {
+  const dcl = new DummyChecklistService();
+  checklists.value = dcl.getChecklists();
+})
 
-const calloutContent = computed(() => {
-  return `Hello ${firstName}`;
-});
 </script>
 
 <style>
