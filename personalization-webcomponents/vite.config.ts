@@ -33,6 +33,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       manifest: true, // required for post build logic in 'processes' folder
+      minify: true,
       rollupOptions: {
         input: {
           "checklist-detail": "./src/checklist-detail-webcomponent.ts",
