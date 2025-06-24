@@ -10,6 +10,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
  */
 @SuppressWarnings("PMD.DataClass")
 public final class Authorities {
+    public static final String CHECKLIST_GET = "hasAnyRole('reader', 'writer')";
+    public static final String CHECKLIST_GET_ALL = "hasAnyRole('reader', 'writer')";
+    public static final String CHECKLIST_CREATE = "hasAnyRole('writer')";
+    public static final String CHECKLIST_UPDATE = "hasAnyRole('writer')";
+
     public static final String THEENTITY_GET = "hasAnyRole('reader', 'writer')";
     public static final String THEENTITY_GET_ALL = "hasAnyRole('reader', 'writer')";
     public static final String THEENTITY_CREATE = "hasAnyRole('writer')";
