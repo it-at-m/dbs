@@ -29,9 +29,12 @@
 [![Made with love by it@M][made-with-love-shield]][itm-opensource]
 [![GitHub license][license-shield]][license]
 
-The repository contains components for the Digital Citizen Service of the City of Munich. It currently includes the personalization service. In the future, the repository will be expanded to include web components for the Digital Citizen Service.
+The repository contains components for the Digital Citizen Service of the City of Munich. It currently includes the personalization service and it's corresponding webcomponents.
+
+In the future, the repository will be expanded to include the other artifacts which form the Digital Citizen Service.
 
 ## Build with
+
 The project is built with technologies we use in our projects ([reference architecture][refarch-documentation]):
 
 - [Spring][spring-documentation]
@@ -39,9 +42,16 @@ The project is built with technologies we use in our projects ([reference archit
 
 ## Getting Started
 
+### personalization-service
+
 1. Build it with `mvn clean install`
 2. Run the stack using `docker-compose` in the stack folder
 3. Run the PersonalizationServiceApplication
+
+### personalization-webcomponents
+
+1. Install dependencies with `npm i`
+2. Run local dev server with `npm run dev`
 
 ## Contributing
 
