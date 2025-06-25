@@ -13,7 +13,7 @@
     <template #content>
 
       <div>
-        <chip
+        <muc-chip
             v-if="todoCount"
             style="margin-right: 16px"
             background-color="#FDD1AC"
@@ -26,8 +26,8 @@
           >
             <use href="#icon-pencil"/>
           </svg>
-        </chip>
-        <chip
+        </muc-chip>
+        <muc-chip
             v-if="doneCount"
             background-color="#B7D2B7"
         >
@@ -39,7 +39,7 @@
           >
             <use href="#icon-check"/>
           </svg>
-        </chip>
+        </muc-chip>
       </div>
 
       <div
@@ -62,7 +62,7 @@
 <script setup lang="ts">
 import {MucCard} from "@muenchen/muc-patternlab-vue";
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
-import Chip from "@/components/common/Chip.vue";
+import MucChip from "@/components/common/muc-chip.vue";
 import {computed} from "vue";
 
 const props = defineProps<{
