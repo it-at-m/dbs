@@ -6,6 +6,7 @@ import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.crea
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -14,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.dbs.personalization.TestConstants;
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
 import java.util.List;
@@ -93,21 +95,21 @@ public class ChecklistIntegrationTest {
         }
     }
 
-    //    @Nested
-    //    class CreateChecklist {
-    //        @Test
-    //        void givenChecklist_thenChecklistIsSaved() throws Exception {
-    //            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("lhmExtId", List.of("item1", "item2"));
-    //            final String requestBody = objectMapper.writeValueAsString(requestDTO);
-    //
-    //            mockMvc.perform(post("/checklist")
-    //                            .content(requestBody)
-    //                            .contentType(MediaType.APPLICATION_JSON))
-    //                    .andExpect(status().isCreated())
-    //                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    //                    .andExpect(jsonPath("$.lhmExtId", is(requestDTO.lhmExtId())));
-    //        }
-    //    }
+    @Nested
+    class CreateChecklist {
+        @Test
+        void givenChecklist_thenChecklistIsSaved() throws Exception {
+            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("createChecklistId", List.of("item1", "item2"));
+            final String requestBody = objectMapper.writeValueAsString(requestDTO);
+
+            mockMvc.perform(post("/checklist")
+                    .content(requestBody)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isCreated())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.lhmExtId", is(requestDTO.lhmExtId())));
+        }
+    }
 
     @Nested
     class UpdateChecklist {

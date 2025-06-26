@@ -24,14 +24,14 @@ public class ChecklistController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ChecklistReadDTO> getChecklists(@RequestHeader(value = "lhmExtID") String lhmExtID) {
+    public List<ChecklistReadDTO> getChecklists(@RequestHeader("lhmExtID") final String lhmExtID) {
         final List<Checklist> checklists = checklistService.getChecklists(lhmExtID);
         return checklists.stream().map(checklistMapper::toReadDTO).toList();
     }
 
     @GetMapping(path = "/{checklistID}")
     @ResponseStatus(HttpStatus.OK)
-    public ChecklistReadDTO getChecklist(@PathVariable("checklistID") UUID checklistID) {
+    public ChecklistReadDTO getChecklist(@PathVariable("checklistID") final UUID checklistID) {
         return checklistMapper.toReadDTO(checklistService.getChecklist(checklistID));
     }
 

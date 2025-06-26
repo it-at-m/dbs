@@ -44,7 +44,7 @@ public class ChecklistServiceTest {
     //            final Checklist result = checklistService.createChecklist(userID, listOfIds);
     //
     //            // Then
-    //            assertThat(result).usingRecursiveComparison().ignoringFields("id").isEqualTo(expectedChecklist);
+    //            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
     //            verify(checklistRepository).save(checklistToSave);
     //        }
     //    }
