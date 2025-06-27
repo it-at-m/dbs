@@ -4,7 +4,12 @@
     <div v-html="mucIconsSprite"/>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite"/>
-    <h1>Aktive Checklisten ({{ checklists.length }})</h1>
+    <h1
+      style="padding-bottom: 24px;"
+    >
+      <muc-icon icon="order-bool-ascending"></muc-icon>
+      Aktive Checklisten ({{ checklists.length }})
+    </h1>
     <muc-card-container
         style="grid-template-columns: repeat(auto-fit,589px)"
     >
@@ -27,11 +32,16 @@
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import {onMounted, ref} from "vue";
-import {MucCardContainer, MucCard} from "@muenchen/muc-patternlab-vue";
+import {MucCardContainer, MucIcon} from "@muenchen/muc-patternlab-vue";
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
+
+const props = defineProps<{
+  checklistDetailUrl: string,
+  newChecklistUrl: string
+}>();
 
 const checklists = ref<DummyChecklist[]>([]);
 const loading = ref(false);

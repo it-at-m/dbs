@@ -45,10 +45,15 @@
       <div
         style="padding-top: 16px; padding-bottom: 20px;"
       >
-        <p v-for="(item) in firstThreeItemsSortedByChecked">
-          <span>{{ item.checked ? "☑️" : "🔘"}}</span>
-          <span>{{item.title}}</span>
-        </p>
+        <checklistitem-listitem
+            v-for="(item, index) in firstThreeItemsSortedByChecked"
+            :checklist-item="item"
+            :class="{
+              'pt-8': index != 0,
+              'pb-8': index != firstThreeItemsSortedByChecked.length - 1
+            }"
+        >
+        </checklistitem-listitem>
       </div>
 
       <div>
@@ -64,6 +69,7 @@ import {MucCard} from "@muenchen/muc-patternlab-vue";
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 import MucChip from "@/components/common/muc-chip.vue";
 import {computed} from "vue";
+import ChecklistitemListitem from "@/components/checklistitem-listitem.vue";
 
 const props = defineProps<{
   checklist: DummyChecklist;
@@ -83,3 +89,12 @@ const firstThreeItemsSortedByChecked = computed(() => {
 });
 
 </script>
+
+<style>
+.pt-8 {
+  padding-top: 8px;
+}
+.pb-8 {
+  padding-bottom: 8px;
+}
+</style>
