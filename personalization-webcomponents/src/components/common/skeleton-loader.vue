@@ -9,7 +9,6 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
         <div class="prod--col prod--details">
           <div class="prod--row prod--name">
             <span
-              id="productName"
               class="prod--name-text skeleton-loader"
             />
           </div>
@@ -21,13 +20,11 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
         <div class="prod--col prod--details">
           <div class="prod--row prod--description">
             <span
-              id="productId"
               class="prod--description-text skeleton-loader"
             />
           </div>
           <div class="prod--row prod--description">
             <span
-              id="productId"
               class="prod--description-text skeleton-loader"
             />
           </div>
