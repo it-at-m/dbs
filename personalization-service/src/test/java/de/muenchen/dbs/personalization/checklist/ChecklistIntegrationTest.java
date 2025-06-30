@@ -140,7 +140,7 @@ public class ChecklistIntegrationTest {
         @Test
         void givenChecklistId_thenChecklistIsDeleted() throws Exception {
             mockMvc.perform(delete("/checklist/{checklistID}", testChecklistId)
-                            .contentType(MediaType.APPLICATION_JSON))
+                    .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         }
     }
