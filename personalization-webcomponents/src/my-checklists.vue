@@ -1,49 +1,51 @@
 <template>
   <main class="container">
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="mucIconsSprite"/>
+    <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="customIconsSprite"/>
-    <h2
-      style="display: flex; align-items: center; margin-bottom: 24px;"
-    >
+    <div v-html="customIconsSprite" />
+    <h2 style="display: flex; align-items: center; margin-bottom: 24px">
       <muc-icon
-          style="width: 32px; height: 32px; margin-right: 8px;"
-          icon="order-bool-ascending"
+        style="width: 32px; height: 32px; margin-right: 8px"
+        icon="order-bool-ascending"
       ></muc-icon>
       Aktive Checklisten ({{ checklists.length }})
     </h2>
-    <muc-card-container
-        class="checklist-card-container"
-    >
-      <skeleton-loader
-          v-for="() in [1,2,3,4]"
-          v-if="loading"
-      >
-      </skeleton-loader>
-      <checklist-card
-          v-else
+    <muc-card-container class="checklist-card-container">
+      <div v-if="loading">
+        <skeleton-loader
+          v-for="elem in [1, 2, 3, 4]"
+          :key="elem"
+        >
+        </skeleton-loader>
+      </div>
+      <div v-else>
+        <checklist-card
           v-for="(checklist, index) in checklists"
           :key="index"
-          :checklist="checklist">
-      </checklist-card>
+          :checklist="checklist"
+        >
+        </checklist-card>
+      </div>
     </muc-card-container>
   </main>
 </template>
 
 <script setup lang="ts">
+import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+
+import { MucCardContainer, MucIcon } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import {onMounted, ref} from "vue";
-import {MucCardContainer, MucIcon} from "@muenchen/muc-patternlab-vue";
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import { onMounted, ref } from "vue";
+
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
 
-const props = defineProps<{
-  checklistDetailUrl: string,
-  newChecklistUrl: string
+defineProps<{
+  checklistDetailUrl: string;
+  newChecklistUrl: string;
 }>();
 
 const checklists = ref<DummyChecklist[]>([]);
@@ -52,13 +54,13 @@ const loading = ref(false);
 onMounted(() => {
   loading.value = true;
   const dcl = new DummyChecklistService();
-  dcl.getChecklists()
-      .then((checklist) => {
-        checklists.value = checklist;
-      })
-      .finally(() => loading.value = false);
-})
-
+  dcl
+    .getChecklists()
+    .then((checklist) => {
+      checklists.value = checklist;
+    })
+    .finally(() => (loading.value = false));
+});
 </script>
 
 <style>
@@ -74,8 +76,7 @@ onMounted(() => {
 
 @media (min-width: 768px) {
   .checklist-card-container {
-    grid-template-columns: repeat(auto-fit,589px);
+    grid-template-columns: repeat(auto-fit, 589px);
   }
 }
-
 </style>

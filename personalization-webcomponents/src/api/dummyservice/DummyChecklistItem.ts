@@ -1,7 +1,7 @@
 export default interface DummyChecklistItem {
-    serviceID: string,
-    checked: Date | null,
-    title: string,
-    note: string,
-    required: boolean
+  serviceID: string;
+  checked: Date | null;
+  title: string;
+  note: string;
+  required: boolean;
 }

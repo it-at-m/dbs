@@ -1,20 +1,16 @@
 <script setup lang="ts">
-
-import {MucCard, MucCardContainer} from "@muenchen/muc-patternlab-vue";
+import { MucCard } from "@muenchen/muc-patternlab-vue";
 </script>
 
 <template>
-
-  <muc-card
-      title=""
-  >
+  <muc-card title="">
     <template #headerPrefix>
       <div class="prod--wrapper">
         <div class="prod--col prod--details">
           <div class="prod--row prod--name">
             <span
-                id="productName"
-                class="prod--name-text skeleton-loader"
+              id="productName"
+              class="prod--name-text skeleton-loader"
             />
           </div>
         </div>
@@ -25,14 +21,14 @@ import {MucCard, MucCardContainer} from "@muenchen/muc-patternlab-vue";
         <div class="prod--col prod--details">
           <div class="prod--row prod--description">
             <span
-                id="productId"
-                class="prod--description-text skeleton-loader"
+              id="productId"
+              class="prod--description-text skeleton-loader"
             />
           </div>
           <div class="prod--row prod--description">
             <span
-                id="productId"
-                class="prod--description-text skeleton-loader"
+              id="productId"
+              class="prod--description-text skeleton-loader"
             />
           </div>
         </div>
@@ -107,13 +103,14 @@ import {MucCard, MucCardContainer} from "@muenchen/muc-patternlab-vue";
   width: 100%;
   height: 15px;
   display: block;
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
       rgba(255, 255, 255, 0) 80%
-  ),
-  lightgray;
+    ),
+    lightgray;
   background-repeat: repeat-y;
   background-size: 50px 500px;
   background-position: 0 0;

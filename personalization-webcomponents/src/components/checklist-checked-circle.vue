@@ -1,19 +1,14 @@
 <template>
   <div
-      class="circle"
-      :class="checked ? 'checked' : ''"
-  >
-  </div>
+    class="circle"
+    :class="checked ? 'checked' : ''"
+  ></div>
 </template>
 
 <script setup lang="ts">
-
-import {MucIcon} from "@muenchen/muc-patternlab-vue";
-
-const props = defineProps<{
+defineProps<{
   checked: boolean;
 }>();
-
 </script>
 
 <style scoped>
