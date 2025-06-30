@@ -3,6 +3,7 @@ import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 export default class DummyChecklistService {
   dummyResponse: DummyChecklist[] = [
     {
+      id: "1111",
       title: "Ich habe wenig Geld.",
       lhmExtId: "111",
       lastUpdated: new Date(),
@@ -45,6 +46,7 @@ export default class DummyChecklistService {
       ],
     },
     {
+      id: "2222",
       title: "Ich will umziehen.",
       lhmExtId: "111",
       lastUpdated: new Date(),
@@ -122,6 +124,7 @@ export default class DummyChecklistService {
       ],
     },
     {
+      id: "3333",
       title: "Ich manage eine Familie.",
       lhmExtId: "111",
       lastUpdated: new Date(),

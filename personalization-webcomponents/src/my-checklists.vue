@@ -27,6 +27,8 @@
         >
         </checklist-card>
       </div>
+          :checklist-detail-url="checklistDetailUrl"
+      >
     </muc-card-container>
   </main>
 </template>
