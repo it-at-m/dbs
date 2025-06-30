@@ -5,9 +5,14 @@
   >
     <template #headerPrefix>
       <div
-          style="padding-right: 16px; font-size: 32px;"
+          class="card-header-icon"
       >
-        <img src="https://assets.muenchen.de/mde/1.0.10/assets/svg/pictograms/pictogram-cash.svg" alt="cash-icon"></img>
+        <img
+            width="56px"
+            height="56px"
+            :src="getChecklistIconByTitle(checklist.title)"
+            alt="checklist-icon"
+        ></img>
       </div>
     </template>
     <template #content>
@@ -70,6 +75,7 @@ import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 import MucChip from "@/components/common/muc-chip.vue";
 import {computed} from "vue";
 import ChecklistitemListitem from "@/components/checklistitem-listitem.vue";
+import {CHECKLIST_TITLE_TO_ICON_MAP, getChecklistIconByTitle} from "@/util/constants.ts";
 
 const props = defineProps<{
   checklist: DummyChecklist;
@@ -90,10 +96,17 @@ const firstThreeItemsSortedByChecked = computed(() => {
 
 </script>
 
-<style>
+<style scoped>
+.card-header-icon {
+  margin-right: 16px;
+  border: 1px solid var(--color-neutrals-blue);
+  border-radius: 56px;
+}
+
 .pt-8 {
   padding-top: 8px;
 }
+
 .pb-8 {
   padding-bottom: 8px;
 }
