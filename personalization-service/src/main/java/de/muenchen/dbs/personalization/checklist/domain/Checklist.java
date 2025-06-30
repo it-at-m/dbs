@@ -29,11 +29,11 @@ public class Checklist extends BaseEntity {
     @NotNull
     private String lhmExtId;
 
-    @Column(name = "last-update")
+    @Column(name = "last_update")
     private ZonedDateTime lastUpdate;
 
     @ElementCollection
-    @CollectionTable(joinColumns = @JoinColumn(name = "checklist_id"))
+    @CollectionTable(name = "checklist_item", joinColumns = @JoinColumn(name = "checklist_id"))
     private List<ChecklistItem> checklistItems;
 
 }
