@@ -105,7 +105,7 @@ function gotoChecklist(checklistId: string) {
 .card-header-icon {
   margin-right: 16px;
   border: 1px solid var(--color-neutrals-blue);
-  border-radius: 56px;
+  border-radius: 50%;
 }
 
 .pt-8 {

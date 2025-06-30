@@ -15,7 +15,7 @@ defineProps<{
 .circle {
   width: 20px;
   height: 20px;
-  border-radius: 24px;
+  border-radius: 50%;
   border: 2px solid var(--color-brand-main-blue);
 }
 
