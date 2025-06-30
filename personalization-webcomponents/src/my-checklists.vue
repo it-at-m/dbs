@@ -1,17 +1,20 @@
 <template>
-  <main>
+  <main class="container">
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="mucIconsSprite"/>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite"/>
-    <h1
-      style="padding-bottom: 24px;"
+    <h2
+      style="display: flex; align-items: center; margin-bottom: 24px;"
     >
-      <muc-icon icon="order-bool-ascending"></muc-icon>
+      <muc-icon
+          style="width: 32px; height: 32px; margin-right: 8px;"
+          icon="order-bool-ascending"
+      ></muc-icon>
       Aktive Checklisten ({{ checklists.length }})
-    </h1>
+    </h2>
     <muc-card-container
-        style="grid-template-columns: repeat(auto-fit,589px)"
+        class="checklist-card-container"
     >
       <skeleton-loader
           v-for="() in [1,2,3,4]"
@@ -62,4 +65,17 @@ onMounted(() => {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+</style>
+
+<style scoped>
+.checklist-card-container {
+  grid-template-columns: repeat(auto-fit, 100%);
+}
+
+@media (min-width: 768px) {
+  .checklist-card-container {
+    grid-template-columns: repeat(auto-fit,589px);
+  }
+}
+
 </style>
