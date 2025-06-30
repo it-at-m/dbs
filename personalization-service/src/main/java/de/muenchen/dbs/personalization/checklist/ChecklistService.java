@@ -52,6 +52,12 @@ public class ChecklistService {
         return checklistRepository.save(foundChecklist);
     }
 
+    @PreAuthorize(Authorities.CHECKLIST_DELETE)
+    public void deleteChecklist(final UUID checklistId) {
+        log.debug("Delete Checklist with ID {}", checklistId);
+        checklistRepository.deleteById(checklistId);
+    }
+
     private Checklist getCheckistOrThrowException(final UUID checklistId) {
         return checklistRepository
                 .findById(checklistId)

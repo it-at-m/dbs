@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -149,6 +150,22 @@ public class ChecklistServiceTest {
             Assertions.assertEquals(NotFoundException.class, exception.getClass());
             Assertions.assertEquals(exception.getMessage(), String.format("404 NOT_FOUND \"Could not find entity with id %s\"", checklistToUpdateId));
 
+        }
+    }
+
+    @Nested
+    class DeleteChecklist {
+        @Test
+        void givenChecklistId_thenReturnVoid() {
+            // Given
+            final UUID checklistToDeleteId = UUID.randomUUID();
+            Mockito.doNothing().when(checklistRepository).deleteById(checklistToDeleteId);
+
+            // When
+            checklistService.deleteChecklist(checklistToDeleteId);
+
+            // Then
+            verify(checklistRepository).deleteById(checklistToDeleteId);
         }
     }
 }

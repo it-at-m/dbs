@@ -46,10 +46,17 @@ public class ChecklistController {
     }
 
     @PutMapping("/{checklistID}")
-    @Operation(summary = "Update a new checklist", description = "Updates a new checklist using the provided checklist details.")
+    @Operation(summary = "Update a checklist", description = "Updates a checklist using the provided checklist details.")
     @ResponseStatus(HttpStatus.OK)
     public ChecklistReadDTO updateChecklist(@Valid @RequestBody final ChecklistUpdateDTO checklistUpdateDTO,
             @PathVariable("checklistID") final UUID checklistID) {
         return checklistMapper.toReadDTO(checklistService.updateChecklist(checklistMapper.toUpdateChecklist(checklistUpdateDTO), checklistID));
+    }
+
+    @DeleteMapping("/{checklistID}")
+    @Operation(summary = "Delete a checklist", description = "Deletes a checklist by checklistId.")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteChecklist(@PathVariable("checklistID") final UUID checklistID) {
+        checklistService.deleteChecklist(checklistID);
     }
 }

@@ -5,6 +5,7 @@ import static de.muenchen.dbs.personalization.TestConstants.SPRING_TEST_PROFILE;
 import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.createTestChecklist;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -131,6 +132,16 @@ public class ChecklistIntegrationTest {
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
                     .andExpect(jsonPath("$.checklistItems", hasSize(3)));
+        }
+    }
+
+    @Nested
+    class DeleteChecklist {
+        @Test
+        void givenChecklistId_thenChecklistIsDeleted() throws Exception {
+            mockMvc.perform(delete("/checklist/{checklistID}", testChecklistId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
         }
     }
 
