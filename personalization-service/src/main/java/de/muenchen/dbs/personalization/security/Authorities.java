@@ -23,11 +23,11 @@ public final class Authorities {
     public static final String THEENTITY_DELETE = "hasAnyRole('writer')";
 
     // Permissions based auth
-    // public static final String THEENTITY_GET = "hasAuthority('REFARCH_THEENTITY_READ')";
-    // public static final String THEENTITY_GET_ALL = "hasAuthority('REFARCH_THEENTITY_READ')";
-    // public static final String THEENTITY_CREATE = "hasAuthority('REFARCH_THEENTITY_WRITE')";
-    // public static final String THEENTITY_UPDATE = "hasAuthority('REFARCH_THEENTITY_WRITE')";
-    // public static final String THEENTITY_DELETE = "hasAuthority('REFARCH_THEENTITY_DELETE')";
+    // public static final String CHECKLIST_GET = "hasAuthority('DBS_CHECKLIST_READ')";
+    // public static final String CHECKLIST_GET_ALL = "hasAuthority('DBS_CHECKLIST_READ')";
+    // public static final String CHECKLIST_CREATE = "hasAuthority('DBS_CHECKLIST_WRITE')";
+    // public static final String CHECKLIST_UPDATE = "hasAuthority('DBS_CHECKLIST_WRITE')";
+    // public static final String CHECKLIST_DELETE = "hasAuthority('DBS_CHECKLIST_DELETE')";
 
     private Authorities() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
