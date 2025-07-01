@@ -1,9 +1,3 @@
-create table the_entity (
-    text_attribute varchar(8) not null,
-    id uuid not null,
-    primary key (id)
-);
-
 create table checklist (
     lhm_ext_id varchar(255) not null,
     last_update timestamp with time zone,

@@ -27,28 +27,30 @@ public class ChecklistServiceTest {
     @InjectMocks
     private ChecklistService checklistService;
 
-    //    @Nested
-    //    class CreateChecklist {
+    //     TODO Completion after adding the services interface
     //
-    //        @Test
-    //        void givenChecklist_thenReturnChecklist() {
-    //            // Given
-    //            final List<String> listOfIds = List.of("item1", "item2");
-    //            final String userID = "lhmExtId";
+    //        @Nested
+    //        class CreateChecklist {
     //
-    //            final Checklist checklistToSave = createTestChecklist(null, userID, null);
-    //            final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getLhmExtId(), null);
+    //            @Test
+    //            void givenChecklist_thenReturnChecklist() {
+    //                // Given
+    //                final List<String> listOfIds = List.of("item1", "item2");
+    //                final String userID = "lhmExtId";
     //
-    //            when(checklistRepository.save(checklistToSave)).thenReturn(expectedChecklist);
+    //                final Checklist checklistToSave = createTestChecklist(null, userID, null);
+    //                final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getLhmExtId(), null);
     //
-    //            // When
-    //            final Checklist result = checklistService.createChecklist(userID, listOfIds);
+    //                when(checklistRepository.save(checklistToSave)).thenReturn(expectedChecklist);
     //
-    //            // Then
-    //            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
-    //            verify(checklistRepository).save(checklistToSave);
+    //                // When
+    //                final Checklist result = checklistService.createChecklist(userID, listOfIds);
+    //
+    //                // Then
+    //                assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
+    //                verify(checklistRepository).save(checklistToSave);
+    //            }
     //        }
-    //    }
 
     @Nested
     class GetChecklists {
