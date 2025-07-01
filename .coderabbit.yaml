@@ -1,10 +1,10 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+tone_instructions: "Friendly, thankful and supportive."
 reviews:
-  profile: "assertive"
+  profile: "chill"
   review_status: true
   auto_review:
-    enabled: true
-    auto_incremental_review: true
+    enabled: false
   tools:
     pmd:
       enabled: false
@@ -13,3 +13,6 @@ reviews:
   finishing_touches:
     docstrings:
       enabled: false # needs to be disabled as it collides with the PR require checklist functionality (workflow in .github/workflows/pr-checklist.yml)
+chat:
+  auto_reply: true
+  
