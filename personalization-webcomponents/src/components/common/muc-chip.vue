@@ -2,16 +2,15 @@
 defineProps({
   backgroundColor: {
     type: String,
-    default: "#fff"
-  }
-})
-
+    default: "#fff",
+  },
+});
 </script>
 
 <template>
   <div
-      class="chip"
-      :style="'background-color: ' + backgroundColor"
+    class="chip"
+    :style="'background-color: ' + backgroundColor"
   >
     <div class="chip-content">
       <slot />

@@ -4,12 +4,24 @@
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
-    <checklist-header
-    :checklist=checklists[1]
-    :loading=false>
-
-    </checklist-header>
-
+    <div v-html="customIconsSprite" />
+    <muc-card-container class="checklist-card-container">
+      <div v-if="loading">
+        <skeleton-loader
+            v-for="elem in [1, 2, 3, 4]"
+            :key="elem"
+        >
+        </skeleton-loader>
+      </div>
+      <div v-else>
+        <checklist-header
+            v-for="(checklist, index) in checklists"
+            :key="index"
+            :checklist="checklist"
+        >
+        </checklist-header>
+      </div>
+    </muc-card-container>
   </div>
 
 </template>
@@ -23,14 +35,24 @@ import { onMounted, ref} from "vue";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
+import {MucCardContainer} from "@muenchen/muc-patternlab-vue";
+import ChecklistCard from "@/components/ChecklistCard.vue";
+import SkeletonLoader from "@/components/common/skeleton-loader.vue";
 
 
 const checklists = ref<DummyChecklist[]>([]);
+const loading = ref(false);
 
 onMounted(() => {
+  loading.value = true;
   const dcl = new DummyChecklistService();
-  checklists.value = dcl.getChecklists();
-})
+  dcl
+      .getChecklists()
+      .then((checklist) => {
+        checklists.value = checklist;
+      })
+      .finally(() => (loading.value = false));
+});
 
 </script>
 
