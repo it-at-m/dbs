@@ -4,32 +4,34 @@
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
-    <muc-callout>
-      <template #header>
-        <p>checklist-domi Webcomponent</p>
-      </template>
-      <template #content>
-        <p>{{ calloutContent }}</p>
-      </template>
-    </muc-callout>
+    <checklist-header
+    :checklist=checklists[1]
+    :loading=false>
+
+    </checklist-header>
+
   </div>
+
 </template>
 
 <script setup lang="ts">
-import { MucCallout } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { computed } from "vue";
+import { onMounted, ref} from "vue";
 
-import { FIRSTNAME_DEFAULT } from "@/util/constants";
 
-const { firstName = FIRSTNAME_DEFAULT } = defineProps<{
-  firstName?: string;
-}>();
+import ChecklistHeader from "@/components/ChecklistHeader.vue";
+import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 
-const calloutContent = computed(() => {
-  return `Hello ${firstName}`;
-});
+
+const checklists = ref<DummyChecklist[]>([]);
+
+onMounted(() => {
+  const dcl = new DummyChecklistService();
+  checklists.value = dcl.getChecklists();
+})
+
 </script>
 
 <style>
