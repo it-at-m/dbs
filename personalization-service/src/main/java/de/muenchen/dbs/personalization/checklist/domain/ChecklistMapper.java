@@ -1,5 +1,6 @@
 package de.muenchen.dbs.personalization.checklist.domain;
 
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,4 +11,9 @@ public interface ChecklistMapper {
 
     @Mapping(target = "id", ignore = true)
     Checklist toUpdateChecklist(ChecklistUpdateDTO checklistUpdateDTO);
+
+    List<ChecklistItemDTO> toChecklistItemDTOList(List<ChecklistItem> checklistItems);
+
+    List<ChecklistItem> toChecklistItemList(List<ChecklistItemDTO> checklistItemDTO);
+
 }

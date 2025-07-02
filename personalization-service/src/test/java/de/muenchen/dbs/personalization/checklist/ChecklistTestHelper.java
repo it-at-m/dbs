@@ -5,14 +5,18 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
 import java.util.List;
 import java.util.UUID;
 
-public class ChecklistTestHelper {
+public final class ChecklistTestHelper {
 
-    public static Checklist createTestChecklist(UUID id, String userId, List<ChecklistItem> checklistItems) {
-        Checklist checklist = new Checklist();
+    private ChecklistTestHelper() {
+    }
+
+    public static Checklist createTestChecklist(final UUID id, final String userId, final List<ChecklistItem> checklistItems) {
+        final Checklist checklist = new Checklist();
         if (id != null) {
             checklist.setId(id);
         }
         checklist.setLhmExtId(userId);
+        checklist.setTitle("Title");
         if (checklistItems != null) {
             checklist.setChecklistItems(checklistItems);
         } else {

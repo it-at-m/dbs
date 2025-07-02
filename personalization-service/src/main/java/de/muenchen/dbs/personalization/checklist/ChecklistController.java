@@ -42,7 +42,8 @@ public class ChecklistController {
     @Operation(summary = "Create a new checklist", description = "Creates a new checklist using the provided checklist details.")
     @ResponseStatus(HttpStatus.CREATED)
     public ChecklistReadDTO createChecklist(@Valid @RequestBody final ChecklistCreateDTO checklistCreateDTO) {
-        return checklistMapper.toReadDTO(checklistService.createChecklist(checklistCreateDTO.lhmExtId(), checklistCreateDTO.checklistItems()));
+        return checklistMapper
+                .toReadDTO(checklistService.createChecklist(checklistCreateDTO.lhmExtId(), checklistCreateDTO.title(), checklistCreateDTO.checklistItems()));
     }
 
     @PutMapping("/{checklistID}")

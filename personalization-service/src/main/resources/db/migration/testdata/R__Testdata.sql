@@ -1,10 +1,10 @@
 truncate checklist CASCADE;
 truncate checklist_item CASCADE;
 
-INSERT INTO checklist (lhm_ext_id, last_update, id) VALUES
-('user1', NOW(), '123e4567-e89b-12d3-a456-426614174000'),
-('user2', NOW(), '123e4567-e89b-12d3-a456-426614174001'),
-('user3', NOW(), '123e4567-e89b-12d3-a456-426614174002');
+INSERT INTO checklist (lhm_ext_id, title, last_update, id) VALUES
+('user1', 'title1', NOW(), '123e4567-e89b-12d3-a456-426614174000'),
+('user2', 'title2', NOW(), '123e4567-e89b-12d3-a456-426614174001'),
+('user3', 'title3', NOW(), '123e4567-e89b-12d3-a456-426614174002');
 
 INSERT INTO checklist_item (service_id, checked, title, note, required, checklist_id) VALUES
 ('service1', NOW(), 'Item 1', 'Note for Item 1', TRUE, (select id from checklist where lhm_ext_id='user1')),

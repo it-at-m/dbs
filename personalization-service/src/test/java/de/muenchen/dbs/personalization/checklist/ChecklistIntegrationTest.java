@@ -15,16 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.dbs.personalization.TestConstants;
-import de.muenchen.dbs.personalization.checklist.domain.Checklist;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
+import de.muenchen.dbs.personalization.checklist.domain.*;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,6 +46,8 @@ public class ChecklistIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private final ChecklistMapper checklistMapper = Mappers.getMapper(ChecklistMapper.class);
 
     @Container
     @ServiceConnection
@@ -100,7 +100,7 @@ public class ChecklistIntegrationTest {
     class CreateChecklist {
         @Test
         void givenChecklist_thenChecklistIsSaved() throws Exception {
-            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("createChecklistId", List.of("item1", "item2"));
+            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("createChecklistId", "title", List.of("item1", "item2"));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
             mockMvc.perform(post("/checklist")
@@ -122,7 +122,8 @@ public class ChecklistIntegrationTest {
             checklistItem1.setServiceID("item1");
             checklistItem2.setServiceID("item2");
             checklistItem3.setServiceID("item3");
-            final ChecklistUpdateDTO requestDTO = new ChecklistUpdateDTO(testChecklistId, "lhmExtId", List.of(checklistItem1, checklistItem2, checklistItem3));
+            final ChecklistUpdateDTO requestDTO = new ChecklistUpdateDTO(testChecklistId, "lhmExtId", "title",
+                    checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
             mockMvc.perform(put("/checklist/{checklistID}", testChecklistId)

@@ -25,9 +25,13 @@ public class Checklist extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "lhm_ext_id", nullable = false, length = 1024)
+    @Column(name = "lhm_ext_id", nullable = false)
     @NotNull
     private String lhmExtId;
+
+    @Column(name = "title")
+    @NotNull
+    private String title;
 
     @Column(name = "last_update")
     private ZonedDateTime lastUpdate;
@@ -35,5 +39,4 @@ public class Checklist extends BaseEntity {
     @ElementCollection
     @CollectionTable(name = "checklist_item", joinColumns = @JoinColumn(name = "checklist_id"))
     private List<ChecklistItem> checklistItems;
-
 }

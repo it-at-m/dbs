@@ -2,6 +2,7 @@ package de.muenchen.dbs.personalization.checklist;
 
 import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.createTestChecklist;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
@@ -32,7 +33,8 @@ public class ChecklistMapperTest {
 
             // Then
             assertNotNull(result);
-            assertThat(result).usingRecursiveComparison().isEqualTo(checklist);
+            assertThat(result).usingRecursiveComparison().ignoringFields("checklistItems").isEqualTo(checklist);
+            assertEquals(result.checklistItems(), checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
         }
     }
 
@@ -43,7 +45,8 @@ public class ChecklistMapperTest {
             // Given
             final UUID id = UUID.randomUUID();
             final Checklist checklist = createTestChecklist(id, "lhmExtId", null);
-            final ChecklistUpdateDTO checklistUpdateDTO = new ChecklistUpdateDTO(id, checklist.getLhmExtId(), checklist.getChecklistItems());
+            final ChecklistUpdateDTO checklistUpdateDTO = new ChecklistUpdateDTO(id, checklist.getLhmExtId(), checklist.getTitle(),
+                    checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
 
             // When
             final Checklist result = checklistMapper.toUpdateChecklist(checklistUpdateDTO);

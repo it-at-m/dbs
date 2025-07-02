@@ -2,6 +2,8 @@ package de.muenchen.dbs.personalization.checklist.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,15 +15,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChecklistItem {
+public class ChecklistItem implements Serializable {
 
-    @Column(name = "service_id", length = 1024)
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Column(name = "service_id")
     private String serviceID;
 
     @Column(name = "checked")
     private ZonedDateTime checked;
 
-    @Column(name = "title", length = 1024)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "note", length = 1024)

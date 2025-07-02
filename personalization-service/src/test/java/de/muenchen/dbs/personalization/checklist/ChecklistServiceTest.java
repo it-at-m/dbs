@@ -15,11 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class ChecklistServiceTest {
+
+    private static final String USER_ID = "userId";
 
     @Mock
     private ChecklistRepository checklistRepository;
@@ -38,13 +39,13 @@ public class ChecklistServiceTest {
     //                final List<String> listOfIds = List.of("item1", "item2");
     //                final String userID = "lhmExtId";
     //
-    //                final Checklist checklistToSave = createTestChecklist(null, userID, null);
+    //                final Checklist checklistToSave = createTestChecklist(null, USER_ID, null);
     //                final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getLhmExtId(), null);
     //
     //                when(checklistRepository.save(checklistToSave)).thenReturn(expectedChecklist);
     //
     //                // When
-    //                final Checklist result = checklistService.createChecklist(userID, listOfIds);
+    //                final Checklist result = checklistService.createChecklist(USER_ID, listOfIds);
     //
     //                // Then
     //                assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
@@ -58,22 +59,21 @@ public class ChecklistServiceTest {
         @Test
         void givenLhmExtId_thenReturnChecklists() {
             // Given
-            final String lhmExtId = "lhmExtId";
 
             final UUID id1 = UUID.randomUUID();
             final UUID id2 = UUID.randomUUID();
 
-            final Checklist checklist1 = createTestChecklist(id1, lhmExtId, null);
-            final Checklist checklist2 = createTestChecklist(id2, lhmExtId, null);
+            final Checklist checklist1 = createTestChecklist(id1, USER_ID, null);
+            final Checklist checklist2 = createTestChecklist(id2, USER_ID, null);
 
-            when(checklistRepository.findChecklistByLhmExtId(lhmExtId)).thenReturn(List.of(checklist1, checklist2));
+            when(checklistRepository.findChecklistByLhmExtId(USER_ID)).thenReturn(List.of(checklist1, checklist2));
 
             // When
-            final List<Checklist> result = checklistService.getChecklists(lhmExtId);
+            final List<Checklist> result = checklistService.getChecklists(USER_ID);
 
             // Then
             Assertions.assertEquals(List.of(checklist1, checklist2), result);
-            verify(checklistRepository, times(1)).findChecklistByLhmExtId(lhmExtId);
+            verify(checklistRepository, times(1)).findChecklistByLhmExtId(USER_ID);
         }
 
     }
@@ -85,7 +85,7 @@ public class ChecklistServiceTest {
         void givenUUID_thenReturnChecklist() {
             // Given
             final UUID id = UUID.randomUUID();
-            final Checklist checklist = createTestChecklist(id, "lhmExtId", null);
+            final Checklist checklist = createTestChecklist(id, USER_ID, null);
 
             when(checklistRepository.findById(id)).thenReturn(Optional.of(checklist));
 
@@ -121,7 +121,7 @@ public class ChecklistServiceTest {
         void givenChecklist_thenReturnChecklist() {
             // Given
             final UUID checklistToUpdateId = UUID.randomUUID();
-            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, "lhmExtId", null);
+            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_ID, null);
             final Checklist expectedChecklist = createTestChecklist(null, checklistToUpdate.getLhmExtId(), null);
 
             when(checklistRepository.save(checklistToUpdate)).thenReturn(expectedChecklist);
@@ -139,7 +139,7 @@ public class ChecklistServiceTest {
         void givenChecklist_thenThrowNotFoundException() {
             // Given
             final UUID checklistToUpdateId = UUID.randomUUID();
-            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, "lhmExtId", null);
+            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_ID, null);
 
             when(checklistRepository.findById(checklistToUpdate.getId())).thenReturn(Optional.empty());
 
@@ -161,7 +161,7 @@ public class ChecklistServiceTest {
         void givenChecklistId_thenReturnVoid() {
             // Given
             final UUID checklistToDeleteId = UUID.randomUUID();
-            Mockito.doNothing().when(checklistRepository).deleteById(checklistToDeleteId);
+            doNothing().when(checklistRepository).deleteById(checklistToDeleteId);
 
             // When
             checklistService.deleteChecklist(checklistToDeleteId);

@@ -21,11 +21,12 @@ public class ChecklistService {
     private final ChecklistRepository checklistRepository;
 
     @PreAuthorize(Authorities.CHECKLIST_CREATE)
-    public Checklist createChecklist(final String userId, final List<String> serviceIds) {
+    public Checklist createChecklist(final String userId, final String title, final List<String> serviceIds) {
         log.debug("Create Checklist for {} with {}}", userId, serviceIds);
         final Checklist createdChecklist = new Checklist();
         createdChecklist.setLhmExtId(userId);
         createdChecklist.setLastUpdate(ZonedDateTime.now());
+        createdChecklist.setTitle(title);
         // Get Services from ServiceApi
         // createdChecklist.setChecklistItems();
         return checklistRepository.save(createdChecklist);

@@ -1,5 +1,6 @@
 create table checklist (
     lhm_ext_id varchar(255) not null,
+    title varchar(255) not null,
     last_update timestamp with time zone,
     id uuid not null,
     primary key (id)
