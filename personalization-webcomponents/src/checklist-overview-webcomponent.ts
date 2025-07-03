@@ -4,11 +4,8 @@ import ChecklistOverviewVueComponent from "@/checklist-overview.ce.vue";
 
 // convert into custom element constructor
 const ChecklistOverviewWebcomponent = defineCustomElement(
-    ChecklistOverviewVueComponent
+  ChecklistOverviewVueComponent
 );
 
 // register
-customElements.define(
-  "checklist-overview",
-    ChecklistOverviewWebcomponent
-);
+customElements.define("checklist-overview", ChecklistOverviewWebcomponent);
