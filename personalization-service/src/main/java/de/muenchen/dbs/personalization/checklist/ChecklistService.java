@@ -23,7 +23,7 @@ public class ChecklistService {
 
     @PreAuthorize(Authorities.CHECKLIST_CREATE)
     public Checklist createChecklist(final String userId, final String title, final List<String> serviceIds) {
-        log.debug("Create Checklist for {} with {}}", userId, serviceIds);
+        log.debug("Create Checklist for {} with {}", userId, serviceIds);
         final Checklist createdChecklist = new Checklist();
         createdChecklist.setLhmExtId(userId);
         createdChecklist.setLastUpdate(ZonedDateTime.now());
@@ -47,12 +47,12 @@ public class ChecklistService {
     @PreAuthorize(Authorities.CHECKLIST_GET)
     public Checklist getChecklist(final UUID checklistId) {
         log.debug("Get checklist with ID {}", checklistId);
-        return getCheckistOrThrowException(checklistId);
+        return getChecklistOrThrowException(checklistId);
     }
 
     @PreAuthorize(Authorities.CHECKLIST_UPDATE)
     public Checklist updateChecklist(final Checklist checklist, final UUID checklistId) {
-        final Checklist foundChecklist = getCheckistOrThrowException(checklistId);
+        final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
         foundChecklist.setChecklistItems(checklist.getChecklistItems());
         foundChecklist.setLastUpdate(ZonedDateTime.now());
         log.debug("Update Checklist {}", foundChecklist);
@@ -65,7 +65,7 @@ public class ChecklistService {
         checklistRepository.deleteById(checklistId);
     }
 
-    private Checklist getCheckistOrThrowException(final UUID checklistId) {
+    private Checklist getChecklistOrThrowException(final UUID checklistId) {
         return checklistRepository
                 .findById(checklistId)
                 .orElseThrow(() -> new NotFoundException(String.format(MSG_NOT_FOUND, checklistId)));
