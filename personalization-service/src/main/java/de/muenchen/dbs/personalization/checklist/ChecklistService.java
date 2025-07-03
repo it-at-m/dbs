@@ -40,13 +40,13 @@ public class ChecklistService {
 
     @PreAuthorize(Authorities.CHECKLIST_GET_ALL)
     public List<Checklist> getChecklists(final String userId) {
-        log.info("Get all checklists of {}", userId);
+        log.debug("Get all checklists of {}", userId);
         return checklistRepository.findChecklistByLhmExtId(userId);
     }
 
     @PreAuthorize(Authorities.CHECKLIST_GET)
     public Checklist getChecklist(final UUID checklistId) {
-        log.info("Get checklist with ID {}", checklistId);
+        log.debug("Get checklist with ID {}", checklistId);
         return getCheckistOrThrowException(checklistId);
     }
 
