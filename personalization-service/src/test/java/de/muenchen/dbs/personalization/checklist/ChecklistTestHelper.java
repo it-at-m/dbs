@@ -16,7 +16,7 @@ public final class ChecklistTestHelper {
             checklist.setId(id);
         }
         checklist.setLhmExtId(userId);
-        checklist.setTitle("Title");
+        checklist.setTitle("title");
         if (checklistItems != null) {
             checklist.setChecklistItems(checklistItems);
         } else {

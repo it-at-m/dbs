@@ -3,6 +3,7 @@ package de.muenchen.dbs.personalization.checklist;
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.security.Authorities;
 import java.time.ZonedDateTime;
@@ -27,8 +28,13 @@ public class ChecklistService {
         createdChecklist.setLhmExtId(userId);
         createdChecklist.setLastUpdate(ZonedDateTime.now());
         createdChecklist.setTitle(title);
-        // Get Services from ServiceApi
-        // createdChecklist.setChecklistItems();
+        // TODO Get service details from ServiceApi
+        final List<ChecklistItem> checklistItems = serviceIds.stream().map(serviceId -> {
+            final ChecklistItem checklistItem = new ChecklistItem();
+            checklistItem.setServiceID(serviceId);
+            return checklistItem;
+        }).toList();
+        createdChecklist.setChecklistItems(checklistItems);
         return checklistRepository.save(createdChecklist);
     }
 

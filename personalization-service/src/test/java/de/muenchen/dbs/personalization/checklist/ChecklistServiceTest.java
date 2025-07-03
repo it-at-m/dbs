@@ -30,28 +30,31 @@ public class ChecklistServiceTest {
 
     //     TODO Completion after adding the services interface
     //
-    //        @Nested
-    //        class CreateChecklist {
-    //
-    //            @Test
-    //            void givenChecklist_thenReturnChecklist() {
-    //                // Given
-    //                final List<String> listOfIds = List.of("item1", "item2");
-    //                final String userID = "lhmExtId";
-    //
-    //                final Checklist checklistToSave = createTestChecklist(null, USER_ID, null);
-    //                final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getLhmExtId(), null);
-    //
-    //                when(checklistRepository.save(checklistToSave)).thenReturn(expectedChecklist);
-    //
-    //                // When
-    //                final Checklist result = checklistService.createChecklist(USER_ID, listOfIds);
-    //
-    //                // Then
-    //                assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
-    //                verify(checklistRepository).save(checklistToSave);
-    //            }
-    //        }
+    @Nested
+    class CreateChecklist {
+
+        @Test
+        void givenChecklist_thenReturnChecklist() {
+            // Given
+            final List<String> listOfIds = List.of("item1", "item2");
+
+            final Checklist checklistToSave = createTestChecklist(null, USER_ID, null);
+            final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getLhmExtId(), null);
+
+            when(checklistRepository.save(argThat(checklist -> checklist.getLhmExtId().equals(checklistToSave.getLhmExtId()) &&
+                    checklist.getTitle().equals(checklistToSave.getTitle()) &&
+                    checklist.getChecklistItems().equals(checklistToSave.getChecklistItems())))).thenReturn(expectedChecklist);
+
+            // When
+            final Checklist result = checklistService.createChecklist(USER_ID, "title", listOfIds);
+
+            // Then
+            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
+            verify(checklistRepository).save(argThat(checklist -> checklist.getLhmExtId().equals(checklistToSave.getLhmExtId()) &&
+                    checklist.getTitle().equals(checklistToSave.getTitle()) &&
+                    checklist.getChecklistItems().equals(checklistToSave.getChecklistItems())));
+        }
+    }
 
     @Nested
     class GetChecklists {
