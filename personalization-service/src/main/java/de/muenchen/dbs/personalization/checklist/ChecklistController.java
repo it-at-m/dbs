@@ -6,6 +6,7 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistReadDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -18,13 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/checklist")
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "Checklists", description = "Creating, reading and deleting Checklists.")
 public class ChecklistController {
 
     private final ChecklistService checklistService;
     private final ChecklistMapper checklistMapper;
 
     @GetMapping
-    @Operation(summary = "Return checklists of user", description = "Returns all checklists of an user by lhmExtId")
+    @Operation(summary = "Get all checklists by user.", description = "Returns all checklists of an user by lhmExtId")
     @ResponseStatus(HttpStatus.OK)
     public List<ChecklistReadDTO> getChecklists(@RequestHeader("lhmExtID") final String lhmExtID) {
         final List<Checklist> checklists = checklistService.getChecklists(lhmExtID);
@@ -32,7 +34,7 @@ public class ChecklistController {
     }
 
     @GetMapping(path = "/{checklistID}")
-    @Operation(summary = "Return checklist", description = "Returns a checklist by checklistId")
+    @Operation(summary = "Get specific checklist by checklist-id.", description = "Returns a checklist by checklistId")
     @ResponseStatus(HttpStatus.OK)
     public ChecklistReadDTO getChecklist(@PathVariable("checklistID") final UUID checklistID) {
         return checklistMapper.toReadDTO(checklistService.getChecklist(checklistID));
