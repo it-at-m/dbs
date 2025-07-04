@@ -6,12 +6,12 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.5</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <groupId>de.muenchen.dbs.personalization</groupId>
     <artifactId>personalization-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>personalization_service</name>
     <description>Personalization service for the digital citizen service of the City of Munich</description>
     <url>https://github.com/it-at-m/dbs</url>
