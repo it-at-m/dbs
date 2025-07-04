@@ -73,7 +73,10 @@ import { computed } from "vue";
 
 import ChecklistitemListitem from "@/components/checklistitem-listitem.vue";
 import MucChip from "@/components/common/muc-chip.vue";
-import {getChecklistIconByTitle, QUERY_PARAM_CHECKLIST_ID} from "@/util/constants.ts";
+import {
+  getChecklistIconByTitle,
+  QUERY_PARAM_CHECKLIST_ID,
+} from "@/util/constants.ts";
 
 const props = defineProps<{
   checklist: DummyChecklist;
@@ -94,7 +97,6 @@ const firstThreeItemsSortedByChecked = computed(() => {
   );
   return sortedItems.slice(0, 3);
 });
-
 
 function gotoChecklist(checklistId: string) {
   location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${checklistId}`;
