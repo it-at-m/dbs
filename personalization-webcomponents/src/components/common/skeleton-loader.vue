@@ -8,9 +8,7 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
       <div class="skeleton-wrapper">
         <div class="skeleton-col skeleton-details">
           <div class="skeleton-row skeleton-name">
-            <span
-              class="skeleton-name-text skeleton-loader"
-            />
+            <span class="skeleton-name-text skeleton-loader" />
           </div>
         </div>
       </div>
@@ -19,14 +17,10 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
       <div class="skeleton-wrapper">
         <div class="skeleton-col skeleton-details">
           <div class="skeleton-row skeleton-description">
-            <span
-              class="skeleton-description-text skeleton-loader"
-            />
+            <span class="skeleton-description-text skeleton-loader" />
           </div>
           <div class="skeleton-row skeleton-description">
-            <span
-              class="skeleton-description-text skeleton-loader"
-            />
+            <span class="skeleton-description-text skeleton-loader" />
           </div>
         </div>
       </div>
@@ -74,7 +68,10 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
   margin-bottom: 13px;
 }
 
-.skeleton-wrapper .skeleton-details .skeleton-description .skeleton-description-text {
+.skeleton-wrapper
+  .skeleton-details
+  .skeleton-description
+  .skeleton-description-text {
   font-size: 13px;
   line-height: 18px;
   color: #666666;
