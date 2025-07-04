@@ -45,7 +45,7 @@ public class ChecklistController {
     @ResponseStatus(HttpStatus.CREATED)
     public ChecklistReadDTO createChecklist(@Valid @RequestBody final ChecklistCreateDTO checklistCreateDTO) {
         return checklistMapper
-                .toReadDTO(checklistService.createChecklist(checklistCreateDTO.lhmExtId(), checklistCreateDTO.title(), checklistCreateDTO.checklistItems()));
+                .toReadDTO(checklistService.createChecklist(checklistMapper.toCreateChecklist(checklistCreateDTO)));
     }
 
     @PutMapping("/{checklistID}")

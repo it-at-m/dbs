@@ -3,10 +3,8 @@ package de.muenchen.dbs.personalization.checklist;
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.security.Authorities;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -22,20 +20,9 @@ public class ChecklistService {
     private final ChecklistRepository checklistRepository;
 
     @PreAuthorize(Authorities.CHECKLIST_CREATE)
-    public Checklist createChecklist(final String userId, final String title, final List<String> serviceIds) {
-        log.debug("Create Checklist for {} with {}", userId, serviceIds);
-        final Checklist createdChecklist = new Checklist();
-        createdChecklist.setLhmExtId(userId);
-        createdChecklist.setLastUpdate(ZonedDateTime.now());
-        createdChecklist.setTitle(title);
-        // TODO Get service details from ServiceApi
-        final List<ChecklistItem> checklistItems = serviceIds.stream().map(serviceId -> {
-            final ChecklistItem checklistItem = new ChecklistItem();
-            checklistItem.setServiceID(serviceId);
-            return checklistItem;
-        }).toList();
-        createdChecklist.setChecklistItems(checklistItems);
-        return checklistRepository.save(createdChecklist);
+    public Checklist createChecklist(final Checklist checklist) {
+        log.debug("Create Checklist {}", checklist);
+        return checklistRepository.save(checklist);
     }
 
     @PreAuthorize(Authorities.CHECKLIST_GET_ALL)
@@ -54,7 +41,6 @@ public class ChecklistService {
     public Checklist updateChecklist(final Checklist checklist, final UUID checklistId) {
         final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
         foundChecklist.setChecklistItems(checklist.getChecklistItems());
-        foundChecklist.setLastUpdate(ZonedDateTime.now());
         log.debug("Update Checklist {}", foundChecklist);
         return checklistRepository.save(foundChecklist);
     }

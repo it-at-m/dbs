@@ -10,10 +10,13 @@ import de.muenchen.dbs.personalization.TestConstants;
 import de.muenchen.dbs.personalization.checklist.ChecklistRepository;
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistReadDTO;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -40,6 +43,8 @@ class UnicodeConfigurationTest {
 
     private static final String ENTITY_ENDPOINT_URL = "/checklist";
 
+    private final ChecklistMapper checklistMapper = Mappers.getMapper(ChecklistMapper.class);
+
     /**
      * Decomposed string:
      * String "Ä-é" represented with unicode letters "A◌̈-e◌́"
@@ -62,7 +67,14 @@ class UnicodeConfigurationTest {
     void testForNfcNormalization() {
         // Given
         // Persist entity with decomposed string.
-        final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(TEXT_ATTRIBUTE_DECOMPOSED, "title", List.of("item1", "item2"));
+        final ChecklistItem checklistItem1 = new ChecklistItem();
+        final ChecklistItem checklistItem2 = new ChecklistItem();
+        final ChecklistItem checklistItem3 = new ChecklistItem();
+        checklistItem1.setServiceID("item1");
+        checklistItem2.setServiceID("item2");
+        checklistItem3.setServiceID("item3");
+        final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(TEXT_ATTRIBUTE_DECOMPOSED, "title",
+                checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
 
         // When
         final ChecklistReadDTO response = testRestTemplate.postForEntity(URI.create(ENTITY_ENDPOINT_URL), checklistCreateDTO, ChecklistReadDTO.class)

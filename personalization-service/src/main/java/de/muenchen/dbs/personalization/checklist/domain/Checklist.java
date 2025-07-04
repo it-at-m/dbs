@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Data
@@ -34,6 +35,7 @@ public class Checklist extends BaseEntity {
     private String title;
 
     @Column(name = "last_update")
+    @LastModifiedDate
     private ZonedDateTime lastUpdate;
 
     @ElementCollection

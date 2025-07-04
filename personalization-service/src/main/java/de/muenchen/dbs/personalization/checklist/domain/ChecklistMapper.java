@@ -10,6 +10,9 @@ public interface ChecklistMapper {
     ChecklistReadDTO toReadDTO(Checklist checklist);
 
     @Mapping(target = "id", ignore = true)
+    Checklist toCreateChecklist(ChecklistCreateDTO checklistUpdateDTO);
+
+    @Mapping(target = "id", ignore = true)
     Checklist toUpdateChecklist(ChecklistUpdateDTO checklistUpdateDTO);
 
     List<ChecklistItemDTO> toChecklistItemDTOList(List<ChecklistItem> checklistItems);

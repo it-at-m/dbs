@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistReadDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
@@ -35,6 +36,24 @@ public class ChecklistMapperTest {
             assertNotNull(result);
             assertThat(result).usingRecursiveComparison().ignoringFields("checklistItems").isEqualTo(checklist);
             assertEquals(result.checklistItems(), checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
+        }
+    }
+
+    @Nested
+    class ToCreateChecklist {
+        @Test
+        void givenRequestDTO_thenReturnsCorrectEntity() {
+            // Given
+            final UUID id = UUID.randomUUID();
+            final Checklist checklist = createTestChecklist(id, "lhmExtId", null);
+            final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(checklist.getLhmExtId(), checklist.getTitle(),
+                    checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
+
+            // When
+            final Checklist result = checklistMapper.toCreateChecklist(checklistCreateDTO);
+
+            // Then
+            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(checklistCreateDTO);
         }
     }
 

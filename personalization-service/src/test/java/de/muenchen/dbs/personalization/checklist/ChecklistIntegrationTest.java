@@ -100,7 +100,14 @@ public class ChecklistIntegrationTest {
     class CreateChecklist {
         @Test
         void givenChecklist_thenChecklistIsSaved() throws Exception {
-            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("createChecklistId", "title", List.of("item1", "item2"));
+            final ChecklistItem checklistItem1 = new ChecklistItem();
+            final ChecklistItem checklistItem2 = new ChecklistItem();
+            final ChecklistItem checklistItem3 = new ChecklistItem();
+            checklistItem1.setServiceID("item1");
+            checklistItem2.setServiceID("item2");
+            checklistItem3.setServiceID("item3");
+            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("createLhmExtId", "title",
+                    checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
             mockMvc.perform(post("/checklist")

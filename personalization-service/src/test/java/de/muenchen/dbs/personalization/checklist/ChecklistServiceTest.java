@@ -28,15 +28,12 @@ public class ChecklistServiceTest {
     @InjectMocks
     private ChecklistService checklistService;
 
-    //     TODO Completion after adding the services interface
-    //
     @Nested
     class CreateChecklist {
 
         @Test
         void givenChecklist_thenReturnChecklist() {
             // Given
-            final List<String> listOfIds = List.of("item1", "item2");
 
             final Checklist checklistToSave = createTestChecklist(null, USER_ID, null);
             final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getLhmExtId(), null);
@@ -46,7 +43,7 @@ public class ChecklistServiceTest {
                     checklist.getChecklistItems().equals(checklistToSave.getChecklistItems())))).thenReturn(expectedChecklist);
 
             // When
-            final Checklist result = checklistService.createChecklist(USER_ID, "title", listOfIds);
+            final Checklist result = checklistService.createChecklist(checklistToSave);
 
             // Then
             assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
