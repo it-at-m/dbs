@@ -5,6 +5,7 @@ import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.M
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.security.Authorities;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class ChecklistService {
     public Checklist updateChecklist(final Checklist checklist, final UUID checklistId) {
         final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
         foundChecklist.setChecklistItems(checklist.getChecklistItems());
+        foundChecklist.setLastUpdate(ZonedDateTime.now());
         log.debug("Update Checklist {}", foundChecklist);
         return checklistRepository.save(foundChecklist);
     }
