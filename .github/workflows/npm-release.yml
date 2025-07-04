@@ -38,6 +38,7 @@ jobs:
       - id: npm_release
         uses: it-at-m/lhm_actions/action-templates/actions/action-npm-release@9767179088fd2e344d1a24c17404ab809a60f1b6 # v1.0.20
         with:
+          use-pr: true
           app-path: ${{ inputs.app-path }}
           releaseVersion: ${{ inputs.release-version }}
       - id: node
