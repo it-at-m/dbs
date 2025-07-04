@@ -1,8 +1,8 @@
-package de.muenchen.dbs.personalization.theentity;
+package de.muenchen.dbs.personalization.checklist;
 
 import static de.muenchen.dbs.personalization.TestConstants.SPRING_NO_SECURITY_PROFILE;
 import static de.muenchen.dbs.personalization.TestConstants.SPRING_TEST_PROFILE;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.createTestChecklist;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -15,12 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.dbs.personalization.TestConstants;
-import de.muenchen.dbs.personalization.theentity.dto.TheEntityRequestDTO;
+import de.muenchen.dbs.personalization.checklist.domain.*;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +39,7 @@ import org.testcontainers.utility.DockerImageName;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
-class TheEntityIntegrationTest {
+public class ChecklistIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,93 +47,107 @@ class TheEntityIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private final ChecklistMapper checklistMapper = Mappers.getMapper(ChecklistMapper.class);
+
     @Container
     @ServiceConnection
     @SuppressWarnings("unused")
     private static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(
             DockerImageName.parse(TestConstants.TESTCONTAINERS_POSTGRES_IMAGE));
 
-    private UUID testEntityId;
+    private UUID testChecklistId;
 
     @Autowired
-    private TheEntityRepository theEntityRepository;
+    private ChecklistRepository checklistRepository;
 
     @BeforeEach
     public void setUp() {
-        final TheEntity exampleEntity = new TheEntity();
-        exampleEntity.setTextAttribute("Test");
-        testEntityId = theEntityRepository.save(exampleEntity).getId();
+        final Checklist exampleChecklist = createTestChecklist(null, "lhmExtId", null);
+        testChecklistId = checklistRepository.save(exampleChecklist).getId();
     }
 
     @AfterEach
     public void tearDown() {
-        theEntityRepository.deleteById(testEntityId);
+        checklistRepository.deleteById(testChecklistId);
     }
 
     @Nested
-    class GetEntity {
+    class GetChecklist {
         @Test
-        void givenEntityId_thenReturnEntity() throws Exception {
-            mockMvc.perform(get("/theEntity/{theEntityID}", testEntityId)
+        void givenChecklistId_thenReturnChecklist() throws Exception {
+            mockMvc.perform(get("/checklist/{checklistID}", testChecklistId)
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.id", is(testEntityId.toString())));
+                    .andExpect(jsonPath("$.id", is(testChecklistId.toString())));
         }
     }
 
     @Nested
-    class GetEntitiesPage {
+    class GetChecklists {
         @Test
-        void givenPageNumberAndPageSize_thenReturnPageOfEntities() throws Exception {
-            mockMvc.perform(get("/theEntity")
-                    .param("pageNumber", "0")
-                    .param("pageSize", "10")
+        void givenLhmExtId_thenReturnChecklists() throws Exception {
+            mockMvc.perform(get("/checklist")
+                    .header("lhmExtID", "lhmExtId")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.content", hasSize(greaterThanOrEqualTo(0))));
+                    .andExpect(jsonPath("$", hasSize(1)));
         }
     }
 
     @Nested
-    class SaveEntity {
+    class CreateChecklist {
         @Test
-        void givenEntity_thenEntityIsSaved() throws Exception {
-            final TheEntityRequestDTO requestDTO = new TheEntityRequestDTO("Test1");
+        void givenChecklist_thenChecklistIsSaved() throws Exception {
+            final ChecklistItem checklistItem1 = new ChecklistItem();
+            final ChecklistItem checklistItem2 = new ChecklistItem();
+            final ChecklistItem checklistItem3 = new ChecklistItem();
+            checklistItem1.setServiceID("item1");
+            checklistItem2.setServiceID("item2");
+            checklistItem3.setServiceID("item3");
+            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("createLhmExtId", "title",
+                    checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
-            mockMvc.perform(post("/theEntity")
+            mockMvc.perform(post("/checklist")
                     .content(requestBody)
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.textAttribute", is(requestDTO.textAttribute())));
+                    .andExpect(jsonPath("$.lhmExtId", is(requestDTO.lhmExtId())));
         }
     }
 
     @Nested
-    class UpdateEntity {
+    class UpdateChecklist {
         @Test
-        void givenEntity_thenEntityIsUpdated() throws Exception {
-            final TheEntityRequestDTO requestDTO = new TheEntityRequestDTO("Test2");
+        void givenChecklist_thenChecklistIsUpdated() throws Exception {
+            final ChecklistItem checklistItem1 = new ChecklistItem();
+            final ChecklistItem checklistItem2 = new ChecklistItem();
+            final ChecklistItem checklistItem3 = new ChecklistItem();
+            checklistItem1.setServiceID("item1");
+            checklistItem2.setServiceID("item2");
+            checklistItem3.setServiceID("item3");
+            final ChecklistUpdateDTO requestDTO = new ChecklistUpdateDTO(testChecklistId, "lhmExtId", "title",
+                    checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
-            mockMvc.perform(put("/theEntity/{theEntityId}", testEntityId)
+            mockMvc.perform(put("/checklist/{checklistID}", testChecklistId)
                     .content(requestBody)
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.id", is(testEntityId.toString())))
-                    .andExpect(jsonPath("$.textAttribute", is(requestDTO.textAttribute())));
+                    .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
+                    .andExpect(jsonPath("$.checklistItems", hasSize(3)));
         }
     }
 
     @Nested
-    class DeleteEntity {
+    class DeleteChecklist {
         @Test
-        void givenEntityId_thenEntityIsDeleted() throws Exception {
-            mockMvc.perform(delete("/theEntity/{theEntityId}", testEntityId)
+        void givenChecklistId_thenChecklistIsDeleted() throws Exception {
+            mockMvc.perform(delete("/checklist/{checklistID}", testChecklistId)
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         }
