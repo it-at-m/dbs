@@ -2,6 +2,7 @@
   <muc-card
     :title="checklist.title"
     tagline="Checkliste"
+    @click="gotoChecklist(checklist.id!)"
   >
     <template #headerPrefix>
       <div class="card-header-icon">
@@ -72,10 +73,14 @@ import { computed } from "vue";
 
 import ChecklistitemListitem from "@/components/checklistitem-listitem.vue";
 import MucChip from "@/components/common/muc-chip.vue";
-import { getChecklistIconByTitle } from "@/util/constants.ts";
+import {
+  getChecklistIconByTitle,
+  QUERY_PARAM_CHECKLIST_ID,
+} from "@/util/constants.ts";
 
 const props = defineProps<{
   checklist: DummyChecklist;
+  checklistDetailUrl: string;
 }>();
 
 const todoCount = computed(() => {
@@ -92,13 +97,17 @@ const firstThreeItemsSortedByChecked = computed(() => {
   );
   return sortedItems.slice(0, 3);
 });
+
+function gotoChecklist(checklistId: string) {
+  location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${checklistId}`;
+}
 </script>
 
 <style scoped>
 .card-header-icon {
   margin-right: 16px;
   border: 1px solid var(--color-neutrals-blue);
-  border-radius: 56px;
+  border-radius: 50%;
 }
 
 .pt-8 {

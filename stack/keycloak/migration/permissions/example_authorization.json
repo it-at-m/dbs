@@ -3,17 +3,17 @@
   "policyEnforcementMode": "ENFORCING",
   "resources": [
     {
-      "name": "REFARCH_THEENTITY_READ",
+      "name": "DBS_CHECKLIST_READ",
       "type": "local-backend-service",
       "scopes": []
     },
     {
-      "name": "REFARCH_THEENTITY_WRITE",
+      "name": "DBS_CHECKLIST_WRITE",
       "type": "local-backend-service",
       "scopes": []
     },
     {
-      "name": "REFARCH_THEENTITY_DELETE",
+      "name": "DBS_CHECKLIST_DELETE",
       "type": "local-backend-service",
       "scopes": []
     }
@@ -38,32 +38,32 @@
       }
     },
     {
-      "name": "permission_REFARCH_THEENTITY_DELETE",
+      "name": "permission_DBS_CHECKLIST_DELETE",
       "type": "resource",
       "logic": "POSITIVE",
       "decisionStrategy": "AFFIRMATIVE",
       "config": {
-        "resources": "[\"REFARCH_THEENTITY_DELETE\"]",
+        "resources": "[\"DBS_CHECKLIST_DELETE\"]",
         "applyPolicies": "[\"rolepolicy_writer\"]"
       }
     },
     {
-      "name": "permission_REFARCH_THEENTITY_WRITE",
+      "name": "permission_DBS_CHECKLIST_WRITE",
       "type": "resource",
       "logic": "POSITIVE",
       "decisionStrategy": "AFFIRMATIVE",
       "config": {
-        "resources": "[\"REFARCH_THEENTITY_WRITE\"]",
+        "resources": "[\"DBS_CHECKLIST_WRITE\"]",
         "applyPolicies": "[\"rolepolicy_writer\"]"
       }
     },
     {
-      "name": "permission_REFARCH_THEENTITY_READ",
+      "name": "permission_DBS_CHECKLIST_READ",
       "type": "resource",
       "logic": "POSITIVE",
       "decisionStrategy": "AFFIRMATIVE",
       "config": {
-        "resources": "[\"REFARCH_THEENTITY_READ\"]",
+        "resources": "[\"DBS_CHECKLIST_READ\"]",
         "applyPolicies": "[\"rolepolicy_writer\",\"rolepolicy_reader\"]"
       }
     }

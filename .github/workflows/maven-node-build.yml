@@ -16,6 +16,7 @@ jobs:
       matrix:
         include:
           - app-path: personalization-service
+          - app-path: personalization-webcomponents
 
     steps:
       - uses: it-at-m/lhm_actions/action-templates/actions/action-checkout@9767179088fd2e344d1a24c17404ab809a60f1b6 # v1.0.20

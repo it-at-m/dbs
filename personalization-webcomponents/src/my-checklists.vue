@@ -11,22 +11,27 @@
       ></muc-icon>
       Aktive Checklisten ({{ checklists.length }})
     </h2>
-    <muc-card-container class="checklist-card-container">
-      <div v-if="loading">
-        <skeleton-loader
-          v-for="elem in [1, 2, 3, 4]"
-          :key="elem"
-        >
-        </skeleton-loader>
-      </div>
-      <div v-else>
-        <checklist-card
-          v-for="(checklist, index) in checklists"
-          :key="index"
-          :checklist="checklist"
-        >
-        </checklist-card>
-      </div>
+    <muc-card-container
+      v-if="loading"
+      class="checklist-card-container"
+    >
+      <skeleton-loader
+        v-for="elem in [1, 2, 3, 4]"
+        :key="elem"
+      >
+      </skeleton-loader>
+    </muc-card-container>
+    <muc-card-container
+      v-else
+      class="checklist-card-container"
+    >
+      <checklist-card
+        v-for="(checklist, index) in checklists"
+        :key="index"
+        :checklist="checklist"
+        :checklist-detail-url="checklistDetailUrl"
+      >
+      </checklist-card>
     </muc-card-container>
   </main>
 </template>
@@ -49,7 +54,7 @@ defineProps<{
 }>();
 
 const checklists = ref<DummyChecklist[]>([]);
-const loading = ref(false);
+const loading = ref(true);
 
 onMounted(() => {
   loading.value = true;

@@ -5,31 +5,22 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
 <template>
   <muc-card title="">
     <template #headerPrefix>
-      <div class="prod--wrapper">
-        <div class="prod--col prod--details">
-          <div class="prod--row prod--name">
-            <span
-              id="productName"
-              class="prod--name-text skeleton-loader"
-            />
+      <div class="skeleton-wrapper">
+        <div class="skeleton-col skeleton-details">
+          <div class="skeleton-row skeleton-name">
+            <span class="skeleton-name-text skeleton-loader" />
           </div>
         </div>
       </div>
     </template>
     <template #content>
-      <div class="prod--wrapper">
-        <div class="prod--col prod--details">
-          <div class="prod--row prod--description">
-            <span
-              id="productId"
-              class="prod--description-text skeleton-loader"
-            />
+      <div class="skeleton-wrapper">
+        <div class="skeleton-col skeleton-details">
+          <div class="skeleton-row skeleton-description">
+            <span class="skeleton-description-text skeleton-loader" />
           </div>
-          <div class="prod--row prod--description">
-            <span
-              id="productId"
-              class="prod--description-text skeleton-loader"
-            />
+          <div class="skeleton-row skeleton-description">
+            <span class="skeleton-description-text skeleton-loader" />
           </div>
         </div>
       </div>
@@ -38,50 +29,34 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
 </template>
 
 <style scoped>
-.prod--wrapper {
+.skeleton-wrapper {
   display: flex;
   width: 95%;
 }
 
-.prod--wrapper .prod--row {
+.skeleton-wrapper .skeleton-row {
   display: flex;
   flex-direction: row;
 }
 
-.prod--wrapper .prod--col {
+.skeleton-wrapper .skeleton-col {
   display: flex;
   flex-direction: column;
 }
 
-.prod--wrapper .prod--img {
-  width: 20%;
-  margin: 0 15px;
-}
-
-.prod--wrapper .prod--img .prod--img-graphic {
-  max-height: 100%;
-  height: 100%;
-  vertical-align: top;
-  max-width: 100%;
-}
-
-.prod--wrapper .prod--details {
+.skeleton-wrapper .skeleton-details {
   width: 90%;
   margin-left: 17px;
 }
 
-.prod--wrapper .prod--details .prod--name {
+.skeleton-wrapper .skeleton-details .skeleton-name {
   margin-bottom: 3px;
   width: 85%;
   display: block;
   max-width: 100%;
 }
 
-.prod--wrapper .prod--details .prod--name .prod--name-para {
-  margin: 0 auto;
-}
-
-.prod--wrapper .prod--details .prod--name .prod--name-text {
+.skeleton-wrapper .skeleton-details .skeleton-name .skeleton-name-text {
   font-weight: bold;
   font-size: 16px;
   line-height: 23px;
@@ -89,11 +64,14 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
   height: 40px;
 }
 
-.prod--wrapper .prod--details .prod--description {
+.skeleton-wrapper .skeleton-details .skeleton-description {
   margin-bottom: 13px;
 }
 
-.prod--wrapper .prod--details .prod--description .prod--description-text {
+.skeleton-wrapper
+  .skeleton-details
+  .skeleton-description
+  .skeleton-description-text {
   font-size: 13px;
   line-height: 18px;
   color: #666666;
