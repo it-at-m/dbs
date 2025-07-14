@@ -5,6 +5,6 @@ It currently consists of these modules:
 - DBS-Ticketing
 - DBS-P13N
 - DBS-Login
-- Terminvereinbarung (https://github.com/it-at-m/eappointment)
+- Terminvereinbarung (<https://github.com/it-at-m/eappointment>)
 
 🚧 TODO

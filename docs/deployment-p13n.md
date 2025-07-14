@@ -1,7 +1,7 @@
 # dbs-p13n-service
 
 | Property | Description | Default |
-|----------|-------------|---------|
+| -------- | ----------- | ------- |
 
 # dbs-p13n-webcomponents
 
@@ -13,18 +13,18 @@ There are multiple webcomponents available which should be integrated to separat
 ## `checklist-overview`
 
 | Property               | Type   | Description                      | Default |
-|------------------------|--------|----------------------------------|---------|
+| ---------------------- | ------ | -------------------------------- | ------- |
 | `checklist-detail-url` | string | URL to the checklist detail page | -       |
 
 ## `checklist-detail`
 
 | Query-Parameter | Description                    |
-|-----------------|--------------------------------|
+| --------------- | ------------------------------ |
 | `cl-id`         | ID of the checklist to display |
 
 ## `my-checklists`
 
 | Property               | Type   | Description                      | Default |
-|------------------------|--------|----------------------------------|---------|
+| ---------------------- | ------ | -------------------------------- | ------- |
 | `checklist-detail-url` | string | URL to the checklist detail page | -       |
 | `new-checklist-url`    | string | URL to the new checklist page    | -       |
