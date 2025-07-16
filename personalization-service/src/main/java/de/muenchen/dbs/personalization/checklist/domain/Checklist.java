@@ -25,9 +25,9 @@ public class Checklist extends BaseEntity {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "lhm_ext_id", nullable = false)
+    @Column(name = "email", nullable = false)
     @NotNull
-    private String lhmExtId;
+    private String email;
 
     @Column(name = "title")
     @NotNull

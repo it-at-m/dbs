@@ -1,7 +1,5 @@
 package de.muenchen.dbs.personalization.checklist;
 
-import static de.muenchen.dbs.personalization.TestConstants.SPRING_NO_SECURITY_PROFILE;
-import static de.muenchen.dbs.personalization.TestConstants.SPRING_TEST_PROFILE;
 import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.createTestChecklist;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -13,9 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.dbs.personalization.IntegrationTestBase;
 import de.muenchen.dbs.personalization.TestConstants;
-import de.muenchen.dbs.personalization.checklist.domain.*;
+import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
@@ -24,28 +26,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-@Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
-public class ChecklistIntegrationTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+public class ChecklistIntegrationTest extends IntegrationTestBase {
 
     private final ChecklistMapper checklistMapper = Mappers.getMapper(ChecklistMapper.class);
 
@@ -55,6 +43,7 @@ public class ChecklistIntegrationTest {
     private static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(
             DockerImageName.parse(TestConstants.TESTCONTAINERS_POSTGRES_IMAGE));
 
+
     private UUID testChecklistId;
 
     @Autowired
@@ -62,7 +51,7 @@ public class ChecklistIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        final Checklist exampleChecklist = createTestChecklist(null, "lhmExtId", null);
+        final Checklist exampleChecklist = createTestChecklist(null, TOKEN_USER_MAIL, null);
         testChecklistId = checklistRepository.save(exampleChecklist).getId();
     }
 
@@ -76,23 +65,25 @@ public class ChecklistIntegrationTest {
         @Test
         void givenChecklistId_thenReturnChecklist() throws Exception {
             mockMvc.perform(get("/checklist/{checklistID}", testChecklistId)
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.id", is(testChecklistId.toString())));
+                    .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
+                    .andExpect(jsonPath("$.email", is(TOKEN_USER_MAIL)));
         }
     }
 
     @Nested
     class GetChecklists {
         @Test
-        void givenLhmExtId_thenReturnChecklists() throws Exception {
+        void givenEmail_thenReturnChecklists() throws Exception {
             mockMvc.perform(get("/checklist")
-                    .header("lhmExtID", "lhmExtId")
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$", hasSize(1)));
+                    .andExpect(jsonPath("$", hasSize(2)));
         }
     }
 
@@ -106,16 +97,17 @@ public class ChecklistIntegrationTest {
             checklistItem1.setServiceID("item1");
             checklistItem2.setServiceID("item2");
             checklistItem3.setServiceID("item3");
-            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("createLhmExtId", "title",
+            final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("title",
                     checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
             mockMvc.perform(post("/checklist")
-                    .content(requestBody)
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .content(requestBody)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isCreated())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.lhmExtId", is(requestDTO.lhmExtId())));
+                    .andExpect(jsonPath("$.email", is(TOKEN_USER_MAIL)));
         }
     }
 
@@ -129,13 +121,14 @@ public class ChecklistIntegrationTest {
             checklistItem1.setServiceID("item1");
             checklistItem2.setServiceID("item2");
             checklistItem3.setServiceID("item3");
-            final ChecklistUpdateDTO requestDTO = new ChecklistUpdateDTO(testChecklistId, "lhmExtId", "title",
+            final ChecklistUpdateDTO requestDTO = new ChecklistUpdateDTO(testChecklistId, "update@example.com", "title",
                     checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
             mockMvc.perform(put("/checklist/{checklistID}", testChecklistId)
-                    .content(requestBody)
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .content(requestBody)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
@@ -148,7 +141,8 @@ public class ChecklistIntegrationTest {
         @Test
         void givenChecklistId_thenChecklistIsDeleted() throws Exception {
             mockMvc.perform(delete("/checklist/{checklistID}", testChecklistId)
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk());
         }
     }

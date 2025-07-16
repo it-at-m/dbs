@@ -26,10 +26,10 @@ public class ChecklistController {
     private final ChecklistMapper checklistMapper;
 
     @GetMapping
-    @Operation(summary = "Get all checklists by user.", description = "Returns all checklists of an user by lhmExtId")
+    @Operation(summary = "Get all checklists by user.", description = "Returns all checklists of an user (identified by JWT-Token)")
     @ResponseStatus(HttpStatus.OK)
-    public List<ChecklistReadDTO> getChecklists(@RequestHeader("lhmExtID") final String lhmExtID) {
-        final List<Checklist> checklists = checklistService.getChecklists(lhmExtID);
+    public List<ChecklistReadDTO> getChecklists() {
+        final List<Checklist> checklists = checklistService.getChecklists();
         return checklists.stream().map(checklistMapper::toReadDTO).toList();
     }
 
