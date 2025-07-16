@@ -116,20 +116,5 @@ services:
       test: [ "CMD-SHELL", "curl http://localhost:8080/actuator/health/liveness" ]
     security_opt: *security_settings
 
-  appswitcher-server:
-    image: ghcr.io/it-at-m/appswitcher-server:1.2.3@sha256:8a6b7f111e003b2885047c73ec04940c358c589fe3c833362093b9a4334480c6
-    environment:
-      - SPRING_WEB_RESOURCES_STATIC_LOCATIONS=file:/workspace/static
-      - THC_PATH=/actuator/health/liveness
-    ports:
-      - "8084:8080"
-    volumes:
-      - "./appswitcher-server/application.yml:/workspace/config/application.yml"
-      - "./appswitcher-server/static:/workspace/static"
-    healthcheck:
-      <<: *healthcheck
-      test: ["CMD-SHELL", "/workspace/health-check"]
-    security_opt: *security_settings
-
 networks:
   keycloak:
