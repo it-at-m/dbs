@@ -4,31 +4,54 @@
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
-    <muc-callout>
-      <template #header>
-        <p>checklist-detail Webcomponent</p>
-      </template>
-      <template #content>
-        <p>{{ calloutContent }}</p>
-      </template>
-    </muc-callout>
+
+    <div v-if="loading">
+      <skeleton-loader />
+    </div>
+    <div v-else>
+      <checklist-header
+        v-if="checklist"
+        :checklist="checklist"
+      >
+      </checklist-header>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { MucCallout } from "@muenchen/muc-patternlab-vue";
+import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { computed } from "vue";
+import { onMounted, ref } from "vue";
 
-import { FIRSTNAME_DEFAULT } from "@/util/constants";
+import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
+import ChecklistHeader from "@/components/ChecklistHeader.vue";
+import SkeletonLoader from "@/components/common/skeleton-loader.vue";
+import { QUERY_PARAM_CHECKLIST_ID } from "@/util/constants.ts";
 
-const { firstName = FIRSTNAME_DEFAULT } = defineProps<{
-  firstName?: string;
-}>();
+const checklist = ref<DummyChecklist>();
+const loading = ref(true);
 
-const calloutContent = computed(() => {
-  return `Hello ${firstName}`;
+onMounted(() => {
+  loading.value = true;
+  const dcl = new DummyChecklistService();
+  dcl
+    .getChecklists()
+    .then((checklists) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
+      const foundChecklist = checklists.find(
+        (checklist) => checklist.id === checklistId
+      );
+
+      if (foundChecklist) {
+        checklist.value = foundChecklist;
+      } else {
+        throw new Error("Checkliste wurde nicht gefunden");
+      }
+    })
+    .finally(() => (loading.value = false));
 });
 </script>
 
