@@ -80,7 +80,7 @@ public class ChecklistService {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof Jwt jwt) {
             Object emailClaim = jwt.getClaims().get("email");
-            if(emailClaim != null) {
+            if (emailClaim != null) {
                 final String email = emailClaim.toString();
                 if (!StringUtils.isBlank(email)) {
                     return email;
