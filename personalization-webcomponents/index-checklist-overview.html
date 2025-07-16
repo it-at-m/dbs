@@ -1,42 +1,53 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <meta
-      name="robots"
-      content="noindex"
+            name="robots"
+            content="noindex"
     />
     <link
-      href="/favicon.ico"
-      rel="icon"
+            href="/favicon.ico"
+            rel="icon"
     />
     <meta
-      content="width=device-width, initial-scale=1.0"
-      name="viewport"
+            content="width=device-width, initial-scale=1.0"
+            name="viewport"
     />
     <title>personalization-webcomponent</title>
 
     <!-- Muenchen.de Fontfaces -->
     <link
-      href="https://assets.muenchen.de/mde/1.0.10/css/fonts.css"
-      rel="stylesheet"
+            href="https://assets.muenchen.de/mde/1.0.10/css/fonts.css"
+            rel="stylesheet"
     />
+
+    <!-- Load login-WC from local dev-server -->
+    <script src="http://localhost:5173/src/main.ts" type="module"></script>
 
     <!-- built files will be auto injected -->
     <script
-      src="src/checklist-overview-webcomponent.ts"
-      type="module"
+            src="src/checklist-overview-webcomponent.ts"
+            type="module"
     ></script>
-  </head>
-  <body>
-    <noscript>
-      <strong>
+</head>
+<body>
+<noscript>
+    <strong>
         In order for the development page to work correctly, JavaScript needs to
         be activated.
-      </strong>
-    </noscript>
-    <div>
-      <checklist-overview first-name="Simon" />
-    </div>
-  </body>
+    </strong>
+</noscript>
+<dbs-login
+        kc-url="http://localhost:8100/auth/"
+        kc-realm="local_realm"
+        kc-client-id="local"
+        overview-link="http://localhost:3000/"
+        ticket-link="http://localhost:3000/"
+        appointment-link="http://localhost:3000/"
+></dbs-login>
+<div>
+    <checklist-overview first-name="Simon"/>
+</div>
+</body>
 </html>
