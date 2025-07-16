@@ -9,8 +9,8 @@
         <skeleton-loader/>
       </div>
       <div v-else>
-        <checklist-header
-            :checklist="checklists[0]"
+        <checklist-header v-if="checklist"
+            :checklist="checklist"
         >
         </checklist-header>
       </div>
@@ -27,20 +27,30 @@ import ChecklistHeader from "@/components/ChecklistHeader.vue";
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
+import {QUERY_PARAM_CHECKLIST_ID} from "@/util/constants.ts";
 
-const checklists = ref<DummyChecklist[]>([]);
+const checklist = ref<DummyChecklist >();
 const loading = ref(true);
+
 
 onMounted(() => {
   loading.value = true;
   const dcl = new DummyChecklistService();
-  dcl
-      .getChecklists()
-      .then((checklist) => {
-        checklists.value = checklist;
+  dcl.getChecklists()
+      .then((checklists) => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID)
+        const foundChecklist = checklists.find(checklist => checklist.id === checklistId)
+
+        if (foundChecklist) {
+          checklist.value = foundChecklist;
+        } else {
+          throw new Error("Checkliste wurde nicht gefunden")
+        }
       })
       .finally(() => (loading.value = false));
 });
+
 </script>
 
 <style>
