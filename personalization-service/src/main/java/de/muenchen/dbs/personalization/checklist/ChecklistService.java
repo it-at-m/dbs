@@ -79,9 +79,12 @@ public class ChecklistService {
     private String getUserMailFromAuthenticationOrThrow() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof Jwt jwt) {
-            final String email = jwt.getClaims().get("email").toString();
-            if (!StringUtils.isBlank(email)) {
-                return email;
+            Object emailClaim = jwt.getClaims().get("email");
+            if(emailClaim != null) {
+                final String email = emailClaim.toString();
+                if (!StringUtils.isBlank(email)) {
+                    return email;
+                }
             }
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
