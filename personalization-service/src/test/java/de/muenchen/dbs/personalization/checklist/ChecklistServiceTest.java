@@ -4,12 +4,10 @@ import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.crea
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.argThat;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.muenchen.dbs.personalization.IntegrationTestBase;
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import java.time.Instant;
@@ -42,14 +40,13 @@ public class ChecklistServiceTest {
 
     @BeforeEach
     public void setup() {
-        JwtAuthenticationToken authentication = new JwtAuthenticationToken(
+        final JwtAuthenticationToken authentication = new JwtAuthenticationToken(
                 new Jwt("tokenvalue",
                         Instant.now(),
                         Instant.now().plusSeconds(3600),
                         Map.of("alg", "HS256",
                                 "typ", "JWT"),
-                        Map.of("email", USER_EMAIL))
-        );
+                        Map.of("email", USER_EMAIL)));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

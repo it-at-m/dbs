@@ -6,7 +6,6 @@ import static de.muenchen.dbs.personalization.TestConstants.SPRING_TEST_PROFILE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.util.Map;
-import org.hibernate.annotations.common.reflection.XPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +21,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 )
 @ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
 @AutoConfigureMockMvc
-public abstract class IntegrationTestBase {
+public class IntegrationTestBase {
 
     @Autowired
     protected MockMvc mockMvc;
@@ -30,13 +29,12 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    protected final String TOKEN_USER_MAIL = "testuser@example.com";
-    protected final Jwt DEFAULT_JWT = new Jwt(
+    protected static final String TOKEN_USER_MAIL = "testuser@example.com";
+    protected static final Jwt DEFAULT_JWT = new Jwt(
             "tokenvalue",
             Instant.now(),
             Instant.now().plusSeconds(3600),
             Map.of("alg", "HS256",
                     "typ", "JWT"),
-            Map.of("email", TOKEN_USER_MAIL)
-    );
+            Map.of("email", TOKEN_USER_MAIL));
 }

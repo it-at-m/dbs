@@ -52,7 +52,6 @@ class UnicodeConfigurationTest extends IntegrationTestBase {
      */
     private static final String TEXT_ATTRIBUTE_COMPOSED = "\u00c4-\u00e9";
 
-
     @Autowired
     private ChecklistRepository checklistRepository;
 
@@ -71,14 +70,14 @@ class UnicodeConfigurationTest extends IntegrationTestBase {
 
         // When
         final ResultActions response = mockMvc.perform(MockMvcRequestBuilders.post(ENTITY_ENDPOINT_URL)
-                        .content(objectMapper.writeValueAsString(checklistCreateDTO))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)));
+                .content(objectMapper.writeValueAsString(checklistCreateDTO))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)));
 
         assertThat(response).isNotNull();
         assertThat(response.andExpect(status().isCreated()));
 
-        ChecklistReadDTO responseChecklist = objectMapper.readValue(response.andReturn().getResponse().getContentAsString(), ChecklistReadDTO.class);
+        final ChecklistReadDTO responseChecklist = objectMapper.readValue(response.andReturn().getResponse().getContentAsString(), ChecklistReadDTO.class);
 
         final Checklist checklist = checklistRepository.findById(responseChecklist.id()).orElse(null);
 

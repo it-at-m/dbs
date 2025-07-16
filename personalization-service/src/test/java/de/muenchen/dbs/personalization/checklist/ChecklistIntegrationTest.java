@@ -43,7 +43,6 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
     private static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER = new PostgreSQLContainer<>(
             DockerImageName.parse(TestConstants.TESTCONTAINERS_POSTGRES_IMAGE));
 
-
     private UUID testChecklistId;
 
     @Autowired
@@ -65,8 +64,8 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
         @Test
         void givenChecklistId_thenReturnChecklist() throws Exception {
             mockMvc.perform(get("/checklist/{checklistID}", testChecklistId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
@@ -79,8 +78,8 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
         @Test
         void givenEmail_thenReturnChecklists() throws Exception {
             mockMvc.perform(get("/checklist")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$", hasSize(2)));
@@ -102,9 +101,9 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
             mockMvc.perform(post("/checklist")
-                            .content(requestBody)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
+                    .content(requestBody)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isCreated())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.email", is(TOKEN_USER_MAIL)));
@@ -126,9 +125,9 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
             mockMvc.perform(put("/checklist/{checklistID}", testChecklistId)
-                            .content(requestBody)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
+                    .content(requestBody)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
@@ -141,8 +140,8 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
         @Test
         void givenChecklistId_thenChecklistIsDeleted() throws Exception {
             mockMvc.perform(delete("/checklist/{checklistID}", testChecklistId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk());
         }
     }

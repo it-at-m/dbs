@@ -31,8 +31,8 @@ class CacheControlConfigurationTest extends IntegrationTestBase {
     void testForCacheControlHeadersForEntityEndpoint() throws Exception {
 
         mockMvc.perform(get(ENTITY_ENDPOINT_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                 .andExpect(status().isOk())
                 .andExpect(header().exists(HttpHeaders.CACHE_CONTROL))
                 .andExpect(header().string(HttpHeaders.CACHE_CONTROL, EXPECTED_CACHE_CONTROL_HEADER_VALUES));
