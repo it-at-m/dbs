@@ -22,6 +22,12 @@
       rel="stylesheet"
     />
 
+    <!-- Load login-WC from local dev-server -->
+    <script
+      src="http://localhost:5173/src/main.ts"
+      type="module"
+    ></script>
+
     <!-- built files will be auto injected -->
     <script
       src="src/checklist-overview-webcomponent.ts"
@@ -35,6 +41,14 @@
         be activated.
       </strong>
     </noscript>
+    <dbs-login
+      kc-url="http://localhost:8100/auth/"
+      kc-realm="local_realm"
+      kc-client-id="local"
+      overview-link="http://localhost:3000/"
+      ticket-link="http://localhost:3000/"
+      appointment-link="http://localhost:3000/"
+    ></dbs-login>
     <div>
       <checklist-overview first-name="Simon" />
     </div>

@@ -6,6 +6,7 @@ const vitepressConfig = defineConfig({
   title: "DBS",
   description:
     "Documentation for the Digital Citizen Service of the City of Munich",
+  base: "/dbs/",
   head: [
     [
       "link",
@@ -28,6 +29,7 @@ const vitepressConfig = defineConfig({
       lazyLoading: true,
     },
   },
+  ignoreDeadLinks: "localhostLinks",
 });
 
 export default withMermaid(vitepressConfig);

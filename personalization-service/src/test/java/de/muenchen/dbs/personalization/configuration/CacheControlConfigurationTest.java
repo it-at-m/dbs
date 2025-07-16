@@ -1,35 +1,21 @@
 package de.muenchen.dbs.personalization.configuration;
 
-import static de.muenchen.dbs.personalization.TestConstants.SPRING_NO_SECURITY_PROFILE;
-import static de.muenchen.dbs.personalization.TestConstants.SPRING_TEST_PROFILE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import de.muenchen.dbs.personalization.PersonalizationServiceApplication;
+import de.muenchen.dbs.personalization.IntegrationTestBase;
 import de.muenchen.dbs.personalization.TestConstants;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-@Testcontainers
-@SpringBootTest(
-        classes = { PersonalizationServiceApplication.class },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-@ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
-class CacheControlConfigurationTest {
+class CacheControlConfigurationTest extends IntegrationTestBase {
 
     @Container
     @ServiceConnection
@@ -41,22 +27,15 @@ class CacheControlConfigurationTest {
 
     private static final String EXPECTED_CACHE_CONTROL_HEADER_VALUES = "no-cache, no-store, must-revalidate";
 
-    @Autowired
-    private TestRestTemplate testRestTemplate;
-
     @Test
-    void testForCacheControlHeadersForEntityEndpoint() {
+    void testForCacheControlHeadersForEntityEndpoint() throws Exception {
 
-        @SuppressWarnings("PMD.LooseCoupling")
-        final HttpHeaders headers = new HttpHeaders();
-        headers.set("lhmExtID", "userid");
-
-        final HttpEntity<Object> entity = new HttpEntity<>(headers);
-
-        final ResponseEntity<String> response = testRestTemplate.exchange(ENTITY_ENDPOINT_URL, HttpMethod.GET, entity, String.class);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getHeaders().containsKey(HttpHeaders.CACHE_CONTROL));
-        assertEquals(EXPECTED_CACHE_CONTROL_HEADER_VALUES, response.getHeaders().getCacheControl());
+        mockMvc.perform(get(ENTITY_ENDPOINT_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
+                .andExpect(status().isOk())
+                .andExpect(header().exists(HttpHeaders.CACHE_CONTROL))
+                .andExpect(header().string(HttpHeaders.CACHE_CONTROL, EXPECTED_CACHE_CONTROL_HEADER_VALUES));
     }
 
 }

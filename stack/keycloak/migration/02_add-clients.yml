@@ -5,10 +5,15 @@ changes:
   - addSimpleClient:
       clientId: local
       secret: client_secret
-      publicClient: false
+      publicClient: true
       redirectUris:
         - http://*
         - https://*
+
+  - updateClient:
+      clientId: local
+      webOrigins:
+        - *
 
   # Maps user client roles of current client into a claim "authorities"
   - addClientMapper:
