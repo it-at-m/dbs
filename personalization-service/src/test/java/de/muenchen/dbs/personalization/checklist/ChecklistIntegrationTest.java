@@ -50,6 +50,7 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
 
     @BeforeEach
     public void setUp() {
+        checklistRepository.deleteAll();
         final Checklist exampleChecklist = createTestChecklist(null, TOKEN_USER_MAIL, null);
         testChecklistId = checklistRepository.save(exampleChecklist).getId();
     }
@@ -82,7 +83,7 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
                     .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$", hasSize(2)));
+                    .andExpect(jsonPath("$", hasSize(1)));
         }
     }
 
