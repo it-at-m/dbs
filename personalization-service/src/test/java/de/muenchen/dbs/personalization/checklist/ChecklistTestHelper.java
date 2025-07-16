@@ -10,12 +10,12 @@ public final class ChecklistTestHelper {
     private ChecklistTestHelper() {
     }
 
-    public static Checklist createTestChecklist(final UUID id, final String userId, final List<ChecklistItem> checklistItems) {
+    public static Checklist createTestChecklist(final UUID id, final String email, final List<ChecklistItem> checklistItems) {
         final Checklist checklist = new Checklist();
         if (id != null) {
             checklist.setId(id);
         }
-        checklist.setLhmExtId(userId);
+        checklist.setEmail(email);
         checklist.setTitle("title");
         if (checklistItems != null) {
             checklist.setChecklistItems(checklistItems);

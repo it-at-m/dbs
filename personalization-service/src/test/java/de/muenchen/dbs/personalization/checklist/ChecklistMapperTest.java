@@ -27,7 +27,7 @@ public class ChecklistMapperTest {
         void givenChecklist_thenReturnsCorrectDTO() {
             // Given
             final UUID id = UUID.randomUUID();
-            final Checklist checklist = createTestChecklist(id, "lhmExtId", null);
+            final Checklist checklist = createTestChecklist(id, "user@example.com", null);
 
             // When
             final ChecklistReadDTO result = checklistMapper.toReadDTO(checklist);
@@ -45,15 +45,15 @@ public class ChecklistMapperTest {
         void givenRequestDTO_thenReturnsCorrectEntity() {
             // Given
             final UUID id = UUID.randomUUID();
-            final Checklist checklist = createTestChecklist(id, "lhmExtId", null);
-            final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(checklist.getLhmExtId(), checklist.getTitle(),
+            final Checklist checklist = createTestChecklist(id, "user@example.com", null);
+            final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(checklist.getTitle(),
                     checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
 
             // When
             final Checklist result = checklistMapper.toCreateChecklist(checklistCreateDTO);
 
             // Then
-            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(checklistCreateDTO);
+            assertThat(result).usingRecursiveComparison().ignoringFields("id", "email", "lastUpdate").isEqualTo(checklistCreateDTO);
         }
     }
 
@@ -63,8 +63,8 @@ public class ChecklistMapperTest {
         void givenRequestDTO_thenReturnsCorrectEntity() {
             // Given
             final UUID id = UUID.randomUUID();
-            final Checklist checklist = createTestChecklist(id, "lhmExtId", null);
-            final ChecklistUpdateDTO checklistUpdateDTO = new ChecklistUpdateDTO(id, checklist.getLhmExtId(), checklist.getTitle(),
+            final Checklist checklist = createTestChecklist(id, "user@example.com", null);
+            final ChecklistUpdateDTO checklistUpdateDTO = new ChecklistUpdateDTO(id, checklist.getEmail(), checklist.getTitle(),
                     checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
 
             // When

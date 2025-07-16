@@ -29,6 +29,7 @@ const vitepressConfig = defineConfig({
       lazyLoading: true,
     },
   },
+  ignoreDeadLinks: "localhostLinks",
 });
 
 export default withMermaid(vitepressConfig);

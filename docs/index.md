@@ -11,8 +11,12 @@ features:
     icon: 📖
     details: "Read more about what the DBS is and how it works."
     link: /introduction
-  - title: "Deployment"
+  - title: "Development"
     icon: 🛠️
+    details: "Getting DBS running locally for development."
+    link: /development
+  - title: "Deployment"
+    icon: 🚀
     details: "Documentation on how to deploy the DBS."
     link: /deployment
 ---
