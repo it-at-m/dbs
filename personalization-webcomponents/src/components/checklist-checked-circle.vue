@@ -21,5 +21,6 @@ defineProps<{
 
 .circle.checked {
   background-color: #9CA8B3;
+  border: 2px solid #9CA8B3;
 }
 </style>
