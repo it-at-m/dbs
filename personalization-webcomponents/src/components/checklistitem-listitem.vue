@@ -5,7 +5,10 @@
       :checked="!!checklistItem.checked"
     >
     </checklist-checked-circle>
-    <div class="item-title" :class="{ 'item-title-checked': checklistItem.checked }">
+    <div
+      class="item-title"
+      :class="{ 'item-title-checked': checklistItem.checked }"
+    >
       {{ checklistItem.title }}
     </div>
   </div>
@@ -27,6 +30,6 @@ defineProps<{
   font-size: 18px;
 }
 .item-title-checked {
-  color: #7A8D9F;
+  color: #7a8d9f;
 }
 </style>
