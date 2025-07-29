@@ -16,10 +16,11 @@ defineProps<{
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid var(--color-brand-main-blue);
+  border: 2px solid var(--color-neutrals-grey);
 }
 
 .circle.checked {
-  background-color: var(--color-brand-main-blue);
+  background-color: #9ca8b3;
+  border: 2px solid #9ca8b3;
 }
 </style>
