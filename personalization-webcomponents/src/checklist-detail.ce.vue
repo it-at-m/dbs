@@ -15,6 +15,9 @@
       >
       </checklist-header>
     </div>
+    <checklist-list
+        v-model="list" @checked="onChecked" @label-click="onLabelClick"
+    ></checklist-list>
   </div>
 </template>
 
@@ -29,9 +32,24 @@ import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
 import { QUERY_PARAM_CHECKLIST_ID } from "@/util/constants.ts";
+import ChecklistList from "@/components/ChecklistList.vue";
+import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
+
 
 const checklist = ref<DummyChecklist>();
 const loading = ref(true);
+const items = ref<DummyChecklistItem[]>([]);
+
+
+const list = items;
+
+function onChecked() {
+  console.log('List1 checked', items);
+}
+
+function onLabelClick(item: DummyChecklistItem) {
+  console.log('List label clicked', item);
+}
 
 onMounted(() => {
   loading.value = true;
@@ -47,6 +65,7 @@ onMounted(() => {
 
       if (foundChecklist) {
         checklist.value = foundChecklist;
+        items.value = checklist.value.items;
       } else {
         throw new Error("Checkliste wurde nicht gefunden");
       }
