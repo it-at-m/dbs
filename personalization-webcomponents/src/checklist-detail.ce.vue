@@ -14,20 +14,19 @@
         :checklist="checklist"
       >
       </checklist-header>
+
+      <h2 class="h2">Offene Aufgaben ({{todoCount}})</h2>
+      <checklist-list
+          v-model="openCheckList" @checked="onChecked" @label-click="onLabelClick"
+      ></checklist-list>
+
+      <h2 class="h2">Erledigte Aufgaben ({{doneCount}})</h2>
+      <checklist-list
+          v-model="closedCheckList" @label-click="onLabelClick"
+          :is-draggable="false" :disabled="true"
+      ></checklist-list>
     </div>
-    <h2 class="h2">Offene Aufgaben ({{todoCount}})</h2>
-    <checklist-list
-        v-model="openCheckList" @checked="onChecked" @label-click="onLabelClick"
-        :is-draggable="true"
-    ></checklist-list>
-
-    <h2 class="h2">Erledigte Aufgaben ({{doneCount}})</h2>
-    <checklist-list
-        v-model="closedCheckList" @label-click="onLabelClick"
-        :is-draggable="false"
-    ></checklist-list>
   </div>
-
 
 </template>
 

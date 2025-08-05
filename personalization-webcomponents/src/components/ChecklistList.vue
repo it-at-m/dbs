@@ -9,17 +9,18 @@
         :disabled="!isDraggable"
         @start="drag = true"
         @end="drag = false"
+        item-key="serviceID"
     >
       <template #item="{ element}">
         <li class="list-item"
             :class="{ muted: element.checked !== null }"
-            :key="element.serviceID"
         >
           <input
               type="checkbox"
               :id="'cb-' + element.serviceID"
               class="radio-look"
               :checked="element.checked !== null"
+              :disabled="disabled"
               @change="() => onSelectChange(element.serviceID)"
           />
           <label
@@ -57,11 +58,14 @@ import {MucIcon} from "@muenchen/muc-patternlab-vue";
 import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 
-const props = defineProps<{
-  modelValue: DummyChecklistItem[]
-  isDraggable: boolean
-}>();
-
+const props = withDefaults(defineProps<{
+  modelValue: DummyChecklistItem[];
+  isDraggable?: boolean;
+  disabled?: boolean; // Optional, damit Default greifen kann
+}>(), {
+  isDraggable: true,
+  disabled: false
+});
 const emit = defineEmits(["checked", "update:modelValue", "label-click"]);
 const list = ref<DummyChecklistItem[]>([...props.modelValue]);
 const drag = ref(false);
