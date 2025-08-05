@@ -46,13 +46,13 @@ public class SecurityConfiguration {
                         // allow access to /actuator/health/readiness for OpenShift Readiness Check
                         PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/actuator/health/readiness"),
                         // allow access to opean-api endpoints
-                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET,"/v3/api-docs"),
-                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET,"/v3/api-docs.yaml"),
-                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET,"/v3/api-docs/**"),
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/v3/api-docs"),
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/v3/api-docs.yaml"),
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/v3/api-docs/**"),
                         // allow access to swagger-ui
-                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET,"/swagger-ui/**"),
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/swagger-ui/**"),
                         // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
-                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET,"/actuator/metrics"))
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/actuator/metrics"))
                         .permitAll())
                 .authorizeHttpRequests((requests) -> requests.requestMatchers("/**")
                         .authenticated())
