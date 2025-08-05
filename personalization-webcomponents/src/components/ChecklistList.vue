@@ -5,22 +5,22 @@
         tag="ul"
         class="list"
         :animation="200"
-        handle=".drag-handle"
+        :handle="isDraggable ? '.drag-handle' : undefined"
+        :disabled="!isDraggable"
         @start="drag = true"
         @end="drag = false"
     >
       <template #item="{ element}">
         <li class="list-item"
-            :class="{ muted: isSelected(element.serviceID) }"
+            :class="{ muted: element.checked !== null }"
             :key="element.serviceID"
         >
           <input
               type="checkbox"
               :id="'cb-' + element.serviceID"
               class="radio-look"
-              :value="element.serviceID"
-              v-model="selected"
-              @change="onSelectChange"
+              :checked="element.checked !== null"
+              @change="() => onSelectChange(element.serviceID)"
           />
           <label
               class="label-text"
@@ -31,14 +31,12 @@
           </label>
 
           <!-- Drag-Handle Icon -->
-          <span class="drag-handle" title="Element verschieben">
+          <span v-if="isDraggable" class="drag-handle" title="Element verschieben">
             <muc-icon icon="drag-vertical" />
           </span>
         </li>
       </template>
     </draggable>
-
-    <pre>Ausgewählt: {{ selected }}</pre>
 
     <!--todo-->
     <!-- Platzhalter Einfaches Dialogfenster (Modal)-->
@@ -61,11 +59,11 @@ import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 const props = defineProps<{
   modelValue: DummyChecklistItem[]
+  isDraggable: boolean
 }>();
 
 const emit = defineEmits(["checked", "update:modelValue", "label-click"]);
 const list = ref<DummyChecklistItem[]>([...props.modelValue]);
-const selected = ref<string[]>([]);
 const drag = ref(false);
 
 const dialogVisible = ref(false);
@@ -80,12 +78,9 @@ watch(list, (newVal) => {
   emit('update:modelValue', [...newVal]);
 }, { deep: true });
 
-function isSelected(serviceID: string) {
-  return selected.value.includes(serviceID);
-}
 
-function onSelectChange() {
-  emit('checked', [...selected.value]);
+function onSelectChange(serviceID: string) {
+  emit('checked', serviceID);
 }
 
 function openDialog(item: DummyChecklistItem) {
@@ -132,7 +127,7 @@ function closeDialog() {
   color: #999;
 }
 
-/* Checkbox im Radio-Look */
+/* Checkbox im Radio-Look mit weißem Haken auf blauem Kreis */
 .radio-look {
   appearance: none;
   -webkit-appearance: none;
@@ -140,40 +135,60 @@ function closeDialog() {
   height: 16px;
   border: 2px solid #007acc;
   border-radius: 50%;
+  background: white;
+  box-sizing: border-box;
   margin-right: 0.8rem;
   position: relative;
   cursor: pointer;
   outline-offset: 2px;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .radio-look:hover {
   border-color: #005fa3;
+  background-color: #cce4ff;
 }
 
-.radio-look:checked::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 8px;
-  height: 8px;
-  background-color: #007acc;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-
+/* Blauer Kreis im Innern beim Hover (leicht transparent) */
 .radio-look:hover::before {
   content: "";
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background-color: #007acc;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0.5;
+  opacity: 0.3;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Blauer Kreis mit weißem Haken beim Ausgewählt */
+.radio-look:checked {
+  border-color: #007acc;
+  background-color: #007acc;
+}
+
+.radio-look:checked::before {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
+  transform: translate(-50%, -55%);
+  pointer-events: none;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+/* Optional Haken leicht transparent beim Hover des Ausgewählten */
+.radio-look:checked:hover::before {
+  opacity: 0.8;
 }
 
 .label-text {

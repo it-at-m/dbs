@@ -15,19 +15,27 @@
       >
       </checklist-header>
     </div>
+    <h2 class="h2">Offene Aufgaben ({{todoCount}})</h2>
     <checklist-list
-        v-model="list" @checked="onChecked" @label-click="onLabelClick"
+        v-model="openCheckList" @checked="onChecked" @label-click="onLabelClick"
+        :is-draggable="true"
+    ></checklist-list>
+
+    <h2 class="h2">Erledigte Aufgaben ({{doneCount}})</h2>
+    <checklist-list
+        v-model="closedCheckList" @label-click="onLabelClick"
+        :is-draggable="false"
     ></checklist-list>
   </div>
+
+
 </template>
 
 <script setup lang="ts">
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
-
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref } from "vue";
-
+import {computed, onMounted, ref} from "vue";
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
@@ -35,16 +43,28 @@ import { QUERY_PARAM_CHECKLIST_ID } from "@/util/constants.ts";
 import ChecklistList from "@/components/ChecklistList.vue";
 import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
-
 const checklist = ref<DummyChecklist>();
 const loading = ref(true);
-const items = ref<DummyChecklistItem[]>([]);
+const openCheckList = ref<DummyChecklistItem[]>([]);
+const closedCheckList = ref<DummyChecklistItem[]>([]);
 
+const todoCount = computed(() => {
+  return openCheckList.value.filter((value) => !value.checked).length;
+});
 
-const list = items;
+const doneCount = computed(() => {
+  return closedCheckList.value.filter((value) => value.checked).length;
+});
 
-function onChecked() {
-  console.log('List1 checked', items);
+function onChecked(serviceID: string) {
+  const idx = openCheckList.value.findIndex(i => i.serviceID === serviceID);
+  if (idx === -1) return;
+
+  const [item] = openCheckList.value.splice(idx, 1);
+  item.checked = new Date();
+
+  openCheckList.value = [...openCheckList.value];
+  closedCheckList.value = [...closedCheckList.value, item];
 }
 
 function onLabelClick(item: DummyChecklistItem) {
@@ -65,7 +85,8 @@ onMounted(() => {
 
       if (foundChecklist) {
         checklist.value = foundChecklist;
-        items.value = checklist.value.items;
+        openCheckList.value = foundChecklist.items.filter(item => item.checked === null);
+        closedCheckList.value = foundChecklist.items.filter(item => item.checked !== null);
       } else {
         throw new Error("Checkliste wurde nicht gefunden");
       }
@@ -78,4 +99,10 @@ onMounted(() => {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+
+.h2 {
+  display: flex;
+  justify-content: center; /* Horizontal zentrieren */
+  align-items: center;
+}
 </style>
