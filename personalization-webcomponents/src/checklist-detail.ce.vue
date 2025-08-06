@@ -12,35 +12,62 @@
       <checklist-header
         v-if="checklist"
         :checklist="checklist"
-      >
-      </checklist-header>
+      ></checklist-header>
+      <div class="m-component m-component-form">
+        <div class="container">
+          <div class="m-component__grid">
+            <div class="m-component__column">
+              <h2>Offene Aufgaben ({{ todoCount }})</h2>
 
-      <h2 class="h2">Offene Aufgaben ({{todoCount}})</h2>
-      <checklist-list
-          v-model="openCheckList" @checked="onChecked" @label-click="onLabelClick"
-      ></checklist-list>
-
-      <h2 class="h2">Erledigte Aufgaben ({{doneCount}})</h2>
-      <checklist-list
-          v-model="closedCheckList" @label-click="onLabelClick"
-          :is-draggable="false" :disabled="true"
-      ></checklist-list>
+              <checklist-list
+                v-if="todoCount !== 0"
+                v-model="openCheckList"
+                @checked="onCheckedOpen"
+                @label-click="onLabelClick"
+              ></checklist-list>
+              <muc-banner
+                v-else
+                type="success"
+                >Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
+                bewahren diese Checkliste noch bis zum 17. September 2026 für
+                Sie auf. Danach wird sie automatisch gelöscht.</muc-banner
+              >
+              <h2>Erledigte Aufgaben ({{ doneCount }})</h2>
+              <checklist-list
+                v-if="doneCount !== 0"
+                v-model="closedCheckList"
+                @checked="onCheckedClosed"
+                @label-click="onLabelClick"
+                :is-draggable="false"
+              ></checklist-list>
+              <muc-banner
+                v-else
+                type="info"
+                >Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
+                der Checkliste ab, um sie als erledigt zu markieren.</muc-banner
+              >
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
+
+import { MucBanner } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import {computed, onMounted, ref} from "vue";
+import { computed, onMounted, ref } from "vue";
+
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
+import ChecklistList from "@/components/ChecklistList.vue";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
 import { QUERY_PARAM_CHECKLIST_ID } from "@/util/constants.ts";
-import ChecklistList from "@/components/ChecklistList.vue";
-import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 const checklist = ref<DummyChecklist>();
 const loading = ref(true);
@@ -55,19 +82,30 @@ const doneCount = computed(() => {
   return closedCheckList.value.filter((value) => value.checked).length;
 });
 
-function onChecked(serviceID: string) {
-  const idx = openCheckList.value.findIndex(i => i.serviceID === serviceID);
+function onCheckedOpen(serviceID: string) {
+  const idx = openCheckList.value.findIndex((i) => i.serviceID === serviceID);
   if (idx === -1) return;
 
   const [item] = openCheckList.value.splice(idx, 1);
   item.checked = new Date();
 
   openCheckList.value = [...openCheckList.value];
-  closedCheckList.value = [...closedCheckList.value, item];
+  closedCheckList.value = [item, ...closedCheckList.value];
+}
+
+function onCheckedClosed(serviceID: string) {
+  const idx = closedCheckList.value.findIndex((i) => i.serviceID === serviceID);
+  if (idx === -1) return;
+
+  const [item] = closedCheckList.value.splice(idx, 1);
+  item.checked = null;
+
+  closedCheckList.value = [...closedCheckList.value];
+  openCheckList.value = [...openCheckList.value, item];
 }
 
 function onLabelClick(item: DummyChecklistItem) {
-  console.log('List label clicked', item);
+  console.log("List label clicked", item);
 }
 
 onMounted(() => {
@@ -84,8 +122,12 @@ onMounted(() => {
 
       if (foundChecklist) {
         checklist.value = foundChecklist;
-        openCheckList.value = foundChecklist.items.filter(item => item.checked === null);
-        closedCheckList.value = foundChecklist.items.filter(item => item.checked !== null);
+        openCheckList.value = foundChecklist.items.filter(
+          (item) => item.checked === null
+        );
+        closedCheckList.value = foundChecklist.items.filter(
+          (item) => item.checked !== null
+        );
       } else {
         throw new Error("Checkliste wurde nicht gefunden");
       }
@@ -98,10 +140,4 @@ onMounted(() => {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
-
-.h2 {
-  display: flex;
-  justify-content: center; /* Horizontal zentrieren */
-  align-items: center;
-}
 </style>

@@ -1,38 +1,44 @@
 <template>
   <div class="container">
     <draggable
-        v-model="list"
-        tag="ul"
-        class="list"
-        :animation="200"
-        :handle="isDraggable ? '.drag-handle' : undefined"
-        :disabled="!isDraggable"
-        @start="drag = true"
-        @end="drag = false"
-        item-key="serviceID"
+      v-model="list"
+      tag="ul"
+      class="list"
+      :animation="200"
+      :handle="isDraggable ? '.drag-handle' : undefined"
+      :disabled="!isDraggable"
+      @start="drag = true"
+      @end="drag = false"
+      :ghost-class="'drag-ghost'"
+      item-key="serviceID"
     >
-      <template #item="{ element}">
-        <li class="list-item"
-            :class="{ muted: element.checked !== null }"
+      <template #item="{ element }">
+        <li
+          class="list-item"
+          :class="{ muted: element.checked !== null }"
         >
           <input
-              type="checkbox"
-              :id="'cb-' + element.serviceID"
-              class="radio-look"
-              :checked="element.checked !== null"
-              :disabled="disabled"
-              @change="() => onSelectChange(element.serviceID)"
+            type="checkbox"
+            :id="'cb-' + element.serviceID"
+            class="radio-look"
+            :checked="element.checked !== null"
+            :disabled="disabled"
+            @change="() => onSelectChange(element.serviceID)"
           />
           <label
-              class="label-text"
-              @click.prevent="openDialog(element)"
-              style="cursor: pointer;"
+            class="label-text"
+            @click.prevent="openDialog(element)"
+            style="cursor: pointer"
           >
             {{ element.title }}
           </label>
 
           <!-- Drag-Handle Icon -->
-          <span v-if="isDraggable" class="drag-handle" title="Element verschieben">
+          <span
+            v-if="isDraggable"
+            class="drag-handle"
+            title="Element verschieben"
+          >
             <muc-icon icon="drag-vertical" />
           </span>
         </li>
@@ -41,7 +47,11 @@
 
     <!--todo-->
     <!-- Platzhalter Einfaches Dialogfenster (Modal)-->
-    <div v-if="dialogVisible" class="modal-overlay" @click.self="closeDialog">
+    <div
+      v-if="dialogVisible"
+      class="modal-overlay"
+      @click.self="closeDialog"
+    >
       <div class="modal-content">
         <h3>Information zu "{{ dialogItem?.title }}"</h3>
         <p>Hier kannst du beliebige Inhalte anzeigen.</p>
@@ -52,20 +62,23 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineEmits,watch } from "vue";
-import draggable from "vuedraggable";
-import {MucIcon} from "@muenchen/muc-patternlab-vue";
 import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
+import { MucIcon } from "@muenchen/muc-patternlab-vue";
+import { defineEmits, ref, watch } from "vue";
+import draggable from "vuedraggable";
 
-const props = withDefaults(defineProps<{
-  modelValue: DummyChecklistItem[];
-  isDraggable?: boolean;
-  disabled?: boolean; // Optional, damit Default greifen kann
-}>(), {
-  isDraggable: true,
-  disabled: false
-});
+const props = withDefaults(
+  defineProps<{
+    modelValue: DummyChecklistItem[];
+    isDraggable?: boolean;
+    disabled?: boolean;
+  }>(),
+  {
+    isDraggable: true,
+    disabled: false,
+  }
+);
 const emit = defineEmits(["checked", "update:modelValue", "label-click"]);
 const list = ref<DummyChecklistItem[]>([...props.modelValue]);
 const drag = ref(false);
@@ -73,24 +86,29 @@ const drag = ref(false);
 const dialogVisible = ref(false);
 const dialogItem = ref<DummyChecklistItem | null>(null);
 
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    list.value = [...newVal];
+  }
+);
 
-watch(() => props.modelValue, (newVal) => {
-  list.value = [...newVal];
-});
-
-watch(list, (newVal) => {
-  emit('update:modelValue', [...newVal]);
-}, { deep: true });
-
+watch(
+  list,
+  (newVal) => {
+    emit("update:modelValue", [...newVal]);
+  },
+  { deep: true }
+);
 
 function onSelectChange(serviceID: string) {
-  emit('checked', serviceID);
+  emit("checked", serviceID);
 }
 
 function openDialog(item: DummyChecklistItem) {
   dialogItem.value = item;
   dialogVisible.value = true;
-  emit('label-click', item);
+  emit("label-click", item);
 }
 
 function closeDialog() {
@@ -99,18 +117,20 @@ function closeDialog() {
 </script>
 
 <style scoped>
+.drag-ghost {
+  background-color: #e1f0fc !important;
+  box-shadow: 0 2px 8px #007acc30;
+}
 .container {
   max-width: 600px;
   margin: 1rem auto;
-  font-family: Arial, sans-serif;
 }
 
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border-top: 1px solid #ddd;
 }
 
 .list-item {
@@ -120,6 +140,7 @@ function closeDialog() {
   border-bottom: 1px solid #ddd;
   user-select: none;
   cursor: grab;
+  color: var(--color-brand-main-blue);
 }
 
 .list-item:last-child {
@@ -128,16 +149,16 @@ function closeDialog() {
 
 /* Text ausgegraut, wenn ausgewählt */
 .muted {
-  color: #999;
+  color: #7a8d9f;
 }
 
-/* Checkbox im Radio-Look mit weißem Haken auf blauem Kreis */
 .radio-look {
   appearance: none;
   -webkit-appearance: none;
+  flex: 0 0 16px;
   width: 16px;
   height: 16px;
-  border: 2px solid #007acc;
+  border: 2px solid var(--color-neutrals-grey);
   border-radius: 50%;
   background: white;
   box-sizing: border-box;
@@ -145,11 +166,13 @@ function closeDialog() {
   position: relative;
   cursor: pointer;
   outline-offset: 2px;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .radio-look:hover {
-  border-color: #005fa3;
+  border-color: var(--color-brand-main-blue);
   background-color: #cce4ff;
 }
 
@@ -161,7 +184,7 @@ function closeDialog() {
   left: 50%;
   width: 10px;
   height: 10px;
-  background-color: #007acc;
+  background-color: var(--color-brand-main-blue);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   opacity: 0.3;
@@ -171,8 +194,8 @@ function closeDialog() {
 
 /* Blauer Kreis mit weißem Haken beim Ausgewählt */
 .radio-look:checked {
-  border-color: #007acc;
-  background-color: #007acc;
+  border-color: var(--color-brand-main-blue);
+  background-color: var(--color-brand-main-blue);
 }
 
 .radio-look:checked::before {
@@ -184,7 +207,7 @@ function closeDialog() {
   font-weight: bold;
   font-size: 14px;
   line-height: 1;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -45%);
   pointer-events: none;
   user-select: none;
   transition: color 0.2s ease;
@@ -205,14 +228,14 @@ function closeDialog() {
   user-select: none;
   font-size: 24px;
   margin-left: auto;
-  color: #666;
+  color: var(--color-neutrals-grey);
   display: flex;
   align-items: center;
 }
 
 .drag-handle:active {
   cursor: grabbing;
-  color: #007acc;
+  color: var(--color-brand-main-blue);
 }
 
 /* Modal Styles */
