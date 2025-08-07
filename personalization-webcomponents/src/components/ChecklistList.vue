@@ -46,7 +46,7 @@
     </draggable>
 
     <!--todo-->
-    <!-- Platzhalter Einfaches Dialogfenster (Modal)-->
+    <!-- Placeholder simple dialog box (modal)-->
     <div
       v-if="dialogVisible"
       class="modal-overlay"
@@ -148,7 +148,7 @@ function closeDialog() {
   border-bottom: none;
 }
 
-/* Text ausgegraut, wenn ausgewählt */
+/* text grayed out when selected */
 .muted {
   color: #7a8d9f;
 }
@@ -177,7 +177,7 @@ function closeDialog() {
   background-color: #cce4ff;
 }
 
-/* Blauer Kreis im Innern beim Hover (leicht transparent) */
+/* blue circle inside on hover (slightly transparent) */
 .radio-look:hover::before {
   content: "";
   position: absolute;
@@ -193,7 +193,7 @@ function closeDialog() {
   transition: opacity 0.2s ease;
 }
 
-/* Blauer Kreis mit weißem Haken beim Ausgewählt */
+/* blue circle with white tick when selected */
 .radio-look:checked {
   border-color: var(--color-brand-main-blue);
   background-color: var(--color-brand-main-blue);
@@ -214,7 +214,6 @@ function closeDialog() {
   transition: color 0.2s ease;
 }
 
-/* Optional Haken leicht transparent beim Hover des Ausgewählten */
 .radio-look:checked:hover::before {
   opacity: 0.8;
 }

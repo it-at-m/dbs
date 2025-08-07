@@ -23,7 +23,6 @@
                 v-if="todoCount !== 0"
                 v-model="openCheckList"
                 @checked="onCheckedOpen"
-                @label-click="onLabelClick"
               ></checklist-list>
               <muc-banner
                 v-else
@@ -37,7 +36,6 @@
                 v-if="doneCount !== 0"
                 v-model="closedCheckList"
                 @checked="onCheckedClosed"
-                @label-click="onLabelClick"
                 :is-draggable="false"
               ></checklist-list>
               <muc-banner
@@ -102,10 +100,6 @@ function onCheckedClosed(serviceID: string) {
 
   closedCheckList.value = [...closedCheckList.value];
   openCheckList.value = [item, ...openCheckList.value];
-}
-
-function onLabelClick(item: DummyChecklistItem) {
-  console.log("List label clicked", item);
 }
 
 onMounted(() => {
