@@ -124,6 +124,7 @@ function closeDialog() {
 .container {
   max-width: 600px;
   margin: 1rem auto;
+  padding-left: 0;
 }
 
 .list {
