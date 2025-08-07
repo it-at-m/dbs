@@ -101,7 +101,7 @@ function onCheckedClosed(serviceID: string) {
   item.checked = null;
 
   closedCheckList.value = [...closedCheckList.value];
-  openCheckList.value = [...openCheckList.value, item];
+  openCheckList.value = [item, ...openCheckList.value];
 }
 
 function onLabelClick(item: DummyChecklistItem) {
