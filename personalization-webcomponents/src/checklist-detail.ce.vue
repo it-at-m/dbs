@@ -17,7 +17,7 @@
         <div class="container">
           <div class="m-component__grid">
             <div class="m-component__column">
-              <h2>Offene Aufgaben ({{ todoCount }})</h2>
+              <h2 class="headline">Offene Aufgaben ({{ todoCount }})</h2>
 
               <checklist-list
                 v-if="todoCount !== 0"
@@ -26,12 +26,13 @@
               ></checklist-list>
               <muc-banner
                 v-else
+                class="banner"
                 type="success"
                 >Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
                 bewahren diese Checkliste noch bis zum 17. September 2026 für
                 Sie auf. Danach wird sie automatisch gelöscht.</muc-banner
               >
-              <h2>Erledigte Aufgaben ({{ doneCount }})</h2>
+              <h2 class="headline">Erledigte Aufgaben ({{ doneCount }})</h2>
               <checklist-list
                 v-if="doneCount !== 0"
                 v-model="closedCheckList"
@@ -40,6 +41,7 @@
               ></checklist-list>
               <muc-banner
                 v-else
+                class="banner"
                 type="info"
                 >Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
                 der Checkliste ab, um sie als erledigt zu markieren.</muc-banner
@@ -134,4 +136,17 @@ onMounted(() => {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+
+.banner .m-banner .container-fluid {
+  margin-left: -60px !important; /* oder eine kleinere Zahl nach Wunsch */
+  min-width: 575px !important;
+}
+
+.banner {
+  padding-bottom: 56px;
+}
+
+.headline {
+  padding-bottom: 32px;
+}
 </style>

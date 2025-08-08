@@ -30,7 +30,7 @@
             @click.prevent="openDialog(element)"
             style="cursor: pointer"
           >
-            {{ element.title }}
+            <b>{{ element.title }}</b>
           </label>
 
           <!-- Drag-Handle Icon -->
