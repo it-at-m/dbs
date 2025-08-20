@@ -65,8 +65,8 @@
 import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
-import { defineEmits, ref, watch } from "vue";
 import { Sortable } from "sortablejs-vue3";
+import { defineEmits, ref, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
