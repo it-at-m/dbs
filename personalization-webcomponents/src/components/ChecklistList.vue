@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <draggable
-      v-model="list"
+    <sortable
+      :list="list"
       tag="ul"
       class="list"
       :animation="200"
@@ -25,13 +25,13 @@
             :disabled="disabled"
             @change="() => onSelectChange(element.serviceID)"
           />
-          <label
+          <span
             class="label-text"
             @click.prevent="openDialog(element)"
             style="cursor: pointer"
           >
             <b>{{ element.title }}</b>
-          </label>
+          </span>
 
           <!-- Drag-Handle Icon -->
           <span
@@ -43,7 +43,7 @@
           </span>
         </li>
       </template>
-    </draggable>
+    </sortable>
 
     <!--todo-->
     <!-- Placeholder simple dialog box (modal)-->
@@ -65,8 +65,8 @@
 import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
+import { Sortable } from "sortablejs-vue3";
 import { defineEmits, ref, watch } from "vue";
-import draggable from "vuedraggable";
 
 const props = withDefaults(
   defineProps<{
