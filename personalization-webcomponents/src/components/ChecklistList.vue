@@ -66,9 +66,9 @@ import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import { defineEmits, ref, watch } from "vue";
+import { defineEmits, ref } from "vue";
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     modelValue: DummyChecklistItem[];
     isDraggable?: boolean;
