@@ -5,6 +5,21 @@ spring:
     name: "@project.artifactId@"
     group: "@project.groupId@"
     version: "@project.version@"
+  cloud:
+    stream:
+      default:
+        consumer:
+          max-attempts: 1
+      kafka:
+        default:
+          consumer:
+            ack-mode: record
+        binder:
+          auto-create-topics: false
+          consumer-properties:
+            max.poll.records: 20
+            auto.offset.reset: latest
+      output-bindings: event-out
 
 server:
   error:
