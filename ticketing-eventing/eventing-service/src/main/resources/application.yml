@@ -25,6 +25,7 @@ server:
   error:
     whitelabel:
       enabled: false
+    include-message: always
 
 # Config for spring actuator endpoints
 management:
@@ -61,7 +62,6 @@ management:
       enabled: true
 
 springdoc:
-  show-actuator: true
   # Disable swagger-ui as default
   swagger-ui:
     enabled: false
@@ -72,6 +72,7 @@ springdoc:
 logging:
   level:
     root: info
+    org.apache.kafka: warn
   structured:
     format:
       console: logstash

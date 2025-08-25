@@ -31,5 +31,11 @@ logging:
   level:
     root: INFO
     de.muenchen.oss.dbs.ticketing.eventing: DEBUG
-    org.springframework.cache: TRACE
     org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+
+dbs:
+  eventing:
+    trigger-mapping:
+      - trigger-name: "Trigger Name"
+        action: "ticket_create"

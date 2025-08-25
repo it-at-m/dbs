@@ -1,8 +1,10 @@
 package de.muenchen.oss.dbs.ticketing.eventing.service.domain.model;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record Event(
-        String action,
-        String ticket,
+        @NotBlank String action,
+        @NotBlank String ticket,
         String status,
         String status_id,
         String anliegenart,

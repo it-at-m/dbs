@@ -12,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
@@ -58,6 +59,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((requests) -> requests
                         .anyRequest()
                         .authenticated())
+                // disable CSRF as server only api without preflight requests
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

@@ -10,8 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @SpringBootApplication
 @ConfigurationPropertiesScan
 @SuppressWarnings("PMD.UseUtilityClass")
-public class MicroServiceApplication {
+public class DbsTicketingEventingService {
     public static void main(final String[] args) {
-        SpringApplication.run(MicroServiceApplication.class, args);
+        SpringApplication.run(DbsTicketingEventingService.class, args);
     }
 }
