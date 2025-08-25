@@ -1,5 +1,7 @@
 package de.muenchen.oss.dbs.ticketing.eventing.service.adapter.in.rest;
 
+import static de.muenchen.oss.dbs.ticketing.eventing.service.configuration.OpenAPIDocumentationConfiguration.BASIC_SCHEME_NAME;
+
 import de.muenchen.oss.dbs.ticketing.eventing.service.configuration.DbsEventingProperties;
 import de.muenchen.oss.dbs.ticketing.eventing.service.core.port.in.HandleEventInPort;
 import de.muenchen.oss.dbs.ticketing.eventing.service.domain.model.Event;
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import static de.muenchen.oss.dbs.ticketing.eventing.service.configuration.OpenAPIDocumentationConfiguration.BASIC_SCHEME_NAME;
 
 @Service
 @RestController
