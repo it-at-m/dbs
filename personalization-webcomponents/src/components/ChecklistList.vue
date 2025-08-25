@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <sortable
-      :list="list"
+      :list="modelValue"
       tag="ul"
       class="list"
       :animation="200"
@@ -79,27 +79,11 @@ const props = withDefaults(
     disabled: false,
   }
 );
-const emit = defineEmits(["checked", "update:modelValue", "label-click"]);
-const list = ref<DummyChecklistItem[]>([...props.modelValue]);
+const emit = defineEmits(["checked", "label-click"]);
 const drag = ref(false);
 
 const dialogVisible = ref(false);
 const dialogItem = ref<DummyChecklistItem | null>(null);
-
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    list.value = [...newVal];
-  }
-);
-
-watch(
-  list,
-  (newVal) => {
-    emit("update:modelValue", [...newVal]);
-  },
-  { deep: true }
-);
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
