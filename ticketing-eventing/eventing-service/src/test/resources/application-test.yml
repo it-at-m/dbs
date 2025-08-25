@@ -3,3 +3,15 @@ logging:
   structured:
     format:
       console: # set to empty to disable structured logging for testing
+
+spring:
+  security:
+    user:
+      name: test-user
+      password: test-password
+
+dbs:
+  eventing:
+    trigger-mapping:
+      - trigger-name: test-trigger
+        action: test-action
