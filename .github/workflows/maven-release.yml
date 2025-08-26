@@ -17,6 +17,7 @@ on:
         required: true
         options:
           - personalization-service
+          - ticketing-eai/api-client
 
 jobs:
   release-maven:
@@ -40,6 +41,7 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.gpg_private_key }}
 
   build-image:
+    if: inputs.app-path != 'ticketing-eai/api-client'
     runs-on: ubuntu-latest
     needs: release-maven
     steps:

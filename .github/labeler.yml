@@ -5,3 +5,6 @@
 "Template: personalization-service":
   - changed-files:
       - any-glob-to-any-file: [ 'personalization-service/**' ]
+"Component: ticketing-eai":
+  - changed-files:
+      - any-glob-to-any-file: [ 'ticketing-eai/**' ]
