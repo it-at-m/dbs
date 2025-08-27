@@ -17,7 +17,7 @@ jobs:
         include:
           - app-path: personalization-service
           - app-path: personalization-webcomponents
-          - app-path: ticketing-eai/api-client
+          - app-path: ticketing-eai/api-client-internal
             build-image: false
 
     steps:
