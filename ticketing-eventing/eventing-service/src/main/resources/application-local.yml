@@ -1,0 +1,41 @@
+spring:
+  security:
+    user:
+      name: zammad
+      # pw: password
+      password: "{bcrypt}$2a$12$eQgzAB2v.y8lkVqfOjOaL.acj1Zp8HW87CNdHzdyOaoYqnHL0Tppy"
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+          configuration:
+            security:
+              protocol: PLAINTEXT
+      bindings:
+        event-out:
+          destination: dbs-ticketing-event
+
+# Enable swagger-ui
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+
+logging:
+  include-application-group: false # disabled because application group is only relevant when deployed
+  structured:
+    format:
+      console: # set to empty to disable structured logging locally
+  level:
+    root: INFO
+    de.muenchen.oss.dbs.ticketing.eventing: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+
+dbs:
+  eventing:
+    trigger-mapping:
+      - trigger-name: "Trigger Name"
+        action: "ticket_create"

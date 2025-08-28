@@ -17,6 +17,7 @@ on:
         required: true
         options:
           - personalization-service
+          - ticketing-eventing/eventing-service
           - ticketing-eventing/handler-core
 
 jobs:
@@ -66,4 +67,3 @@ jobs:
           artifact-name: ${{ needs.release-maven.outputs.ARTIFACT_NAME }}
           tag-name: ${{ inputs.app-path }}-${{ github.event.inputs.releaseVersion }}
           artifact-path: ${{ github.event.inputs.app-path }}/target/*.jar
-
