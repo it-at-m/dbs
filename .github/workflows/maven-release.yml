@@ -41,7 +41,7 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.gpg_private_key }}
 
   build-image:
-    if: ${{ !contains(['ticketing-eventing/handler-core'], github.event.inputs.app-path) }}
+    if: ${{ !contains('ticketing-eventing/handler-core', github.event.inputs.app-path) }}
     runs-on: ubuntu-latest
     needs: release-maven
     steps:
