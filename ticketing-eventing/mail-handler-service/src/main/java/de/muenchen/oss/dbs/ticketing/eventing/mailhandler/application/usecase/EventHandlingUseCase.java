@@ -97,12 +97,12 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                                 .formatted(FORM_ATTACHMENT_NAME, internalAttachmentsArticle.getId())))
                 .getId();
         // load content of form attachment
-//        try (InputStream formContent = ticketingOutPort.getAttachmentContent(formAttachmentId)) {
-//            // parse form
-//            return xmlMapper.readValue(formContent, Map.class);
-//        } catch (final IOException e) {
-//            throw new RuntimeException(e);
-//        }
-        return Map.of();
+        try (InputStream formContent = ticketingOutPort.getAttachmentContent(ticket.getId(),
+                internalAttachmentsArticle.getId(), formAttachmentId)) {
+            // parse form
+            return xmlMapper.readValue(formContent, Map.class);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
