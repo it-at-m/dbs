@@ -17,6 +17,8 @@ jobs:
         include:
           - app-path: personalization-service
           - app-path: personalization-webcomponents
+          - app-path: ticketing-eai/api-client-internal
+            build-image: false
           - app-path: ticketing-eventing/eventing-service
           - app-path: ticketing-eventing/handler-core
             build-image: false
