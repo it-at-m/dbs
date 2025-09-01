@@ -8,3 +8,6 @@
 "Component: ticketing-eai":
   - changed-files:
       - any-glob-to-any-file: [ 'ticketing-eai/**' ]
+"Component: ticketing-eventing":
+  - changed-files:
+      - any-glob-to-any-file: [ 'ticketing-eventing/**' ]

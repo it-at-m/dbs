@@ -18,6 +18,7 @@ on:
         options:
           - personalization-service
           - ticketing-eai/api-client-internal
+          - ticketing-eventing/eventing-service
 
 jobs:
   release-maven:

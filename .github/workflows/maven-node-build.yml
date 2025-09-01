@@ -19,6 +19,7 @@ jobs:
           - app-path: personalization-webcomponents
           - app-path: ticketing-eai/api-client-internal
             build-image: false
+          - app-path: ticketing-eventing/eventing-service
 
     steps:
       - uses: it-at-m/lhm_actions/action-templates/actions/action-checkout@9767179088fd2e344d1a24c17404ab809a60f1b6 # v1.0.20
