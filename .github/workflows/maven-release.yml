@@ -17,6 +17,7 @@ on:
         required: true
         options:
           - personalization-service
+          - ticketing-eventing/eventing-service
 
 jobs:
   release-maven:
