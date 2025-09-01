@@ -2,11 +2,14 @@ package de.muenchen.dbs.personalization.servicefinder;
 
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import java.time.ZonedDateTime;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-@Setter
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Data
 @RequiredArgsConstructor
+@Service
 public class ServiceFinderService {
 
     private final ServiceFinderRepository serviceFinderRepository;
