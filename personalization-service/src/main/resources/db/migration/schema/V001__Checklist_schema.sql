@@ -19,3 +19,11 @@ create table checklist_item (
             references checklist(id)
             on delete cascade
 );
+
+create table service_finder (
+   service_id varchar(255) not null,
+   last_update timestamp with time zone,
+   title varchar(255) not null,
+   note varchar(255) not null,
+   primary key (service_id)
+);
