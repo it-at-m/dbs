@@ -9,9 +9,9 @@
       <b>Erstellungsdatum: </b
       >{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
     </p>
-    <p>
-      <b>Aufgaben: </b>
-      <muc-chip
+    <div class="taskcontainer">
+      <div class="task">Aufgaben: </div>
+      <div class="chip"><muc-chip
         v-if="todoCount"
         style="margin-right: 8px"
         background-color="#FDD1AC"
@@ -25,6 +25,9 @@
           <use href="#icon-pencil" />
         </svg>
       </muc-chip>
+      </div>
+
+      <div class="chip">
       <muc-chip
         v-if="doneCount"
         background-color="#B7D2B7"
@@ -38,7 +41,8 @@
           <use href="#icon-check" />
         </svg>
       </muc-chip>
-    </p>
+      </div>
+    </div>
   </muc-intro>
 </template>
 
@@ -80,5 +84,23 @@ const doneCount = computed(() => {
 
 .m-intro-vertical__title {
   margin-bottom: 8px !important;
+}
+
+.taskcontainer {
+  display: grid;
+  grid-template-columns: 80px 100px 100px;
+  gap: 8px;
+}
+
+.task {
+  padding-top: 3px;
+  text-align: left;
+  font-weight: bold;
+}
+
+@media (max-width: 450px) {
+  .chip:nth-child(3) {
+    grid-column: 2;
+  }
 }
 </style>
