@@ -25,7 +25,7 @@ jobs:
             build-image: true
           - app-path: ticketing-eventing/handler-core
             build-image: false
-          - app-patch: ticketing-eventing/mail-handler-service
+          - app-path: ticketing-eventing/mail-handler-service
             build-image: true
 
     steps:
