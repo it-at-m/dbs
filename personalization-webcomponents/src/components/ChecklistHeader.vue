@@ -46,7 +46,7 @@
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 
 import { MucIntro } from "@muenchen/muc-patternlab-vue";
-import {computed, onMounted} from "vue";
+import { computed, onMounted } from "vue";
 
 import MucChip from "@/components/common/muc-chip.vue";
 import { getChecklistIconByTitle } from "@/util/constants.ts";
@@ -56,11 +56,13 @@ const props = defineProps<{
 }>();
 
 onMounted(() => {
-  const element = document.querySelector('[data-fragment-placeholder="breadcrumb-label"]');
+  const element = document.querySelector(
+    '[data-fragment-placeholder="breadcrumb-label"]'
+  );
   if (element) {
     element.innerHTML = props.checklist.title;
   }
-})
+});
 
 const todoCount = computed(() => {
   return props.checklist.items.filter((value) => !value.checked).length;
@@ -71,7 +73,6 @@ const doneCount = computed(() => {
 });
 </script>
 <style>
-
 .muc-divider {
   margin-top: 0 !important;
   margin-bottom: 32px !important;
