@@ -3,7 +3,7 @@
     tagline="Checkliste"
     :title="checklist.title"
     :img="getChecklistIconByTitle(checklist.title)"
-    :imgAlt="checklist.title"
+    imgAlt=""
   >
     <p style="padding-bottom: 16px">
       <b>Erstellungsdatum: </b
@@ -88,7 +88,7 @@ const doneCount = computed(() => {
 
 .taskcontainer {
   display: grid;
-  grid-template-columns: 80px 100px 100px;
+  grid-template-columns: 90px 100px 100px;
   gap: 8px;
 }
 
