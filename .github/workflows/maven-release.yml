@@ -19,6 +19,7 @@ on:
           - personalization-service
           - ticketing-eai/api-client-internal
           - ticketing-eventing/eventing-service
+          - ticketing-eventing/handler-core
 
 jobs:
   release-maven:
@@ -42,7 +43,7 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.gpg_private_key }}
 
   build-image:
-    if: inputs.app-path != 'ticketing-eai/api-client-internal'
+    if: ${{ !contains('ticketing-eai/api-client-internal, ticketing-eventing/handler-core', github.event.inputs.app-path) }}
     runs-on: ubuntu-latest
     needs: release-maven
     steps:
@@ -67,3 +68,4 @@ jobs:
           artifact-name: ${{ needs.release-maven.outputs.ARTIFACT_NAME }}
           tag-name: ${{ inputs.app-path }}-${{ github.event.inputs.releaseVersion }}
           artifact-path: ${{ github.event.inputs.app-path }}/target/*.jar
+
