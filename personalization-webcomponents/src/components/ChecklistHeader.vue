@@ -63,3 +63,14 @@ const doneCount = computed(() => {
   return props.checklist.items.filter((value) => value.checked).length;
 });
 </script>
+<style>
+
+.muc-divider {
+  margin-top: 0 !important;
+  margin-bottom: 32px !important;
+}
+
+.m-intro-vertical__title {
+  margin-bottom: 8px !important;
+}
+</style>
