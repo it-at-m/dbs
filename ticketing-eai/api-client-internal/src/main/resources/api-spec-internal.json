@@ -335,6 +335,228 @@
         ]
       }
     },
+    "/v2/tickets": {
+      "post": {
+        "tags": [
+          "Tickets"
+        ],
+        "summary": "Create a new Ticket.",
+        "description": "Customer must be identified by specifying lhmExtID in Header.\nExposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
+        "operationId": "createNewTicket",
+        "parameters": [
+          {
+            "name": "lhmExtID",
+            "in": "header",
+            "description": "lhmExtID of customer must be set.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userid",
+            "in": "header",
+            "description": "One of lhmExtID or userId must be set.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "$ref": "#/components/schemas/CreateTicketDTOV2"
+                  },
+                  "attachments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "body"
+                ]
+              },
+              "encoding": {
+                "body": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketInternal"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dbs-ticketing-eai-secscheme": []
+          }
+        ]
+      }
+    },
+    "/v2/tickets/{ticketID}/articles": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Create a new Article for a given Ticket.",
+        "description": "User can be identified  by lhmExtId, lhmObjectID OR userID. Anonymous access also possible.\nExposes all available attributes.\n\n⚠ Internal Articles can only be created by users with at least an \"Agent\"-Role in Zammad. When giving a user-context, make sure the user has the appropriate rights.\n\nAuthorization: WRITE_TICKETS\n",
+        "operationId": "createNewArticle",
+        "parameters": [
+          {
+            "name": "ticketID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lhmExtID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lhmObjectID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userid",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "$ref": "#/components/schemas/CreateArticleDTOV2"
+                  },
+                  "attachments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "body"
+                ]
+              },
+              "encoding": {
+                "body": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dbs-ticketing-eai-secscheme": []
+          }
+        ]
+      }
+    },
+    "/v2/composition/userAndTicket": {
+      "post": {
+        "tags": [
+          "Tickets"
+        ],
+        "summary": "Create a new User and a corresponding Ticket for this new user.",
+        "description": "Exposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
+        "operationId": "createNewTicketWithUser",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "$ref": "#/components/schemas/CreateUserAndTicketDTOV2"
+                  },
+                  "attachments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "body"
+                ]
+              },
+              "encoding": {
+                "body": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAndTicketResponseDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dbs-ticketing-eai-secscheme": []
+          }
+        ]
+      }
+    },
     "/tickets": {
       "get": {
         "tags": [
@@ -441,7 +663,7 @@
         ],
         "summary": "Create a new Ticket.",
         "description": "Customer must be identified by specifying lhmExtID in Header.\nExposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
-        "operationId": "createNewTicket",
+        "operationId": "createNewTicket_1",
         "parameters": [
           {
             "name": "lhmExtID",
@@ -498,7 +720,7 @@
         ],
         "summary": "Create a new Article for a given Ticket.",
         "description": "User can be identified  by lhmExtId, lhmObjectID OR userID. Anonymous access also possible.\nExposes all available attributes.\n\n⚠ Internal Articles can only be created by users with at least an \"Agent\"-Role in Zammad. When giving a user-context, make sure the user has the appropriate rights.\n\nAuthorization: WRITE_TICKETS\n",
-        "operationId": "createNewArticle",
+        "operationId": "createNewArticle_1",
         "parameters": [
           {
             "name": "ticketID",
@@ -634,7 +856,44 @@
         ]
       }
     },
-    "/tickets/{ticketId}": {
+    "/composition/userAndTicket": {
+      "post": {
+        "tags": [
+          "Tickets"
+        ],
+        "summary": "Create a new User and a corresponding Ticket for this new user.",
+        "description": "Exposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
+        "operationId": "createNewTicketWithUser_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserAndTicketDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAndTicketResponseDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dbs-ticketing-eai-secscheme": []
+          }
+        ]
+      }
+    },
+    "/v2/tickets/{ticketId}": {
       "patch": {
         "tags": [
           "Tickets"
@@ -642,6 +901,90 @@
         "summary": "Update Ticket.",
         "description": "User can be identified  by lhmExtId OR lhmObjectID. Anonymous access also possible.\nExposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
         "operationId": "updateTicket",
+        "parameters": [
+          {
+            "name": "lhmExtID",
+            "in": "header",
+            "description": "One of lhmExtID or lhmObjectID can be set.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lhmObjectID",
+            "in": "header",
+            "description": "One of lhmExtID or lhmObjectID can be set.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "$ref": "#/components/schemas/UpdateTicketDTOV2"
+                  },
+                  "attachments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": [
+                  "body"
+                ]
+              },
+              "encoding": {
+                "body": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketInternal"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dbs-ticketing-eai-secscheme": []
+          }
+        ]
+      }
+    },
+    "/tickets/{ticketId}": {
+      "patch": {
+        "tags": [
+          "Tickets"
+        ],
+        "summary": "Update Ticket.",
+        "description": "User can be identified  by lhmExtId OR lhmObjectID. Anonymous access also possible.\nExposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
+        "operationId": "updateTicket_1",
         "parameters": [
           {
             "name": "lhmExtID",
@@ -1227,20 +1570,6 @@
           }
         }
       },
-      "AttachmentDTO": {
-        "type": "object",
-        "properties": {
-          "filename": {
-            "type": "string"
-          },
-          "data": {
-            "type": "string"
-          },
-          "mime-type": {
-            "type": "string"
-          }
-        }
-      },
       "CreateTicketArticleDTO": {
         "type": "object",
         "properties": {
@@ -1258,16 +1587,10 @@
           },
           "internal": {
             "type": "boolean"
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AttachmentDTO"
-            }
           }
         }
       },
-      "CreateTicketDTO": {
+      "CreateTicketDTOV2": {
         "type": "object",
         "properties": {
           "title": {
@@ -1609,7 +1932,7 @@
           }
         }
       },
-      "CreateArticleDTO": {
+      "CreateArticleDTOV2": {
         "type": "object",
         "properties": {
           "subject": {
@@ -1652,12 +1975,6 @@
           },
           "cc": {
             "type": "string"
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ArticleAttachment"
-            }
           }
         }
       },
@@ -1720,6 +2037,112 @@
           }
         }
       },
+      "CreateUserAndTicketDTOV2": {
+        "type": "object",
+        "properties": {
+          "createUserDTO": {
+            "$ref": "#/components/schemas/CreateUserDTO"
+          },
+          "createTicketDTO": {
+            "$ref": "#/components/schemas/CreateTicketDTOV2"
+          }
+        }
+      },
+      "UserAndTicketResponseDTO": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "ticket": {
+            "$ref": "#/components/schemas/TicketInternal"
+          }
+        }
+      },
+      "CreateTicketDTO": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "anliegenart": {
+            "type": "string"
+          },
+          "vertrauensniveau": {
+            "type": "string"
+          },
+          "verwendeter_idp_bei_ticketerstellung": {
+            "type": "string"
+          },
+          "direktkennwort": {
+            "type": "string"
+          },
+          "article": {
+            "$ref": "#/components/schemas/CreateTicketArticleDTO"
+          },
+          "additionalData": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CreateArticleDTO": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "content_type": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "email",
+              "phone",
+              "web",
+              "note",
+              "sms",
+              "chat",
+              "fax"
+            ]
+          },
+          "internal": {
+            "type": "boolean"
+          },
+          "sender": {
+            "type": "string",
+            "enum": [
+              "Agent",
+              "Customer",
+              "System"
+            ]
+          },
+          "time_unit": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "cc": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArticleAttachment"
+            }
+          }
+        }
+      },
       "CreateOrganizationDTO": {
         "type": "object",
         "properties": {
@@ -1740,6 +2163,17 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "CreateUserAndTicketDTO": {
+        "type": "object",
+        "properties": {
+          "createUserDTO": {
+            "$ref": "#/components/schemas/CreateUserDTO"
+          },
+          "createTicketDTO": {
+            "$ref": "#/components/schemas/CreateTicketDTO"
           }
         }
       },
@@ -1766,12 +2200,39 @@
           },
           "internal": {
             "type": "boolean"
+          }
+        }
+      },
+      "UpdateTicketDTOV2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AttachmentDTO"
-            }
+          "title": {
+            "type": "string"
+          },
+          "group_id": {
+            "type": "string"
+          },
+          "direktkennwort": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "open",
+              "pending reminder",
+              "pending close",
+              "closed"
+            ]
+          },
+          "pending_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "article": {
+            "$ref": "#/components/schemas/UpdateTicketArticleDTO"
           }
         }
       },
