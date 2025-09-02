@@ -6,5 +6,5 @@ import java.io.InputStream;
 public interface TicketingOutPort {
     TicketInternal getTicket(String ticketId);
 
-    InputStream getAttachmentContent(String attachmentId);
+    InputStream getAttachmentContent(String ticketId, String articleId, String attachmentId);
 }
