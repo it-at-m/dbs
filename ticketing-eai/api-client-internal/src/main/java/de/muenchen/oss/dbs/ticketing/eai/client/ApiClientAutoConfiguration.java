@@ -1,6 +1,7 @@
 package de.muenchen.oss.dbs.ticketing.eai.client;
 
 import de.muenchen.oss.dbs.ticketing.eai.client.api.ArticlesApi;
+import de.muenchen.oss.dbs.ticketing.eai.client.api.AttachmentsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.OrganizationsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.UsersApi;
@@ -44,6 +45,12 @@ public class ApiClientAutoConfiguration {
     @ConditionalOnMissingBean
     public ArticlesApi articlesApi(final ApiClient apiClient) {
         return new ArticlesApi(apiClient);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AttachmentsApi attachmentsApi(final ApiClient apiClient) {
+        return new AttachmentsApi(apiClient);
     }
 
     @Bean
