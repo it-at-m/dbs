@@ -10,7 +10,7 @@ export function getChecklistIconByTitle(checklistTitle: string) {
       "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482700.svg",
     "Ich manage eine Familie.":
       "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483310.svg",
-    Einwanderung:
+    "Einwanderung":
       "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483311.svg",
   }[checklistTitle];
 }

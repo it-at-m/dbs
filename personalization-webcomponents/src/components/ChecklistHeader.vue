@@ -5,15 +5,15 @@
     :img="getChecklistIconByTitle(checklist.title)"
     :imgAlt="checklist.title"
   >
-    <p style="padding-bottom: 18px">
+    <p style="padding-bottom: 16px">
       <b>Erstellungsdatum: </b
-      >{{ props.checklist.lastUpdated.toLocaleString() }}
+      >{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
     </p>
     <p>
       <b>Aufgaben: </b>
       <muc-chip
         v-if="todoCount"
-        style="margin-right: 16px"
+        style="margin-right: 8px"
         background-color="#FDD1AC"
       >
         {{ todoCount }} offen
