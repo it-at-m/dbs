@@ -4,9 +4,11 @@ import static de.muenchen.dbs.personalization.TestConstants.SPRING_NO_SECURITY_P
 import static de.muenchen.dbs.personalization.TestConstants.SPRING_TEST_PROFILE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import java.time.Instant;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,6 +21,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
         classes = { PersonalizationServiceApplication.class },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@EnableConfigurationProperties(P13nConfiguration.class)
 @ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
 @AutoConfigureMockMvc
 public class IntegrationTestBase {
