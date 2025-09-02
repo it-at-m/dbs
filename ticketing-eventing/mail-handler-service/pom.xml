@@ -360,7 +360,7 @@
                         <excludeRoot>target/generated-test-sources</excludeRoot>
                     </excludeRoots>
                     <rulesets>
-                        <ruleset>swim-pmd-ruleset.xml</ruleset>
+                        <ruleset>refarch-pmd-ruleset.xml</ruleset>
                     </rulesets>
                 </configuration>
                 <executions>
