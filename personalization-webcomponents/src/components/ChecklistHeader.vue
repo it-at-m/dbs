@@ -10,37 +10,38 @@
       >{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
     </p>
     <div class="taskcontainer">
-      <div class="task">Aufgaben: </div>
-      <div class="chip"><muc-chip
-        v-if="todoCount"
-        style="margin-right: 8px"
-        background-color="#FDD1AC"
-      >
-        {{ todoCount }} offen
-        <svg
-          style="margin-left: 8px; width: 20px; height: 20px"
-          aria-hidden="true"
-          class="m-button__icon"
+      <div class="task">Aufgaben:</div>
+      <div class="chip">
+        <muc-chip
+          v-if="todoCount"
+          style="margin-right: 8px"
+          background-color="#FDD1AC"
         >
-          <use href="#icon-pencil" />
-        </svg>
-      </muc-chip>
+          {{ todoCount }} offen
+          <svg
+            style="margin-left: 8px; width: 20px; height: 20px"
+            aria-hidden="true"
+            class="m-button__icon"
+          >
+            <use href="#icon-pencil" />
+          </svg>
+        </muc-chip>
       </div>
 
       <div class="chip">
-      <muc-chip
-        v-if="doneCount"
-        background-color="#B7D2B7"
-      >
-        {{ doneCount }} erledigt
-        <svg
-          style="margin-left: 8px; width: 20px; height: 20px"
-          aria-hidden="true"
-          class="m-button__icon"
+        <muc-chip
+          v-if="doneCount"
+          background-color="#B7D2B7"
         >
-          <use href="#icon-check" />
-        </svg>
-      </muc-chip>
+          {{ doneCount }} erledigt
+          <svg
+            style="margin-left: 8px; width: 20px; height: 20px"
+            aria-hidden="true"
+            class="m-button__icon"
+          >
+            <use href="#icon-check" />
+          </svg>
+        </muc-chip>
       </div>
     </div>
   </muc-intro>
