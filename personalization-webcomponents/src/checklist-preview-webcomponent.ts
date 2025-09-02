@@ -4,7 +4,7 @@ import ChecklistPreviewVueComponent from "@/checklist-preview.ce.vue";
 
 // convert into custom element constructor
 const ChecklistPreviewWebcomponent = defineCustomElement(
-    ChecklistPreviewVueComponent
+  ChecklistPreviewVueComponent
 );
 
 // register

@@ -36,7 +36,7 @@ public class PublicServiceNavigatorController {
     public PublicServiceNavigatorController(P13nConfiguration p13nConfiguration) {
         this.p13nConfiguration = p13nConfiguration;
 
-        if(StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
+        if (StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
             this.restTemplate = new RestTemplate();
         } else {
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(p13nConfiguration.getProxyHost(), p13nConfiguration.getProxyPort()));
@@ -49,7 +49,7 @@ public class PublicServiceNavigatorController {
     @GetMapping
     @Operation(summary = "Lookup ServiceNavigator Services by ServiceID. Returns a list of services for the given service IDs.")
     @ResponseStatus(HttpStatus.OK)
-    public List<Object> getServicesByIds(@RequestParam("ids")String serviceIds) {
+    public List<Object> getServicesByIds(@RequestParam("ids") String serviceIds) {
         final String url = p13nConfiguration.getServiceNavigatorUrl() + SERVICENAVIGATOR_QUERY_PARAMETER_ID + serviceIds;
         ResponseEntity<List> forEntity = restTemplate.getForEntity(url, List.class);
         return forEntity.getBody();

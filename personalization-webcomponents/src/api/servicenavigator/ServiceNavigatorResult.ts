@@ -1,5 +1,5 @@
 export interface ServiceNavigatorResult {
-    id: string
-    name: string
-    services: number[]
+  id: string;
+  name: string;
+  services: number[];
 }

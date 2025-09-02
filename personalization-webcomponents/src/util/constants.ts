@@ -17,7 +17,7 @@ export function getChecklistIconByTitle(checklistTitle: string) {
   }[checklistTitle];
 }
 
-export function getAPIBaseURL(): String {
+export function getAPIBaseURL(): string {
   if (import.meta.env.VITE_VUE_APP_API_URL) {
     return import.meta.env.VITE_VUE_APP_API_URL;
   } else {
