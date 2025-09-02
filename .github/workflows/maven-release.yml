@@ -20,6 +20,7 @@ on:
           - ticketing-eai/api-client-internal
           - ticketing-eventing/eventing-service
           - ticketing-eventing/handler-core
+          - ticketing-eventing/mail-handler-service
 
 jobs:
   release-maven:
