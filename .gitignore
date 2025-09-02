@@ -185,5 +185,3 @@ nbdist/
 *.njsproj
 *.sln
 *.sw?
-
-out
