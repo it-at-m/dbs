@@ -19,11 +19,6 @@
           <p>
             <b>{{ service.serviceName }} (ID: {{ service.id }})</b><br>
             <span>{{ service.summary }}</span><br><br>
-            <span>
-              <b>Public URL</b>: <i>{{ service.publicUrl }}</i><br>
-              <b>Has Responsibilities</b>: {{ service.hasResponsibilities ? "✅" : "❌" }}<br>
-              <b>Is External</b>: {{ service.isExternal ? "✅" : "❌"  }}<br>
-            </span>
             <div v-if="service.onlineServices">
               <b>Online-Services:</b>
               <ul>
@@ -50,7 +45,7 @@ import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
 import {onMounted, ref} from "vue";
-import {LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT} from "@/util/constants.ts";
+import {getAPIBaseURL, LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT} from "@/util/constants.ts";
 import type {ServiceNavigatorResult} from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 import type {SNService} from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
 
@@ -66,7 +61,7 @@ onMounted(() => {
     loading.value = false;
   } else {
     const snResult = JSON.parse(serviceNavigatorResultString) as ServiceNavigatorResult;
-    const url = "http://localhost:8083/public/api/backend-service/servicenavigator?ids=" + snResult.services.join(",");
+    const url = getAPIBaseURL() + "/public/api/backend-service/servicenavigator?ids=" + snResult.services.join(",");
     fetch(url)
         .then(resp => {
           if (resp.ok) {

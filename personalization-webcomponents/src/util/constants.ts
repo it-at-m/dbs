@@ -16,3 +16,11 @@ export function getChecklistIconByTitle(checklistTitle: string) {
       "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483311.svg",
   }[checklistTitle];
 }
+
+export function getAPIBaseURL(): String {
+  if (import.meta.env.VITE_VUE_APP_API_URL) {
+    return import.meta.env.VITE_VUE_APP_API_URL;
+  } else {
+    return new URL(import.meta.url).origin;
+  }
+}
