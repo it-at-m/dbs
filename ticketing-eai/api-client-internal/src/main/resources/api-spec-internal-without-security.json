@@ -7,11 +7,15 @@
   },
   "servers": [
     {
-      "url": "https://dbs-ticketing-eai-test-dbs-ticketing-eai.apps.capk.muenchen.de",
+      "url": "https://dbs-ticketing-eai-integration-dbs-ticketing-eai.apps.capk.muenchen.de",
       "description": "Generated server url"
     }
   ],
   "tags": [
+    {
+      "name": "Attachments",
+      "description": "Endpoints to receive Attachment-Data for downloading."
+    },
     {
       "name": "Articles",
       "description": "Reading and Creating Articles in Zammad."
@@ -1091,6 +1095,55 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/TicketInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attachments/{ticketID}/{articleID}/{attachmentID}": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Get Attachment of given article id from given ticket id by given attachment id.",
+        "description": "Receives the attachment with the ID attachmentID of the article articleID from the ticket ticketID and forwards it as a binary data stream.",
+        "operationId": "getAttachment",
+        "parameters": [
+          {
+            "name": "ticketID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "articleID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attachmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Attachment as binary data.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "octet-stream"
                 }
               }
             }
@@ -2201,7 +2254,7 @@
         "in": "header",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "openIdConnectUrl": "https://ssotest.muenchen.de/auth/realms/intrap/.well-known/openid-configuration"
+        "openIdConnectUrl": "https://ssodev.muenchen.de/auth/realms/KM81/.well-known/openid-configuration"
       }
     }
   }
