@@ -5,14 +5,14 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.4</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <groupId>de.muenchen.oss.dbs.ticketing.eai</groupId>
     <artifactId>api-client-internal</artifactId>
     <name>api-client-internal</name>
     <description>API client for dbs-ticketing-eai internal endpoints</description>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
     <url>https://github.com/it-at-m/dbs</url>
     <licenses>
         <license>

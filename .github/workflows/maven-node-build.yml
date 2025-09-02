@@ -16,10 +16,13 @@ jobs:
       matrix:
         include:
           - app-path: personalization-service
+            build-image: true
           - app-path: personalization-webcomponents
+            build-image: true
           - app-path: ticketing-eai/api-client-internal
             build-image: false
           - app-path: ticketing-eventing/eventing-service
+            build-image: true
           - app-path: ticketing-eventing/handler-core
             build-image: false
 
@@ -35,7 +38,7 @@ jobs:
         uses: it-at-m/lhm_actions/action-templates/actions/action-maven-build@9767179088fd2e344d1a24c17404ab809a60f1b6 # v1.0.20
         with:
           app-path: ${{ matrix.app-path }}
-      - if: github.ref == 'refs/heads/main' && matrix.build-image != 'false'
+      - if: github.ref == 'refs/heads/main' && matrix.build-image
         uses: it-at-m/lhm_actions/action-templates/actions/action-build-image@9767179088fd2e344d1a24c17404ab809a60f1b6 # v1.0.20
         with:
           path: ${{ matrix.app-path }}
