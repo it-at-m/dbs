@@ -6,8 +6,8 @@
 [documentation]: https://refarch.oss.muenchen.de/templates
 [contribution-documentation]: https://refarch.oss.muenchen.de/contribute
 [itm-opensource]: https://opensource.muenchen.de/
-[license]: ../LICENSE
-[code-of-conduct]: ./CODE_OF_CONDUCT.md
+[license]: LICENSE
+[code-of-conduct]: .github/CODE_OF_CONDUCT.md
 
 <!-- Project specific links -->
 [refarch-documentation]: https://refarch.oss.muenchen.de/
@@ -29,9 +29,7 @@
 [![Made with love by it@M][made-with-love-shield]][itm-opensource]
 [![GitHub license][license-shield]][license]
 
-The repository contains components for the Digital Citizen Service of the City of Munich. It currently includes the personalization service and it's corresponding webcomponents.
-
-In the future, the repository will be expanded to include the other artifacts which form the Digital Citizen Service.
+The repository contains components for the Digital Citizen Service (German: "Digitaler Bürgerservice" DBS) of the City of Munich.
 
 ## Build with
 
@@ -39,6 +37,11 @@ The project is built with technologies we use in our projects ([reference archit
 
 - [Spring][spring-documentation]
 - [Vue.js][vuejs-documentation]
+
+## Components
+
+- [personalization service](./personalization-service) and it's corresponding [webcomponents](./personalization-webcomponents)
+- [ticketing-eventing](./ticketing-eventing): Event notification via Zammad webhooks and Apache Kafka
 
 ## Getting Started
 
