@@ -50,7 +50,23 @@
       appointment-link="http://localhost:3000/"
     ></dbs-login>
     <div>
-      <checklist-overview first-name="Simon" />
+      <h1>Overview page</h1>
+      <checklist-overview
+        checklist-detail-url="index-checklist-detail.html"
+        checklist-overview-url="index-my-checklists.html"
+        new-checklist-url="index.html"
+        displayed-on-detail-screen="false"
+      >
+      </checklist-overview>
+
+      <h1>Detail page</h1>
+      <checklist-overview
+        checklist-detail-url="index-checklist-detail.html"
+        checklist-overview-url="index-my-checklists.html"
+        new-checklist-url="index.html"
+        displayed-on-detail-screen="true"
+      >
+      </checklist-overview>
     </div>
   </body>
 </html>
