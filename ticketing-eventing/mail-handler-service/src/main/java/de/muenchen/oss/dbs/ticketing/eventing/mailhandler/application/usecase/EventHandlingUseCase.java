@@ -1,5 +1,6 @@
 package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.application.usecase;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.in.EventHandlerInPort;
@@ -7,15 +8,13 @@ import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.T
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.domain.model.Event;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.application.port.out.SendMailOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.config.MailHandlerProperties;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -45,8 +44,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         final String subject = buildSubject(ticket, form);
         final String body = buildBody(ticket);
         sendMailOutport.sendMail(
-                mailHandlerProperties.getRecipient(), subject, body
-        );
+                mailHandlerProperties.getRecipient(), subject, body);
         log.info("Handled event successfully");
     }
 
@@ -64,8 +62,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                         "",
                         form.get("ticketingVertrauensniveau"),
                         "Dummy",
-                        ticket.getTitle()
-                );
+                        ticket.getTitle());
     }
 
     private String buildBody(final TicketInternal ticket) {
