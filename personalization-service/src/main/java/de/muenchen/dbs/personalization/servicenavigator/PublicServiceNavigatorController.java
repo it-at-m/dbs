@@ -1,4 +1,4 @@
-package de.muenchen.dbs.personalization.serviceNavigator;
+package de.muenchen.dbs.personalization.servicenavigator;
 
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,14 +33,14 @@ public class PublicServiceNavigatorController {
     private final P13nConfiguration p13nConfiguration;
 
     @Autowired
-    public PublicServiceNavigatorController(P13nConfiguration p13nConfiguration) {
+    public PublicServiceNavigatorController(final P13nConfiguration p13nConfiguration) {
         this.p13nConfiguration = p13nConfiguration;
 
         if (StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
             this.restTemplate = new RestTemplate();
         } else {
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(p13nConfiguration.getProxyHost(), p13nConfiguration.getProxyPort()));
-            SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+            final Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(p13nConfiguration.getProxyHost(), p13nConfiguration.getProxyPort()));
+            final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
             requestFactory.setProxy(proxy);
             this.restTemplate = new RestTemplate(requestFactory);
         }
@@ -49,9 +49,9 @@ public class PublicServiceNavigatorController {
     @GetMapping
     @Operation(summary = "Lookup ServiceNavigator Services by ServiceID. Returns a list of services for the given service IDs.")
     @ResponseStatus(HttpStatus.OK)
-    public List<Object> getServicesByIds(@RequestParam("ids") String serviceIds) {
+    public List<Object> getServicesByIds(@RequestParam("ids") final String serviceIds) {
         final String url = p13nConfiguration.getServiceNavigatorUrl() + SERVICENAVIGATOR_QUERY_PARAMETER_ID + serviceIds;
-        ResponseEntity<List> forEntity = restTemplate.getForEntity(url, List.class);
+        final ResponseEntity<List> forEntity = restTemplate.getForEntity(url, List.class);
         return forEntity.getBody();
     }
 
