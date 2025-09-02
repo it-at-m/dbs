@@ -1,5 +1,7 @@
 export const FIRSTNAME_DEFAULT = "World";
 
+export const LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT = "lhm.servicenavigator";
+
 export const QUERY_PARAM_CHECKLIST_ID = "cl-id";
 
 export function getChecklistIconByTitle(checklistTitle: string) {
