@@ -93,6 +93,7 @@ import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/skeleton-loader.vue";
+import { QUERY_PARAM_CHECKLIST_ID } from "@/util/constants.ts";
 
 const { displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
@@ -122,6 +123,14 @@ onMounted(() => {
     .getChecklists()
     .then((checklist) => {
       checklists.value = checklist;
+
+      if (displayOptionDetailScreen) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
+        checklists.value = checklists.value.filter(
+          (checklist) => checklist.id != checklistId
+        );
+      }
     })
     .finally(() => (loading.value = false));
 });
