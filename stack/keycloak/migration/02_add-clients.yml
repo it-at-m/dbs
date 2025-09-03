@@ -13,7 +13,7 @@ changes:
   - updateClient:
       clientId: local
       webOrigins:
-        - *
+        - "*"
 
   # Maps user client roles of current client into a claim "authorities"
   - addClientMapper:
