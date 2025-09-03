@@ -8,3 +8,6 @@ security:
   # Currently only dummy values, will later be changed for testing security.
   user-info-uri: NotNeeded
   logging-mode: all
+
+p13n:
+  service-navigator-url: "https://stadt.muenchen.de/service/rs/befi/navigator/"

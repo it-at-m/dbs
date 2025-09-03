@@ -51,7 +51,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build-path: ["./personalization-service", "./ticketing-eventing/eventing-service"] # JSON array formatted as string, contains the paths to the java projects to build
+        # paths to the java projects to build
+        build-path:
+          - "./personalization-service"
+          - "./ticketing-eai/api-client-internal"
+          - "./ticketing-eventing/eventing-service"
+          - "./ticketing-eventing/handler-core"
+          - "./ticketing-eventing/mail-handler-service"
     steps:
       - uses: it-at-m/lhm_actions/action-templates/actions/action-codeql@9767179088fd2e344d1a24c17404ab809a60f1b6 # v1.0.20
         if: ${{ env.analyze-java == 'true' && (github.ref_name == 'main' || needs.check-changes.outputs.java == 'true') }}

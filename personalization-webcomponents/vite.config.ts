@@ -38,6 +38,7 @@ export default defineConfig(({ mode }) => {
         input: {
           "checklist-detail": "./src/checklist-detail-webcomponent.ts",
           "checklist-overview": "./src/checklist-overview-webcomponent.ts",
+          "checklist-preview": "./src/checklist-preview-webcomponent.ts",
           "my-checklists": "./src/my-checklists-webcomponent.ts",
         },
         output: {
