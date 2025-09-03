@@ -75,7 +75,7 @@ onMounted(() => {
     ) as ServiceNavigatorResult;
     const url =
       getAPIBaseURL() +
-      "/public/api/backend-service/servicenavigator?ids=" +
+      "/public/api/p13n-backend/servicenavigator?ids=" +
       snResult.services.join(",");
     fetch(url)
       .then((resp) => {
