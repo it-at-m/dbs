@@ -19,7 +19,8 @@
           <div>
             <b>{{ service.serviceName }} (ID: {{ service.id }})</b><br />
             <span>{{ service.summary }}</span
-            ><br /><br />
+            ><br />
+            {{ service.mandatory ? "✅" : "❌" }} Verpflichtend <br /><br />
             <div v-if="service.onlineServices">
               <b>Online-Services:</b>
               <ul>

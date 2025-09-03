@@ -8,6 +8,7 @@ export interface SNService {
   isExternal: boolean;
   appointmentServiceUrl?: string;
   appointmentService?: boolean;
+  mandatory?: boolean;
 }
 
 export interface OnlineService {
