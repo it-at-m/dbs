@@ -5,45 +5,45 @@
     :img="getChecklistIconByTitle(checklist.title)"
     imgAlt=""
   >
-    <p style="padding-bottom: 16px">
+    <div style="padding-bottom: 16px; padding-left: 3px">
       <b>Erstellungsdatum: </b
       >{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
-    </p>
-    <div class="taskcontainer">
-      <div class="task">Aufgaben:</div>
-      <div class="chip">
-        <muc-chip
-          v-if="todoCount"
-          style="margin-right: 8px"
-          background-color="#FDD1AC"
-        >
-          {{ todoCount }} offen
-          <svg
-            style="margin-left: 8px; width: 20px; height: 20px"
-            aria-hidden="true"
-            class="m-button__icon"
-          >
-            <use href="#icon-pencil" />
-          </svg>
-        </muc-chip>
-      </div>
-
-      <div class="chip">
-        <muc-chip
-          v-if="doneCount"
-          background-color="#B7D2B7"
-        >
-          {{ doneCount }} erledigt
-          <svg
-            style="margin-left: 8px; width: 20px; height: 20px"
-            aria-hidden="true"
-            class="m-button__icon"
-          >
-            <use href="#icon-check" />
-          </svg>
-        </muc-chip>
-      </div>
     </div>
+    <table>
+      <tr>
+        <td class="task">Aufgaben:</td>
+        <td>
+          <div class="chips-container">
+            <muc-chip
+              v-if="todoCount"
+              background-color="#FDD1AC"
+            >
+              {{ todoCount }} offen
+              <svg
+                style="margin-left: 8px; width: 20px; height: 20px"
+                aria-hidden="true"
+                class="m-button__icon"
+              >
+                <use href="#icon-pencil" />
+              </svg>
+            </muc-chip>
+            <muc-chip
+              v-if="doneCount"
+              background-color="#B7D2B7"
+            >
+              {{ doneCount }} erledigt
+              <svg
+                style="margin-left: 8px; width: 20px; height: 20px"
+                aria-hidden="true"
+                class="m-button__icon"
+              >
+                <use href="#icon-check" />
+              </svg>
+            </muc-chip>
+          </div>
+        </td>
+      </tr>
+    </table>
   </muc-intro>
 </template>
 
@@ -67,6 +67,18 @@ onMounted(() => {
   if (element) {
     element.innerHTML = props.checklist.title;
   }
+
+  // Don't show breadcrump "Checkliste"
+  const removeChecklist = document.querySelector(
+    ".m-breadcrumb__list-item-current"
+  );
+  if (removeChecklist) {
+    removeChecklist.childNodes.forEach((node) => {
+      if (node.nodeType === 3) {
+        node.textContent = "";
+      }
+    });
+  }
 });
 
 const todoCount = computed(() => {
@@ -87,21 +99,24 @@ const doneCount = computed(() => {
   margin-bottom: 8px !important;
 }
 
-.taskcontainer {
-  display: grid;
-  grid-template-columns: 90px 100px 100px;
-  gap: 8px;
+.task {
+  font-weight: bold;
+  vertical-align: baseline;
+  padding-right: 8px;
+  white-space: nowrap;
 }
 
-.task {
-  padding-top: 3px;
-  text-align: left;
-  font-weight: bold;
+.chips-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
 @media (max-width: 450px) {
-  .chip:nth-child(3) {
-    grid-column: 2;
+  .chips-container {
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 8px;
   }
 }
 </style>
