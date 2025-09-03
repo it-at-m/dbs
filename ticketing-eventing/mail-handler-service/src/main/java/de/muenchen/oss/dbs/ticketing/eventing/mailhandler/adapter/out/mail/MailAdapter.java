@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailAdapter implements SendMailOutPort {
     private final JavaMailSender mailSender;
+    private final MailProperties mailProperties;
 
     @Override
     public void sendMail(final String recipient, final String subject, final String body) {
         final SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setFrom(mailProperties.getFromAddress());
         mail.setTo(recipient);
         mail.setSubject(subject);
         mail.setText(body);
