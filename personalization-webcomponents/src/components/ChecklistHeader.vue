@@ -1,12 +1,13 @@
 <template>
   <muc-intro
-      tagline="Checkliste"
-      :title="checklist.title"
-      :img="getChecklistIconByTitle(checklist.title)"
-      imgAlt=""
+    tagline="Checkliste"
+    :title="checklist.title"
+    :img="getChecklistIconByTitle(checklist.title)"
+    imgAlt=""
   >
     <div style="padding-bottom: 16px; padding-left: 3px">
-      <b>Erstellungsdatum: </b>{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
+      <b>Erstellungsdatum: </b
+      >{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
     </div>
     <table>
       <tr>
@@ -14,27 +15,27 @@
         <td>
           <div class="chips-container">
             <muc-chip
-                v-if="todoCount"
-                background-color="#FDD1AC"
+              v-if="todoCount"
+              background-color="#FDD1AC"
             >
               {{ todoCount }} offen
               <svg
-                  style="margin-left: 8px; width: 20px; height: 20px"
-                  aria-hidden="true"
-                  class="m-button__icon"
+                style="margin-left: 8px; width: 20px; height: 20px"
+                aria-hidden="true"
+                class="m-button__icon"
               >
                 <use href="#icon-pencil" />
               </svg>
             </muc-chip>
             <muc-chip
-                v-if="doneCount"
-                background-color="#B7D2B7"
+              v-if="doneCount"
+              background-color="#B7D2B7"
             >
               {{ doneCount }} erledigt
               <svg
-                  style="margin-left: 8px; width: 20px; height: 20px"
-                  aria-hidden="true"
-                  class="m-button__icon"
+                style="margin-left: 8px; width: 20px; height: 20px"
+                aria-hidden="true"
+                class="m-button__icon"
               >
                 <use href="#icon-check" />
               </svg>
@@ -118,5 +119,4 @@ const doneCount = computed(() => {
     gap: 8px;
   }
 }
-
 </style>
