@@ -4,12 +4,9 @@
       :list="modelValue"
       tag="ul"
       class="list"
-      :animation="200"
-      :handle="isDraggable ? '.drag-handle' : undefined"
-      :disabled="!isDraggable"
+      :options="sortableOptions"
       @start="drag = true"
       @end="drag = false"
-      :ghost-class="'drag-ghost'"
       item-key="serviceID"
     >
       <template #item="{ element }">
@@ -66,9 +63,9 @@ import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import { defineEmits, ref } from "vue";
+import {computed, defineEmits, ref} from "vue";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     modelValue: DummyChecklistItem[];
     isDraggable?: boolean;
@@ -81,6 +78,13 @@ withDefaults(
 );
 const emit = defineEmits(["checked", "label-click"]);
 const drag = ref(false);
+
+const sortableOptions = computed(() => ({
+  animation: 200,
+  handle: props.isDraggable ? ".drag-handle" : undefined,
+  ghostClass: "drag-ghost",
+  disabled: !props.isDraggable
+}));
 
 const dialogVisible = ref(false);
 const dialogItem = ref<DummyChecklistItem | null>(null);
