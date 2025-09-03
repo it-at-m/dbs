@@ -20,6 +20,7 @@ on:
           - ticketing-eai/api-client-internal
           - ticketing-eventing/eventing-service
           - ticketing-eventing/handler-core
+          - ticketing-eventing/mail-handler-service
 
 jobs:
   release-maven:
@@ -68,4 +69,3 @@ jobs:
           artifact-name: ${{ needs.release-maven.outputs.ARTIFACT_NAME }}
           tag-name: ${{ inputs.app-path }}-${{ github.event.inputs.releaseVersion }}
           artifact-path: ${{ github.event.inputs.app-path }}/target/*.jar
-

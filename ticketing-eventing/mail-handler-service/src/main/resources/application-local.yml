@@ -1,0 +1,51 @@
+server:
+  port: 39147
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+          configuration:
+            security:
+              protocol: PLAINTEXT
+      bindings:
+        event-in-0:
+          group: dbs-mail-handler
+          destination: dbs-ticketing-event
+  mail:
+    host: localhost
+    port: 1025
+    username: dbs-eventing@muenchen.de
+    password: secret
+  security:
+    oauth2:
+      client:
+        provider:
+          zammad:
+            issuer-uri: TODO
+        registration:
+          zammad:
+            provider: zammad
+            authorization-grant-type: client_credentials
+            client-id: TODO
+            client-secret: TODO
+
+dbs:
+  eai:
+    client:
+      eai-base-url: http://localhost:8082/
+  eventing:
+    mail:
+      recipient: test@example.com
+      relevant-ticket-types:
+        - "technischer Bürgersupport"
+
+logging:
+  include-application-group: false # disabled because application group is only relevant when deployed
+  structured:
+    format:
+      console: # set to empty to disable structured logging locally
+  level:
+    root: INFO
+    de.muenchen.oss.dbs.ticketing.eventing: debug
