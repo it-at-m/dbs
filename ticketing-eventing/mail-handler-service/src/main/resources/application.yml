@@ -26,6 +26,8 @@ spring:
 dbs:
   eventing:
     mail:
+      smtp:
+        from-address: ${spring.mail.username}
       state-change-action: "state_changed"
       closed-state: "closed"
 
