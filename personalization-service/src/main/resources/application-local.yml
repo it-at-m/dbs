@@ -43,3 +43,8 @@ sso:
 security:
   user-info-uri: ${sso.url}/auth/realms/${sso.realm}/protocol/openid-connect/userinfo
   logging-mode: all
+
+p13n:
+  service-navigator-url: "https://stadt.muenchen.de/service/rs/befi/navigator/"
+  proxy-host: "internet-proxy-client.muenchen.de"
+  proxy-port: 80
