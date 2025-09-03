@@ -67,6 +67,18 @@ onMounted(() => {
   if (element) {
     element.innerHTML = props.checklist.title;
   }
+
+  // Don't show breadcrump "Checkliste"
+  const removeChecklist = document.querySelector(
+    ".m-breadcrumb__list-item-current"
+  );
+  if (removeChecklist) {
+    removeChecklist.childNodes.forEach((node) => {
+      if (node.nodeType === 3) {
+        node.textContent = "";
+      }
+    });
+  }
 });
 
 const todoCount = computed(() => {
@@ -89,7 +101,7 @@ const doneCount = computed(() => {
 
 .taskcontainer {
   display: grid;
-  grid-template-columns: 90px 100px 100px;
+  grid-template-columns: 100px 100px 100px;
   gap: 8px;
 }
 
