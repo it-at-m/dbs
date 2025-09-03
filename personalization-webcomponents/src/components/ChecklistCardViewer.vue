@@ -112,7 +112,7 @@ import {
 
 import AddChecklistCard from "@/components/AddChecklistCard.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
-import IconAddChecklist from "@/components/icons/icon-add-checklist.vue";
+import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
 
 defineProps<{
   allChecklists: DummyChecklist[];
