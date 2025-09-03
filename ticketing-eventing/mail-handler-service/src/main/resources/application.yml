@@ -23,6 +23,12 @@ spring:
             trusted:
               packages: '*'
 
+dbs:
+  eventing:
+    mail:
+      state-change-action: "state_changed"
+      closed-state: "closed"
+
 server:
   shutdown: "graceful"
   port: 8080

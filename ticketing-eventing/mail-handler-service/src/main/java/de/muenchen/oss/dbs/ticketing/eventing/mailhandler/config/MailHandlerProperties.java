@@ -17,6 +17,10 @@ import org.springframework.validation.annotation.Validated;
 public class MailHandlerProperties {
     @NotBlank
     private String recipient;
+    @NotBlank
+    private String stateChangeAction;
+    @NotBlank
+    private String closedState;
     @NotNull
     private List<String> relevantTicketTypes;
 }

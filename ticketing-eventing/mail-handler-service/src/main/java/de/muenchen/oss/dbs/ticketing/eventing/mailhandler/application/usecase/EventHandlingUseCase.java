@@ -49,8 +49,12 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private boolean isRelevantEvent(final Event event) {
-        return "geschlossen".equals(event.status()) &&
-                "state_changed".equals(event.action()) &&
+        return
+        // state was changed
+        mailHandlerProperties.getStateChangeAction().equals(event.action()) &&
+        // new state is closed
+                mailHandlerProperties.getClosedState().equals(event.status()) &&
+                // is relevant anliegen
                 mailHandlerProperties.getRelevantTicketTypes().contains(event.anliegenart());
     }
 
