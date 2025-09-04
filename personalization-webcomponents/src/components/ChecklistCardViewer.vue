@@ -75,6 +75,7 @@
         tabindex="0"
       />
       <add-checklist-card
+        v-if="!displayedOnDetailScreen"
         class="mobile-card-height"
         title="Neue Checkliste"
         :new-checklist-url="newChecklistUrl"
