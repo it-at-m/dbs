@@ -1,6 +1,6 @@
 import { defineCustomElement } from "vue";
 
-import MyChecklistsVueComponent from "@/my-checklists.vue";
+import MyChecklistsVueComponent from "@/MyChecklists.ce.vue";
 
 // convert into custom element constructor
 const MyChecklistsWebcomponent = defineCustomElement(MyChecklistsVueComponent);

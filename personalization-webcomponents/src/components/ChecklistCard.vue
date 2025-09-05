@@ -71,12 +71,12 @@ import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 import { MucCard } from "@muenchen/muc-patternlab-vue";
 import { computed } from "vue";
 
-import ChecklistitemListitem from "@/components/checklistitem-listitem.vue";
-import MucChip from "@/components/common/muc-chip.vue";
+import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
+import MucChip from "@/components/common/MucChip.vue";
 import {
   getChecklistIconByTitle,
   QUERY_PARAM_CHECKLIST_ID,
-} from "@/util/constants.ts";
+} from "@/util/Constants.ts";
 
 const props = defineProps<{
   checklist: DummyChecklist;
