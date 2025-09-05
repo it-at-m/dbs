@@ -92,8 +92,8 @@ import { onMounted, ref } from "vue";
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
-import SkeletonLoader from "@/components/common/skeleton-loader.vue";
-import { QUERY_PARAM_CHECKLIST_ID } from "@/util/constants.ts";
+import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
+import { QUERY_PARAM_CHECKLIST_ID } from "@/util/Constants.ts";
 
 const { displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
