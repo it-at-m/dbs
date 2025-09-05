@@ -53,8 +53,8 @@ import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
 
-import MucChip from "@/components/common/muc-chip.vue";
-import { getChecklistIconByTitle } from "@/util/constants.ts";
+import MucChip from "@/components/common/MucChip.vue";
+import { getChecklistIconByTitle } from "@/util/Constants.ts";
 
 const props = defineProps<{
   checklist: DummyChecklist;

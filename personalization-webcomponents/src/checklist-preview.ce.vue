@@ -48,11 +48,11 @@ import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { onMounted, ref } from "vue";
 
-import SkeletonLoader from "@/components/common/skeleton-loader.vue";
+import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import {
   getAPIBaseURL,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
-} from "@/util/constants.ts";
+} from "@/util/Constants.ts";
 
 const loading = ref(true);
 const snServices = ref<SNService[] | null>(null);

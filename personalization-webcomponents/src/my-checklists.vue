@@ -46,7 +46,7 @@ import { onMounted, ref } from "vue";
 
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistCard from "@/components/ChecklistCard.vue";
-import SkeletonLoader from "@/components/common/skeleton-loader.vue";
+import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 
 defineProps<{
   checklistDetailUrl: string;
