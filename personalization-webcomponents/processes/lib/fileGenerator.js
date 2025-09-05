@@ -29,6 +29,9 @@ export function generateLoaderJs(filename, subdirectory, suffix) {
 }
 
 function changeCamelToSnakeCase(camelCased) {
-  const snakeCased = camelCased.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-  return snakeCased.startsWith('_') ? snakeCased.substring(1) : snakeCased;
+  const snakeCased = camelCased.replace(
+    /[A-Z]/g,
+    (letter) => `_${letter.toLowerCase()}`
+  );
+  return snakeCased.startsWith("_") ? snakeCased.substring(1) : snakeCased;
 }
