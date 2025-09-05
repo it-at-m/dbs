@@ -2,6 +2,10 @@ export const FIRSTNAME_DEFAULT = "World";
 
 export const LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT = "lhm.servicenavigator";
 
+export const QUERY_PARAM_SN_RESULT_NAME = "p13n-name";
+export const QUERY_PARAM_SN_RESULT_ID = "p13n-id";
+export const QUERY_PARAM_SN_RESULT_SERVICES = "p13n-services";
+
 export const QUERY_PARAM_CHECKLIST_ID = "cl-id";
 
 export function getChecklistIconByTitle(checklistTitle: string) {
