@@ -15,13 +15,20 @@ export function generateLoaderJs(filename, subdirectory, suffix) {
     "{{path}}",
     `../${subdirectory}/${filename}`
   );
+
+  const dirName = changeCamelToSnakeCase(suffix);
   // write script to the dist folder as loader.js.template
-  fs.mkdirSync(`./dist/${suffix}`, { recursive: true });
+  fs.mkdirSync(`./dist/${dirName}`, { recursive: true });
   fs.writeFileSync(
-    path.resolve(`./dist/${suffix}/loader.js`),
+    path.resolve(`./dist/${dirName}/loader.js`),
     loaderJsReplaced,
     {
       encoding: "utf-8",
     }
   );
+}
+
+function changeCamelToSnakeCase(camelCased) {
+  const snakeCased = camelCased.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+  return snakeCased.startsWith('_') ? snakeCased.substring(1) : snakeCased;
 }
