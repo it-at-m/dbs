@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChecklistRepository extends JpaRepository<Checklist, UUID> {
 
-    List<Checklist> findChecklistByEmail(String email);
+    List<Checklist> findChecklistByLhmExtId(String lhmExtId);
 
 }
