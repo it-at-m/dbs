@@ -132,38 +132,49 @@ function closeDialog() {
 }
 
 function handleKeyDown(event: KeyboardEvent) {
-  if (!props.isDraggable) return;
-  if (focusedIndex.value === null) return;
+  if (!props.isDraggable || focusedIndex.value === null) return;
 
   const maxIndex = props.modelValue.length - 1;
-
   if (event.key === "Enter") {
-    if (draggedIndex.value === null) {
-      draggedIndex.value = focusedIndex.value;
-    } else {
-      draggedIndex.value = null;
-    }
-  } else if (draggedIndex.value !== null) {
-    if (event.key === "ArrowUp" && draggedIndex.value > 0) {
-      event.preventDefault();
-      const list = [...props.modelValue];
-      const temp = list[draggedIndex.value];
-      list[draggedIndex.value] = list[draggedIndex.value - 1];
-      list[draggedIndex.value - 1] = temp;
-      emit("update:modelValue", list);
-      draggedIndex.value = draggedIndex.value - 1;
-      focusedIndex.value = draggedIndex.value;
-    } else if (event.key === "ArrowDown" && draggedIndex.value < maxIndex) {
-      event.preventDefault();
-      const list = [...props.modelValue];
-      const temp = list[draggedIndex.value];
-      list[draggedIndex.value] = list[draggedIndex.value + 1];
-      list[draggedIndex.value + 1] = temp;
-      emit("update:modelValue", list);
-      draggedIndex.value = draggedIndex.value + 1;
-      focusedIndex.value = draggedIndex.value;
-    }
+    draggedIndex.value =
+      draggedIndex.value === null ? focusedIndex.value : null;
+    return;
   }
+  if (draggedIndex.value === null) return;
+
+  const move = (direction: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const newIndex = draggedIndex.value! + direction;
+    if (newIndex < 0 || newIndex > maxIndex) return;
+
+    event.preventDefault();
+
+    const updatedList = swapItems(
+      [...props.modelValue],
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      draggedIndex.value!,
+      newIndex
+    );
+    emit("update:modelValue", updatedList);
+    draggedIndex.value = newIndex;
+    focusedIndex.value = newIndex;
+  };
+
+  if (event.key === "ArrowUp") move(-1);
+  if (event.key === "ArrowDown") move(1);
+}
+
+function swapItems(
+  array: DummyChecklistItem[],
+  i: number,
+  j: number
+): DummyChecklistItem[] {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const temp = array[i]!;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  array[i] = array[j]!;
+  array[j] = temp;
+  return array;
 }
 </script>
 
