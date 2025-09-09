@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <div
+    class="container"
+    tabindex="0"
+  >
     <sortable
       :list="modelValue"
       tag="ul"
@@ -9,10 +12,17 @@
       @end="drag = false"
       item-key="serviceID"
     >
-      <template #item="{ element }">
+      <template #item="{ element, index }">
         <li
           class="list-item"
-          :class="{ muted: element.checked !== null }"
+          :class="{
+            muted: element.checked !== null,
+            'keyboard-dragging': draggedIndex === index,
+          }"
+          :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
+          tabindex="0"
+          @focus="focusedIndex = index"
+          :key="element.serviceID"
         >
           <input
             type="checkbox"
@@ -29,14 +39,17 @@
           >
             <b>{{ element.title }}</b>
           </span>
-
-          <!-- Drag-Handle Icon -->
           <span
             v-if="isDraggable"
             class="drag-handle"
             title="Element verschieben"
           >
-            <muc-icon icon="drag-vertical" />
+            <template v-if="draggedIndex === index">
+              <muc-icon icon="arrow-up-down" />
+            </template>
+            <template v-else>
+              <muc-icon icon="drag-vertical" />
+            </template>
           </span>
         </li>
       </template>
@@ -63,7 +76,14 @@ import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import {computed, defineEmits, ref} from "vue";
+import {
+  computed,
+  defineEmits,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+} from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -76,18 +96,29 @@ const props = withDefaults(
     disabled: false,
   }
 );
-const emit = defineEmits(["checked", "label-click"]);
+const emit = defineEmits(["checked", "label-click", "update:modelValue"]);
+
 const drag = ref(false);
+const focusedIndex = ref<number | null>(null);
+const draggedIndex = ref<number | null>(null);
 
 const sortableOptions = computed(() => ({
   animation: 200,
   handle: props.isDraggable ? ".drag-handle" : undefined,
   ghostClass: "drag-ghost",
-  disabled: !props.isDraggable
+  disabled: !props.isDraggable,
 }));
 
 const dialogVisible = ref(false);
 const dialogItem = ref<DummyChecklistItem | null>(null);
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
@@ -102,6 +133,61 @@ function openDialog(item: DummyChecklistItem) {
 function closeDialog() {
   dialogVisible.value = false;
 }
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (!props.isDraggable) return;
+  if (focusedIndex.value === null) return;
+
+  const maxIndex = props.modelValue.length - 1;
+
+  if (event.key === "Enter") {
+    if (draggedIndex.value === null) {
+      draggedIndex.value = focusedIndex.value;
+    } else {
+      draggedIndex.value = null;
+    }
+  } else if (draggedIndex.value !== null) {
+    if (event.key === "ArrowUp" && draggedIndex.value > 0) {
+      event.preventDefault();
+      const list = [...props.modelValue];
+      const temp = list[draggedIndex.value];
+      list[draggedIndex.value] = list[draggedIndex.value - 1];
+      list[draggedIndex.value - 1] = temp;
+
+      emit("update:modelValue", list);
+      draggedIndex.value = draggedIndex.value - 1;
+      focusedIndex.value = draggedIndex.value;
+
+      nextTick(() => {
+        if (draggedIndex.value !== null) {
+          const el = document.querySelectorAll(".list-item")[
+            draggedIndex.value
+          ] as HTMLElement;
+          el?.focus();
+        }
+      });
+    } else if (event.key === "ArrowDown" && draggedIndex.value < maxIndex) {
+      event.preventDefault();
+      const list = [...props.modelValue];
+      const temp = list[draggedIndex.value];
+      list[draggedIndex.value] = list[draggedIndex.value + 1];
+      list[draggedIndex.value + 1] = temp;
+
+      emit("update:modelValue", list);
+      draggedIndex.value = draggedIndex.value + 1;
+      focusedIndex.value = draggedIndex.value;
+
+      nextTick(() => {
+        if (draggedIndex.value !== null) {
+          const el = document.querySelectorAll(".list-item")[
+            draggedIndex.value
+          ] as HTMLElement;
+          el?.focus();
+        }
+      });
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -109,6 +195,12 @@ function closeDialog() {
   background-color: #e1f0fc !important;
   box-shadow: 0 2px 8px #007acc30;
 }
+
+.keyboard-dragging {
+  outline: 2px solid var(--color-brand-main-blue);
+  background-color: #d0e7ff;
+}
+
 .container {
   max-width: 600px;
   margin: 1rem auto;
@@ -165,7 +257,6 @@ function closeDialog() {
   background-color: #cce4ff;
 }
 
-/* blue circle inside on hover (slightly transparent) */
 .radio-look:hover::before {
   content: "";
   position: absolute;
@@ -181,7 +272,6 @@ function closeDialog() {
   transition: opacity 0.2s ease;
 }
 
-/* blue circle with white tick when selected */
 .radio-look:checked {
   border-color: var(--color-brand-main-blue);
   background-color: var(--color-brand-main-blue);
@@ -216,7 +306,7 @@ function closeDialog() {
   user-select: none;
   font-size: 24px;
   margin-left: auto;
-  color: var(--color-neutrals-grey);
+  color: #617586;
   display: flex;
   align-items: center;
 }
