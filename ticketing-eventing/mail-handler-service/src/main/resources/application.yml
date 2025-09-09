@@ -23,6 +23,14 @@ spring:
             trusted:
               packages: '*'
 
+dbs:
+  eventing:
+    mail:
+      smtp:
+        from-address: ${spring.mail.username}
+      state-change-action: "state_changed"
+      closed-state: "closed"
+
 server:
   shutdown: "graceful"
   port: 8080

@@ -36,10 +36,10 @@ export default defineConfig(({ mode }) => {
       minify: true,
       rollupOptions: {
         input: {
-          "checklist-detail": "./src/checklist-detail-webcomponent.ts",
-          "checklist-overview": "./src/checklist-overview-webcomponent.ts",
-          "checklist-preview": "./src/checklist-preview-webcomponent.ts",
-          "my-checklists": "./src/my-checklists-webcomponent.ts",
+          "checklist-detail": "./src/ChecklistDetailWebcomponent.ts",
+          "checklist-overview": "./src/ChecklistOverviewWebcomponent.ts",
+          "checklist-preview": "./src/ChecklistPreviewWebcomponent.ts",
+          "my-checklists": "./src/MyChecklistsWebcomponent.ts",
         },
         output: {
           entryFileNames: "entry-[name]-[hash].js",

@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
-import ChecklistCheckedCircle from "@/components/checklist-checked-circle.vue";
+import ChecklistCheckedCircle from "@/components/ChecklistCheckedCircle.vue";
 
 defineProps<{
   checklistItem: DummyChecklistItem;

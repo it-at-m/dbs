@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.4</version>
+        <version>3.5.5</version>
         <relativePath />
     </parent>
 
@@ -36,8 +36,8 @@
     </developers>
 
     <properties>
-        <openapi-generator-maven-plugin.version>7.14.0</openapi-generator-maven-plugin.version>
-        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+        <openapi-generator-maven-plugin.version>7.15.0</openapi-generator-maven-plugin.version>
+        <jackson-databind-nullable.version>0.2.7</jackson-databind-nullable.version>
 
         <!-- Release -->
         <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
