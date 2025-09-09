@@ -45,7 +45,7 @@ public class ChecklistMapperTest {
         void givenRequestDTO_thenReturnsCorrectEntity() {
             // Given
             final UUID id = UUID.randomUUID();
-            final Checklist checklist = createTestChecklist(id, "user@example.com", null);
+            final Checklist checklist = createTestChecklist(id, "user-lhm-ext-id", null);
             final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(checklist.getTitle(),
                     checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
 
@@ -53,7 +53,7 @@ public class ChecklistMapperTest {
             final Checklist result = checklistMapper.toCreateChecklist(checklistCreateDTO);
 
             // Then
-            assertThat(result).usingRecursiveComparison().ignoringFields("id", "email", "lastUpdate").isEqualTo(checklistCreateDTO);
+            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lhmExtId", "lastUpdate").isEqualTo(checklistCreateDTO);
         }
     }
 
@@ -64,7 +64,7 @@ public class ChecklistMapperTest {
             // Given
             final UUID id = UUID.randomUUID();
             final Checklist checklist = createTestChecklist(id, "user@example.com", null);
-            final ChecklistUpdateDTO checklistUpdateDTO = new ChecklistUpdateDTO(id, checklist.getEmail(), checklist.getTitle(),
+            final ChecklistUpdateDTO checklistUpdateDTO = new ChecklistUpdateDTO(id, checklist.getLhmExtId(), checklist.getTitle(),
                     checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
 
             // When

@@ -30,7 +30,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 @ExtendWith(MockitoExtension.class)
 public class ChecklistServiceTest {
 
-    private static final String USER_EMAIL = "user@example.com";
+    private static final String USER_LHM_EXT_ID = "user-lhm-ext-id";
 
     @Mock
     private ChecklistRepository checklistRepository;
@@ -46,7 +46,7 @@ public class ChecklistServiceTest {
                         Instant.now().plusSeconds(3600),
                         Map.of("alg", "HS256",
                                 "typ", "JWT"),
-                        Map.of("email", USER_EMAIL)));
+                        Map.of("lhmExtId", USER_LHM_EXT_ID)));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
@@ -57,10 +57,10 @@ public class ChecklistServiceTest {
         void givenChecklist_thenReturnChecklist() {
             // Given
 
-            final Checklist checklistToSave = createTestChecklist(null, USER_EMAIL, null);
-            final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getEmail(), null);
+            final Checklist checklistToSave = createTestChecklist(null, USER_LHM_EXT_ID, null);
+            final Checklist expectedChecklist = createTestChecklist(UUID.randomUUID(), checklistToSave.getLhmExtId(), null);
 
-            when(checklistRepository.save(argThat(checklist -> checklist.getEmail().equals(checklistToSave.getEmail()) &&
+            when(checklistRepository.save(argThat(checklist -> checklist.getLhmExtId().equals(checklistToSave.getLhmExtId()) &&
                     checklist.getTitle().equals(checklistToSave.getTitle()) &&
                     checklist.getChecklistItems().equals(checklistToSave.getChecklistItems())))).thenReturn(expectedChecklist);
 
@@ -69,7 +69,7 @@ public class ChecklistServiceTest {
 
             // Then
             assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(expectedChecklist);
-            verify(checklistRepository).save(argThat(checklist -> checklist.getEmail().equals(checklistToSave.getEmail()) &&
+            verify(checklistRepository).save(argThat(checklist -> checklist.getLhmExtId().equals(checklistToSave.getLhmExtId()) &&
                     checklist.getTitle().equals(checklistToSave.getTitle()) &&
                     checklist.getChecklistItems().equals(checklistToSave.getChecklistItems())));
         }
@@ -85,17 +85,17 @@ public class ChecklistServiceTest {
             final UUID id1 = UUID.randomUUID();
             final UUID id2 = UUID.randomUUID();
 
-            final Checklist checklist1 = createTestChecklist(id1, USER_EMAIL, null);
-            final Checklist checklist2 = createTestChecklist(id2, USER_EMAIL, null);
+            final Checklist checklist1 = createTestChecklist(id1, USER_LHM_EXT_ID, null);
+            final Checklist checklist2 = createTestChecklist(id2, USER_LHM_EXT_ID, null);
 
-            when(checklistRepository.findChecklistByEmail(USER_EMAIL)).thenReturn(List.of(checklist1, checklist2));
+            when(checklistRepository.findChecklistByLhmExtId(USER_LHM_EXT_ID)).thenReturn(List.of(checklist1, checklist2));
 
             // When
             final List<Checklist> result = checklistService.getChecklists();
 
             // Then
             Assertions.assertEquals(List.of(checklist1, checklist2), result);
-            verify(checklistRepository, times(1)).findChecklistByEmail(USER_EMAIL);
+            verify(checklistRepository, times(1)).findChecklistByLhmExtId(USER_LHM_EXT_ID);
         }
 
     }
@@ -107,7 +107,7 @@ public class ChecklistServiceTest {
         void givenUUID_thenReturnChecklist() {
             // Given
             final UUID id = UUID.randomUUID();
-            final Checklist checklist = createTestChecklist(id, USER_EMAIL, null);
+            final Checklist checklist = createTestChecklist(id, USER_LHM_EXT_ID, null);
 
             when(checklistRepository.findById(id)).thenReturn(Optional.of(checklist));
 
@@ -143,8 +143,8 @@ public class ChecklistServiceTest {
         void givenChecklist_thenReturnChecklist() {
             // Given
             final UUID checklistToUpdateId = UUID.randomUUID();
-            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_EMAIL, null);
-            final Checklist expectedChecklist = createTestChecklist(null, checklistToUpdate.getEmail(), null);
+            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_LHM_EXT_ID, null);
+            final Checklist expectedChecklist = createTestChecklist(null, checklistToUpdate.getLhmExtId(), null);
 
             when(checklistRepository.save(checklistToUpdate)).thenReturn(expectedChecklist);
             when(checklistRepository.findById(checklistToUpdateId)).thenReturn(Optional.of(checklistToUpdate));
@@ -161,7 +161,7 @@ public class ChecklistServiceTest {
         void givenChecklist_thenThrowNotFoundException() {
             // Given
             final UUID checklistToUpdateId = UUID.randomUUID();
-            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_EMAIL, null);
+            final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_LHM_EXT_ID, null);
 
             when(checklistRepository.findById(checklistToUpdate.getId())).thenReturn(Optional.empty());
 
@@ -185,7 +185,7 @@ public class ChecklistServiceTest {
             final UUID checklistToDeleteId = UUID.randomUUID();
             doNothing().when(checklistRepository).deleteById(checklistToDeleteId);
 
-            final Checklist checklistToUpdate = createTestChecklist(checklistToDeleteId, USER_EMAIL, null);
+            final Checklist checklistToUpdate = createTestChecklist(checklistToDeleteId, USER_LHM_EXT_ID, null);
             when(checklistRepository.findById(checklistToDeleteId)).thenReturn(Optional.of(checklistToUpdate));
 
             // When

@@ -25,34 +25,34 @@ public class ChecklistService {
     private final ChecklistRepository checklistRepository;
 
     public Checklist createChecklist(final Checklist checklist) {
-        final String userMail = getUserMailFromAuthenticationOrThrow();
-        log.debug("Create Checklist {} for {}", checklist, userMail);
-        checklist.setEmail(userMail);
+        final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
+        log.debug("Create Checklist {} for {}", checklist, lhmExtId);
+        checklist.setLhmExtId(lhmExtId);
         return checklistRepository.save(checklist);
     }
 
     public List<Checklist> getChecklists() {
-        final String userMail = getUserMailFromAuthenticationOrThrow();
-        log.debug("Get all checklists of {}", userMail);
-        return checklistRepository.findChecklistByEmail(userMail);
+        final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
+        log.debug("Get all checklists of {}", lhmExtId);
+        return checklistRepository.findChecklistByLhmExtId(lhmExtId);
     }
 
     public Checklist getChecklist(final UUID checklistId) {
-        final String userMail = getUserMailFromAuthenticationOrThrow();
-        log.debug("Get checklist with ID {} for {}", checklistId, userMail);
+        final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
+        log.debug("Get checklist with ID {} for {}", checklistId, lhmExtId);
         final Checklist checklistOrThrowException = getChecklistOrThrowException(checklistId);
 
-        isChecklistOwnerOrThrow(checklistOrThrowException, userMail);
+        isChecklistOwnerOrThrow(checklistOrThrowException, lhmExtId);
 
         return checklistOrThrowException;
     }
 
     public Checklist updateChecklist(final Checklist checklist, final UUID checklistId) {
-        final String userMail = getUserMailFromAuthenticationOrThrow();
-        log.debug("Update checklist with ID {} for {}", checklistId, userMail);
+        final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
+        log.debug("Update checklist with ID {} for {}", checklistId, lhmExtId);
         final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
 
-        isChecklistOwnerOrThrow(foundChecklist, userMail);
+        isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
         foundChecklist.setChecklistItems(checklist.getChecklistItems());
         foundChecklist.setLastUpdate(ZonedDateTime.now());
@@ -61,11 +61,11 @@ public class ChecklistService {
     }
 
     public void deleteChecklist(final UUID checklistId) {
-        final String userMail = getUserMailFromAuthenticationOrThrow();
-        log.debug("Delete Checklist with ID {} for {}", checklistId, userMail);
+        final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
+        log.debug("Delete Checklist with ID {} for {}", checklistId, lhmExtId);
 
         final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
-        isChecklistOwnerOrThrow(foundChecklist, userMail);
+        isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
         checklistRepository.deleteById(checklistId);
     }
@@ -76,19 +76,19 @@ public class ChecklistService {
                 .orElseThrow(() -> new NotFoundException(String.format(MSG_NOT_FOUND, checklistId)));
     }
 
-    private String getUserMailFromAuthenticationOrThrow() {
+    private String getLhmExtIdFromAuthenticationOrThrow() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof Jwt jwt) {
-            final Object emailClaim = jwt.getClaims().get("email");
-            if (emailClaim != null && !StringUtils.isBlank(emailClaim.toString())) {
-                return emailClaim.toString();
+            final Object lhmExtIdClaim = jwt.getClaims().get("lhmExtId");
+            if (lhmExtIdClaim != null && !StringUtils.isBlank(lhmExtIdClaim.toString())) {
+                return lhmExtIdClaim.toString();
             }
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
-    private void isChecklistOwnerOrThrow(final Checklist checklist, final String userMail) {
-        if (!checklist.getEmail().equals(userMail)) {
+    private void isChecklistOwnerOrThrow(final Checklist checklist, final String lhmExtId) {
+        if (!checklist.getLhmExtId().equals(lhmExtId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not own the checklist");
         }
     }
