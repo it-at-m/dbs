@@ -2,6 +2,7 @@
   <div
     class="container"
     tabindex="0"
+    role="list"
   >
     <sortable
       :list="modelValue"
@@ -15,11 +16,14 @@
       <template #item="{ element, index }">
         <li
           class="list-item"
+          role="listitem"
+          aria-roledescription="sortierbares Listenelement"
           :class="{
             muted: element.checked !== null,
             'keyboard-dragging': draggedIndex === index,
           }"
           :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
+          :aria-label="`${element.title}, Position ${index + 1} von ${modelValue.length}`"
           tabindex="0"
           @focus="focusedIndex = index"
           :key="element.serviceID"
