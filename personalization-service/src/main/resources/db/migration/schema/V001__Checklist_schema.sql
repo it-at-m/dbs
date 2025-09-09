@@ -1,5 +1,5 @@
 create table checklist (
-    email varchar(255) not null,
+    lhm_ext_id varchar(255) not null,
     title varchar(255) not null,
     last_update timestamp with time zone,
     id uuid not null,
