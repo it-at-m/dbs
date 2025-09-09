@@ -80,14 +80,7 @@ import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import {
-  computed,
-  defineEmits,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-} from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -157,38 +150,18 @@ function handleKeyDown(event: KeyboardEvent) {
       const temp = list[draggedIndex.value];
       list[draggedIndex.value] = list[draggedIndex.value - 1];
       list[draggedIndex.value - 1] = temp;
-
       emit("update:modelValue", list);
       draggedIndex.value = draggedIndex.value - 1;
       focusedIndex.value = draggedIndex.value;
-
-      nextTick(() => {
-        if (draggedIndex.value !== null) {
-          const el = document.querySelectorAll(".list-item")[
-            draggedIndex.value
-          ] as HTMLElement;
-          el?.focus();
-        }
-      });
     } else if (event.key === "ArrowDown" && draggedIndex.value < maxIndex) {
       event.preventDefault();
       const list = [...props.modelValue];
       const temp = list[draggedIndex.value];
       list[draggedIndex.value] = list[draggedIndex.value + 1];
       list[draggedIndex.value + 1] = temp;
-
       emit("update:modelValue", list);
       draggedIndex.value = draggedIndex.value + 1;
       focusedIndex.value = draggedIndex.value;
-
-      nextTick(() => {
-        if (draggedIndex.value !== null) {
-          const el = document.querySelectorAll(".list-item")[
-            draggedIndex.value
-          ] as HTMLElement;
-          el?.focus();
-        }
-      });
     }
   }
 }
