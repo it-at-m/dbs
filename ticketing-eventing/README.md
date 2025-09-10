@@ -12,3 +12,6 @@ flowchart LR
 ## Components
 
 - [eventing-service]: Takes Zammad webhook event via REST and forwards it to Apache Kafka
+
+## Local development
+TODO
