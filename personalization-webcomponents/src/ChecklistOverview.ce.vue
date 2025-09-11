@@ -14,7 +14,7 @@
         <div class="header">
           <div class="headline">
             <span class="header-icon">
-              <muc-icon icon="calendar" />
+              <muc-icon icon="order-bool-ascending" />
             </span>
             <h2 tabindex="0">
               <span v-if="displayOptionDetailScreen"
