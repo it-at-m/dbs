@@ -33,14 +33,14 @@
               >
             </h2>
           </div>
-          <muc-link
-            v-if="!loadingError && checklists.length > 2 && !isMobile"
-            label="Alle Checklisten anzeigen"
-            icon="chevron-right"
-            target="_self"
-            no-underline
-            :href="checklistOverviewUrl"
-          />
+          <muc-button
+              v-if="!loadingError && checklists.length > 2 && !isMobile"
+              icon="arrow-right"
+              variant="ghost"
+              @click="goToChecklistOverviewLink"
+          >
+            Alle Checklisten anzeigen
+          </muc-button>
         </div>
         <error-alert
           v-if="loadingError"
@@ -62,15 +62,15 @@
             :checklist-detail-url="checklistDetailUrl"
             :displayed-on-detail-screen="displayOptionDetailScreen"
           />
-          <muc-link
-            v-if="!loadingError && checklists.length > 2 && isMobile"
-            class="mobile-link"
-            label="Alle Checklisten anzeigen"
-            icon="chevron-right"
-            target="_self"
-            no-underline
-            :href="checklistOverviewUrl"
-          />
+          <muc-button
+              v-if="!loadingError && checklists.length > 2 && isMobile"
+              class="mobile-link"
+              icon="arrow-right"
+              variant="ghost"
+              @click="goToChecklistOverviewLink"
+          >
+            Alle Checklisten anzeigen
+          </muc-button>
         </div>
       </div>
     </div>
@@ -81,9 +81,9 @@
 import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
 
 import {
+  MucButton,
   MucCardContainer,
   MucIcon,
-  MucLink,
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
@@ -95,7 +95,7 @@ import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { QUERY_PARAM_CHECKLIST_ID } from "@/util/Constants.ts";
 
-const { displayedOnDetailScreen } = defineProps<{
+const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
   checklistOverviewUrl: string;
   newChecklistUrl: string;
@@ -108,6 +108,10 @@ const loadingError = ref(false);
 const isMobile = ref(false);
 const displayOptionDetailScreen =
   displayedOnDetailScreen.toLowerCase() === "true";
+
+const goToChecklistOverviewLink = () => {
+  location.href = checklistOverviewUrl;
+};
 
 const checksMobile = () => {
   isMobile.value = window.matchMedia("(max-width: 767px)").matches;
