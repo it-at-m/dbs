@@ -34,10 +34,10 @@
             </h2>
           </div>
           <muc-button
-              v-if="!loadingError && checklists.length > 2 && !isMobile"
-              icon="arrow-right"
-              variant="ghost"
-              @click="goToChecklistOverviewLink"
+            v-if="!loadingError && checklists.length > 2 && !isMobile"
+            icon="arrow-right"
+            variant="ghost"
+            @click="goToChecklistOverviewLink"
           >
             Alle Checklisten anzeigen
           </muc-button>
@@ -63,11 +63,11 @@
             :displayed-on-detail-screen="displayOptionDetailScreen"
           />
           <muc-button
-              v-if="!loadingError && checklists.length > 2 && isMobile"
-              class="mobile-link"
-              icon="arrow-right"
-              variant="ghost"
-              @click="goToChecklistOverviewLink"
+            v-if="!loadingError && checklists.length > 2 && isMobile"
+            class="mobile-link"
+            icon="arrow-right"
+            variant="ghost"
+            @click="goToChecklistOverviewLink"
           >
             Alle Checklisten anzeigen
           </muc-button>
