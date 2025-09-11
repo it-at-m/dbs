@@ -7,7 +7,7 @@
     <div
       v-if="checklists.length > 0 || !displayOptionDetailScreen"
       :class="
-        displayOptionDetailScreen ? 'details-background' : 'overview-padding'
+        displayOptionDetailScreen ? 'details-background' : 'overview-margin'
       "
     >
       <div class="container">
@@ -143,9 +143,10 @@ onMounted(() => {
 </style>
 
 <style scoped>
-/* Padding on overview page */
-.overview-padding {
-  padding-top: 40px;
+/* Margin on overview page */
+.overview-margin {
+  margin-top: 40px;
+  margin-bottom: 48px;
 }
 
 /* Background color on details page */
@@ -188,8 +189,8 @@ onMounted(() => {
 
 /* CSS for desktop */
 @media (min-width: 768px) {
-  .overview-padding {
-    padding-top: 40px;
+  .overview-margin {
+    margin: 56px 0;
   }
 
   .details-background {
