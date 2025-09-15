@@ -1,13 +1,21 @@
 <template>
   <div>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="mucIconsSprite" />
+    <div v-html="mucIconsSprite"/>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="customIconsSprite" />
+    <div v-html="customIconsSprite"/>
+
+    <service-info-modal
+      :open="modalOpen"
+      :service="selectedService!"
+      @close="modalOpen = false"
+      @cancel="modalOpen = false"
+    />
+
     <muc-intro
-      :title="lebenslageTitle"
-      :divider="false"
-      style="margin-bottom: 56px"
+        :title="lebenslageTitle"
+        :divider="false"
+        style="margin-bottom: 56px"
     >
       <div v-if="!localStorageError">
         <p>
@@ -16,15 +24,15 @@
         </p>
         <div style="padding-top: 32px">
           <muc-button
-            icon="order-bool-ascending"
-            style="margin-right: 16px"
+              icon="order-bool-ascending"
+              style="margin-right: 16px"
           >
             Als Checkliste speichern
           </muc-button>
           <muc-button
-            @click="copyUrl"
-            variant="secondary"
-            icon="copy"
+              @click="copyUrl"
+              variant="secondary"
+              icon="copy"
           >
             Link kopieren
           </muc-button>
@@ -36,7 +44,7 @@
       <div class="m-intro-vertical__grid">
         <div class="m-intro-vertical__grid-inner">
           <div v-if="loading">
-            <skeleton-loader />
+            <skeleton-loader/>
           </div>
 
           <div v-else-if="localStorageError">
@@ -55,8 +63,8 @@
               dann die Abfrage erneut.
             </p>
             <muc-button
-              icon="arrow-right"
-              iconAnimated
+                icon="arrow-right"
+                iconAnimated
             >
               Abfrage neu starten
             </muc-button>
@@ -68,10 +76,10 @@
             </h2>
             <div>
               <div
-                class="snServiceElement"
-                v-for="service in snServices"
-                :key="service.id"
-                @click="openService(service)"
+                  class="snServiceElement"
+                  v-for="service in snServices"
+                  :key="service.id"
+                  @click="openService(service)"
               >
                 <span>
                   {{ service.serviceName }}
@@ -82,7 +90,7 @@
 
           <div v-else>
             <muc-callout type="error">
-              <template #header> Fehler </template>
+              <template #header> Fehler</template>
               <template #content>
                 Beim Laden der Daten ist ein Fehler aufgetreten. Bitte versuchen
                 Sie es zu einem späteren Zeitpunkt noch einmal.
@@ -96,13 +104,13 @@
 </template>
 
 <script setup lang="ts">
-import type { SNService } from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
-import type { ServiceNavigatorResult } from "@/api/servicenavigator/ServiceNavigatorResult.ts";
+import type {SNService} from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
+import type {ServiceNavigatorResult} from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 
-import { MucButton, MucCallout, MucIntro } from "@muenchen/muc-patternlab-vue";
+import {MucButton, MucCallout, MucIntro, MucModal} from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref } from "vue";
+import {onMounted, ref} from "vue";
 
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import {
@@ -112,13 +120,16 @@ import {
   QUERY_PARAM_SN_RESULT_NAME,
   QUERY_PARAM_SN_RESULT_SERVICES,
 } from "@/util/Constants.ts";
+import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 
 const loading = ref(true);
 const localStorageError = ref("");
 const loadingError = ref("");
+const modalOpen = ref(false);
 
 const lebenslageTitle = ref("Meine Lebenslage");
 const snServices = ref<SNService[] | null>(null);
+const selectedService = ref<SNService | null>(null);
 
 onMounted(() => {
   loading.value = true;
@@ -128,29 +139,29 @@ onMounted(() => {
   if (snResult) {
     lebenslageTitle.value = snResult.name;
     const url =
-      getAPIBaseURL() +
-      "/public/api/p13n-backend/servicenavigator?ids=" +
-      snResult.services.join(",");
+        getAPIBaseURL() +
+        "/public/api/p13n-backend/servicenavigator?ids=" +
+        snResult.services.join(",");
     fetch(url)
-      .then((resp) => {
-        if (resp.ok) {
-          resp.json().then((snServicesBody: SNService[]) => {
-            snServices.value = snServicesBody;
-          });
-        } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
-          });
-        }
-      })
-      .catch((error) => {
-        console.debug(error);
-      })
-      .finally(() => (loading.value = false));
+        .then((resp) => {
+          if (resp.ok) {
+            resp.json().then((snServicesBody: SNService[]) => {
+              snServices.value = snServicesBody;
+            });
+          } else {
+            resp.text().then((errBody) => {
+              throw Error(errBody);
+            });
+          }
+        })
+        .catch((error) => {
+          console.debug(error);
+        })
+        .finally(() => (loading.value = false));
   } else {
     localStorageError.value =
-      "No Data found in LocalStorage with key " +
-      LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT;
+        "No Data found in LocalStorage with key " +
+        LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT;
     loading.value = false;
   }
 });
@@ -161,11 +172,11 @@ function getSnResults(): ServiceNavigatorResult | null {
     return snResultsFromUrl;
   }
   const serviceNavigatorResultString = localStorage.getItem(
-    LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT
+      LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT
   );
   if (serviceNavigatorResultString) {
     const snResult = JSON.parse(
-      serviceNavigatorResultString
+        serviceNavigatorResultString
     ) as ServiceNavigatorResult;
     setUrlParams(snResult);
     localStorage.removeItem(LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT);
@@ -181,8 +192,8 @@ function setUrlParams(snResult: ServiceNavigatorResult) {
     url.searchParams.set(QUERY_PARAM_SN_RESULT_ID, snResult.id);
     url.searchParams.set(QUERY_PARAM_SN_RESULT_NAME, snResult.name);
     url.searchParams.set(
-      QUERY_PARAM_SN_RESULT_SERVICES,
-      snResult.services.join(",")
+        QUERY_PARAM_SN_RESULT_SERVICES,
+        snResult.services.join(",")
     );
     history.pushState(null, "", url);
   }
@@ -208,10 +219,8 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
 
 function openService(service: SNService) {
   //TODO use correct modal dialog to show information from vue-patternlab
-  window.alert(`
-  Service: ${service.serviceName}
-  Summary: ${service.summary}
-  `);
+  selectedService.value = service;
+  modalOpen.value = true;
 }
 
 async function copyUrl() {
@@ -242,5 +251,15 @@ async function copyUrl() {
   color: var(--color-brand-main-blue);
   font-weight: 700;
   line-height: 150%;
+}
+
+.mandatory-subtitle {
+  font-family: "Open Sans";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  color: var(--color-neutrals-grey-light, #617586);
+
 }
 </style>
