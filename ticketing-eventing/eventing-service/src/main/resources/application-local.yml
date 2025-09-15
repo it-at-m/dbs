@@ -38,4 +38,4 @@ dbs:
   eventing:
     trigger-mapping:
       - trigger-name: "Trigger Name"
-        action: "ticket_create"
+        action: "state_changed"
