@@ -8,3 +8,19 @@ changes:
       realm: local_realm
       name: openid
       description: Client scope used for OpenID Connect (OIDC) based authentication
+
+  - addRealmProfileAttribute:
+      realm: local_realm
+      name: lhmExtId
+      displayName: lhmExtId
+      multivalued: false
+      permissions:
+        view:
+          - admin
+          - user
+        edit:
+          - admin
+      required:
+        roles:
+          - admin
+          - user
