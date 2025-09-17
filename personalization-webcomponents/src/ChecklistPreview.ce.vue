@@ -6,11 +6,58 @@
     <div v-html="customIconsSprite"/>
 
     <service-info-modal
-      :open="modalOpen"
-      :service="selectedService!"
-      @close="modalOpen = false"
-      @cancel="modalOpen = false"
+        :open="serviceInfoModalOpen"
+        :service="selectedService!"
+        @close="serviceInfoModalOpen = false"
+        @cancel="serviceInfoModalOpen = false"
     />
+
+    <muc-modal
+        :open="requestLoginModalOpen"
+        @close="requestLoginModalOpen = false"
+        @cancel="requestLoginModalOpen = false"
+    >
+      <template #title>Bürgerservice-Anmeldung</template>
+      <template #body>Melden Sie sich an, um die für Sie ermittelten Leistungen als Checkliste in Ihrem Bereich zu
+        speichern.
+      </template>
+      <template #buttons>
+        <muc-button
+            icon="sing-in"
+            @click="_requestLogin"
+        >
+          Anmelden
+        </muc-button>
+      </template>
+    </muc-modal>
+
+    <muc-modal
+        :open="saveChecklistModalOpen"
+        @close="saveChecklistModalOpen = false"
+        @cancel="saveChecklistModalOpen = false"
+    >
+      <template #title>Speichern als Checkliste</template>
+      <template #body>
+        <p>
+          Ich stimme der Speicherung der Checkliste <b>„{{ lebenslageTitle }}”</b> in meinem Bereich gemäß der <a
+            href="https://stadt.muenchen.de/infos/datenschutz.html">Datenschutzerklärung</a> zu.
+        </p>
+        <muc-checkbox
+            id="dseAcceptCheckbox"
+            v-model:="dseAccepted"
+            label="Ich stimme zu."
+        />
+      </template>
+      <template #buttons>
+        <muc-button
+            :disabled="!dseAccepted"
+            icon="order-bool-ascending"
+            @click="_saveChecklistAcceptedDSE"
+        >
+          Checkliste speichern
+        </muc-button>
+      </template>
+    </muc-modal>
 
     <muc-intro
         :title="lebenslageTitle"
@@ -26,6 +73,7 @@
           <muc-button
               icon="order-bool-ascending"
               style="margin-right: 16px"
+              @click="saveChecklistClicked"
           >
             Als Checkliste speichern
           </muc-button>
@@ -107,29 +155,41 @@
 import type {SNService} from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
 import type {ServiceNavigatorResult} from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 
-import {MucButton, MucCallout, MucIntro, MucModal} from "@muenchen/muc-patternlab-vue";
+import {MucButton, MucCallout, MucIntro, MucModal, MucCheckbox} from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import {onMounted, ref} from "vue";
 
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import {
+  getAccessToken,
   getAPIBaseURL,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_SN_RESULT_ID,
   QUERY_PARAM_SN_RESULT_NAME,
-  QUERY_PARAM_SN_RESULT_SERVICES,
+  QUERY_PARAM_SN_RESULT_SERVICES, setAccessToken,
 } from "@/util/Constants.ts";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
+import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
+// Network activity and results
 const loading = ref(true);
 const localStorageError = ref("");
 const loadingError = ref("");
-const modalOpen = ref(false);
 
+// Modal states
+const serviceInfoModalOpen = ref(false);
+const requestLoginModalOpen = ref(false);
+const saveChecklistModalOpen = ref(false);
+
+// State
+const dseAccepted = ref(false);
 const lebenslageTitle = ref("Meine Lebenslage");
 const snServices = ref<SNService[] | null>(null);
 const selectedService = ref<SNService | null>(null);
+
+const {loggedIn} = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
 onMounted(() => {
   loading.value = true;
@@ -165,6 +225,74 @@ onMounted(() => {
     loading.value = false;
   }
 });
+
+function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
+  setAccessToken(authEventDetails?.accessToken!);
+}
+
+function _requestLogin() {
+  requestLoginModalOpen.value = false;
+  document.dispatchEvent(new CustomEvent('authorization-request', {
+    detail: {
+      loginProvider: undefined,
+      authLevel: undefined
+    }
+  }));
+}
+
+function _saveChecklistAcceptedDSE() {
+  loading.value = true;
+  const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
+  const checklistItemsDtos = snServices.value?.map(service => {
+    return {
+      serviceID: service.id,
+      checked: null,
+      title: service.serviceName,
+      note: service.summary,
+      required: service.mandatory
+    }
+  })
+  const body = JSON.stringify({
+    title: lebenslageTitle.value,
+    checklistItems: checklistItemsDtos
+  })
+  fetch(
+      url,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + getAccessToken(),
+          "Content-Type": "application/json"
+        },
+        body: body,
+        mode: "cors",
+        credentials: "include"
+      }
+  )
+      .then((resp) => {
+        if (resp.ok) {
+          resp.json().then((createResponse: Object) => {
+            console.log(createResponse);
+          });
+        } else {
+          resp.text().then((errBody) => {
+            throw Error(errBody);
+          });
+        }
+      })
+      .catch((error) => {
+        console.debug(error);
+      })
+      .finally(() => (loading.value = false));
+}
+
+function saveChecklistClicked() {
+  if (loggedIn.value) {
+    saveChecklistModalOpen.value = true;
+  } else {
+    requestLoginModalOpen.value = true;
+  }
+}
 
 function getSnResults(): ServiceNavigatorResult | null {
   const snResultsFromUrl = getSnResultFromUrl();
@@ -218,9 +346,8 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
 }
 
 function openService(service: SNService) {
-  //TODO use correct modal dialog to show information from vue-patternlab
   selectedService.value = service;
-  modalOpen.value = true;
+  serviceInfoModalOpen.value = true;
 }
 
 async function copyUrl() {

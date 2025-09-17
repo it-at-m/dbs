@@ -8,6 +8,8 @@ export const QUERY_PARAM_SN_RESULT_SERVICES = "p13n-services";
 
 export const QUERY_PARAM_CHECKLIST_ID = "cl-id";
 
+let ACCESS_TOKEN: string | undefined = undefined;
+
 export function getChecklistIconByTitle(checklistTitle: string) {
   return {
     "Ich habe wenig Geld.":
@@ -27,4 +29,14 @@ export function getAPIBaseURL(): string {
   } else {
     return new URL(import.meta.url).origin;
   }
+}
+
+export function setAccessToken(newAccessToken: string): void {
+  console.debug("#setAccessToken with token ", newAccessToken);
+  ACCESS_TOKEN = newAccessToken;
+}
+
+export function getAccessToken(): string | undefined {
+  console.debug("#getAccessToken getting ", ACCESS_TOKEN);
+  return ACCESS_TOKEN;
 }
