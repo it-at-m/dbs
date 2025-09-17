@@ -4,10 +4,12 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ChecklistMapper {
 
     ChecklistReadDTO toReadDTO(Checklist checklist);
+
+    ChecklistServiceNavigatorReadDTO toServiceNavigatorReadDTO(Checklist checklist);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "lhmExtId", ignore = true)
