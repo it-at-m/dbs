@@ -17,6 +17,7 @@ defineProps<{
   height: 20px;
   border-radius: 50%;
   border: 2px solid var(--color-neutrals-grey);
+  flex-shrink: 0;
 }
 
 .circle.checked {

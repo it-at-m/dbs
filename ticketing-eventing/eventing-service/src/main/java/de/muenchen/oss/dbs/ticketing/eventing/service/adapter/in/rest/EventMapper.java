@@ -9,5 +9,6 @@ import org.springframework.stereotype.Component;
 @Mapper
 public interface EventMapper {
     @Mapping(source = "dto.status_id", target = "statusId")
+    @Mapping(source = "dto.lhmextid", target = "lhmExtId")
     Event fromDto(String action, EventDTO dto);
 }

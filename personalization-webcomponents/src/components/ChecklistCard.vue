@@ -59,7 +59,7 @@
       </div>
 
       <div>
-        <b>Letzte Änderung:</b> {{ checklist.lastUpdated.toLocaleString() }}
+        <b>Letzte Änderung:</b> {{ checklist.lastUpdated.toLocaleDateString() }}
       </div>
     </template>
   </muc-card>
