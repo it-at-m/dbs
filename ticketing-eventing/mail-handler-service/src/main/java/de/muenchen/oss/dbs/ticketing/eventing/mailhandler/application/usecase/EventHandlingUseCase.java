@@ -11,7 +11,7 @@ import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.config.MailHandlerProp
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.stream.Collectors;
+import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.exceptions.NoValidArticleException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,6 +22,11 @@ import org.springframework.stereotype.Component;
 public class EventHandlingUseCase implements EventHandlerInPort {
     private static final String INTERNAL_ATTACHMENTS_ARTICLE_TITLE = "Interner Artikel für interne Anhänge.";
     private static final String FORM_ATTACHMENT_NAME = "XML-Daten.xml";
+    public static final String TICKETING_VERTRAUENSNIVEAU = "ticketingVertrauensniveau";
+    public static final String LEGACY_POSTKORB_HANDLE = "legacyPostkorbHandle";
+    public static final String ACCOUNT_SOURCE = "accountSource";
+    public static final String TO_POSTBOX_DEFAULT = "2";
+    public static final String TO_POSTBOX_HIGH = "3";
 
     private final XmlMapper xmlMapper = new XmlMapper();
     private final MailHandlerProperties mailHandlerProperties;
@@ -36,51 +41,76 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             return;
         }
         log.info("Handling event");
-        // find event ticket
-        final TicketInternal ticket = ticketingOutPort.getTicket(event.ticket());
-        // get parsed form
-        final Map<String, Object> form = getParsedForm(ticket);
-        // send mail
-        final String subject = buildSubject(ticket, form);
-        final String body = buildBody(ticket);
-        sendMailOutport.sendMail(
-                mailHandlerProperties.getRecipient(), subject, body);
-        log.info("Handled event successfully");
+        try {
+            // find event ticket
+            final TicketInternal ticket = ticketingOutPort.getTicket(event.ticket());
+            //TODO dummy-setting entfernen
+            ticket.setSendeNachrichtNachExtern("3");
+            //check if ticket should be sent
+            if (!isRelevantTicket(ticket)) {
+                log.debug("Ticket not relevant");
+                return;
+            }
+            // get parsed form
+            final Map<String, Object> form = getParsedForm(ticket);
+            // send mail
+            final String subject = buildSubject(ticket, form);
+            log.debug("Created subject: " + subject);
+            final String body = buildBody(ticket);
+            log.debug("Created body: " + body);
+            sendMailOutport.sendMail(
+                    mailHandlerProperties.getRecipient(), subject, body);
+            log.info("Event handled successfully");
+        } catch (NoValidArticleException e) {
+            log.error(e.getMessage());
+            log.error("Event NOT handled successfully");
+        }
     }
 
     private boolean isRelevantEvent(final Event event) {
         log.debug("checking event: " + event);
         return
-        // state was changed
-        mailHandlerProperties.getStateChangeAction().equals(event.action()) &&
-        // new state is closed
-                mailHandlerProperties.getClosedState().equals(event.status()) &&
+        // state was changed by trigger send-to-postbox
+        mailHandlerProperties.getTicketChangeAction().equals(event.action()) &&
                 // is relevant anliegen
                 mailHandlerProperties.getRelevantTicketTypes().contains(event.anliegenart()) &&
                 // user does have an lhmExtId (i.e. BayernID or BundID user)
                 event.lhmExtId() != null && !event.lhmExtId().isEmpty();
     }
 
+    private boolean isRelevantTicket(TicketInternal ticket) {
+        log.debug("Checking value of sende_nachricht_nach_extern: " + ticket.getSendeNachrichtNachExtern());
+       return TO_POSTBOX_DEFAULT.equals(ticket.getSendeNachrichtNachExtern()) || TO_POSTBOX_HIGH.equals(ticket.getSendeNachrichtNachExtern());
+    }
+
+
     private String buildSubject(final TicketInternal ticket, final Map<String, Object> form) {
-        return "[%s;%s;%s;%s] Ihr Anliegen '%s' wurde abschließend bearbeitet"
+        String authlevel;
+        if (form.get(TICKETING_VERTRAUENSNIVEAU) == null) {
+            log.error("no ticketingVertrauensniveau found in ticket " + ticket.getId() + " - setting level1");
+            authlevel = "level1";
+        } else {
+            authlevel = "3".equals(ticket.getSendeNachrichtNachExtern()) ? "level3" : String.valueOf(form.get(TICKETING_VERTRAUENSNIVEAU));
+        }
+
+        return "[%s;%s;%s;%s] Neue Nachricht zu Ihrem Anliegen '%s'"
                 .formatted(
-                        form.get("legacyPostkorbHandle"),
-                        form.get("accountSource"),
-                        form.get("ticketingVertrauensniveau"),
-                        "Dummy",
+                        form.get(LEGACY_POSTKORB_HANDLE),
+                        form.get(ACCOUNT_SOURCE),
+                        authlevel,
+                        "Zammad-Eventing",
                         ticket.getTitle());
     }
 
-    private String buildBody(final TicketInternal ticket) {
+    private String buildBody(final TicketInternal ticket) throws NoValidArticleException {
         assert ticket.getArticles() != null;
         return ticket.getArticles().stream()
-                // only public articles of type "web" or "note"
+                // find last public articles of type "note"
                 .filter(i -> Boolean.FALSE.equals(i.getInternal()) &&
-                        (ArticleInternal.TypeEnum.WEB.equals(i.getType()) || ArticleInternal.TypeEnum.NOTE.equals(i.getType())))
-                // format single article
-                .map(i -> "Titel: %s<br>Body: %s".formatted(i.getSubject(), i.getBody()))
-                // build body
-                .collect(Collectors.joining("<hr>"));
+                        ArticleInternal.TypeEnum.NOTE.equals(i.getType()))
+                .reduce((first, second) -> second)
+                .map(ArticleInternal::getBody)
+                .orElseThrow(() -> new NoValidArticleException("no valid article found in ticket " + ticket.getId()));
 
     }
 

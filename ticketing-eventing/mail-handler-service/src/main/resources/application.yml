@@ -28,8 +28,7 @@ dbs:
     mail:
       smtp:
         from-address: ${spring.mail.username}
-      state-change-action: "state_changed"
-      closed-state: "closed"
+      ticket-change-action: "send_to_postbox"
 
 server:
   shutdown: "graceful"
