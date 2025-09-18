@@ -83,7 +83,7 @@ class UnicodeConfigurationTest extends IntegrationTestBase {
 
         // Then
         // Check whether responseChecklist contains a composed string.
-        assertNotNull(responseChecklist.email());
+        assertNotNull(responseChecklist.lhmExtId());
         assertEquals(TEXT_ATTRIBUTE_COMPOSED, responseChecklist.title());
         assertEquals(TEXT_ATTRIBUTE_COMPOSED.length(), responseChecklist.title().length());
 

@@ -66,8 +66,8 @@ import { computed, onMounted, ref } from "vue";
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
 import ChecklistList from "@/components/ChecklistList.vue";
-import SkeletonLoader from "@/components/common/skeleton-loader.vue";
-import { QUERY_PARAM_CHECKLIST_ID } from "@/util/constants.ts";
+import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
+import { QUERY_PARAM_CHECKLIST_ID } from "@/util/Constants.ts";
 
 const checklist = ref<DummyChecklist>();
 const loading = ref(true);
@@ -87,10 +87,12 @@ function onCheckedOpen(serviceID: string) {
   if (idx === -1) return;
 
   const [item] = openCheckList.value.splice(idx, 1);
-  item.checked = new Date();
+  if (item) {
+    item.checked = new Date();
 
-  openCheckList.value = [...openCheckList.value];
-  closedCheckList.value = [item, ...closedCheckList.value];
+    openCheckList.value = [...openCheckList.value];
+    closedCheckList.value = [item, ...closedCheckList.value];
+  }
 }
 
 function onCheckedClosed(serviceID: string) {
@@ -98,10 +100,12 @@ function onCheckedClosed(serviceID: string) {
   if (idx === -1) return;
 
   const [item] = closedCheckList.value.splice(idx, 1);
-  item.checked = null;
+  if (item) {
+    item.checked = null;
 
-  closedCheckList.value = [...closedCheckList.value];
-  openCheckList.value = [item, ...openCheckList.value];
+    closedCheckList.value = [...closedCheckList.value];
+    openCheckList.value = [item, ...openCheckList.value];
+  }
 }
 
 onMounted(() => {

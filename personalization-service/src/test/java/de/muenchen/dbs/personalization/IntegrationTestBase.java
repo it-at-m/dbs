@@ -32,12 +32,12 @@ public class IntegrationTestBase {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    protected static final String TOKEN_USER_MAIL = "testuser@example.com";
+    protected static final String TOKEN_USER_LHM_EXT_ID = "testuser-lhm-ext-id";
     protected static final Jwt DEFAULT_JWT = new Jwt(
             "tokenvalue",
             Instant.now(),
             Instant.now().plusSeconds(3600),
             Map.of("alg", "HS256",
                     "typ", "JWT"),
-            Map.of("email", TOKEN_USER_MAIL));
+            Map.of("lhmExtId", TOKEN_USER_LHM_EXT_ID));
 }

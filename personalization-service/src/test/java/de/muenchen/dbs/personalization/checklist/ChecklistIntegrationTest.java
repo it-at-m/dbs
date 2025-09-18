@@ -51,7 +51,7 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
     @BeforeEach
     public void setUp() {
         checklistRepository.deleteAll();
-        final Checklist exampleChecklist = createTestChecklist(null, TOKEN_USER_MAIL, null);
+        final Checklist exampleChecklist = createTestChecklist(null, TOKEN_USER_LHM_EXT_ID, null);
         testChecklistId = checklistRepository.save(exampleChecklist).getId();
     }
 
@@ -70,14 +70,14 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
-                    .andExpect(jsonPath("$.email", is(TOKEN_USER_MAIL)));
+                    .andExpect(jsonPath("$.lhmExtId", is(TOKEN_USER_LHM_EXT_ID)));
         }
     }
 
     @Nested
     class GetChecklists {
         @Test
-        void givenEmail_thenReturnChecklists() throws Exception {
+        void givenLhmExtId_thenReturnChecklists() throws Exception {
             mockMvc.perform(get("/checklist")
                     .contentType(MediaType.APPLICATION_JSON)
                     .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
@@ -107,7 +107,7 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
                     .with(SecurityMockMvcRequestPostProcessors.jwt().jwt(DEFAULT_JWT)))
                     .andExpect(status().isCreated())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.email", is(TOKEN_USER_MAIL)));
+                    .andExpect(jsonPath("$.lhmExtId", is(TOKEN_USER_LHM_EXT_ID)));
         }
     }
 

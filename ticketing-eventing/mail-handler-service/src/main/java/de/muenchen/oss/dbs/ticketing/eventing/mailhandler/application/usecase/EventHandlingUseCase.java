@@ -49,17 +49,23 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private boolean isRelevantEvent(final Event event) {
-        return "geschlossen".equals(event.status()) &&
-                "state_changed".equals(event.action()) &&
-                mailHandlerProperties.getRelevantTicketTypes().contains(event.anliegenart());
+        log.debug("checking event: " + event);
+        return
+        // state was changed
+        mailHandlerProperties.getStateChangeAction().equals(event.action()) &&
+        // new state is closed
+                mailHandlerProperties.getClosedState().equals(event.status()) &&
+                // is relevant anliegen
+                mailHandlerProperties.getRelevantTicketTypes().contains(event.anliegenart()) &&
+                // user does have an lhmExtId (i.e. BayernID or BundID user)
+                event.lhmExtId() != null && !event.lhmExtId().isEmpty();
     }
 
     private String buildSubject(final TicketInternal ticket, final Map<String, Object> form) {
         return "[%s;%s;%s;%s] Ihr Anliegen '%s' wurde abschließend bearbeitet"
                 .formatted(
-                        // TODO
-                        "",
-                        "",
+                        form.get("legacyPostkorbHandle"),
+                        form.get("accountSource"),
                         form.get("ticketingVertrauensniveau"),
                         "Dummy",
                         ticket.getTitle());
@@ -68,12 +74,13 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private String buildBody(final TicketInternal ticket) {
         assert ticket.getArticles() != null;
         return ticket.getArticles().stream()
-                // only public articles
-                .filter(i -> Boolean.FALSE.equals(i.getInternal()))
+                // only public articles of type "web" or "note"
+                .filter(i -> Boolean.FALSE.equals(i.getInternal()) &&
+                        (ArticleInternal.TypeEnum.WEB.equals(i.getType()) || ArticleInternal.TypeEnum.NOTE.equals(i.getType())))
                 // format single article
-                .map(i -> "Titel: %s%nBody: %s".formatted(i.getSubject(), i.getBody()))
+                .map(i -> "Titel: %s<br>Body: %s".formatted(i.getSubject(), i.getBody()))
                 // build body
-                .collect(Collectors.joining("\n\n"));
+                .collect(Collectors.joining("<hr>"));
 
     }
 
