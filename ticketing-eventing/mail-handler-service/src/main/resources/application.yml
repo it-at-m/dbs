@@ -22,6 +22,8 @@ spring:
           json:
             trusted:
               packages: '*'
+  codec:
+    max-in-memory-size: 5MB
 
 dbs:
   eventing:

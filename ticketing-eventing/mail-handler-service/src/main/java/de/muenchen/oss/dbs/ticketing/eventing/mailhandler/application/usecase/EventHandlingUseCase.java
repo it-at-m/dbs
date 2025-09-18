@@ -1,16 +1,21 @@
 package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.application.usecase;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleAttachment;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.in.EventHandlerInPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.domain.model.Event;
+import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.adapter.out.mail.Mail;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.application.port.out.SendMailOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.config.MailHandlerProperties;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.exceptions.NoValidArticleException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,13 +58,10 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             }
             // get parsed form
             final Map<String, Object> form = getParsedForm(ticket);
-            // send mail
-            final String subject = buildSubject(ticket, form);
-            log.debug("Created subject: " + subject);
-            final String body = buildBody(ticket);
-            log.debug("Created body: " + body);
-            sendMailOutport.sendMail(
-                    mailHandlerProperties.getRecipient(), subject, body);
+            //find relevant article
+            final ArticleInternal article = findRelevantArticle(ticket);
+            sendMail(ticket, form, article);
+
             log.info("Event handled successfully");
         } catch (NoValidArticleException e) {
             log.error(e.getMessage());
@@ -84,6 +86,26 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
 
+    private ArticleInternal findRelevantArticle(final TicketInternal ticket) throws NoValidArticleException {
+        assert ticket.getArticles() != null;
+        return ticket.getArticles().stream()
+                // find last public articles of type "note"
+                .filter(i -> Boolean.FALSE.equals(i.getInternal()) &&
+                        ArticleInternal.TypeEnum.NOTE.equals(i.getType()))
+                .reduce((first, second) -> second)
+                .orElseThrow(() -> new NoValidArticleException("no valid article found in ticket " + ticket.getId()));
+    }
+
+    private void sendMail(TicketInternal ticket, Map<String, Object> form, ArticleInternal article) {
+        final String recipient = mailHandlerProperties.getRecipient();
+        final String subject = buildSubject(ticket, form);
+        log.debug("Created subject: " + subject);
+        final String body = buildBody(article);
+        log.debug("Created body: " + body);
+        final Map<String, InputStream> attachments = buildAttachments(article);
+        sendMailOutport.sendMail(new Mail(recipient, subject, body, attachments));
+    }
+
     private String buildSubject(final TicketInternal ticket, final Map<String, Object> form) {
         String authlevel;
         if (form.get(TICKETING_VERTRAUENSNIVEAU) == null) {
@@ -102,16 +124,17 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                         ticket.getTitle());
     }
 
-    private String buildBody(final TicketInternal ticket) throws NoValidArticleException {
-        assert ticket.getArticles() != null;
-        return ticket.getArticles().stream()
-                // find last public articles of type "note"
-                .filter(i -> Boolean.FALSE.equals(i.getInternal()) &&
-                        ArticleInternal.TypeEnum.NOTE.equals(i.getType()))
-                .reduce((first, second) -> second)
-                .map(ArticleInternal::getBody)
-                .orElseThrow(() -> new NoValidArticleException("no valid article found in ticket " + ticket.getId()));
 
+    private String buildBody(final ArticleInternal article) {
+        return article.getBody();
+    }
+
+    private Map<String, InputStream> buildAttachments(final ArticleInternal article) {
+        if (article.getAttachments() == null) {
+            return new HashMap<>();
+        }
+        return article.getAttachments().stream().collect(Collectors.toMap(ArticleAttachment::getFilename,
+                a -> ticketingOutPort.getAttachmentContent(article.getTicketId(), article.getId(), a.getId())));
     }
 
     private Map<String, Object> getParsedForm(final TicketInternal ticket) {
