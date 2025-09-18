@@ -163,7 +163,7 @@ import {onMounted, ref} from "vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import {
   getAccessToken,
-  getAPIBaseURL,
+  getAPIBaseURL, getXSRFToken,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_SN_RESULT_ID,
   QUERY_PARAM_SN_RESULT_NAME,
@@ -186,6 +186,7 @@ const saveChecklistModalOpen = ref(false);
 // State
 const dseAccepted = ref(false);
 const lebenslageTitle = ref("Meine Lebenslage");
+const lebenslageId = ref("");
 const snServices = ref<SNService[] | null>(null);
 const selectedService = ref<SNService | null>(null);
 
@@ -198,12 +199,16 @@ onMounted(() => {
 
   if (snResult) {
     lebenslageTitle.value = snResult.name;
+    lebenslageId.value = snResult.id;
     const url =
         getAPIBaseURL() +
         "/public/api/p13n-backend/servicenavigator?ids=" +
         snResult.services.join(",");
-    fetch(url)
+    fetch(url, {
+      mode: "cors"
+    })
         .then((resp) => {
+          console.log(resp.headers.getSetCookie());
           if (resp.ok) {
             resp.json().then((snServicesBody: SNService[]) => {
               snServices.value = snServicesBody;
@@ -254,15 +259,18 @@ function _saveChecklistAcceptedDSE() {
   })
   const body = JSON.stringify({
     title: lebenslageTitle.value,
+    lebenslageId: lebenslageId.value,
     checklistItems: checklistItemsDtos
   })
+
   fetch(
       url,
       {
         method: "POST",
         headers: {
           "Authorization": "Bearer " + getAccessToken(),
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "x-xsrf-token": getXSRFToken()
         },
         body: body,
         mode: "cors",
