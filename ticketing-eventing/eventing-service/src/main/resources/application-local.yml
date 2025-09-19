@@ -37,5 +37,7 @@ logging:
 dbs:
   eventing:
     trigger-mapping:
-      - trigger-name: "Trigger Name"
+      - trigger-name: "T2800_Event_Statusaenderung"
         action: "state_changed"
+      - trigger-name: "T2805_Event_Nachricht_In_Postkorb"
+        action: "send_to_postbox"

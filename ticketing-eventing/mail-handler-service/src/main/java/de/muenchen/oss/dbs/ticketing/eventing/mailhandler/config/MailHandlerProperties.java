@@ -18,9 +18,7 @@ public class MailHandlerProperties {
     @NotBlank
     private String recipient;
     @NotBlank
-    private String stateChangeAction;
-    @NotBlank
-    private String closedState;
+    private String ticketChangeAction;
     @NotNull
     private List<String> relevantTicketTypes;
 }

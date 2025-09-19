@@ -24,7 +24,7 @@ Open **Event-Service** via Swagger (http://localhost:8080/swagger-ui/index.html)
 - User: zammad
 - Password: password
 - Method: POST `/api/event`
-- X-Zammad-Trigger: `Trigger Name`
+- X-Zammad-Trigger: `T2805_Event_Nachricht_In_Postkorb`
 - X-Zammad-Delivery: `myID`
 - Request Body:
 ```json
@@ -33,7 +33,7 @@ Open **Event-Service** via Swagger (http://localhost:8080/swagger-ui/index.html)
     "status": "closed",
     "status_id": "1",
     "anliegenart": "technischer Bürgersupport",
-    "lhmExtId": "33caabe6-317c-4c2d-8bf7-6c36230599db"
+    "lhmextid": "33caabe6-317c-4c2d-8bf7-6c36230599db"
 }
 ```
 

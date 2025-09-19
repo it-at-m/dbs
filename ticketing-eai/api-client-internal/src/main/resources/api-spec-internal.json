@@ -2279,6 +2279,9 @@
           "direktkennwort": {
             "type": "string"
           },
+          "sende_nachricht_nach_extern": {
+            "type": "string"
+          },
           "state": {
             "type": "string",
             "enum": [
@@ -2310,6 +2313,9 @@
             "type": "string"
           },
           "direktkennwort": {
+            "type": "string"
+          },
+          "sende_nachricht_nach_extern": {
             "type": "string"
           },
           "state": {
