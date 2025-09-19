@@ -1,35 +1,35 @@
 <template>
   <main class="container">
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="mucIconsSprite" />
+    <div v-html="mucIconsSprite"/>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="customIconsSprite" />
+    <div v-html="customIconsSprite"/>
     <h2 style="display: flex; align-items: center; margin-bottom: 24px">
       <muc-icon
-        style="width: 32px; height: 32px; margin-right: 8px"
-        icon="order-bool-ascending"
+          style="width: 32px; height: 32px; margin-right: 8px"
+          icon="order-bool-ascending"
       ></muc-icon>
       Aktive Checklisten ({{ checklists.length }})
     </h2>
     <muc-card-container
-      v-if="loading"
-      class="checklist-card-container"
+        v-if="loading"
+        class="checklist-card-container"
     >
       <skeleton-loader
-        v-for="elem in [1, 2, 3, 4]"
-        :key="elem"
+          v-for="elem in [1, 2, 3, 4]"
+          :key="elem"
       >
       </skeleton-loader>
     </muc-card-container>
     <muc-card-container
-      v-else
-      class="checklist-card-container"
+        v-else
+        class="checklist-card-container"
     >
       <checklist-card
-        v-for="(checklist, index) in checklists"
-        :key="index"
-        :checklist="checklist"
-        :checklist-detail-url="checklistDetailUrl"
+          v-for="(checklist) in checklists"
+          :key="checklist.id"
+          :checklist="checklist"
+          :checklist-detail-url="checklistDetailUrl"
       >
       </checklist-card>
     </muc-card-container>
@@ -37,34 +37,66 @@
 </template>
 
 <script setup lang="ts">
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
-
-import { MucCardContainer, MucIcon } from "@muenchen/muc-patternlab-vue";
+import {MucCardContainer, MucIcon} from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref } from "vue";
+import {onMounted, ref} from "vue";
 
 import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
+import ChecklistService from "@/api/persservice/ChecklistService.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
+import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
+import {setAccessToken} from "@/util/Constants.ts";
+import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentPlugin.ts";
 
 defineProps<{
   checklistDetailUrl: string;
   newChecklistUrl: string;
 }>();
 
-const checklists = ref<DummyChecklist[]>([]);
+const checklists = ref<Checklist[]>([]);
 const loading = ref(true);
+
+const {loggedIn} = useDBSLoginWebcomponentPlugin(_authChangedCallback);
+
+function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
+  if (authEventDetails && authEventDetails.accessToken) {
+    setAccessToken(authEventDetails.accessToken);
+    loadChecklists();
+  }
+}
+
+function loadChecklists() {
+  const service = new ChecklistService();
+  service.getChecklists()
+      .then((resp) => {
+        if (resp.ok) {
+          resp.json().then((checklistResponse: Checklist[]) => {
+            checklists.value = checklistResponse
+          });
+        } else {
+          resp.text().then((errBody) => {
+            throw Error(errBody);
+          });
+        }
+      })
+      .catch((error) => {
+        console.debug(error);
+      })
+      .finally(() => (loading.value = false));
+}
 
 onMounted(() => {
   loading.value = true;
   const dcl = new DummyChecklistService();
   dcl
-    .getChecklists()
-    .then((checklist) => {
-      checklists.value = checklist;
-    })
-    .finally(() => (loading.value = false));
+      .getChecklists()
+      .then((checklist) => {
+        checklists.value = checklist;
+      })
+      .finally(() => (loading.value = false));
 });
 </script>
 
