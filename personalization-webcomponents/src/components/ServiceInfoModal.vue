@@ -38,7 +38,7 @@
         :href="service.appointmentServiceUrl"
         target="_blank"
       >
-        <muc-button icon="calendar"> Termin Vereinbaren </muc-button>
+        <muc-button icon="calendar"> Termin vereinbaren </muc-button>
       </a>
 
       <a
