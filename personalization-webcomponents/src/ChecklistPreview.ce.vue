@@ -47,14 +47,26 @@
             v-model:="dseAccepted"
             label="Ich stimme zu."
         />
+
+        <muc-banner
+          v-if="loadingError"
+          type="emergency"
+        >
+          Es ist ein Fehler beim speichern der Checkliste aufgetreten. Bitte versuchen Sie es zu einem späteren Zeitpunkt nochmal.
+        </muc-banner>
       </template>
       <template #buttons>
         <muc-button
             :disabled="!dseAccepted"
-            icon="order-bool-ascending"
+            :icon="loading ? '' : 'order-bool-ascending'"
             @click="_saveChecklistAcceptedDSE"
         >
           Checkliste speichern
+          <muc-percentage-spinner
+              v-if="loading"
+              style="color: white;"
+              size="24px"
+          />
         </muc-button>
       </template>
     </muc-modal>
@@ -155,7 +167,7 @@
 import type {SNService} from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
 import type {ServiceNavigatorResult} from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 
-import {MucButton, MucCallout, MucIntro, MucModal, MucCheckbox} from "@muenchen/muc-patternlab-vue";
+import {MucButton, MucBanner, MucIntro, MucModal, MucCheckbox, MucPercentageSpinner} from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import {onMounted, ref} from "vue";
@@ -164,7 +176,7 @@ import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import {
   getAccessToken,
   getAPIBaseURL, getXSRFToken,
-  LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
+  LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT, QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,
   QUERY_PARAM_SN_RESULT_NAME,
   QUERY_PARAM_SN_RESULT_SERVICES, setAccessToken,
@@ -174,7 +186,7 @@ import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentP
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 // Network activity and results
-const loading = ref(true);
+const loading = ref(false);
 const localStorageError = ref("");
 const loadingError = ref("");
 
@@ -192,6 +204,10 @@ const selectedService = ref<SNService | null>(null);
 
 const {loggedIn} = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
+const props = defineProps<{
+  checklistDetailUrl: string;
+}>();
+
 onMounted(() => {
   loading.value = true;
 
@@ -200,6 +216,8 @@ onMounted(() => {
   if (snResult) {
     lebenslageTitle.value = snResult.name;
     lebenslageId.value = snResult.id;
+
+    //todo replace with openapi generated client when backend is finished
     const url =
         getAPIBaseURL() +
         "/public/api/p13n-backend/servicenavigator?ids=" +
@@ -246,6 +264,7 @@ function _requestLogin() {
 }
 
 function _saveChecklistAcceptedDSE() {
+  //todo replace with openapi generated client when backend is finished
   loading.value = true;
   const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
   const checklistItemsDtos = snServices.value?.map(service => {
@@ -279,8 +298,8 @@ function _saveChecklistAcceptedDSE() {
   )
       .then((resp) => {
         if (resp.ok) {
-          resp.json().then((createResponse: Object) => {
-            console.log(createResponse);
+          resp.json().then((createResponse: any) => {
+            location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${createResponse.id}`;
           });
         } else {
           resp.text().then((errBody) => {
@@ -290,6 +309,7 @@ function _saveChecklistAcceptedDSE() {
       })
       .catch((error) => {
         console.debug(error);
+        loadingError.value = error;
       })
       .finally(() => (loading.value = false));
 }
