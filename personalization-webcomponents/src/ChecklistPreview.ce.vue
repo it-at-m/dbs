@@ -265,7 +265,7 @@ onMounted(() => {
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
-  if(authEventDetails && authEventDetails.accessToken)
+  if (authEventDetails && authEventDetails.accessToken)
     setAccessToken(authEventDetails.accessToken);
 }
 
@@ -313,7 +313,7 @@ function _saveChecklistAcceptedDSE() {
   })
     .then((resp) => {
       if (resp.ok) {
-        resp.json().then((createResponse: {id: string}) => {
+        resp.json().then((createResponse: { id: string }) => {
           location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${createResponse.id}`;
         });
       } else {
