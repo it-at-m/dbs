@@ -32,7 +32,7 @@ public class ZammadAdapter implements TicketingOutPort {
 
     @Override
     public TicketInternal updateTicket(final UpdateTicketDTO updateTicketDTO) {
-        assert updateTicketDTO != null;
+        assert updateTicketDTO != null && updateTicketDTO.getId() != null;
         //TODO use v2 here --> article has to come out as mandatory-param for that
         try {
             final ResponseEntity<TicketInternal> response = ticketsApi.updateTicket1WithHttpInfo(updateTicketDTO.getId(), updateTicketDTO, null, null).block();
