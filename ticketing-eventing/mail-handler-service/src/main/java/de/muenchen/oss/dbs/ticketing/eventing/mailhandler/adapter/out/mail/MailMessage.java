@@ -1,14 +1,13 @@
 package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.adapter.out.mail;
 
+import java.io.InputStream;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.io.InputStream;
-import java.util.Map;
-
 @Data
 @AllArgsConstructor
-public class Mail {
+public class MailMessage {
     private String recipient;
     private String subject;
     private String body;
