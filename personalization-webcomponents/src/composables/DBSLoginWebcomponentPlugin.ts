@@ -1,4 +1,5 @@
-import {onMounted, ref} from 'vue';
+import { onMounted, ref } from "vue";
+
 import AuthorizationEventDetails from "@/types/AuthorizationEventDetails";
 
 /**
@@ -21,25 +22,28 @@ const AUTH_REFRESH_EVENT_NAME = "authorization-event";
  * @return loggedIn default false, turns true after a successfull authentification.
  */
 export function useDBSLoginWebcomponentPlugin(
+  //eslint-disable-next-line  @typescript-eslint/no-empty-function
   loginCallback: (accessToken: AuthorizationEventDetails) => void = () => {},
-  logoutCallback: () => void = () => {},
+  //eslint-disable-next-line  @typescript-eslint/no-empty-function
+  logoutCallback: () => void = () => {}
 ) {
-  const authLoading = ref(true)
-  const loggedIn = ref(false)
-  let prevAuthDetails : AuthorizationEventDetails | undefined = undefined;
+  const authLoading = ref(true);
+  const loggedIn = ref(false);
+  let prevAuthDetails: AuthorizationEventDetails | undefined = undefined;
 
   onMounted(() => {
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     document.addEventListener(AUTH_REFRESH_EVENT_NAME, (ev: any) => {
       authLoading.value = true;
       authChanged(ev.detail);
     });
-  })
+  });
 
   function authChanged(newAuthDetails: AuthorizationEventDetails | undefined) {
     authLoading.value = false;
     if (newAuthDetails) {
       loggedIn.value = true;
-      if(JSON.stringify(newAuthDetails) !== JSON.stringify(prevAuthDetails)) {
+      if (JSON.stringify(newAuthDetails) !== JSON.stringify(prevAuthDetails)) {
         loginCallback(newAuthDetails);
         prevAuthDetails = newAuthDetails;
       } else {
@@ -52,5 +56,5 @@ export function useDBSLoginWebcomponentPlugin(
   }
 
   // expose managed state as return value
-  return {authLoading, loggedIn}
+  return { authLoading, loggedIn };
 }
