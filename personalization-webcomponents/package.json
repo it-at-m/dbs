@@ -24,7 +24,7 @@
     "sortablejs-vue3": "1.3.0"
   },
   "devDependencies": {
-    "@cyclonedx/cyclonedx-npm": "4.0.1",
+    "@cyclonedx/cyclonedx-npm": "4.0.2",
     "@muenchen/prettier-codeformat": "1.0.2",
     "@tsconfig/node-lts": "22.0.2",
     "@types/node": "22.14.0",
