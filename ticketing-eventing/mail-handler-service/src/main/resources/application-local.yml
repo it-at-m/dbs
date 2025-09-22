@@ -34,8 +34,8 @@ spring:
 dbs:
   eai:
     client:
-#      eai-base-url: https://dbs-ticketing-eai-integration-dbs-ticketing-eai.apps.capk.muenchen.de/
-      eai-base-url: http://localhost:39146
+      eai-base-url: https://dbs-ticketing-eai-integration-dbs-ticketing-eai.apps.capk.muenchen.de/
+#      eai-base-url: http://localhost:39146
   eventing:
     mail:
       recipient: test@example.com

@@ -30,8 +30,9 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     public static final String TICKETING_VERTRAUENSNIVEAU = "ticketingVertrauensniveau";
     public static final String LEGACY_POSTKORB_HANDLE = "legacyPostkorbHandle";
     public static final String ACCOUNT_SOURCE = "accountSource";
-    public static final String TO_POSTBOX_DEFAULT = "2";
-    public static final String TO_POSTBOX_HIGH = "3";
+
+    public static final String TO_POSTBOX_DEFAULT = "send";
+    public static final String TO_POSTBOX_HIGH = "send_high_authLevel";
 
     private final XmlMapper xmlMapper = new XmlMapper();
     private final MailHandlerProperties mailHandlerProperties;
@@ -49,8 +50,6 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         try {
             // find event ticket
             final TicketInternal ticket = ticketingOutPort.getTicket(event.ticket());
-            //TODO dummy-setting entfernen
-            ticket.setSendeNachrichtNachExtern("3");
             //check if ticket should be sent
             if (!isRelevantTicket(ticket)) {
                 log.debug("Ticket not relevant");
