@@ -23,13 +23,13 @@ spring:
       client:
         provider:
           zammad:
-            issuer-uri: https://ssodev.muenchen.de/auth/realms/KM81
+            issuer-uri: TODO
         registration:
           zammad:
             provider: zammad
             authorization-grant-type: client_credentials
-            client-id: mpdz-ticketing-fk
-            client-secret: V8zmjkcqgXE9xIWhljjVT45Bxli2c02B
+            client-id: TODO
+            client-secret: TODO
 
 dbs:
   eai:
