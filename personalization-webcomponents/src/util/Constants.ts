@@ -8,6 +8,8 @@ export const QUERY_PARAM_SN_RESULT_SERVICES = "p13n-services";
 
 export const QUERY_PARAM_CHECKLIST_ID = "cl-id";
 
+let ACCESS_TOKEN: string | undefined = undefined;
+
 export function getChecklistIconByTitle(checklistTitle: string) {
   return {
     "Ich habe wenig Geld.":
@@ -27,4 +29,47 @@ export function getAPIBaseURL(): string {
   } else {
     return new URL(import.meta.url).origin;
   }
+}
+
+export function setAccessToken(newAccessToken: string): void {
+  ACCESS_TOKEN = newAccessToken;
+}
+
+export function getAccessToken(): string | undefined {
+  return ACCESS_TOKEN;
+}
+
+class Cookie {
+  key: string;
+  value: string;
+
+  constructor(key: string, value: string) {
+    this.key = key;
+    this.value = value;
+  }
+}
+
+/**
+ * Get Cookie by its name . Undefined if cookie is not present.
+ * @param cookieName Name of the Cookie
+ */
+export function getCookie(cookieName: string): Cookie | undefined {
+  let cookie: Cookie | undefined = undefined;
+
+  document.cookie.split(";").forEach(function (el) {
+    const [key, value] = el.split("=");
+    if (key && value && key.trim() == cookieName) {
+      cookie = new Cookie(key.trim(), value);
+    }
+  });
+  return cookie;
+}
+
+export function getXSRFToken() {
+  const XSRFToken = getCookie("XSRF-TOKEN");
+  if (XSRFToken == undefined) {
+    console.debug("XRSF-Token Konnte nicht aus Cookie geholt werden");
+    return "";
+  }
+  return XSRFToken.value;
 }

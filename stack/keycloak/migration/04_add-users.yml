@@ -9,6 +9,9 @@ changes:
       enabled: true
       emailVerified: true
       email: none@none.com
+      attributes:
+        lhmExtId:
+          - "nonelhmextid"
   - updateUserPassword:
       name: none
       password: "none"
@@ -19,6 +22,9 @@ changes:
       enabled: true
       emailVerified: true
       email: reader@reader.com
+      attributes:
+        lhmExtId:
+          - "readerlhmextid"
   - updateUserPassword:
       name: reader
       password: "reader"
@@ -29,6 +35,9 @@ changes:
       enabled: true
       emailVerified: true
       email: writer@writer.com
+      attributes:
+        lhmExtId:
+          - "writerlhmextid"
   - updateUserPassword:
       name: writer
       password: "writer"
