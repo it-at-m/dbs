@@ -11,7 +11,7 @@
 
     <groupId>de.muenchen.oss.dbs.ticketing.eventing</groupId>
     <artifactId>handler-core</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <name>handler-core</name>
     <description>DBS ticketing library with base componentes for building a new service for handling notifications from the eventing-service</description>
     <url>https://github.com/it-at-m/dbs</url>
