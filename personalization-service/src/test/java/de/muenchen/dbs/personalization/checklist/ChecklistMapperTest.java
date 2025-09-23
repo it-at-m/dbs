@@ -47,6 +47,7 @@ public class ChecklistMapperTest {
             final UUID id = UUID.randomUUID();
             final Checklist checklist = createTestChecklist(id, "user-lhm-ext-id", null);
             final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(checklist.getTitle(),
+                    "situation-id-sample",
                     checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
 
             // When

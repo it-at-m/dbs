@@ -66,6 +66,7 @@ class UnicodeConfigurationTest extends IntegrationTestBase {
         checklistItem2.setServiceID("item2");
         checklistItem3.setServiceID("item3");
         final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(TEXT_ATTRIBUTE_DECOMPOSED,
+                "situation-id-sample",
                 checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
 
         // When
