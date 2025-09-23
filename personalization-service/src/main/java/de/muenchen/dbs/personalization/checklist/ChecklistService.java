@@ -3,11 +3,9 @@ package de.muenchen.dbs.personalization.checklist;
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +80,7 @@ public class ChecklistService {
         isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
         foundChecklist.getChecklistItems().forEach(checklistItem -> {
-            if(checklistItem.getServiceID().equals(sanitizedServiceId)) {
+            if (checklistItem.getServiceID().equals(sanitizedServiceId)) {
                 checklistItem.setChecked(newCheckedValue);
             }
         });

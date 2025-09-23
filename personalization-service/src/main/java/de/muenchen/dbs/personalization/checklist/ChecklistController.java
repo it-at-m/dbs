@@ -8,7 +8,6 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -69,7 +68,7 @@ public class ChecklistController {
     @Operation(summary = "Check a Checklist-Entry", description = "Checks a checklist-entry.")
     @ResponseStatus(HttpStatus.OK)
     public ChecklistReadDTO checkChecklistEntry(@PathVariable("checklistID") final UUID checklistID,
-                                                @PathVariable("serviceID") final String serviceID) {
+            @PathVariable("serviceID") final String serviceID) {
         return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, ZonedDateTime.now()));
     }
 
@@ -77,7 +76,7 @@ public class ChecklistController {
     @Operation(summary = "Check a Checklist-Entry", description = "Checks a checklist-entry.")
     @ResponseStatus(HttpStatus.OK)
     public ChecklistReadDTO uncheckChecklistEntry(@PathVariable("checklistID") final UUID checklistID,
-                                                @PathVariable("serviceID") final String serviceID) {
+            @PathVariable("serviceID") final String serviceID) {
         return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, null));
     }
 }
