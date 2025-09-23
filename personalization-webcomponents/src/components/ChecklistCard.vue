@@ -9,7 +9,7 @@
         <img
           width="56px"
           height="56px"
-          :src="getChecklistIconByTitle(checklist.title)"
+          :src="getChecklistIconBySituationId(checklist.situationId)"
           alt="checklist-icon"
         />
       </div>
@@ -69,15 +69,12 @@
 <script setup lang="ts">
 import type Checklist from "@/api/persservice/Checklist.ts";
 
-import { MucCard } from "@muenchen/muc-patternlab-vue";
-import { computed } from "vue";
+import {MucCard} from "@muenchen/muc-patternlab-vue";
+import {computed} from "vue";
 
 import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
 import MucChip from "@/components/common/MucChip.vue";
-import {
-  getChecklistIconByTitle,
-  QUERY_PARAM_CHECKLIST_ID,
-} from "@/util/Constants.ts";
+import {getChecklistIconBySituationId, QUERY_PARAM_CHECKLIST_ID,} from "@/util/Constants.ts";
 
 const props = defineProps<{
   checklist: Checklist;

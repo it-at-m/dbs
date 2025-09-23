@@ -4,6 +4,7 @@ export default interface Checklist {
   id: string;
   title: string;
   lhmExtId: string;
+  situationId: string;
   checklistItems: ChecklistItem[];
   lastUpdate: Date;
 }

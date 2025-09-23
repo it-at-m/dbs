@@ -2,7 +2,7 @@
   <muc-intro
     tagline="Checkliste"
     :title="checklist.title"
-    :img="getChecklistIconByTitle(checklist.title)"
+    :img="getChecklistIconBySituationId(checklist.situationId)"
     imgAlt=""
   >
     <div
@@ -57,7 +57,7 @@ import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
 
 import MucChip from "@/components/common/MucChip.vue";
-import { getChecklistIconByTitle } from "@/util/Constants.ts";
+import {getChecklistIconBySituationId} from "@/util/Constants.ts";
 
 const props = defineProps<{
   checklist: Checklist;
