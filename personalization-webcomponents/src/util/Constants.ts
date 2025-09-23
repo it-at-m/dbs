@@ -15,17 +15,16 @@ export function getChecklistIconByTitle(checklistTitle: string) {
     "Ich habe wenig Geld.":
       "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482730.svg",
     "Ich will umziehen.":
-        "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482700.svg",
+      "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482700.svg",
     "Ich manage eine Familie.":
       "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483310.svg",
-    "Einwanderung":
+    Einwanderung:
       "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483311.svg",
-    "Umzug":
-        "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482700.svg",
-    "Test":
-        "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483310.svg",
-    "title3":
-        "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483310.svg",
+    Umzug:
+      "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482700.svg",
+    Test: "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483310.svg",
+    title3:
+      "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483310.svg",
   }[checklistTitle];
 }
 

@@ -1,56 +1,56 @@
 <template>
   <muc-card
-      :title="checklist.title"
-      tagline="Checkliste"
-      @click="gotoChecklist(checklist.id!)"
+    :title="checklist.title"
+    tagline="Checkliste"
+    @click="gotoChecklist(checklist.id!)"
   >
     <template #headerPrefix>
       <div class="card-header-icon">
         <img
-            width="56px"
-            height="56px"
-            :src="getChecklistIconByTitle(checklist.title)"
-            alt="checklist-icon"
+          width="56px"
+          height="56px"
+          :src="getChecklistIconByTitle(checklist.title)"
+          alt="checklist-icon"
         />
       </div>
     </template>
     <template #content>
       <div>
         <muc-chip
-            v-if="todoCount"
-            style="margin-right: 16px"
-            background-color="#FDD1AC"
+          v-if="todoCount"
+          style="margin-right: 16px"
+          background-color="#FDD1AC"
         >
           {{ todoCount }} offen
           <svg
-              style="margin-left: 8px; width: 20px; height: 20px"
-              aria-hidden="true"
-              class="m-button__icon"
+            style="margin-left: 8px; width: 20px; height: 20px"
+            aria-hidden="true"
+            class="m-button__icon"
           >
-            <use href="#icon-pencil"/>
+            <use href="#icon-pencil" />
           </svg>
         </muc-chip>
         <muc-chip
-            v-if="doneCount"
-            background-color="#B7D2B7"
+          v-if="doneCount"
+          background-color="#B7D2B7"
         >
           {{ doneCount }} erledigt
           <svg
-              style="margin-left: 8px; width: 20px; height: 20px"
-              aria-hidden="true"
-              class="m-button__icon"
+            style="margin-left: 8px; width: 20px; height: 20px"
+            aria-hidden="true"
+            class="m-button__icon"
           >
-            <use href="#icon-check"/>
+            <use href="#icon-check" />
           </svg>
         </muc-chip>
       </div>
 
       <div style="padding-top: 16px; padding-bottom: 20px">
         <checklistitem-listitem
-            v-for="(item, index) in firstThreeItemsSortedByChecked"
-            :checklist-item="item"
-            :key="item.serviceID"
-            :class="{
+          v-for="(item, index) in firstThreeItemsSortedByChecked"
+          :checklist-item="item"
+          :key="item.serviceID"
+          :class="{
             'pt-8': index != 0,
             'pb-8': index != firstThreeItemsSortedByChecked.length - 1,
           }"
@@ -59,15 +59,18 @@
       </div>
 
       <div v-if="checklist.lastUpdate">
-        <b>Letzte Änderung:</b> {{ new Date(checklist.lastUpdate).toLocaleDateString() }}
+        <b>Letzte Änderung:</b>
+        {{ new Date(checklist.lastUpdate).toLocaleDateString() }}
       </div>
     </template>
   </muc-card>
 </template>
 
 <script setup lang="ts">
-import {MucCard} from "@muenchen/muc-patternlab-vue";
-import {computed} from "vue";
+import type Checklist from "@/api/persservice/Checklist.ts";
+
+import { MucCard } from "@muenchen/muc-patternlab-vue";
+import { computed } from "vue";
 
 import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
 import MucChip from "@/components/common/MucChip.vue";
@@ -75,7 +78,6 @@ import {
   getChecklistIconByTitle,
   QUERY_PARAM_CHECKLIST_ID,
 } from "@/util/Constants.ts";
-import type Checklist from "@/api/persservice/Checklist.ts";
 
 const props = defineProps<{
   checklist: Checklist;
@@ -83,13 +85,21 @@ const props = defineProps<{
 }>();
 
 const todoCount = computed(() => {
-  if (props.checklist && props.checklist.checklistItems)
-    return props.checklist.checklistItems.filter((value) => !value.checked).length;
+  if (props.checklist && props.checklist.checklistItems) {
+    return props.checklist.checklistItems.filter((value) => !value.checked)
+      .length;
+  } else {
+    return undefined;
+  }
 });
 
 const doneCount = computed(() => {
-  if (props.checklist && props.checklist.checklistItems)
-    return props.checklist.checklistItems.filter((value) => value.checked).length;
+  if (props.checklist && props.checklist.checklistItems) {
+    return props.checklist.checklistItems.filter((value) => value.checked)
+      .length;
+  } else {
+    return undefined;
+  }
 });
 
 const firstThreeItemsSortedByChecked = computed(() => {

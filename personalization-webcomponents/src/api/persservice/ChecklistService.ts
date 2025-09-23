@@ -1,7 +1,6 @@
-import {getAccessToken, getAPIBaseURL} from "@/util/Constants.ts";
+import { getAccessToken, getAPIBaseURL } from "@/util/Constants.ts";
 
 export default class ChecklistService {
-
   getChecklists(): Promise<Response> {
     //todo replace with openapi generated client when backend is finished
     const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
@@ -13,6 +12,6 @@ export default class ChecklistService {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    })
+    });
   }
 }
