@@ -43,7 +43,7 @@
 
         <!-- Core Frameworks -->
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version> <!-- Must match the chosen Spring Boot version -->
-        <dbs-handler-core.version>0.1.0</dbs-handler-core.version>
+        <dbs-handler-core.version>0.2.0</dbs-handler-core.version>
 
         <!-- Logging -->
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
