@@ -135,7 +135,7 @@ const closedCheckList = computed(() => {
 });
 
 const deletionDate = computed(() => {
-  if (checklist.value && checklist.value && checklist.value.lastUpdate) {
+  if (checklist.value && checklist.value.lastUpdate) {
     const date = new Date(checklist.value.lastUpdate);
     date.setFullYear(date.getFullYear() + 1);
     return date.toLocaleString("de-DE", {
