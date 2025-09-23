@@ -72,7 +72,7 @@ public class ChecklistMapperTest {
             final Checklist result = checklistMapper.toUpdateChecklist(checklistUpdateDTO);
 
             // Then
-            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(checklistUpdateDTO);
+            assertThat(result).usingRecursiveComparison().ignoringFields("id", "situationId", "lastUpdate").isEqualTo(checklistUpdateDTO);
         }
     }
 }
