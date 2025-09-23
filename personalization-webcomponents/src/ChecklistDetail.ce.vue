@@ -31,7 +31,7 @@
                 class="banner"
                 type="success"
                 >Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
-                bewahren diese Checkliste noch bis zum 17. September 2026 für
+                bewahren diese Checkliste noch bis zum {{ deletionDate }} für
                 Sie auf. Danach wird sie automatisch gelöscht.
               </muc-banner>
               <h2 class="headline">
@@ -133,6 +133,16 @@ const closedCheckList = computed(() => {
     return [];
   }
 });
+
+const deletionDate = computed(oldValue => {
+  if(checklist && checklist.value && checklist.value.lastUpdate) {
+    let date = new Date(checklist.value.lastUpdate);
+    date.setFullYear(date.getFullYear() + 1);
+    return date.toLocaleString("de-DE", {year: 'numeric', month: 'numeric', day: 'numeric'});
+  } else {
+    return "nächsten Jahr";
+  }
+})
 
 function onCheckedOpen(serviceID: string) {
   if (checklist.value) {
