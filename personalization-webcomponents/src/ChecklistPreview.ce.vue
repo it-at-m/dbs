@@ -299,9 +299,6 @@ function _saveChecklistAcceptedDSE() {
     situationId: lebenslageId.value,
     checklistItems: checklistItemsDtos,
   });
-
-  console.log(body);
-
   fetch(url, {
     method: "POST",
     headers: {
