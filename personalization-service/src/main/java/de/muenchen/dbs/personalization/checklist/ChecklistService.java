@@ -29,13 +29,14 @@ public class ChecklistService {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
         log.debug("Create Checklist {} for {}", checklist, lhmExtId);
         checklist.setLhmExtId(lhmExtId);
+        checklist.setLastUpdate(ZonedDateTime.now());
         return checklistRepository.save(checklist);
     }
 
     public List<Checklist> getChecklists() {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
         log.debug("Get all checklists of {}", lhmExtId);
-        return checklistRepository.findChecklistByLhmExtId(lhmExtId);
+        return checklistRepository.findChecklistByLhmExtIdOrderByLastUpdateDesc(lhmExtId);
     }
 
     public Checklist getChecklist(final UUID checklistId) {
