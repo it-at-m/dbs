@@ -3,9 +3,11 @@ package de.muenchen.dbs.personalization.checklist;
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +70,25 @@ public class ChecklistService {
         isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
         checklistRepository.deleteById(checklistId);
+    }
+
+    public Checklist changeChecklistEntry(final UUID checklistId, final String serviceId, ZonedDateTime newCheckedValue) {
+        final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
+        log.debug("Update checklist with checklist-ID {} and service-ID {} for {}", checklistId, serviceId, lhmExtId);
+        final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
+
+        isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
+
+        foundChecklist.getChecklistItems().stream().forEach(checklistItem -> {
+            if(checklistItem.getServiceID().equals(serviceId)) {
+                checklistItem.setChecked(newCheckedValue);
+            }
+        });
+        foundChecklist.setLastUpdate(ZonedDateTime.now());
+
+        log.debug("Update Checklist {}", foundChecklist);
+
+        return checklistRepository.save(foundChecklist);
     }
 
     private Checklist getChecklistOrThrowException(final UUID checklistId) {

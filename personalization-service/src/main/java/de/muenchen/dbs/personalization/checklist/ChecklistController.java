@@ -8,6 +8,8 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -61,5 +63,21 @@ public class ChecklistController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteChecklist(@PathVariable("checklistID") final UUID checklistID) {
         checklistService.deleteChecklist(checklistID);
+    }
+
+    @PostMapping("/{checklistID}/{serviceID}/check")
+    @Operation(summary = "Check a Checklist-Entry", description = "Checks a checklist-entry.")
+    @ResponseStatus(HttpStatus.OK)
+    public ChecklistReadDTO checkChecklistEntry(@PathVariable("checklistID") final UUID checklistID,
+                                                @PathVariable("serviceID") final String serviceID) {
+        return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, ZonedDateTime.now()));
+    }
+
+    @PostMapping("/{checklistID}/{serviceID}/uncheck")
+    @Operation(summary = "Check a Checklist-Entry", description = "Checks a checklist-entry.")
+    @ResponseStatus(HttpStatus.OK)
+    public ChecklistReadDTO uncheckChecklistEntry(@PathVariable("checklistID") final UUID checklistID,
+                                                @PathVariable("serviceID") final String serviceID) {
+        return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, null));
     }
 }

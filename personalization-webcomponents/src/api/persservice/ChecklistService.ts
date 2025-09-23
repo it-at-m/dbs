@@ -1,4 +1,5 @@
 import { getAccessToken, getAPIBaseURL } from "@/util/Constants.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
 
 export default class ChecklistService {
   getChecklists(): Promise<Response> {
@@ -7,6 +8,49 @@ export default class ChecklistService {
 
     return fetch(url, {
       method: "GET",
+      headers: {
+        Authorization: "Bearer " + getAccessToken(),
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+  }
+
+
+  getChecklist(id: string): Promise<Response> {
+    //todo replace with openapi generated client when backend is finished
+    const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist/" + id;
+
+    return fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + getAccessToken(),
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+  }
+
+  checkChecklistentry(checklistID: string, serviceID: string): Promise<Response> {
+    //todo replace with openapi generated client when backend is finished
+    const url = `${getAPIBaseURL()}/clients/api/p13n-backend/checklist/${checklistID}/${serviceID}/check`;
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + getAccessToken(),
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+  }
+
+  uncheckChecklistentry(checklistID: string, serviceID: string): Promise<Response> {
+    //todo replace with openapi generated client when backend is finished
+    const url = `${getAPIBaseURL()}/clients/api/p13n-backend/checklist/${checklistID}/${serviceID}/uncheck`;
+
+    return fetch(url, {
+      method: "POST",
       headers: {
         Authorization: "Bearer " + getAccessToken(),
         "Content-Type": "application/json",

@@ -288,11 +288,11 @@ function _saveChecklistAcceptedDSE() {
   const checklistItemsDtos = snServices.value?.map((service) => {
     return {
       serviceID: service.id,
-      checked: null,
+      checked: undefined,
       title: service.serviceName,
       note: service.summary,
       required: service.mandatory,
-    };
+    } as any;
   });
   const body = JSON.stringify({
     title: lebenslageTitle.value,
