@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
+import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
 import ChecklistCheckedCircle from "@/components/ChecklistCheckedCircle.vue";
 
 defineProps<{
-  checklistItem: DummyChecklistItem;
+  checklistItem: ChecklistItem;
 }>();
 </script>
 
