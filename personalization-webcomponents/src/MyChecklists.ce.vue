@@ -88,16 +88,6 @@ function loadChecklists() {
       .finally(() => (loading.value = false));
 }
 
-onMounted(() => {
-  loading.value = true;
-  const dcl = new DummyChecklistService();
-  dcl
-      .getChecklists()
-      .then((checklist) => {
-        checklists.value = checklist;
-      })
-      .finally(() => (loading.value = false));
-});
 </script>
 
 <style>
