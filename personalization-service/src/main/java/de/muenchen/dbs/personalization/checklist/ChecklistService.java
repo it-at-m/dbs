@@ -71,7 +71,7 @@ public class ChecklistService {
         checklistRepository.deleteById(checklistId);
     }
 
-    public Checklist changeChecklistEntry(final UUID checklistId, final String serviceId, ZonedDateTime newCheckedValue) {
+    public Checklist changeChecklistEntry(final UUID checklistId, final String serviceId, final ZonedDateTime newCheckedValue) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
         final String sanitizedServiceId = StringEscapeUtils.escapeHtml4(serviceId);
         log.debug("Update checklist with checklist-ID {} and service-ID {} for {}", checklistId, sanitizedServiceId, lhmExtId);
