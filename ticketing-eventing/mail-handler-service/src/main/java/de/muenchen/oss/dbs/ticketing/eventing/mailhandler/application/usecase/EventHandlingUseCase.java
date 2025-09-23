@@ -113,7 +113,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             log.error("no ticketingVertrauensniveau found in ticket " + ticket.getId() + " - setting level1");
             authlevel = "level1";
         } else {
-            authlevel = "3".equals(ticket.getSendeNachrichtNachExtern()) ? "level3" : String.valueOf(form.get(TICKETING_VERTRAUENSNIVEAU));
+            authlevel = TO_POSTBOX_HIGH.equals(ticket.getSendeNachrichtNachExtern()) ? "level3" : String.valueOf(form.get(TICKETING_VERTRAUENSNIVEAU));
         }
 
         return "[%s;%s;%s;%s] Neue Nachricht zu Ihrem Anliegen '%s'"
