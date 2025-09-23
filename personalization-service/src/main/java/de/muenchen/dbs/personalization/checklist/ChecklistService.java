@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -74,13 +75,14 @@ public class ChecklistService {
 
     public Checklist changeChecklistEntry(final UUID checklistId, final String serviceId, ZonedDateTime newCheckedValue) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
-        log.debug("Update checklist with checklist-ID {} and service-ID {} for {}", checklistId, serviceId, lhmExtId);
+        final String sanitizedServiceId = StringEscapeUtils.escapeHtml4(serviceId);
+        log.debug("Update checklist with checklist-ID {} and service-ID {} for {}", checklistId, sanitizedServiceId, lhmExtId);
         final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
 
         isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
-        foundChecklist.getChecklistItems().stream().forEach(checklistItem -> {
-            if(checklistItem.getServiceID().equals(serviceId)) {
+        foundChecklist.getChecklistItems().forEach(checklistItem -> {
+            if(checklistItem.getServiceID().equals(sanitizedServiceId)) {
                 checklistItem.setChecked(newCheckedValue);
             }
         });
