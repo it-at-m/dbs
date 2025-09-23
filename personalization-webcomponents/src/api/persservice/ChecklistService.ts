@@ -1,5 +1,4 @@
 import { getAccessToken, getAPIBaseURL } from "@/util/Constants.ts";
-import type Checklist from "@/api/persservice/Checklist.ts";
 
 export default class ChecklistService {
   getChecklists(): Promise<Response> {
@@ -16,7 +15,6 @@ export default class ChecklistService {
     });
   }
 
-
   getChecklist(id: string): Promise<Response> {
     //todo replace with openapi generated client when backend is finished
     const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist/" + id;
@@ -31,7 +29,10 @@ export default class ChecklistService {
     });
   }
 
-  checkChecklistentry(checklistID: string, serviceID: string): Promise<Response> {
+  checkChecklistentry(
+    checklistID: string,
+    serviceID: string
+  ): Promise<Response> {
     //todo replace with openapi generated client when backend is finished
     const url = `${getAPIBaseURL()}/clients/api/p13n-backend/checklist/${checklistID}/${serviceID}/check`;
 
@@ -45,7 +46,10 @@ export default class ChecklistService {
     });
   }
 
-  uncheckChecklistentry(checklistID: string, serviceID: string): Promise<Response> {
+  uncheckChecklistentry(
+    checklistID: string,
+    serviceID: string
+  ): Promise<Response> {
     //todo replace with openapi generated client when backend is finished
     const url = `${getAPIBaseURL()}/clients/api/p13n-backend/checklist/${checklistID}/${serviceID}/uncheck`;
 

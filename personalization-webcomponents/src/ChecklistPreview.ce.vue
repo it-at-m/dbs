@@ -292,7 +292,7 @@ function _saveChecklistAcceptedDSE() {
       title: service.serviceName,
       note: service.summary,
       required: service.mandatory,
-    } as any;
+    };
   });
   const body = JSON.stringify({
     title: lebenslageTitle.value,
