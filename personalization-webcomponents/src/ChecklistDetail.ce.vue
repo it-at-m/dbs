@@ -134,15 +134,19 @@ const closedCheckList = computed(() => {
   }
 });
 
-const deletionDate = computed(oldValue => {
-  if(checklist && checklist.value && checklist.value.lastUpdate) {
-    let date = new Date(checklist.value.lastUpdate);
+const deletionDate = computed(() => {
+  if (checklist.value && checklist.value && checklist.value.lastUpdate) {
+    const date = new Date(checklist.value.lastUpdate);
     date.setFullYear(date.getFullYear() + 1);
-    return date.toLocaleString("de-DE", {year: 'numeric', month: 'numeric', day: 'numeric'});
+    return date.toLocaleString("de-DE", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
   } else {
     return "nächsten Jahr";
   }
-})
+});
 
 function onCheckedOpen(serviceID: string) {
   if (checklist.value) {
