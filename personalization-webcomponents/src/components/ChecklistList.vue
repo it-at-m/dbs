@@ -154,7 +154,6 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   const maxIndex = props.checklistItems.length - 1;
   const move = (direction: number) => {
     if (draggedIndex.value) {
-       
       const newIndex = draggedIndex.value + direction;
       if (newIndex < 0 || newIndex > maxIndex) return;
 
