@@ -5,7 +5,6 @@ import jakarta.activation.DataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,13 +35,14 @@ public class MailAdapter implements SendMailOutPort {
             helper.setText(mailMessage.getBody(), true);
             for (final Map.Entry<String, InputStream> entry : mailMessage.getAttachments().entrySet()) {
                 //TODO is there a way to do this with streaming? The following line loads the attachment into RAM...
-                InputStream bis = new BufferedInputStream(entry.getValue());
-                String mime = detectMimeType(bis);
-                log.debug("Mime-Type for " + entry.getKey() + " found " + mime);
-                final DataSource dataSource = new ByteArrayDataSource(bis, mime);
-                helper.addAttachment(entry.getKey(), dataSource);
-                //maybe like this?
-                //helper.addAttachment(e.getKey(), new InputStreamSourceImpl(e.getValue()));
+                try (InputStream bis = new BufferedInputStream(entry.getValue())) {
+                    final String mime = detectMimeType(bis);
+                    log.debug("Mime-Type for " + entry.getKey() + " found " + mime);
+                    final DataSource dataSource = new ByteArrayDataSource(bis, mime);
+                    helper.addAttachment(entry.getKey(), dataSource);
+                    //maybe like this?
+                    //helper.addAttachment(e.getKey(), new InputStreamSourceImpl(e.getValue()));
+                }
             }
             mailSender.send(mimeMessage);
         } catch (final MessagingException | IOException e) {
@@ -50,7 +50,7 @@ public class MailAdapter implements SendMailOutPort {
         }
     }
 
-    public String detectMimeType(InputStream inputStream) throws IOException {
+    public String detectMimeType(final InputStream inputStream) throws IOException {
         return tika.detect(inputStream);
     }
 
