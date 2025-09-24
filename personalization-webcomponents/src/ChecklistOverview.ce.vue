@@ -78,7 +78,8 @@
 </template>
 
 <script setup lang="ts">
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
+import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import {
   MucButton,
@@ -89,11 +90,12 @@ import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { onMounted, ref } from "vue";
 
-import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
+import ChecklistService from "@/api/persservice/ChecklistService.ts";
 import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
-import { QUERY_PARAM_CHECKLIST_ID } from "@/util/Constants.ts";
+import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import { setAccessToken } from "@/util/Constants.ts";
 
 const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
@@ -102,12 +104,45 @@ const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   displayedOnDetailScreen: string;
 }>();
 
-const checklists = ref<DummyChecklist[]>([]);
+const checklists = ref<Checklist[]>([]);
 const loading = ref(true);
 const loadingError = ref(false);
 const isMobile = ref(false);
 const displayOptionDetailScreen =
   displayedOnDetailScreen.toLowerCase() === "true";
+
+const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
+
+function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
+  if (authEventDetails && authEventDetails.accessToken) {
+    setAccessToken(authEventDetails.accessToken);
+    loadChecklists();
+  }
+}
+
+function loadChecklists() {
+  if (loggedIn.value) {
+    loading.value = true;
+    const service = new ChecklistService();
+    service
+      .getChecklists()
+      .then((resp) => {
+        if (resp.ok) {
+          resp.json().then((checklistResponse: Checklist[]) => {
+            checklists.value = checklistResponse;
+          });
+        } else {
+          resp.text().then((errBody) => {
+            throw Error(errBody);
+          });
+        }
+      })
+      .catch((error) => {
+        console.debug(error);
+      })
+      .finally(() => (loading.value = false));
+  }
+}
 
 const goToChecklistOverviewLink = () => {
   location.href = checklistOverviewUrl;
@@ -118,25 +153,8 @@ const checksMobile = () => {
 };
 
 onMounted(() => {
-  loading.value = true;
   checksMobile();
   window.addEventListener("resize", checksMobile);
-
-  const dcl = new DummyChecklistService();
-  dcl
-    .getChecklists()
-    .then((checklist) => {
-      checklists.value = checklist;
-
-      if (displayOptionDetailScreen) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
-        checklists.value = checklists.value.filter(
-          (checklist) => checklist.id != checklistId
-        );
-      }
-    })
-    .finally(() => (loading.value = false));
 });
 </script>
 

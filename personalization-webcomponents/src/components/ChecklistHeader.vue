@@ -5,9 +5,12 @@
     :img="getChecklistIconByTitle(checklist.title)"
     imgAlt=""
   >
-    <div style="padding-bottom: 16px; padding-left: 3px">
-      <b>Erstellungsdatum: </b
-      >{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
+    <div
+      v-if="checklist.lastUpdate"
+      style="padding-bottom: 16px; padding-left: 3px"
+    >
+      <b>Erstellungsdatum: </b>
+      {{ new Date(checklist.lastUpdate).toLocaleString().split(",")[0] }}
     </div>
     <table>
       <tr>
@@ -48,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
 
 import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
@@ -57,7 +60,7 @@ import MucChip from "@/components/common/MucChip.vue";
 import { getChecklistIconByTitle } from "@/util/Constants.ts";
 
 const props = defineProps<{
-  checklist: DummyChecklist;
+  checklist: Checklist;
 }>();
 
 onMounted(() => {
@@ -82,11 +85,21 @@ onMounted(() => {
 });
 
 const todoCount = computed(() => {
-  return props.checklist.items.filter((value) => !value.checked).length;
+  if (props.checklist && props.checklist.checklistItems) {
+    return props.checklist.checklistItems.filter((value) => !value.checked)
+      .length;
+  } else {
+    return undefined;
+  }
 });
 
 const doneCount = computed(() => {
-  return props.checklist.items.filter((value) => value.checked).length;
+  if (props.checklist && props.checklist.checklistItems) {
+    return props.checklist.checklistItems.filter((value) => value.checked)
+      .length;
+  } else {
+    return undefined;
+  }
 });
 </script>
 <style>

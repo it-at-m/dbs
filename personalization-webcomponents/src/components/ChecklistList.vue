@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import type DummyChecklistItem from "@/api/dummyservice/DummyChecklistItem.ts";
+import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
@@ -70,7 +70,7 @@ import { defineEmits, ref } from "vue";
 
 withDefaults(
   defineProps<{
-    modelValue: DummyChecklistItem[];
+    modelValue: ChecklistItem[];
     isDraggable?: boolean;
     disabled?: boolean;
   }>(),
@@ -83,13 +83,13 @@ const emit = defineEmits(["checked", "label-click"]);
 const drag = ref(false);
 
 const dialogVisible = ref(false);
-const dialogItem = ref<DummyChecklistItem | null>(null);
+const dialogItem = ref<ChecklistItem | null>(null);
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
 }
 
-function openDialog(item: DummyChecklistItem) {
+function openDialog(item: ChecklistItem) {
   dialogItem.value = item;
   dialogVisible.value = true;
   emit("label-click", item);
