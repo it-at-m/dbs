@@ -19,7 +19,7 @@
           aria-roledescription="sortierbares Listenelement"
           :class="{
             muted: element.checked !== null,
-            'keyboard-dragging': draggedIndex === index
+            'keyboard-dragging': draggedIndex === index,
           }"
           :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
           :aria-label="`${element.title}, Position ${index + 1} von ${checklistItems.length}`"
@@ -78,9 +78,9 @@
 <script lang="ts" setup>
 import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
-import {MucIcon} from "@muenchen/muc-patternlab-vue";
-import {Sortable} from "sortablejs-vue3";
-import {computed, onBeforeUnmount, onMounted, ref} from "vue";
+import { MucIcon } from "@muenchen/muc-patternlab-vue";
+import { Sortable } from "sortablejs-vue3";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -130,11 +130,11 @@ function closeDialog() {
   dialogVisible.value = false;
 }
 
-function onSortEnd(evt: { oldIndex: number, newIndex: number }) {
+function onSortEnd(evt: { oldIndex: number; newIndex: number }) {
   const oldIndex = evt.oldIndex;
   const newIndex = evt.newIndex;
-  if(oldIndex !== newIndex) {
-    emit('sort', {oldIndex, newIndex});
+  if (oldIndex !== newIndex) {
+    emit("sort", { oldIndex, newIndex });
   }
 }
 
@@ -153,16 +153,18 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 
   const maxIndex = props.checklistItems.length - 1;
   const move = (direction: number) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const newIndex = draggedIndex.value! + direction;
-    if (newIndex < 0 || newIndex > maxIndex) return;
+    if (draggedIndex.value) {
+       
+      const newIndex = draggedIndex.value + direction;
+      if (newIndex < 0 || newIndex > maxIndex) return;
 
-    event.preventDefault();
+      event.preventDefault();
 
-    emit("sort", {oldIndex: draggedIndex.value!, newIndex});
+      emit("sort", { oldIndex: draggedIndex.value, newIndex });
 
-    draggedIndex.value = newIndex;
-    focusedIndex.value = newIndex;
+      draggedIndex.value = newIndex;
+      focusedIndex.value = newIndex;
+    }
   };
 
   if (event.key === "ArrowUp") move(-1);

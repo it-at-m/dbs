@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import type Checklist from "@/api/persservice/Checklist.ts";
+import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import { MucBanner } from "@muenchen/muc-patternlab-vue";
@@ -74,7 +75,6 @@ import ChecklistList from "@/components/ChecklistList.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
-import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
 const checklist = ref<Checklist | null>(null);
 const loading = ref(true);
@@ -205,39 +205,39 @@ function onCheckedClosed(serviceID: string) {
  *
  * @param evt Sort-Event which contains the old and new index of the checklist-item.
  */
-function onSortOpen(evt: { oldIndex: number, newIndex: number }) {
-  let elementToSort = openCheckList.value[evt.oldIndex] as ChecklistItem;
-  let oldIndex = checklist.value?.checklistItems.findIndex(item => {return item.serviceID === elementToSort.serviceID}) as number;
-  if(oldIndex >= 0 && checklist.value) {
+function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
+  const elementToSort = openCheckList.value[evt.oldIndex] as ChecklistItem;
+  const oldIndex = checklist.value?.checklistItems.findIndex((item) => {
+    return item.serviceID === elementToSort.serviceID;
+  }) as number;
+  if (oldIndex >= 0 && checklist.value) {
     loading.value = true;
 
     const newIndex = oldIndex + (evt.newIndex - evt.oldIndex);
-    const element = checklist.value.checklistItems[oldIndex];
+    const element = checklist.value.checklistItems[oldIndex] as ChecklistItem;
     checklist.value.checklistItems.splice(oldIndex, 1);
-    checklist.value.checklistItems.splice(newIndex, 0, element!)
+    checklist.value.checklistItems.splice(newIndex, 0, element);
 
     const service = new ChecklistService();
     service
-        .updateChecklist(checklist.value)
-        .then((resp) => {
-          if (resp.ok) {
-            resp.json().then((newChecklist) => {
-              checklist.value = newChecklist;
-            });
-          } else {
-            resp.text().then((errBody) => {
-              throw Error(errBody);
-            });
-          }
-        })
-        .catch((err) => {
-          console.debug(err);
-        })
-        .finally(() => (loading.value = false));
-
+      .updateChecklist(checklist.value)
+      .then((resp) => {
+        if (resp.ok) {
+          resp.json().then((newChecklist) => {
+            checklist.value = newChecklist;
+          });
+        } else {
+          resp.text().then((errBody) => {
+            throw Error(errBody);
+          });
+        }
+      })
+      .catch((err) => {
+        console.debug(err);
+      })
+      .finally(() => (loading.value = false));
   }
 }
-
 </script>
 
 <style>
