@@ -5,13 +5,12 @@
     role="list"
   >
     <sortable
-      :list="modelValue"
+      :list="checklistItems"
       tag="ul"
       class="list"
       :options="sortableOptions"
-      @start="drag = true"
-      @end="drag = false"
       item-key="serviceID"
+      @end="onSortEnd"
     >
       <template #item="{ element, index }">
         <li
@@ -20,13 +19,14 @@
           aria-roledescription="sortierbares Listenelement"
           :class="{
             muted: element.checked !== null,
-            'keyboard-dragging': draggedIndex === index,
+            'keyboard-dragging': draggedIndex === index
           }"
           :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
-          :aria-label="`${element.title}, Position ${index + 1} von ${modelValue.length}`"
+          :aria-label="`${element.title}, Position ${index + 1} von ${checklistItems.length}`"
           tabindex="0"
           @focus="focusedIndex = index"
           :key="element.serviceID"
+          @keydown="handleEnterKeyDown"
         >
           <input
             type="checkbox"
@@ -78,13 +78,13 @@
 <script lang="ts" setup>
 import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
-import { MucIcon } from "@muenchen/muc-patternlab-vue";
-import { Sortable } from "sortablejs-vue3";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import {MucIcon} from "@muenchen/muc-patternlab-vue";
+import {Sortable} from "sortablejs-vue3";
+import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 
 const props = withDefaults(
   defineProps<{
-    modelValue: ChecklistItem[];
+    checklistItems: ChecklistItem[];
     isDraggable?: boolean;
     disabled?: boolean;
   }>(),
@@ -93,9 +93,8 @@ const props = withDefaults(
     disabled: false,
   }
 );
-const emit = defineEmits(["checked", "label-click", "update:modelValue"]);
+const emit = defineEmits(["checked", "label-click", "sort"]);
 
-const drag = ref(false);
 const focusedIndex = ref<number | null>(null);
 const draggedIndex = ref<number | null>(null);
 
@@ -110,11 +109,11 @@ const dialogVisible = ref(false);
 const dialogItem = ref<ChecklistItem | null>(null);
 
 onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
+  window.addEventListener("keydown", handleArrowKeyDown);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeyDown);
+  window.removeEventListener("keydown", handleArrowKeyDown);
 });
 
 function onSelectChange(serviceID: string) {
@@ -131,17 +130,28 @@ function closeDialog() {
   dialogVisible.value = false;
 }
 
-function handleKeyDown(event: KeyboardEvent) {
+function onSortEnd(evt: { oldIndex: number, newIndex: number }) {
+  const oldIndex = evt.oldIndex;
+  const newIndex = evt.newIndex;
+  if(oldIndex !== newIndex) {
+    emit('sort', {oldIndex, newIndex});
+  }
+}
+
+function handleEnterKeyDown(event: KeyboardEvent) {
   if (!props.isDraggable || focusedIndex.value === null) return;
 
-  const maxIndex = props.modelValue.length - 1;
   if (event.key === "Enter") {
     draggedIndex.value =
       draggedIndex.value === null ? focusedIndex.value : null;
-    return;
   }
+}
+
+function handleArrowKeyDown(event: KeyboardEvent) {
+  if (!props.isDraggable || focusedIndex.value === null) return;
   if (draggedIndex.value === null) return;
 
+  const maxIndex = props.checklistItems.length - 1;
   const move = (direction: number) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const newIndex = draggedIndex.value! + direction;
@@ -149,32 +159,14 @@ function handleKeyDown(event: KeyboardEvent) {
 
     event.preventDefault();
 
-    const updatedList = swapItems(
-      [...props.modelValue],
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      draggedIndex.value!,
-      newIndex
-    );
-    emit("update:modelValue", updatedList);
+    emit("sort", {oldIndex: draggedIndex.value!, newIndex});
+
     draggedIndex.value = newIndex;
     focusedIndex.value = newIndex;
   };
 
   if (event.key === "ArrowUp") move(-1);
   if (event.key === "ArrowDown") move(1);
-}
-
-function swapItems(
-  array: DummyChecklistItem[],
-  i: number,
-  j: number
-): DummyChecklistItem[] {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const temp = array[i]!;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  array[i] = array[j]!;
-  array[j] = temp;
-  return array;
 }
 </script>
 

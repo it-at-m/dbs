@@ -23,8 +23,9 @@
 
               <checklist-list
                 v-if="openCheckList.length !== 0"
-                v-model="openCheckList"
+                :checklist-items="openCheckList"
                 @checked="onCheckedOpen"
+                @sort="onSortOpen"
               ></checklist-list>
               <muc-banner
                 v-else
@@ -39,7 +40,7 @@
               </h2>
               <checklist-list
                 v-if="closedCheckList.length !== 0"
-                v-model="closedCheckList"
+                :checklist-items="closedCheckList"
                 @checked="onCheckedClosed"
                 :is-draggable="false"
               ></checklist-list>
@@ -73,6 +74,7 @@ import ChecklistList from "@/components/ChecklistList.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
+import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
 const checklist = ref<Checklist | null>(null);
 const loading = ref(true);
@@ -195,6 +197,47 @@ function onCheckedClosed(serviceID: string) {
       .finally(() => (loading.value = false));
   }
 }
+
+/**
+ * When sort-event occurs, we need to find out the new order of elements.
+ *
+ * As we can only sort open items, we check the "distance" the item was sorted and move it accordingly in the checklist.checklistItems list.
+ *
+ * @param evt Sort-Event which contains the old and new index of the checklist-item.
+ */
+function onSortOpen(evt: { oldIndex: number, newIndex: number }) {
+  let elementToSort = openCheckList.value[evt.oldIndex] as ChecklistItem;
+  let oldIndex = checklist.value?.checklistItems.findIndex(item => {return item.serviceID === elementToSort.serviceID}) as number;
+  if(oldIndex >= 0 && checklist.value) {
+    loading.value = true;
+
+    const newIndex = oldIndex + (evt.newIndex - evt.oldIndex);
+    const element = checklist.value.checklistItems[oldIndex];
+    checklist.value.checklistItems.splice(oldIndex, 1);
+    checklist.value.checklistItems.splice(newIndex, 0, element!)
+
+    const service = new ChecklistService();
+    service
+        .updateChecklist(checklist.value)
+        .then((resp) => {
+          if (resp.ok) {
+            resp.json().then((newChecklist) => {
+              checklist.value = newChecklist;
+            });
+          } else {
+            resp.text().then((errBody) => {
+              throw Error(errBody);
+            });
+          }
+        })
+        .catch((err) => {
+          console.debug(err);
+        })
+        .finally(() => (loading.value = false));
+
+  }
+}
+
 </script>
 
 <style>
