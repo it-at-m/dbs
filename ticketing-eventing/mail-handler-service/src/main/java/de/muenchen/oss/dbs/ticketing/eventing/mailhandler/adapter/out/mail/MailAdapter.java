@@ -5,11 +5,14 @@ import jakarta.activation.DataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tika.Tika;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -20,19 +23,23 @@ import org.springframework.stereotype.Service;
 public class MailAdapter implements SendMailOutPort {
     private final JavaMailSender mailSender;
     private final MailProperties mailProperties;
+    private final Tika tika = new Tika();
 
     @Override
     public void sendMail(final MailMessage mailMessage) {
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
-            final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+            final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED);
             helper.setFrom(mailProperties.getFromAddress());
             helper.setTo(mailMessage.getRecipient());
             helper.setSubject(mailMessage.getSubject());
             helper.setText(mailMessage.getBody(), true);
             for (final Map.Entry<String, InputStream> entry : mailMessage.getAttachments().entrySet()) {
                 //TODO is there a way to do this with streaming? The following line loads the attachment into RAM...
-                final DataSource dataSource = new ByteArrayDataSource(entry.getValue(), "application/octet-stream");
+                InputStream bis = new BufferedInputStream(entry.getValue());
+                String mime = detectMimeType(bis);
+                log.debug("Mime-Type for " + entry.getKey() + " found " + mime);
+                final DataSource dataSource = new ByteArrayDataSource(bis, mime);
                 helper.addAttachment(entry.getKey(), dataSource);
                 //maybe like this?
                 //helper.addAttachment(e.getKey(), new InputStreamSourceImpl(e.getValue()));
@@ -41,6 +48,10 @@ public class MailAdapter implements SendMailOutPort {
         } catch (final MessagingException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String detectMimeType(InputStream inputStream) throws IOException {
+        return tika.detect(inputStream);
     }
 
     //    private class InputStreamSourceImpl implements InputStreamSource {
