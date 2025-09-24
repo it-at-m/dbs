@@ -1862,6 +1862,9 @@
           "direktkennwort": {
             "type": "string"
           },
+          "sende_nachricht_nach_extern": {
+            "type": "string"
+          },
           "ticket_time_accounting_ids": {
             "type": "array",
             "items": {
@@ -2166,6 +2169,9 @@
           "direktkennwort": {
             "type": "string"
           },
+          "sende_nachricht_nach_extern": {
+            "type": "string"
+          },
           "state": {
             "type": "string",
             "enum": [
@@ -2197,6 +2203,9 @@
             "type": "string"
           },
           "direktkennwort": {
+            "type": "string"
+          },
+          "sende_nachricht_nach_extern": {
             "type": "string"
           },
           "state": {

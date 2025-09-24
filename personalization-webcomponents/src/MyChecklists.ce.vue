@@ -1,5 +1,8 @@
 <template>
-  <main class="container">
+  <main
+    v-if="loggedIn"
+    class="container"
+  >
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
@@ -26,8 +29,8 @@
       class="checklist-card-container"
     >
       <checklist-card
-        v-for="(checklist, index) in checklists"
-        :key="index"
+        v-for="checklist in checklists"
+        :key="checklist.id"
         :checklist="checklist"
         :checklist-detail-url="checklistDetailUrl"
       >
@@ -37,35 +40,60 @@
 </template>
 
 <script setup lang="ts">
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
+import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import { MucCardContainer, MucIcon } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
-import DummyChecklistService from "@/api/dummyservice/DummyChecklistService.ts";
+import ChecklistService from "@/api/persservice/ChecklistService.ts";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
+import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import { setAccessToken } from "@/util/Constants.ts";
 
 defineProps<{
   checklistDetailUrl: string;
   newChecklistUrl: string;
 }>();
 
-const checklists = ref<DummyChecklist[]>([]);
+const checklists = ref<Checklist[]>([]);
 const loading = ref(true);
 
-onMounted(() => {
-  loading.value = true;
-  const dcl = new DummyChecklistService();
-  dcl
-    .getChecklists()
-    .then((checklist) => {
-      checklists.value = checklist;
-    })
-    .finally(() => (loading.value = false));
-});
+const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
+
+function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
+  if (authEventDetails && authEventDetails.accessToken) {
+    setAccessToken(authEventDetails.accessToken);
+    loadChecklists();
+  }
+}
+
+function loadChecklists() {
+  if (loggedIn.value) {
+    loading.value = true;
+    const service = new ChecklistService();
+    service
+      .getChecklists()
+      .then((resp) => {
+        if (resp.ok) {
+          resp.json().then((checklistResponse: Checklist[]) => {
+            checklists.value = checklistResponse;
+          });
+        } else {
+          resp.text().then((errBody) => {
+            throw Error(errBody);
+          });
+        }
+      })
+      .catch((error) => {
+        console.debug(error);
+      })
+      .finally(() => (loading.value = false));
+  }
+}
 </script>
 
 <style>
