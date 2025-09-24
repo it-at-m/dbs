@@ -1,9 +1,8 @@
 package de.muenchen.dbs.personalization.checklist.domain;
 
-import lombok.Data;
-
 import java.time.ZonedDateTime;
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class ChecklistServiceNavigatorReadDTO {

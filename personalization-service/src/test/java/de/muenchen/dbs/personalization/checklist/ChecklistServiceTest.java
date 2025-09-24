@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import java.time.Instant;
 import java.util.List;
@@ -112,7 +113,7 @@ public class ChecklistServiceTest {
             when(checklistRepository.findById(id)).thenReturn(Optional.of(checklist));
 
             // When
-            final Checklist result = checklistService.getChecklist(id);
+            final ChecklistServiceNavigatorReadDTO result = checklistService.getChecklist(id);
 
             // Then
             verify(checklistRepository).findById(id);
