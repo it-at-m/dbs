@@ -4,8 +4,9 @@
       tabindex="0"
       class="radio-look"
       :disabled="disabled"
+      :aria-disabled="disabled"
       :checked="checked"
-      @click="emit('check')"
+      @click="!disabled ? emit('check') : null"
       @keydown="(evt) => evt.keyCode == 32 ? emit('check') : null"
   >
     <muc-icon
@@ -64,19 +65,24 @@ const emit = defineEmits(["check"])
   transition: opacity 0.3s ease;
 }
 
-.radio-look[checked]:hover, .radio-look[checked]:focus {
+.radio-look[disabled=true] {
+  border-color: var(--color-neutrals-grey);
+  background: var(--gray-x-light, #9CA8B3);
+}
+
+.radio-look[checked][disabled=false]:hover, .radio-look[checked][disabled=false]:focus {
   border-color: var(--color-brand-main-blue);
   background-color: var(--color-neutrals-blue);
 }
 
-.radio-look[checked=false]:hover .check-icon, .radio-look[checked=false]:focus .check-icon {
+.radio-look[checked=false][disabled=false]:hover .check-icon, .radio-look[checked=false][disabled=false]:focus .check-icon {
   opacity: 1;
 }
-.radio-look[checked=true]:hover .check-icon, .radio-look[checked=true]:focus .check-icon {
+.radio-look[checked=true][disabled=false]:hover .check-icon, .radio-look[checked=true][disabled=false]:focus .check-icon {
   opacity: 0;
 }
 
-.radio-look[checked=true] {
+.radio-look[checked=true][disabled=false] {
   border-color: var(--color-brand-main-blue-dark, #004376);
   background-color: var(--color-brand-main-blue)
 }

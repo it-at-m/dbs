@@ -29,8 +29,10 @@
         >
           <p13n-checkbox
             :id="'cb-' + element.serviceID"
+            :aria-label="!!element.checked ? element.title + ' als nicht erledigt markieren.' : element.title + ' als erledigt markieren.'"
             :checked="!!element.checked"
             :disabled="disabled"
+            style="margin-left: 8px;"
             @check="() => onSelectChange(element.serviceID)"
           />
           <span
@@ -191,23 +193,24 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   background-color: #d0e7ff;
 }
 
-.container {
-  max-width: 600px;
-  margin: 1rem auto;
-  padding-left: 0;
-}
-
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-neutrals-beau-blue-light, #E5EEF5);
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #E5EEF5);
+}
+
+.container {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 56px;
 }
 
 .list-item {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #E5EEF5);
   user-select: none;
   cursor: grab;
   color: var(--color-brand-main-blue);
@@ -241,7 +244,7 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   text-decoration: underline;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 576px) {
   .label-text {
     padding: 12px 8px;
   }
