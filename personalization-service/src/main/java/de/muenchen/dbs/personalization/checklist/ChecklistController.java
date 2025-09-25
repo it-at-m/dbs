@@ -5,6 +5,7 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistReadDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,9 +54,9 @@ public class ChecklistController {
     @PutMapping("/{checklistID}")
     @Operation(summary = "Update a checklist", description = "Updates a checklist using the provided checklist details.")
     @ResponseStatus(HttpStatus.OK)
-    public ChecklistServiceNavigatorReadDTO updateChecklist(@Valid @RequestBody final ChecklistServiceNavigatorReadDTO checklistUpdateDTO,
+    public ChecklistServiceNavigatorReadDTO updateChecklist(@Valid @RequestBody final ChecklistUpdateDTO checklistUpdateDTO,
             @PathVariable("checklistID") final UUID checklistID) {
-        return checklistMapper.toServiceNavigatorReadDTO(checklistService.updateChecklist(checklistMapper.toChecklist(checklistUpdateDTO), checklistID));
+        return checklistService.updateChecklist(checklistMapper.toUpdateChecklist(checklistUpdateDTO), checklistID);
     }
 
     @DeleteMapping("/{checklistID}")

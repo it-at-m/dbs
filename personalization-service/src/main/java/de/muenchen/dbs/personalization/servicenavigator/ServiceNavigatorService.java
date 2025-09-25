@@ -5,6 +5,7 @@ import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;

@@ -151,7 +151,7 @@ public class ChecklistServiceTest {
             when(checklistRepository.findById(checklistToUpdateId)).thenReturn(Optional.of(checklistToUpdate));
 
             // When
-            final Checklist result = checklistService.updateChecklist(checklistToUpdate, checklistToUpdateId);
+            final ChecklistServiceNavigatorReadDTO result = checklistService.updateChecklist(checklistToUpdate, checklistToUpdateId);
 
             // Then
             assertThat(result).usingRecursiveComparison().isEqualTo(expectedChecklist);

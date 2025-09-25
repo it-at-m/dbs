@@ -64,7 +64,7 @@ public class ChecklistService {
         return checklistServiceNavigatorReadDTO;
     }
 
-    public Checklist updateChecklist(final Checklist checklist, final UUID checklistId) {
+    public ChecklistServiceNavigatorReadDTO updateChecklist(final Checklist checklist, final UUID checklistId) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
         log.debug("Update checklist with ID {} for {}", checklistId, lhmExtId);
         final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
@@ -74,7 +74,18 @@ public class ChecklistService {
         foundChecklist.setChecklistItems(checklist.getChecklistItems());
         foundChecklist.setLastUpdate(ZonedDateTime.now());
         log.debug("Update Checklist {}", foundChecklist);
-        return checklistRepository.save(foundChecklist);
+
+        Checklist savedChecklist = checklistRepository.save(foundChecklist);
+        String serviceIds = savedChecklist.getChecklistItems().stream()
+                .map(ChecklistItem::getServiceID)
+                .collect(Collectors.joining(","));
+
+        final List<ChecklistItemServiceNavigatorDTO> checklistItemServiceNavigatorDtos = serviceNavigatorService
+                .getChecklistItemServiceNavigatorDTO(serviceIds);
+        final ChecklistServiceNavigatorReadDTO checklistServiceNavigatorReadDTO = checklistMapper.toServiceNavigatorReadDTO(savedChecklist);
+        checklistServiceNavigatorReadDTO.setChecklistItemServiceNavigatorDtos(checklistItemServiceNavigatorDtos);
+
+        return checklistServiceNavigatorReadDTO;
     }
 
     public void deleteChecklist(final UUID checklistId) {

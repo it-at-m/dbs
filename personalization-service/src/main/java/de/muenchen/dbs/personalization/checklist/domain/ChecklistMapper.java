@@ -12,10 +12,6 @@ public interface ChecklistMapper {
     @Mapping(target = "checklistItemServiceNavigatorDtos", ignore = true)
     ChecklistServiceNavigatorReadDTO toServiceNavigatorReadDTO(Checklist checklist);
 
-    @Mapping(target = "checklistItems", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    Checklist toChecklist(ChecklistServiceNavigatorReadDTO checklistServiceNavigatorReadDTO);
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "lhmExtId", ignore = true)
     @Mapping(target = "lastUpdate", ignore = true)
