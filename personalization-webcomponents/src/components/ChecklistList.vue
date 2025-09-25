@@ -29,10 +29,14 @@
         >
           <p13n-checkbox
             :id="'cb-' + element.serviceID"
-            :aria-label="!!element.checked ? element.title + ' als nicht erledigt markieren.' : element.title + ' als erledigt markieren.'"
+            :aria-label="
+              !!element.checked
+                ? element.title + ' als nicht erledigt markieren.'
+                : element.title + ' als erledigt markieren.'
+            "
             :checked="!!element.checked"
             :disabled="disabled"
-            style="margin-left: 8px;"
+            style="margin-left: 8px"
             @check="() => onSelectChange(element.serviceID)"
           />
           <span
@@ -42,12 +46,14 @@
               muted: element.checked !== null,
             }"
             @click="(evt) => openDialog(element, evt)"
-            @keydown="(evt) => evt.keyCode == 32 ? openDialog(element, evt) : null"
+            @keydown="
+              (evt) => (evt.keyCode == 32 ? openDialog(element, evt) : null)
+            "
           >
             <b>{{ element.title }}</b>
             <span
-                class="required-label"
-                v-if="element.required"
+              class="required-label"
+              v-if="element.required"
             >
               - verpflichtend
             </span>
@@ -90,6 +96,7 @@ import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+
 import P13nCheckbox from "@/components/P13nCheckbox.vue";
 
 const props = withDefaults(
@@ -197,8 +204,8 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: 1px solid var(--color-neutrals-beau-blue-light, #E5EEF5);
-  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #E5EEF5);
+  border-top: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
 }
 
 .container {
@@ -210,7 +217,7 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 .list-item {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #E5EEF5);
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
   user-select: none;
   cursor: grab;
   color: var(--color-brand-main-blue);
@@ -290,7 +297,7 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 }
 
 .required-label {
-  color: var(--neutrals-grey, #3A5368);
+  color: var(--neutrals-grey, #3a5368);
   /* Body/Body 2 */
   font-family: "Open Sans", sans-serif;
   font-size: 16px;

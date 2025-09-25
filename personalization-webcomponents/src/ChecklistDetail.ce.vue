@@ -32,8 +32,10 @@
                 v-else
                 class="banner"
                 type="success"
-                >
-                Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir bewahren diese Checkliste noch bis zum {{ deletionDate }} für Sie auf. Danach wird sie automatisch gelöscht.
+              >
+                Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
+                bewahren diese Checkliste noch bis zum {{ deletionDate }} für
+                Sie auf. Danach wird sie automatisch gelöscht.
               </muc-banner>
               <h2 class="headline">
                 Erledigte Aufgaben ({{ closedCheckList.length }})
@@ -49,7 +51,7 @@
                 v-else
                 class="banner"
                 type="info"
-                >
+              >
                 Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
                 der Checkliste ab, um sie als erledigt zu markieren.
               </muc-banner>
