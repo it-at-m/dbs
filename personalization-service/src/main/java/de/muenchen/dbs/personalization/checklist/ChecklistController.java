@@ -45,7 +45,7 @@ public class ChecklistController {
     @GetMapping(path = PATH_VAR_CHECKLIST_ID)
     @Operation(summary = "Get specific checklist by checklist-id.", description = "Returns a checklist by checklistId")
     @ResponseStatus(HttpStatus.OK)
-    public ChecklistServiceNavigatorReadDTO getChecklist(@PathVariable("checklistID") final UUID checklistID) {
+    public ChecklistServiceNavigatorReadDTO getChecklist(@PathVariable(CHECKLIST_ID) final UUID checklistID) {
         return checklistService.getChecklist(checklistID);
     }
 
