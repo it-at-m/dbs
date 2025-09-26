@@ -29,6 +29,9 @@ public class Checklist extends BaseEntity {
     @NotNull
     private String lhmExtId;
 
+    @Column(name = "situation_id", nullable = true)
+    private String situationId;
+
     @Column(name = "title")
     @NotNull
     private String title;
