@@ -24,6 +24,7 @@
               <checklist-list
                 v-if="openCheckList.length !== 0"
                 :checklist-items="openCheckList"
+                :disabled="loadingSort || loadingCheck"
                 @checked="onCheckedOpen"
                 @sort="onSortOpen"
               ></checklist-list>
@@ -31,7 +32,8 @@
                 v-else
                 class="banner"
                 type="success"
-                >Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
+              >
+                Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
                 bewahren diese Checkliste noch bis zum {{ deletionDate }} für
                 Sie auf. Danach wird sie automatisch gelöscht.
               </muc-banner>
@@ -40,6 +42,7 @@
               </h2>
               <checklist-list
                 v-if="closedCheckList.length !== 0"
+                :disabled="loadingSort || loadingCheck"
                 :checklist-items="closedCheckList"
                 @checked="onCheckedClosed"
                 :is-draggable="false"
@@ -48,7 +51,8 @@
                 v-else
                 class="banner"
                 type="info"
-                >Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
+              >
+                Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
                 der Checkliste ab, um sie als erledigt zu markieren.
               </muc-banner>
             </div>
@@ -78,6 +82,8 @@ import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
 
 const checklist = ref<Checklist | null>(null);
 const loading = ref(true);
+const loadingSort = ref(false);
+const loadingCheck = ref(false);
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
@@ -152,7 +158,7 @@ const deletionDate = computed(() => {
 
 function onCheckedOpen(serviceID: string) {
   if (checklist.value) {
-    loading.value = true;
+    loadingCheck.value = true;
     const service = new ChecklistService();
     service
       .checkChecklistentry(checklist.value.id, serviceID)
@@ -170,13 +176,13 @@ function onCheckedOpen(serviceID: string) {
       .catch((err) => {
         console.debug(err);
       })
-      .finally(() => (loading.value = false));
+      .finally(() => (loadingCheck.value = false));
   }
 }
 
 function onCheckedClosed(serviceID: string) {
   if (checklist.value) {
-    loading.value = true;
+    loadingCheck.value = true;
     const service = new ChecklistService();
     service
       .uncheckChecklistentry(checklist.value.id, serviceID)
@@ -194,7 +200,7 @@ function onCheckedClosed(serviceID: string) {
       .catch((err) => {
         console.debug(err);
       })
-      .finally(() => (loading.value = false));
+      .finally(() => (loadingCheck.value = false));
   }
 }
 
@@ -211,7 +217,7 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
     return item.serviceID === elementToSort.serviceID;
   }) as number;
   if (oldIndex >= 0 && checklist.value) {
-    loading.value = true;
+    loadingSort.value = true;
 
     const newIndex = oldIndex + (evt.newIndex - evt.oldIndex);
     const element = checklist.value.checklistItems[oldIndex] as ChecklistItem;
@@ -235,7 +241,7 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
       .catch((err) => {
         console.debug(err);
       })
-      .finally(() => (loading.value = false));
+      .finally(() => (loadingSort.value = false));
   }
 }
 </script>

@@ -18,7 +18,6 @@
           role="listitem"
           aria-roledescription="sortierbares Listenelement"
           :class="{
-            muted: element.checked !== null,
             'keyboard-dragging': draggedIndex === index,
           }"
           :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
@@ -28,20 +27,36 @@
           :key="element.serviceID"
           @keydown="handleEnterKeyDown"
         >
-          <input
-            type="checkbox"
+          <p13n-checkbox
             :id="'cb-' + element.serviceID"
-            class="radio-look"
-            :checked="element.checked !== null"
+            :aria-label="
+              !!element.checked
+                ? element.title + ' als nicht erledigt markieren.'
+                : element.title + ' als erledigt markieren.'
+            "
+            :checked="!!element.checked"
             :disabled="disabled"
-            @change="() => onSelectChange(element.serviceID)"
+            style="margin-left: 8px"
+            @check="() => onSelectChange(element.serviceID)"
           />
           <span
+            tabindex="0"
             class="label-text"
-            @click.prevent="openDialog(element)"
-            style="cursor: pointer"
+            :class="{
+              muted: element.checked !== null,
+            }"
+            @click="(evt) => openDialog(element, evt)"
+            @keydown="
+              (evt) => (evt.keyCode == 32 ? openDialog(element, evt) : null)
+            "
           >
             <b>{{ element.title }}</b>
+            <span
+              class="required-label"
+              v-if="element.required"
+            >
+              - verpflichtend
+            </span>
           </span>
           <span
             v-if="isDraggable"
@@ -82,6 +97,8 @@ import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
+import P13nCheckbox from "@/components/P13nCheckbox.vue";
+
 const props = withDefaults(
   defineProps<{
     checklistItems: ChecklistItem[];
@@ -120,7 +137,8 @@ function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
 }
 
-function openDialog(item: ChecklistItem) {
+function openDialog(item: ChecklistItem, evt: Event) {
+  evt.preventDefault();
   dialogItem.value = item;
   dialogVisible.value = true;
   emit("label-click", item);
@@ -182,24 +200,24 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   background-color: #d0e7ff;
 }
 
-.container {
-  max-width: 600px;
-  margin: 1rem auto;
-  padding-left: 0;
-}
-
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
+}
+
+.container {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 56px;
 }
 
 .list-item {
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
   user-select: none;
   cursor: grab;
   color: var(--color-brand-main-blue);
@@ -211,75 +229,32 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 
 /* text grayed out when selected */
 .muted {
-  color: #7a8d9f;
-}
-
-.radio-look {
-  appearance: none;
-  -webkit-appearance: none;
-  flex: 0 0 16px;
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--color-neutrals-grey);
-  border-radius: 50%;
-  background: white;
-  box-sizing: border-box;
-  margin-right: 0.8rem;
-  position: relative;
-  cursor: pointer;
-  outline-offset: 2px;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.radio-look:hover {
-  border-color: var(--color-brand-main-blue);
-  background-color: #cce4ff;
-}
-
-.radio-look:hover::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  background-color: var(--color-brand-main-blue);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.3;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.radio-look:checked {
-  border-color: var(--color-brand-main-blue);
-  background-color: var(--color-brand-main-blue);
-}
-
-.radio-look:checked::before {
-  content: "✓";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1;
-  transform: translate(-50%, -45%);
-  pointer-events: none;
-  user-select: none;
-  transition: color 0.2s ease;
-}
-
-.radio-look:checked:hover::before {
-  opacity: 0.8;
+  color: #7a8d9f !important;
 }
 
 .label-text {
+  cursor: pointer;
+  color: var(--color-brand-main-blue);
+  /* Body/Body 1 Bold */
+  font-family: "Open Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 27px */
+
+  padding: 16px 8px;
   flex-grow: 1;
   user-select: none;
+}
+
+.label-text:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+  .label-text {
+    padding: 12px 8px;
+  }
 }
 
 .drag-handle {
@@ -319,5 +294,15 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   max-height: 80%;
   overflow-y: auto;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.required-label {
+  color: var(--neutrals-grey, #3a5368);
+  /* Body/Body 2 */
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
 }
 </style>
