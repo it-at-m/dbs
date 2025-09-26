@@ -1,21 +1,32 @@
 <template>
-  <div class="container">
+  <div
+    class="container"
+    tabindex="0"
+    role="list"
+  >
     <sortable
-      :list="modelValue"
+      :list="checklistItems"
       tag="ul"
       class="list"
-      :animation="200"
-      :handle="isDraggable ? '.drag-handle' : undefined"
-      :disabled="!isDraggable"
-      @start="drag = true"
-      @end="drag = false"
-      :ghost-class="'drag-ghost'"
+      :options="sortableOptions"
       item-key="serviceID"
+      @end="onSortEnd"
     >
-      <template #item="{ element }">
+      <template #item="{ element, index }">
         <li
           class="list-item"
-          :class="{ muted: element.checked !== null }"
+          role="listitem"
+          aria-roledescription="sortierbares Listenelement"
+          :class="{
+            muted: element.checked !== null,
+            'keyboard-dragging': draggedIndex === index,
+          }"
+          :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
+          :aria-label="`${element.title}, Position ${index + 1} von ${checklistItems.length}`"
+          tabindex="0"
+          @focus="focusedIndex = index"
+          :key="element.serviceID"
+          @keydown="handleEnterKeyDown"
         >
           <input
             type="checkbox"
@@ -32,14 +43,17 @@
           >
             <b>{{ element.title }}</b>
           </span>
-
-          <!-- Drag-Handle Icon -->
           <span
             v-if="isDraggable"
             class="drag-handle"
             title="Element verschieben"
           >
-            <muc-icon icon="drag-vertical" />
+            <template v-if="draggedIndex === index">
+              <muc-icon icon="arrow-up-down" />
+            </template>
+            <template v-else>
+              <muc-icon icon="drag-vertical" />
+            </template>
           </span>
         </li>
       </template>
@@ -66,11 +80,11 @@ import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import { defineEmits, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
-    modelValue: ChecklistItem[];
+    checklistItems: ChecklistItem[];
     isDraggable?: boolean;
     disabled?: boolean;
   }>(),
@@ -79,11 +93,28 @@ withDefaults(
     disabled: false,
   }
 );
-const emit = defineEmits(["checked", "label-click"]);
-const drag = ref(false);
+const emit = defineEmits(["checked", "label-click", "sort"]);
+
+const focusedIndex = ref<number | null>(null);
+const draggedIndex = ref<number | null>(null);
+
+const sortableOptions = computed(() => ({
+  animation: 200,
+  handle: props.isDraggable ? ".drag-handle" : undefined,
+  ghostClass: "drag-ghost",
+  disabled: !props.isDraggable,
+}));
 
 const dialogVisible = ref(false);
 const dialogItem = ref<ChecklistItem | null>(null);
+
+onMounted(() => {
+  window.addEventListener("keydown", handleArrowKeyDown);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleArrowKeyDown);
+});
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
@@ -98,6 +129,46 @@ function openDialog(item: ChecklistItem) {
 function closeDialog() {
   dialogVisible.value = false;
 }
+
+function onSortEnd(evt: { oldIndex: number; newIndex: number }) {
+  const oldIndex = evt.oldIndex;
+  const newIndex = evt.newIndex;
+  if (oldIndex !== newIndex) {
+    emit("sort", { oldIndex, newIndex });
+  }
+}
+
+function handleEnterKeyDown(event: KeyboardEvent) {
+  if (!props.isDraggable || focusedIndex.value === null) return;
+
+  if (event.key === "Enter") {
+    draggedIndex.value =
+      draggedIndex.value === null ? focusedIndex.value : null;
+  }
+}
+
+function handleArrowKeyDown(event: KeyboardEvent) {
+  if (!props.isDraggable || focusedIndex.value === null) return;
+  if (draggedIndex.value === null) return;
+
+  const maxIndex = props.checklistItems.length - 1;
+  const move = (direction: number) => {
+    if (draggedIndex.value) {
+      const newIndex = draggedIndex.value + direction;
+      if (newIndex < 0 || newIndex > maxIndex) return;
+
+      event.preventDefault();
+
+      emit("sort", { oldIndex: draggedIndex.value, newIndex });
+
+      draggedIndex.value = newIndex;
+      focusedIndex.value = newIndex;
+    }
+  };
+
+  if (event.key === "ArrowUp") move(-1);
+  if (event.key === "ArrowDown") move(1);
+}
 </script>
 
 <style scoped>
@@ -105,6 +176,12 @@ function closeDialog() {
   background-color: #e1f0fc !important;
   box-shadow: 0 2px 8px #007acc30;
 }
+
+.keyboard-dragging {
+  outline: 2px solid var(--color-brand-main-blue);
+  background-color: #d0e7ff;
+}
+
 .container {
   max-width: 600px;
   margin: 1rem auto;
@@ -161,7 +238,6 @@ function closeDialog() {
   background-color: #cce4ff;
 }
 
-/* blue circle inside on hover (slightly transparent) */
 .radio-look:hover::before {
   content: "";
   position: absolute;
@@ -177,7 +253,6 @@ function closeDialog() {
   transition: opacity 0.2s ease;
 }
 
-/* blue circle with white tick when selected */
 .radio-look:checked {
   border-color: var(--color-brand-main-blue);
   background-color: var(--color-brand-main-blue);
@@ -212,7 +287,7 @@ function closeDialog() {
   user-select: none;
   font-size: 24px;
   margin-left: auto;
-  color: var(--color-neutrals-grey);
+  color: #617586;
   display: flex;
   align-items: center;
 }
