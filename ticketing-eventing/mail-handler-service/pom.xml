@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.5</version>
+        <version>3.5.6</version>
         <relativePath />
     </parent>
 
@@ -43,7 +43,10 @@
 
         <!-- Core Frameworks -->
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version> <!-- Must match the chosen Spring Boot version -->
-        <dbs-handler-core.version>0.1.0</dbs-handler-core.version>
+        <dbs-handler-core.version>0.2.0</dbs-handler-core.version>
+
+        <!-- Apache Libs -->
+        <tika.version>2.9.2</tika.version>
 
         <!-- Logging -->
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
@@ -52,8 +55,8 @@
         <spotless-maven-plugin.version>2.46.1</spotless-maven-plugin.version>
         <itm-java-codeformat.version>1.0.10</itm-java-codeformat.version>
         <pmd-maven-plugin.version>3.27.0</pmd-maven-plugin.version>
-        <spotbugs-maven-plugin.version>4.9.4.2</spotbugs-maven-plugin.version>
-        <spotbugs-annotations.version>4.9.4</spotbugs-annotations.version> <!-- must match the patch version of spotbugs-maven-plugin -->
+        <spotbugs-maven-plugin.version>4.9.6.0</spotbugs-maven-plugin.version>
+        <spotbugs-annotations.version>4.9.6</spotbugs-annotations.version> <!-- must match the patch version of spotbugs-maven-plugin -->
         <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
 
         <!-- Testing -->
@@ -119,6 +122,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
+
+        <!-- Apache Libs-->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+
 
         <!-- DBS -->
         <dependency>

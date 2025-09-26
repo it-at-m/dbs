@@ -2,9 +2,12 @@
   - head-branch: [ '^feat', '-feature-' ]
 "Type: Bug":
   - head-branch: [ '^bug', '-bug-' ]
-"Template: personalization-service":
+"Component: personalization-service":
   - changed-files:
       - any-glob-to-any-file: [ 'personalization-service/**' ]
+"Component: personalization-webcomponents":
+  - changed-files:
+      - any-glob-to-any-file: [ 'personalization-webcomponents/**' ]
 "Component: ticketing-eai":
   - changed-files:
       - any-glob-to-any-file: [ 'ticketing-eai/**' ]

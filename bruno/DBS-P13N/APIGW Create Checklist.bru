@@ -1,0 +1,22 @@
+meta {
+  name: APIGW Create Checklist
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8083/clients/api/p13n-backend/checklist
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer
+}
+
+body:json {
+  {
+    "title": "Test",
+    "checklistItems": []
+  }
+}

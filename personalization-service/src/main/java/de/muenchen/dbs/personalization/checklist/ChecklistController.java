@@ -10,6 +10,7 @@ import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Checklists", description = "Creating, reading and deleting Checklists.")
 public class ChecklistController {
 
+    public static final String CHECKLIST_ID = "checklistID";
+    public static final String SERVICE_ID = "serviceID";
+    public static final String PATH_VAR_CHECKLIST_ID = "/{" + CHECKLIST_ID + "}";
+    public static final String PATH_VAR_SERVICE_ID = "/{" + SERVICE_ID + "}";
+
     private final ChecklistService checklistService;
     private final ChecklistMapper checklistMapper;
     private final ServiceNavigatorService serviceNavigatorService;
@@ -36,7 +42,7 @@ public class ChecklistController {
         return checklists.stream().map(checklistMapper::toReadDTO).toList();
     }
 
-    @GetMapping(path = "/{checklistID}")
+    @GetMapping(path = PATH_VAR_CHECKLIST_ID)
     @Operation(summary = "Get specific checklist by checklist-id.", description = "Returns a checklist by checklistId")
     @ResponseStatus(HttpStatus.OK)
     public ChecklistServiceNavigatorReadDTO getChecklist(@PathVariable("checklistID") final UUID checklistID) {
@@ -51,18 +57,34 @@ public class ChecklistController {
                 .toReadDTO(checklistService.createChecklist(checklistMapper.toCreateChecklist(checklistCreateDTO)));
     }
 
-    @PutMapping("/{checklistID}")
+    @PutMapping(PATH_VAR_CHECKLIST_ID)
     @Operation(summary = "Update a checklist", description = "Updates a checklist using the provided checklist details.")
     @ResponseStatus(HttpStatus.OK)
     public ChecklistServiceNavigatorReadDTO updateChecklist(@Valid @RequestBody final ChecklistUpdateDTO checklistUpdateDTO,
-            @PathVariable("checklistID") final UUID checklistID) {
+            @PathVariable(CHECKLIST_ID) final UUID checklistID) {
         return checklistService.updateChecklist(checklistMapper.toUpdateChecklist(checklistUpdateDTO), checklistID);
     }
 
-    @DeleteMapping("/{checklistID}")
+    @DeleteMapping(PATH_VAR_CHECKLIST_ID)
     @Operation(summary = "Delete a checklist", description = "Deletes a checklist by checklistId.")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteChecklist(@PathVariable("checklistID") final UUID checklistID) {
+    public void deleteChecklist(@PathVariable(CHECKLIST_ID) final UUID checklistID) {
         checklistService.deleteChecklist(checklistID);
+    }
+
+    @PostMapping(PATH_VAR_CHECKLIST_ID + PATH_VAR_SERVICE_ID + "/check")
+    @Operation(summary = "Check a Checklist-Entry", description = "Checks a checklist-entry.")
+    @ResponseStatus(HttpStatus.OK)
+    public ChecklistReadDTO checkChecklistEntry(@PathVariable(CHECKLIST_ID) final UUID checklistID,
+            @PathVariable(SERVICE_ID) final String serviceID) {
+        return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, ZonedDateTime.now()));
+    }
+
+    @PostMapping(PATH_VAR_CHECKLIST_ID + PATH_VAR_SERVICE_ID + "/uncheck")
+    @Operation(summary = "Uncheck a Checklist-Entry", description = "Unchecks a checklist-entry.")
+    @ResponseStatus(HttpStatus.OK)
+    public ChecklistReadDTO uncheckChecklistEntry(@PathVariable(CHECKLIST_ID) final UUID checklistID,
+            @PathVariable(SERVICE_ID) final String serviceID) {
+        return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, null));
     }
 }

@@ -47,6 +47,7 @@ public class ChecklistMapperTest {
             final UUID id = UUID.randomUUID();
             final Checklist checklist = createTestChecklist(id, "user-lhm-ext-id", null);
             final ChecklistCreateDTO checklistCreateDTO = new ChecklistCreateDTO(checklist.getTitle(),
+                    "situation-id-sample",
                     checklistMapper.toChecklistItemDTOList(checklist.getChecklistItems()));
 
             // When
@@ -71,7 +72,7 @@ public class ChecklistMapperTest {
             final Checklist result = checklistMapper.toUpdateChecklist(checklistUpdateDTO);
 
             // Then
-            assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdate").isEqualTo(checklistUpdateDTO);
+            assertThat(result).usingRecursiveComparison().ignoringFields("id", "situationId", "lastUpdate").isEqualTo(checklistUpdateDTO);
         }
     }
 }

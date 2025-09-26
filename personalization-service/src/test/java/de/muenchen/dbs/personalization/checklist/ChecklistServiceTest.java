@@ -89,14 +89,14 @@ public class ChecklistServiceTest {
             final Checklist checklist1 = createTestChecklist(id1, USER_LHM_EXT_ID, null);
             final Checklist checklist2 = createTestChecklist(id2, USER_LHM_EXT_ID, null);
 
-            when(checklistRepository.findChecklistByLhmExtId(USER_LHM_EXT_ID)).thenReturn(List.of(checklist1, checklist2));
+            when(checklistRepository.findChecklistByLhmExtIdOrderByLastUpdateDesc(USER_LHM_EXT_ID)).thenReturn(List.of(checklist1, checklist2));
 
             // When
             final List<Checklist> result = checklistService.getChecklists();
 
             // Then
             Assertions.assertEquals(List.of(checklist1, checklist2), result);
-            verify(checklistRepository, times(1)).findChecklistByLhmExtId(USER_LHM_EXT_ID);
+            verify(checklistRepository, times(1)).findChecklistByLhmExtIdOrderByLastUpdateDesc(USER_LHM_EXT_ID);
         }
 
     }
