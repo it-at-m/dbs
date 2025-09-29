@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class ChecklistService {
 
+    private static final String JWT_CLAIM_LHM_EXT_ID = "lhmExtID";
     private final ChecklistRepository checklistRepository;
 
     public Checklist createChecklist(final Checklist checklist) {
@@ -100,7 +101,7 @@ public class ChecklistService {
     private String getLhmExtIdFromAuthenticationOrThrow() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof Jwt jwt) {
-            final Object lhmExtIdClaim = jwt.getClaims().get("lhmExtId");
+            final Object lhmExtIdClaim = jwt.getClaims().get(JWT_CLAIM_LHM_EXT_ID);
             if (lhmExtIdClaim != null && !StringUtils.isBlank(lhmExtIdClaim.toString())) {
                 return lhmExtIdClaim.toString();
             }
