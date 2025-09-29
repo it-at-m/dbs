@@ -45,6 +45,9 @@
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version> <!-- Must match the chosen Spring Boot version -->
         <dbs-handler-core.version>0.2.0</dbs-handler-core.version>
 
+        <!-- Apache Libs -->
+        <tika.version>2.9.4</tika.version>
+
         <!-- Logging -->
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
 
@@ -119,6 +122,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
+
+        <!-- Apache Libs-->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+
 
         <!-- DBS -->
         <dependency>

@@ -1,45 +1,74 @@
 <template>
-  <div class="container">
+  <div
+    class="container"
+    tabindex="0"
+    role="list"
+  >
     <sortable
-      :list="modelValue"
+      :list="checklistItems"
       tag="ul"
       class="list"
-      :animation="200"
-      :handle="isDraggable ? '.drag-handle' : undefined"
-      :disabled="!isDraggable"
-      @start="drag = true"
-      @end="drag = false"
-      :ghost-class="'drag-ghost'"
+      :options="sortableOptions"
       item-key="serviceID"
+      @end="onSortEnd"
     >
-      <template #item="{ element }">
+      <template #item="{ element, index }">
         <li
           class="list-item"
-          :class="{ muted: element.checked !== null }"
+          role="listitem"
+          aria-roledescription="sortierbares Listenelement"
+          :class="{
+            'keyboard-dragging': draggedIndex === index,
+          }"
+          :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
+          :aria-label="`${element.title}, Position ${index + 1} von ${checklistItems.length}`"
+          tabindex="0"
+          @focus="focusedIndex = index"
+          :key="element.serviceID"
+          @keydown="handleEnterKeyDown"
         >
-          <input
-            type="checkbox"
+          <p13n-checkbox
             :id="'cb-' + element.serviceID"
-            class="radio-look"
-            :checked="element.checked !== null"
+            :aria-label="
+              !!element.checked
+                ? element.title + ' als nicht erledigt markieren.'
+                : element.title + ' als erledigt markieren.'
+            "
+            :checked="!!element.checked"
             :disabled="disabled"
-            @change="() => onSelectChange(element.serviceID)"
+            style="margin-left: 8px"
+            @check="() => onSelectChange(element.serviceID)"
           />
           <span
+            tabindex="0"
             class="label-text"
-            @click.prevent="openDialog(element)"
-            style="cursor: pointer"
+            :class="{
+              muted: element.checked !== null,
+            }"
+            @click="(evt) => openDialog(element, evt)"
+            @keydown="
+              (evt) => (evt.keyCode == 32 ? openDialog(element, evt) : null)
+            "
           >
             <b>{{ element.title }}</b>
+            <span
+              class="required-label"
+              v-if="element.required"
+            >
+              - verpflichtend
+            </span>
           </span>
-
-          <!-- Drag-Handle Icon -->
           <span
             v-if="isDraggable"
             class="drag-handle"
             title="Element verschieben"
           >
-            <muc-icon icon="drag-vertical" />
+            <template v-if="draggedIndex === index">
+              <muc-icon icon="arrow-up-down" />
+            </template>
+            <template v-else>
+              <muc-icon icon="drag-vertical" />
+            </template>
           </span>
         </li>
       </template>
@@ -66,11 +95,13 @@ import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import { defineEmits, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
-withDefaults(
+import P13nCheckbox from "@/components/P13nCheckbox.vue";
+
+const props = withDefaults(
   defineProps<{
-    modelValue: ChecklistItem[];
+    checklistItems: ChecklistItem[];
     isDraggable?: boolean;
     disabled?: boolean;
   }>(),
@@ -79,17 +110,35 @@ withDefaults(
     disabled: false,
   }
 );
-const emit = defineEmits(["checked", "label-click"]);
-const drag = ref(false);
+const emit = defineEmits(["checked", "label-click", "sort"]);
+
+const focusedIndex = ref<number | null>(null);
+const draggedIndex = ref<number | null>(null);
+
+const sortableOptions = computed(() => ({
+  animation: 200,
+  handle: props.isDraggable ? ".drag-handle" : undefined,
+  ghostClass: "drag-ghost",
+  disabled: !props.isDraggable,
+}));
 
 const dialogVisible = ref(false);
 const dialogItem = ref<ChecklistItem | null>(null);
+
+onMounted(() => {
+  window.addEventListener("keydown", handleArrowKeyDown);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleArrowKeyDown);
+});
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
 }
 
-function openDialog(item: ChecklistItem) {
+function openDialog(item: ChecklistItem, evt: Event) {
+  evt.preventDefault();
   dialogItem.value = item;
   dialogVisible.value = true;
   emit("label-click", item);
@@ -98,6 +147,46 @@ function openDialog(item: ChecklistItem) {
 function closeDialog() {
   dialogVisible.value = false;
 }
+
+function onSortEnd(evt: { oldIndex: number; newIndex: number }) {
+  const oldIndex = evt.oldIndex;
+  const newIndex = evt.newIndex;
+  if (oldIndex !== newIndex) {
+    emit("sort", { oldIndex, newIndex });
+  }
+}
+
+function handleEnterKeyDown(event: KeyboardEvent) {
+  if (!props.isDraggable || focusedIndex.value === null) return;
+
+  if (event.key === "Enter") {
+    draggedIndex.value =
+      draggedIndex.value === null ? focusedIndex.value : null;
+  }
+}
+
+function handleArrowKeyDown(event: KeyboardEvent) {
+  if (!props.isDraggable || focusedIndex.value === null) return;
+  if (draggedIndex.value === null) return;
+
+  const maxIndex = props.checklistItems.length - 1;
+  const move = (direction: number) => {
+    if (draggedIndex.value) {
+      const newIndex = draggedIndex.value + direction;
+      if (newIndex < 0 || newIndex > maxIndex) return;
+
+      event.preventDefault();
+
+      emit("sort", { oldIndex: draggedIndex.value, newIndex });
+
+      draggedIndex.value = newIndex;
+      focusedIndex.value = newIndex;
+    }
+  };
+
+  if (event.key === "ArrowUp") move(-1);
+  if (event.key === "ArrowDown") move(1);
+}
 </script>
 
 <style scoped>
@@ -105,24 +194,30 @@ function closeDialog() {
   background-color: #e1f0fc !important;
   box-shadow: 0 2px 8px #007acc30;
 }
-.container {
-  max-width: 600px;
-  margin: 1rem auto;
-  padding-left: 0;
+
+.keyboard-dragging {
+  outline: 2px solid var(--color-brand-main-blue);
+  background-color: #d0e7ff;
 }
 
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
+}
+
+.container {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 56px;
 }
 
 .list-item {
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
   user-select: none;
   cursor: grab;
   color: var(--color-brand-main-blue);
@@ -134,77 +229,32 @@ function closeDialog() {
 
 /* text grayed out when selected */
 .muted {
-  color: #7a8d9f;
-}
-
-.radio-look {
-  appearance: none;
-  -webkit-appearance: none;
-  flex: 0 0 16px;
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--color-neutrals-grey);
-  border-radius: 50%;
-  background: white;
-  box-sizing: border-box;
-  margin-right: 0.8rem;
-  position: relative;
-  cursor: pointer;
-  outline-offset: 2px;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.radio-look:hover {
-  border-color: var(--color-brand-main-blue);
-  background-color: #cce4ff;
-}
-
-/* blue circle inside on hover (slightly transparent) */
-.radio-look:hover::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  background-color: var(--color-brand-main-blue);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.3;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-/* blue circle with white tick when selected */
-.radio-look:checked {
-  border-color: var(--color-brand-main-blue);
-  background-color: var(--color-brand-main-blue);
-}
-
-.radio-look:checked::before {
-  content: "✓";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1;
-  transform: translate(-50%, -45%);
-  pointer-events: none;
-  user-select: none;
-  transition: color 0.2s ease;
-}
-
-.radio-look:checked:hover::before {
-  opacity: 0.8;
+  color: #7a8d9f !important;
 }
 
 .label-text {
+  cursor: pointer;
+  color: var(--color-brand-main-blue);
+  /* Body/Body 1 Bold */
+  font-family: "Open Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 27px */
+
+  padding: 16px 8px;
   flex-grow: 1;
   user-select: none;
+}
+
+.label-text:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+  .label-text {
+    padding: 12px 8px;
+  }
 }
 
 .drag-handle {
@@ -212,7 +262,7 @@ function closeDialog() {
   user-select: none;
   font-size: 24px;
   margin-left: auto;
-  color: var(--color-neutrals-grey);
+  color: #617586;
   display: flex;
   align-items: center;
 }
@@ -244,5 +294,15 @@ function closeDialog() {
   max-height: 80%;
   overflow-y: auto;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.required-label {
+  color: var(--neutrals-grey, #3a5368);
+  /* Body/Body 2 */
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
 }
 </style>

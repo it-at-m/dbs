@@ -296,10 +296,9 @@ function _saveChecklistAcceptedDSE() {
   });
   const body = JSON.stringify({
     title: lebenslageTitle.value,
-    lebenslageId: lebenslageId.value,
+    situationId: lebenslageId.value,
     checklistItems: checklistItemsDtos,
   });
-
   fetch(url, {
     method: "POST",
     headers: {
