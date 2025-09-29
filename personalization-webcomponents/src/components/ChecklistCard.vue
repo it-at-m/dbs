@@ -9,7 +9,7 @@
         <img
           width="56px"
           height="56px"
-          :src="getChecklistIconByTitle(checklist.title)"
+          :src="getChecklistIconBySituationId(checklist.situationId)"
           alt="checklist-icon"
         />
       </div>
@@ -18,7 +18,7 @@
       <div>
         <muc-chip
           v-if="todoCount"
-          style="margin-right: 16px"
+          style="margin-right: 8px"
           background-color="#FDD1AC"
         >
           {{ todoCount }} offen
@@ -75,7 +75,7 @@ import { computed } from "vue";
 import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
 import MucChip from "@/components/common/MucChip.vue";
 import {
-  getChecklistIconByTitle,
+  getChecklistIconBySituationId,
   QUERY_PARAM_CHECKLIST_ID,
 } from "@/util/Constants.ts";
 

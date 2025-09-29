@@ -1,3 +1,5 @@
+import type Checklist from "@/api/persservice/Checklist.ts";
+
 import { getAccessToken, getAPIBaseURL } from "@/util/Constants.ts";
 
 export default class ChecklistService {
@@ -25,6 +27,24 @@ export default class ChecklistService {
         Authorization: "Bearer " + getAccessToken(),
         "Content-Type": "application/json",
       },
+      credentials: "include",
+    });
+  }
+
+  updateChecklist(newChecklist: Checklist): Promise<Response> {
+    //todo replace with openapi generated client when backend is finished
+    const url =
+      getAPIBaseURL() +
+      "/clients/api/p13n-backend/checklist/" +
+      newChecklist.id;
+
+    return fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + getAccessToken(),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newChecklist),
       credentials: "include",
     });
   }
