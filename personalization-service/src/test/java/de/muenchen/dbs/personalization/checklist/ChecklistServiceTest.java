@@ -9,16 +9,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
+import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
-import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
