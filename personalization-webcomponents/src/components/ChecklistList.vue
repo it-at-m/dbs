@@ -21,7 +21,7 @@
             'keyboard-dragging': draggedIndex === index,
           }"
           :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
-          :aria-label="`${element.title}, Position ${index + 1} von ${checklistItems.length}`"
+          :aria-label="`${element.serviceName}, Position ${index + 1} von ${checklistItems.length}`"
           tabindex="0"
           @focus="focusedIndex = index"
           :key="element.serviceID"
@@ -31,8 +31,8 @@
             :id="'cb-' + element.serviceID"
             :aria-label="
               !!element.checked
-                ? element.title + ' als nicht erledigt markieren.'
-                : element.title + ' als erledigt markieren.'
+                ? element.serviceName + ' als nicht erledigt markieren.'
+                : element.serviceName + ' als erledigt markieren.'
             "
             :checked="!!element.checked"
             :disabled="disabled"
@@ -50,10 +50,10 @@
               (evt) => (evt.keyCode == 32 ? openDialog(element, evt) : null)
             "
           >
-            <b>{{ element.title }}</b>
+            <b>{{ element.serviceName }}</b>
             <span
               class="required-label"
-              v-if="element.required"
+              v-if="element.mandatory"
             >
               - verpflichtend
             </span>
@@ -82,7 +82,7 @@
       @click.self="closeDialog"
     >
       <div class="modal-content">
-        <h3>Information zu "{{ dialogItem?.title }}"</h3>
+        <h3>Information zu "{{ dialogItem?.serviceName }}"</h3>
         <p>Hier kannst du beliebige Inhalte anzeigen.</p>
         <button @click="closeDialog">Schließen</button>
       </div>
@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
+import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
@@ -101,7 +101,7 @@ import P13nCheckbox from "@/components/P13nCheckbox.vue";
 
 const props = withDefaults(
   defineProps<{
-    checklistItems: ChecklistItem[];
+    checklistItems: ChecklistItemServiceNavigator[];
     isDraggable?: boolean;
     disabled?: boolean;
   }>(),
@@ -123,7 +123,7 @@ const sortableOptions = computed(() => ({
 }));
 
 const dialogVisible = ref(false);
-const dialogItem = ref<ChecklistItem | null>(null);
+const dialogItem = ref<ChecklistItemServiceNavigator | null>(null);
 
 onMounted(() => {
   window.addEventListener("keydown", handleArrowKeyDown);
@@ -137,7 +137,7 @@ function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
 }
 
-function openDialog(item: ChecklistItem, evt: Event) {
+function openDialog(item: ChecklistItemServiceNavigator, evt: Event) {
   evt.preventDefault();
   dialogItem.value = item;
   dialogVisible.value = true;

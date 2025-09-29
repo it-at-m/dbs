@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import type Checklist from "@/api/persservice/Checklist.ts";
+import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 
 import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
@@ -60,7 +60,7 @@ import MucChip from "@/components/common/MucChip.vue";
 import { getChecklistIconBySituationId } from "@/util/Constants.ts";
 
 const props = defineProps<{
-  checklist: Checklist;
+  checklist: ChecklistServiceNavigator;
 }>();
 
 onMounted(() => {
@@ -85,18 +85,20 @@ onMounted(() => {
 });
 
 const todoCount = computed(() => {
-  if (props.checklist && props.checklist.checklistItems) {
-    return props.checklist.checklistItems.filter((value) => !value.checked)
-      .length;
+  if (props.checklist && props.checklist.checklistItemServiceNavigatorDtos) {
+    return props.checklist.checklistItemServiceNavigatorDtos.filter(
+      (value) => !value.checked
+    ).length;
   } else {
     return undefined;
   }
 });
 
 const doneCount = computed(() => {
-  if (props.checklist && props.checklist.checklistItems) {
-    return props.checklist.checklistItems.filter((value) => value.checked)
-      .length;
+  if (props.checklist && props.checklist.checklistItemServiceNavigatorDtos) {
+    return props.checklist.checklistItemServiceNavigatorDtos.filter(
+      (value) => value.checked
+    ).length;
   } else {
     return undefined;
   }

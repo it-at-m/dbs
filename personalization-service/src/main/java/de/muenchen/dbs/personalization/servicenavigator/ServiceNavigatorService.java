@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -51,16 +53,21 @@ public class ServiceNavigatorService {
 
         log.debug("Get all service infos from {}", url);
         try {
-            final ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
+            ResponseEntity<List<ChecklistItemServiceNavigatorDTO>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+                    });
             checklistItemServiceNavigatorDTOList = response.getBody();
         } catch (final Exception e) {
             log.error("Error retrieving ServiceNavigator data from {}", url);
             for (ChecklistItem item : checklist.getChecklistItems()) {
                 ChecklistItemServiceNavigatorDTO itemServiceNavigatorDTO = new ChecklistItemServiceNavigatorDTO();
                 itemServiceNavigatorDTO.setServiceID(item.getServiceID());
-                itemServiceNavigatorDTO.setNote(item.getNote());
-                itemServiceNavigatorDTO.setTitle(item.getTitle());
-                itemServiceNavigatorDTO.setRequired(item.getRequired());
+                itemServiceNavigatorDTO.setSummary(item.getNote());
+                itemServiceNavigatorDTO.setServiceName(item.getTitle());
+                itemServiceNavigatorDTO.setMandatory(item.getRequired());
                 checklistItemServiceNavigatorDTOList.add(itemServiceNavigatorDTO);
             }
         }

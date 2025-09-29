@@ -16,5 +16,7 @@ public class ChecklistServiceNavigatorReadDTO {
 
     private ZonedDateTime lastUpdate;
 
+    private String situationId;
+
     private List<ChecklistItemServiceNavigatorDTO> checklistItemServiceNavigatorDtos;
 }
