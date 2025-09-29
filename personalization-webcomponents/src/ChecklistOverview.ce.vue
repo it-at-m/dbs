@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main v-if="loggedIn">
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
@@ -12,27 +12,27 @@
     >
       <div class="container">
         <div class="header">
-          <div class="headline">
-            <span class="header-icon">
-              <muc-icon icon="order-bool-ascending" />
-            </span>
-            <h2 tabindex="0">
-              <span v-if="displayOptionDetailScreen"
-                >Meine weiteren Checklisten</span
-              >
-              <span v-else>Meine Checklisten</span>
+          <h2
+            tabindex="0"
+            style="display: flex; align-items: center"
+          >
+            <muc-icon
+              style="width: 32px; height: 32px; margin-right: 8px"
+              icon="order-bool-ascending"
+            />
+            <span v-if="displayOptionDetailScreen"
+              >Meine weiteren Checklisten</span
+            >
+            <span v-else>Meine Checklisten</span>
 
-              <span
-                v-if="
-                  checklists.length &&
-                  !displayOptionDetailScreen &&
-                  !loadingError
-                "
-              >
-                ({{ checklists.length }})</span
-              >
-            </h2>
-          </div>
+            <span
+              v-if="
+                checklists.length && !displayOptionDetailScreen && !loadingError
+              "
+            >
+              ({{ checklists.length }})</span
+            >
+          </h2>
           <muc-button
             v-if="!loadingError && checklists.length > 2 && !isMobile"
             icon="arrow-right"
@@ -189,10 +189,6 @@ onMounted(() => {
 .headline {
   display: flex;
   align-items: center;
-}
-
-.header-icon {
-  margin-right: 8px;
 }
 
 /* Mobile link styles */
