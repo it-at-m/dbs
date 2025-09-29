@@ -185,12 +185,6 @@ onMounted(() => {
   padding-bottom: 24px;
 }
 
-/* Headline styles */
-.headline {
-  display: flex;
-  align-items: center;
-}
-
 /* Mobile link styles */
 .mobile-link {
   padding-top: 24px;
