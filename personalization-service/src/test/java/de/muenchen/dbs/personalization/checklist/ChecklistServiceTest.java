@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import java.time.Instant;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -35,6 +38,9 @@ public class ChecklistServiceTest {
 
     @Mock
     private ChecklistRepository checklistRepository;
+
+    @Mock
+    private ServiceNavigatorService serviceNavigatorService;
 
     @InjectMocks
     private ChecklistService checklistService;
@@ -111,13 +117,18 @@ public class ChecklistServiceTest {
             final Checklist checklist = createTestChecklist(id, USER_LHM_EXT_ID, null);
 
             when(checklistRepository.findById(id)).thenReturn(Optional.of(checklist));
+            ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
+            expectedChecklistServiceNavigatorReadDTO.setId(checklist.getId());
+            expectedChecklistServiceNavigatorReadDTO.setLhmExtId(checklist.getLhmExtId());
+            when(serviceNavigatorService.getChecklistServiceNavigatorReadDTO(checklist)).thenReturn(expectedChecklistServiceNavigatorReadDTO);
 
             // When
             final ChecklistServiceNavigatorReadDTO result = checklistService.getChecklist(id);
 
             // Then
             verify(checklistRepository).findById(id);
-            assertThat(result).usingRecursiveComparison().isEqualTo(checklist);
+            assertThat(result).isNotNull();
+            assertThat(result).usingRecursiveComparison().isEqualTo(expectedChecklistServiceNavigatorReadDTO);
         }
 
         @Test
@@ -145,17 +156,25 @@ public class ChecklistServiceTest {
             // Given
             final UUID checklistToUpdateId = UUID.randomUUID();
             final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_LHM_EXT_ID, null);
-            final Checklist expectedChecklist = createTestChecklist(null, checklistToUpdate.getLhmExtId(), null);
 
-            when(checklistRepository.save(checklistToUpdate)).thenReturn(expectedChecklist);
+            Checklist expectedChecklist = createTestChecklist(null, checklistToUpdate.getLhmExtId(), null);
+            ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
+            expectedChecklistServiceNavigatorReadDTO.setId(expectedChecklist.getId());
+            expectedChecklistServiceNavigatorReadDTO.setLhmExtId(expectedChecklist.getLhmExtId());
+            expectedChecklistServiceNavigatorReadDTO.setTitle(expectedChecklist.getTitle());
+
+            // Mock-Verhalten
             when(checklistRepository.findById(checklistToUpdateId)).thenReturn(Optional.of(checklistToUpdate));
+            when(checklistRepository.save(checklistToUpdate)).thenReturn(expectedChecklist);
+            when(serviceNavigatorService.getChecklistServiceNavigatorReadDTO(expectedChecklist)).thenReturn(expectedChecklistServiceNavigatorReadDTO);
 
             // When
             final ChecklistServiceNavigatorReadDTO result = checklistService.updateChecklist(checklistToUpdate, checklistToUpdateId);
 
             // Then
-            assertThat(result).usingRecursiveComparison().isEqualTo(expectedChecklist);
+            assertThat(result).usingRecursiveComparison().isEqualTo(expectedChecklistServiceNavigatorReadDTO);
             verify(checklistRepository).save(checklistToUpdate);
+            verify(checklistRepository).findById(checklistToUpdateId);
         }
 
         @Test
