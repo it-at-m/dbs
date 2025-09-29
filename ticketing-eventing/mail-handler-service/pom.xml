@@ -46,7 +46,7 @@
         <dbs-handler-core.version>0.2.0</dbs-handler-core.version>
 
         <!-- Apache Libs -->
-        <tika.version>2.9.2</tika.version>
+        <tika.version>2.9.4</tika.version>
 
         <!-- Logging -->
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
