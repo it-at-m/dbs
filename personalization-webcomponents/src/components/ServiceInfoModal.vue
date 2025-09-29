@@ -78,13 +78,13 @@
 </template>
 
 <script setup lang="ts">
-import type { SNService } from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
+import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 
 import { MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
 
 const { open = false, showActions = false } = defineProps<{
   open?: boolean;
-  service: SNService;
+  service: ChecklistItemServiceNavigator;
   showActions?: boolean;
 }>();
 

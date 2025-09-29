@@ -74,19 +74,14 @@
       </template>
     </sortable>
 
-    <!--todo-->
-    <!-- Placeholder simple dialog box (modal)-->
-    <div
-      v-if="dialogVisible"
-      class="modal-overlay"
-      @click.self="closeDialog"
-    >
-      <div class="modal-content">
-        <h3>Information zu "{{ dialogItem?.serviceName }}"</h3>
-        <p>Hier kannst du beliebige Inhalte anzeigen.</p>
-        <button @click="closeDialog">Schließen</button>
-      </div>
-    </div>
+    <service-info-modal
+      v-if="dialogItem !== null"
+      :open="dialogVisible"
+      :service="dialogItem"
+      :show-actions="true"
+      @close="closeDialog"
+      @cancel="closeDialog"
+    />
   </div>
 </template>
 
@@ -98,6 +93,7 @@ import { Sortable } from "sortablejs-vue3";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import P13nCheckbox from "@/components/P13nCheckbox.vue";
+import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 
 const props = withDefaults(
   defineProps<{
