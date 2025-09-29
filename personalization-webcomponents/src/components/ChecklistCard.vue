@@ -18,7 +18,7 @@
       <div>
         <muc-chip
           v-if="todoCount"
-          style="margin-right: 16px"
+          style="margin-right: 8px"
           background-color="#FDD1AC"
         >
           {{ todoCount }} offen
