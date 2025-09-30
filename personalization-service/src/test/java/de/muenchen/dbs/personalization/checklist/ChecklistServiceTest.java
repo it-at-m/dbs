@@ -51,7 +51,7 @@ public class ChecklistServiceTest {
                         Instant.now().plusSeconds(3600),
                         Map.of("alg", "HS256",
                                 "typ", "JWT"),
-                        Map.of("lhmExtId", USER_LHM_EXT_ID)));
+                        Map.of("lhmExtID", USER_LHM_EXT_ID)));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
