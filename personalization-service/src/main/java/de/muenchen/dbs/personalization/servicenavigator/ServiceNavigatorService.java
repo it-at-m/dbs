@@ -57,11 +57,7 @@ public class ServiceNavigatorService {
                     new ParameterizedTypeReference<>() {
                     });
 
-            if (response.getBody() != null) {
-                checklistItemServiceNavigatorDTOList = toDto(response.getBody());
-            } else {
-                throw new NullPointerException("SN response is null");
-            }
+            checklistItemServiceNavigatorDTOList = toDto(Objects.requireNonNull(response.getBody()));
 
         } catch (final Exception e) {
             log.error("Error retrieving ServiceNavigator data from {}", url, e);
@@ -98,11 +94,7 @@ public class ServiceNavigatorService {
                 new ParameterizedTypeReference<>() {
                 });
 
-        if (response.getBody() != null) {
-            return toDto(response.getBody());
-        } else {
-            throw new NullPointerException("SN response is null");
-        }
+        return toDto(Objects.requireNonNull(response.getBody()));
     }
 
     private List<ChecklistItemServiceNavigatorDTO> toDto(final List<ServiceNavigatorResponse> snResponseList) {
