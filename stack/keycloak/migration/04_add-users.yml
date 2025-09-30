@@ -10,7 +10,7 @@ changes:
       emailVerified: true
       email: none@none.com
       attributes:
-        lhmExtId:
+        lhmExtID:
           - "nonelhmextid"
   - updateUserPassword:
       name: none
@@ -23,7 +23,7 @@ changes:
       emailVerified: true
       email: reader@reader.com
       attributes:
-        lhmExtId:
+        lhmExtID:
           - "readerlhmextid"
   - updateUserPassword:
       name: reader
@@ -36,7 +36,7 @@ changes:
       emailVerified: true
       email: writer@writer.com
       attributes:
-        lhmExtId:
+        lhmExtID:
           - "writerlhmextid"
   - updateUserPassword:
       name: writer

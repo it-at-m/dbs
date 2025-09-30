@@ -39,5 +39,5 @@ public class IntegrationTestBase {
             Instant.now().plusSeconds(3600),
             Map.of("alg", "HS256",
                     "typ", "JWT"),
-            Map.of("lhmExtId", TOKEN_USER_LHM_EXT_ID));
+            Map.of("lhmExtID", TOKEN_USER_LHM_EXT_ID));
 }
