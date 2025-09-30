@@ -21,7 +21,7 @@
             'keyboard-dragging': draggedIndex === index,
           }"
           :aria-grabbed="draggedIndex === index ? 'true' : 'false'"
-          :aria-label="`${element.serviceName}, Position ${index + 1} von ${checklistItems.length}`"
+          :aria-label="`${element.title}, Position ${index + 1} von ${checklistItems.length}`"
           tabindex="0"
           @focus="focusedIndex = index"
           :key="element.serviceID"
@@ -31,8 +31,8 @@
             :id="'cb-' + element.serviceID"
             :aria-label="
               !!element.checked
-                ? element.serviceName + ' als nicht erledigt markieren.'
-                : element.serviceName + ' als erledigt markieren.'
+                ? element.title + ' als nicht erledigt markieren.'
+                : element.title + ' als erledigt markieren.'
             "
             :checked="!!element.checked"
             :disabled="disabled"
@@ -50,10 +50,10 @@
               (evt) => (evt.keyCode == 32 ? openDialog(element, evt) : null)
             "
           >
-            <b>{{ element.serviceName }}</b>
+            <b>{{ element.title }}</b>
             <span
               class="required-label"
-              v-if="element.mandatory"
+              v-if="element.required"
             >
               - verpflichtend
             </span>
@@ -81,6 +81,9 @@
       :show-actions="true"
       @close="closeDialog"
       @cancel="closeDialog"
+      @task-done="
+        () => (dialogItem ? onSelectChange(dialogItem.serviceID) : null)
+      "
     />
   </div>
 </template>
@@ -131,6 +134,7 @@ onBeforeUnmount(() => {
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
+  closeDialog();
 }
 
 function openDialog(item: ChecklistItemServiceNavigator, evt: Event) {

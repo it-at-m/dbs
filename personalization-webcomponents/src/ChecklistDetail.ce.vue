@@ -64,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+import type Checklist from "@/api/persservice/Checklist.ts";
 import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
@@ -238,9 +239,17 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
       element
     );
 
+    const updateChecklist = {} as Checklist;
+    updateChecklist.id = checklist.value.id;
+    updateChecklist.title = checklist.value.title;
+    updateChecklist.lhmExtId = checklist.value.lhmExtId;
+    updateChecklist.situationId = checklist.value.situationId;
+    updateChecklist.checklistItems =
+      checklist.value.checklistItemServiceNavigatorDtos;
+
     const service = new ChecklistService();
     service
-      .updateChecklist(checklist.value)
+      .updateChecklist(updateChecklist)
       .then((resp) => {
         if (resp.ok) {
           resp.json().then((newChecklist) => {

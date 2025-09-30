@@ -1,11 +1,11 @@
 export default interface ChecklistItemServiceNavigator {
   serviceID: string;
   checked: Date | null;
-  serviceName: string;
+  title: string;
   publicUrl: string;
-  summary: string;
+  note: string;
   isExternal: boolean;
-  mandatory: boolean;
+  required: boolean;
   appointmentServiceUrl?: string;
   appointmentService?: boolean;
   onlineServices?: OnlineService[];

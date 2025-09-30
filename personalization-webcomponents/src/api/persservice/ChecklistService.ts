@@ -1,4 +1,4 @@
-import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
 
 import { getAccessToken, getAPIBaseURL } from "@/util/Constants.ts";
 
@@ -31,7 +31,7 @@ export default class ChecklistService {
     });
   }
 
-  updateChecklist(newChecklist: ChecklistServiceNavigator): Promise<Response> {
+  updateChecklist(newChecklist: Checklist): Promise<Response> {
     //todo replace with openapi generated client when backend is finished
     const url =
       getAPIBaseURL() +
