@@ -74,34 +74,33 @@
       </template>
     </sortable>
 
-    <!--todo-->
-    <!-- Placeholder simple dialog box (modal)-->
-    <div
-      v-if="dialogVisible"
-      class="modal-overlay"
-      @click.self="closeDialog"
-    >
-      <div class="modal-content">
-        <h3>Information zu "{{ dialogItem?.title }}"</h3>
-        <p>Hier kannst du beliebige Inhalte anzeigen.</p>
-        <button @click="closeDialog">Schließen</button>
-      </div>
-    </div>
+    <service-info-modal
+      v-if="dialogItem !== null"
+      :open="dialogVisible"
+      :service="dialogItem"
+      :show-actions="true"
+      @close="closeDialog"
+      @cancel="closeDialog"
+      @task-done="
+        () => (dialogItem ? onSelectChange(dialogItem.serviceID) : null)
+      "
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
+import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import P13nCheckbox from "@/components/P13nCheckbox.vue";
+import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 
 const props = withDefaults(
   defineProps<{
-    checklistItems: ChecklistItem[];
+    checklistItems: ChecklistItemServiceNavigator[];
     isDraggable?: boolean;
     disabled?: boolean;
   }>(),
@@ -123,7 +122,7 @@ const sortableOptions = computed(() => ({
 }));
 
 const dialogVisible = ref(false);
-const dialogItem = ref<ChecklistItem | null>(null);
+const dialogItem = ref<ChecklistItemServiceNavigator | null>(null);
 
 onMounted(() => {
   window.addEventListener("keydown", handleArrowKeyDown);
@@ -135,9 +134,10 @@ onBeforeUnmount(() => {
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
+  closeDialog();
 }
 
-function openDialog(item: ChecklistItem, evt: Event) {
+function openDialog(item: ChecklistItemServiceNavigator, evt: Event) {
   evt.preventDefault();
   dialogItem.value = item;
   dialogVisible.value = true;

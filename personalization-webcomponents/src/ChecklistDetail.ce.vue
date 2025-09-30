@@ -65,7 +65,8 @@
 
 <script setup lang="ts">
 import type Checklist from "@/api/persservice/Checklist.ts";
-import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
+import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
+import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import { MucBanner } from "@muenchen/muc-patternlab-vue";
@@ -80,7 +81,7 @@ import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
 
-const checklist = ref<Checklist | null>(null);
+const checklist = ref<ChecklistServiceNavigator | null>(null);
 const loading = ref(true);
 const loadingSort = ref(false);
 const loadingCheck = ref(false);
@@ -107,7 +108,7 @@ function loadChecklists() {
         .getChecklist(checklistId)
         .then((resp) => {
           if (resp.ok) {
-            resp.json().then((checklistResponse: Checklist) => {
+            resp.json().then((checklistResponse: ChecklistServiceNavigator) => {
               checklist.value = checklistResponse;
             });
           } else {
@@ -127,16 +128,20 @@ function loadChecklists() {
 }
 
 const openCheckList = computed(() => {
-  if (checklist.value && checklist.value.checklistItems) {
-    return checklist.value.checklistItems.filter((value) => !value.checked);
+  if (checklist.value && checklist.value.checklistItemServiceNavigatorDtos) {
+    return checklist.value.checklistItemServiceNavigatorDtos.filter(
+      (value) => !value.checked
+    );
   } else {
     return [];
   }
 });
 
 const closedCheckList = computed(() => {
-  if (checklist.value && checklist.value.checklistItems) {
-    return checklist.value.checklistItems.filter((value) => value.checked);
+  if (checklist.value && checklist.value.checklistItemServiceNavigatorDtos) {
+    return checklist.value.checklistItemServiceNavigatorDtos.filter(
+      (value) => value.checked
+    );
   } else {
     return [];
   }
@@ -212,21 +217,39 @@ function onCheckedClosed(serviceID: string) {
  * @param evt Sort-Event which contains the old and new index of the checklist-item.
  */
 function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
-  const elementToSort = openCheckList.value[evt.oldIndex] as ChecklistItem;
-  const oldIndex = checklist.value?.checklistItems.findIndex((item) => {
-    return item.serviceID === elementToSort.serviceID;
-  }) as number;
+  const elementToSort = openCheckList.value[
+    evt.oldIndex
+  ] as ChecklistItemServiceNavigator;
+  const oldIndex = checklist.value?.checklistItemServiceNavigatorDtos.findIndex(
+    (item) => {
+      return item.serviceID === elementToSort.serviceID;
+    }
+  ) as number;
   if (oldIndex >= 0 && checklist.value) {
     loadingSort.value = true;
 
     const newIndex = oldIndex + (evt.newIndex - evt.oldIndex);
-    const element = checklist.value.checklistItems[oldIndex] as ChecklistItem;
-    checklist.value.checklistItems.splice(oldIndex, 1);
-    checklist.value.checklistItems.splice(newIndex, 0, element);
+    const element = checklist.value.checklistItemServiceNavigatorDtos[
+      oldIndex
+    ] as ChecklistItemServiceNavigator;
+    checklist.value.checklistItemServiceNavigatorDtos.splice(oldIndex, 1);
+    checklist.value.checklistItemServiceNavigatorDtos.splice(
+      newIndex,
+      0,
+      element
+    );
+
+    const updateChecklist = {} as Checklist;
+    updateChecklist.id = checklist.value.id;
+    updateChecklist.title = checklist.value.title;
+    updateChecklist.lhmExtId = checklist.value.lhmExtId;
+    updateChecklist.situationId = checklist.value.situationId;
+    updateChecklist.checklistItems =
+      checklist.value.checklistItemServiceNavigatorDtos;
 
     const service = new ChecklistService();
     service
-      .updateChecklist(checklist.value)
+      .updateChecklist(updateChecklist)
       .then((resp) => {
         if (resp.ok) {
           resp.json().then((newChecklist) => {

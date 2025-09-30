@@ -75,16 +75,16 @@ public class ChecklistController {
     @PostMapping(PATH_VAR_CHECKLIST_ID + PATH_VAR_SERVICE_ID + "/check")
     @Operation(summary = "Check a Checklist-Entry", description = "Checks a checklist-entry.")
     @ResponseStatus(HttpStatus.OK)
-    public ChecklistReadDTO checkChecklistEntry(@PathVariable(CHECKLIST_ID) final UUID checklistID,
+    public ChecklistServiceNavigatorReadDTO checkChecklistEntry(@PathVariable(CHECKLIST_ID) final UUID checklistID,
             @PathVariable(SERVICE_ID) final String serviceID) {
-        return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, ZonedDateTime.now()));
+        return checklistService.changeChecklistEntry(checklistID, serviceID, ZonedDateTime.now());
     }
 
     @PostMapping(PATH_VAR_CHECKLIST_ID + PATH_VAR_SERVICE_ID + "/uncheck")
     @Operation(summary = "Uncheck a Checklist-Entry", description = "Unchecks a checklist-entry.")
     @ResponseStatus(HttpStatus.OK)
-    public ChecklistReadDTO uncheckChecklistEntry(@PathVariable(CHECKLIST_ID) final UUID checklistID,
+    public ChecklistServiceNavigatorReadDTO uncheckChecklistEntry(@PathVariable(CHECKLIST_ID) final UUID checklistID,
             @PathVariable(SERVICE_ID) final String serviceID) {
-        return checklistMapper.toReadDTO(checklistService.changeChecklistEntry(checklistID, serviceID, null));
+        return checklistService.changeChecklistEntry(checklistID, serviceID, null);
     }
 }

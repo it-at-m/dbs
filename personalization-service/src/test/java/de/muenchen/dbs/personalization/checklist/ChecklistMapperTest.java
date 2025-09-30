@@ -5,11 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import de.muenchen.dbs.personalization.checklist.domain.Checklist;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistReadDTO;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
+import de.muenchen.dbs.personalization.checklist.domain.*;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Nested;
@@ -73,6 +69,21 @@ public class ChecklistMapperTest {
 
             // Then
             assertThat(result).usingRecursiveComparison().ignoringFields("id", "situationId", "lastUpdate").isEqualTo(checklistUpdateDTO);
+        }
+    }
+
+    @Nested
+    class ToServiceNavigatorReadDTO {
+        @Test
+        void givenChecklist_thenReturnsCorrectEntity() {
+            // Given
+            final UUID id = UUID.randomUUID();
+            final Checklist checklist = createTestChecklist(id, "user@example.com", null);
+            checklist.setSituationId("situation_id");
+            final ChecklistServiceNavigatorReadDTO result = checklistMapper.toServiceNavigatorReadDTO(checklist);
+
+            // Then
+            assertThat(result).usingRecursiveComparison().ignoringFields("checklistItemServiceNavigatorDtos").isEqualTo(checklist);
         }
     }
 }

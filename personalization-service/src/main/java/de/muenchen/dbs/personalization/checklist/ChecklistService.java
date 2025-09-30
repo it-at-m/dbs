@@ -79,7 +79,7 @@ public class ChecklistService {
         checklistRepository.deleteById(checklistId);
     }
 
-    public Checklist changeChecklistEntry(final UUID checklistId, final String serviceId, final ZonedDateTime newCheckedValue) {
+    public ChecklistServiceNavigatorReadDTO changeChecklistEntry(final UUID checklistId, final String serviceId, final ZonedDateTime newCheckedValue) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
         final String sanitizedServiceId = StringEscapeUtils.escapeHtml4(serviceId);
         log.debug("Update checklist with checklist-ID {} and service-ID {} for {}", checklistId, sanitizedServiceId, lhmExtId);
@@ -96,7 +96,7 @@ public class ChecklistService {
 
         log.debug("Update Checklist {}", foundChecklist);
 
-        return checklistRepository.save(foundChecklist);
+        return serviceNavigatorService.getChecklistServiceNavigatorReadDTO(checklistRepository.save(foundChecklist));
     }
 
     private Checklist getChecklistOrThrowException(final UUID checklistId) {

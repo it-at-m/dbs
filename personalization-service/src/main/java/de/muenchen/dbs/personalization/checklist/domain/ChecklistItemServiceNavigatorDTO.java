@@ -1,6 +1,5 @@
 package de.muenchen.dbs.personalization.checklist.domain;
 
-import jakarta.persistence.Embedded;
 import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.Data;
@@ -24,6 +23,7 @@ public class ChecklistItemServiceNavigatorDTO {
 
     private String appointmentServiceUrl;
 
-    @Embedded
+    private Boolean appointmentService;
+
     private List<OnlineServiceDTO> onlineServices;
 }
