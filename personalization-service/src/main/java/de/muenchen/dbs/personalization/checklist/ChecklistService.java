@@ -63,7 +63,7 @@ public class ChecklistService {
         foundChecklist.setLastUpdate(ZonedDateTime.now());
         log.debug("Update Checklist {}", foundChecklist);
 
-        Checklist savedChecklist = checklistRepository.save(foundChecklist);
+        final Checklist savedChecklist = checklistRepository.save(foundChecklist);
 
         return serviceNavigatorService.getChecklistServiceNavigatorReadDTO(savedChecklist);
     }

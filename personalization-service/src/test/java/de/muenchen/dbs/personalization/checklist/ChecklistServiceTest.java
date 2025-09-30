@@ -115,7 +115,7 @@ public class ChecklistServiceTest {
             final Checklist checklist = createTestChecklist(id, USER_LHM_EXT_ID, null);
 
             when(checklistRepository.findById(id)).thenReturn(Optional.of(checklist));
-            ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
+            final ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
             expectedChecklistServiceNavigatorReadDTO.setId(checklist.getId());
             expectedChecklistServiceNavigatorReadDTO.setLhmExtId(checklist.getLhmExtId());
             when(serviceNavigatorService.getChecklistServiceNavigatorReadDTO(checklist)).thenReturn(expectedChecklistServiceNavigatorReadDTO);
@@ -155,8 +155,8 @@ public class ChecklistServiceTest {
             final UUID checklistToUpdateId = UUID.randomUUID();
             final Checklist checklistToUpdate = createTestChecklist(checklistToUpdateId, USER_LHM_EXT_ID, null);
 
-            Checklist expectedChecklist = createTestChecklist(null, checklistToUpdate.getLhmExtId(), null);
-            ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
+            final Checklist expectedChecklist = createTestChecklist(null, checklistToUpdate.getLhmExtId(), null);
+            final ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
             expectedChecklistServiceNavigatorReadDTO.setId(expectedChecklist.getId());
             expectedChecklistServiceNavigatorReadDTO.setLhmExtId(expectedChecklist.getLhmExtId());
             expectedChecklistServiceNavigatorReadDTO.setTitle(expectedChecklist.getTitle());

@@ -28,7 +28,7 @@ public class ServiceNavigatorService {
     private final P13nConfiguration p13nConfiguration;
     private final ChecklistMapper checklistMapper;
 
-    public ServiceNavigatorService(final P13nConfiguration p13nConfiguration, ChecklistMapper checklistMapper) {
+    public ServiceNavigatorService(final P13nConfiguration p13nConfiguration, final ChecklistMapper checklistMapper) {
         this.p13nConfiguration = p13nConfiguration;
         this.checklistMapper = checklistMapper;
         if (StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
@@ -42,7 +42,7 @@ public class ServiceNavigatorService {
     }
 
     public ChecklistServiceNavigatorReadDTO getChecklistServiceNavigatorReadDTO(final Checklist checklist) {
-        String serviceIDs = checklist.getChecklistItems().stream()
+        final String serviceIDs = checklist.getChecklistItems().stream()
                 .map(ChecklistItem::getServiceID)
                 .collect(Collectors.joining(","));
 
@@ -55,8 +55,8 @@ public class ServiceNavigatorService {
             checklistItemServiceNavigatorDTOList = response.getBody();
         } catch (final Exception e) {
             log.error("Error retrieving ServiceNavigator data from {}", url);
-            for (ChecklistItem item : checklist.getChecklistItems()) {
-                ChecklistItemServiceNavigatorDTO itemServiceNavigatorDTO = new ChecklistItemServiceNavigatorDTO();
+            for (final ChecklistItem item : checklist.getChecklistItems()) {
+                final ChecklistItemServiceNavigatorDTO itemServiceNavigatorDTO = new ChecklistItemServiceNavigatorDTO();
                 itemServiceNavigatorDTO.setServiceID(item.getServiceID());
                 itemServiceNavigatorDTO.setNote(item.getNote());
                 itemServiceNavigatorDTO.setTitle(item.getTitle());
