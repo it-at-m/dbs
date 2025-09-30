@@ -10,6 +10,6 @@ INSERT INTO checklist_item (service_id, checked, title, note, required, checklis
 ('service1', NOW(), 'Item 1', 'Note for Item 1', TRUE, (select id from checklist where lhm_ext_id='user1-lhm-ext-id')),
 ('service2', NOW(), 'Item 2', 'Note for Item 2', FALSE, (select id from checklist where lhm_ext_id='user1-lhm-ext-id')),
 ('service3', NOW(), 'Item 3', 'Note for Item 3', FALSE, (select id from checklist where lhm_ext_id='user2-lhm-ext-id')),
-('service4', NOW(), 'Item 4', 'Note for Item 4', TRUE, (select id from checklist where lhm_ext_id='writerlhmextid')),
-('service5', NOW(), 'Item 5', 'Note for Item 5', TRUE, (select id from checklist where lhm_ext_id='writerlhmextid')),
-('service6', NOW(), 'Item 6', 'Note for Item 6', FALSE, (select id from checklist where lhm_ext_id='writerlhmextid'));
+('1072583', NOW(), 'Item 4', 'Note for Item 4', TRUE, (select id from checklist where lhm_ext_id='writerlhmextid')),
+('10224132', NOW(), 'Item 5', 'Note for Item 5', TRUE, (select id from checklist where lhm_ext_id='writerlhmextid')),
+('10184237', NOW(), 'Item 6', 'Note for Item 6', FALSE, (select id from checklist where lhm_ext_id='writerlhmextid'));

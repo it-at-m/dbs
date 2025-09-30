@@ -4,7 +4,9 @@ import de.muenchen.dbs.personalization.checklist.domain.Checklist;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistReadDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
+import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,6 +32,7 @@ public class ChecklistController {
 
     private final ChecklistService checklistService;
     private final ChecklistMapper checklistMapper;
+    private final ServiceNavigatorService serviceNavigatorService;
 
     @GetMapping
     @Operation(summary = "Get all checklists by user.", description = "Returns all checklists of an user (identified by JWT-Token)")
@@ -42,8 +45,8 @@ public class ChecklistController {
     @GetMapping(path = PATH_VAR_CHECKLIST_ID)
     @Operation(summary = "Get specific checklist by checklist-id.", description = "Returns a checklist by checklistId")
     @ResponseStatus(HttpStatus.OK)
-    public ChecklistReadDTO getChecklist(@PathVariable(CHECKLIST_ID) final UUID checklistID) {
-        return checklistMapper.toReadDTO(checklistService.getChecklist(checklistID));
+    public ChecklistServiceNavigatorReadDTO getChecklist(@PathVariable(CHECKLIST_ID) final UUID checklistID) {
+        return checklistService.getChecklist(checklistID);
     }
 
     @PostMapping
@@ -57,9 +60,9 @@ public class ChecklistController {
     @PutMapping(PATH_VAR_CHECKLIST_ID)
     @Operation(summary = "Update a checklist", description = "Updates a checklist using the provided checklist details.")
     @ResponseStatus(HttpStatus.OK)
-    public ChecklistReadDTO updateChecklist(@Valid @RequestBody final ChecklistUpdateDTO checklistUpdateDTO,
+    public ChecklistServiceNavigatorReadDTO updateChecklist(@Valid @RequestBody final ChecklistUpdateDTO checklistUpdateDTO,
             @PathVariable(CHECKLIST_ID) final UUID checklistID) {
-        return checklistMapper.toReadDTO(checklistService.updateChecklist(checklistMapper.toUpdateChecklist(checklistUpdateDTO), checklistID));
+        return checklistService.updateChecklist(checklistMapper.toUpdateChecklist(checklistUpdateDTO), checklistID);
     }
 
     @DeleteMapping(PATH_VAR_CHECKLIST_ID)

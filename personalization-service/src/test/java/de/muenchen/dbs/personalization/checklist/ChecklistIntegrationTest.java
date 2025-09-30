@@ -133,7 +133,7 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
-                    .andExpect(jsonPath("$.checklistItems", hasSize(3)));
+                    .andExpect(jsonPath("$.checklistItemServiceNavigatorDtos", hasSize(3)));
         }
     }
 

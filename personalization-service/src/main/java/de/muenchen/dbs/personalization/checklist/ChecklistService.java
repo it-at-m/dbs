@@ -3,7 +3,9 @@ package de.muenchen.dbs.personalization.checklist;
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
+import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +27,7 @@ public class ChecklistService {
 
     private static final String JWT_CLAIM_LHM_EXT_ID = "lhmExtID";
     private final ChecklistRepository checklistRepository;
+    private final ServiceNavigatorService serviceNavigatorService;
 
     public Checklist createChecklist(final Checklist checklist) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
@@ -40,17 +43,17 @@ public class ChecklistService {
         return checklistRepository.findChecklistByLhmExtIdOrderByLastUpdateDesc(lhmExtId);
     }
 
-    public Checklist getChecklist(final UUID checklistId) {
+    public ChecklistServiceNavigatorReadDTO getChecklist(final UUID checklistId) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
         log.debug("Get checklist with ID {} for {}", checklistId, lhmExtId);
         final Checklist checklistOrThrowException = getChecklistOrThrowException(checklistId);
 
         isChecklistOwnerOrThrow(checklistOrThrowException, lhmExtId);
 
-        return checklistOrThrowException;
+        return serviceNavigatorService.getChecklistServiceNavigatorReadDTO(checklistOrThrowException);
     }
 
-    public Checklist updateChecklist(final Checklist checklist, final UUID checklistId) {
+    public ChecklistServiceNavigatorReadDTO updateChecklist(final Checklist checklist, final UUID checklistId) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
         log.debug("Update checklist with ID {} for {}", checklistId, lhmExtId);
         final Checklist foundChecklist = getChecklistOrThrowException(checklistId);
@@ -60,7 +63,10 @@ public class ChecklistService {
         foundChecklist.setChecklistItems(checklist.getChecklistItems());
         foundChecklist.setLastUpdate(ZonedDateTime.now());
         log.debug("Update Checklist {}", foundChecklist);
-        return checklistRepository.save(foundChecklist);
+
+        final Checklist savedChecklist = checklistRepository.save(foundChecklist);
+
+        return serviceNavigatorService.getChecklistServiceNavigatorReadDTO(savedChecklist);
     }
 
     public void deleteChecklist(final UUID checklistId) {
