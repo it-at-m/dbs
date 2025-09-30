@@ -11,15 +11,15 @@ public class ChecklistItemServiceNavigatorDTO {
 
     private ZonedDateTime checked;
 
-    private String serviceName;
+    private String title;
 
     private String publicUrl;
 
-    private String summary;
+    private String note;
 
     private Boolean isExternal;
 
-    private Boolean mandatory;
+    private Boolean required;
 
     private String appointmentServiceUrl;
 

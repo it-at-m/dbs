@@ -1,5 +1,6 @@
 package de.muenchen.dbs.personalization.servicenavigator;
 
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +31,12 @@ public class PublicServiceNavigatorController {
 
     private final RestTemplate restTemplate;
     private final P13nConfiguration p13nConfiguration;
+    private final ServiceNavigatorService snService;
 
     @Autowired
-    public PublicServiceNavigatorController(final P13nConfiguration p13nConfiguration) {
+    public PublicServiceNavigatorController(final P13nConfiguration p13nConfiguration, final ServiceNavigatorService snService) {
         this.p13nConfiguration = p13nConfiguration;
+        this.snService = snService;
 
         if (StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
             this.restTemplate = new RestTemplate();
@@ -49,10 +51,8 @@ public class PublicServiceNavigatorController {
     @GetMapping
     @Operation(summary = "Lookup ServiceNavigator Services by ServiceID. Returns a list of services for the given service IDs.")
     @ResponseStatus(HttpStatus.OK)
-    public List<Object> getServicesByIds(@RequestParam("ids") final String serviceIds) {
-        final String url = p13nConfiguration.getServiceNavigatorUrl() + SERVICENAVIGATOR_QUERY_PARAMETER_ID + serviceIds;
-        final ResponseEntity<List> forEntity = restTemplate.getForEntity(url, List.class);
-        return forEntity.getBody();
+    public List<ChecklistItemServiceNavigatorDTO> getServicesByIds(@RequestParam("ids") final String serviceIds) {
+        return snService.getChecklistServiceNavigatorReadDTO(serviceIds);
     }
 
 }
