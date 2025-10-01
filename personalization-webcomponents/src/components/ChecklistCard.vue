@@ -15,10 +15,9 @@
       </div>
     </template>
     <template #content>
-      <div>
+      <div class="chip-group">
         <muc-chip
           v-if="todoCount"
-          style="margin-right: 8px"
           background-color="var(--mde-color-status-warning-light)"
         >
           {{ todoCount }} offen
@@ -125,5 +124,12 @@ function gotoChecklist(checklistId: string) {
 
 .pb-8 {
   padding-bottom: 8px;
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 8px
 }
 </style>
