@@ -173,7 +173,7 @@ onMounted(() => {
 
 /* Background color on details page */
 .details-background {
-  background-color: var(--color-neutrals-blue-xlight);
+  background-color: var(--mde-color-neutral-beau-blue-x-light);
   padding: 24px 0;
 }
 

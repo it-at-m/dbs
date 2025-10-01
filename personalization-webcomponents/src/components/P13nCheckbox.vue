@@ -11,7 +11,7 @@
     <muc-icon
       class="icon check-icon"
       icon="check"
-      :color="checked ? 'white' : 'var(--color-neutrals-blue)'"
+      :color="checked ? 'white' : 'var(--mde-color-neutral-beau-blue)'"
     />
   </div>
 </template>
@@ -44,7 +44,7 @@ const emit = defineEmits(["check"]);
   flex: 0 0 auto;
   width: var(--radio-button-size);
   height: var(--radio-button-size);
-  border: var(--radio-button-border-width) solid var(--color-neutrals-grey);
+  border: var(--radio-button-border-width) solid var(--mde-color-neutral-grey);
   border-radius: var(--radio-button-size);
   background: white;
   box-sizing: border-box;
@@ -70,14 +70,14 @@ const emit = defineEmits(["check"]);
 }
 
 .radio-look[disabled="true"] {
-  border-color: var(--color-neutrals-grey);
-  background: var(--gray-x-light, #9ca8b3);
+  border-color: var(--mde-color-neutral-grey);
+  background: var(--mde-color-neutral-grey-x-light);
 }
 
 .radio-look[checked][disabled="false"]:hover,
 .radio-look[checked][disabled="false"]:focus {
-  border-color: var(--color-brand-main-blue);
-  background-color: var(--color-neutrals-blue);
+  border-color: var(--mde-color-brand-mde-blue);
+  background-color: var(--mde-color-neutral-beau-blue);
 }
 
 .radio-look[checked="false"][disabled="false"]:hover .check-icon,
@@ -90,8 +90,8 @@ const emit = defineEmits(["check"]);
 }
 
 .radio-look[checked="true"][disabled="false"] {
-  border-color: var(--color-brand-main-blue-dark, #004376);
-  background-color: var(--color-brand-main-blue);
+  border-color: var(--mde-color-brand-mde-blue-dark);
+  background-color: var(--mde-color-brand-mde-blue);
 }
 
 .radio-look[checked="true"] .check-icon {

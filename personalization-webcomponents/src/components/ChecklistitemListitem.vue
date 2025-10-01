@@ -30,6 +30,6 @@ defineProps<{
   font-size: 18px;
 }
 .item-title-checked {
-  color: #7a8d9f;
+  color: var(--mde-color-neutral-grey-x-light);
 }
 </style>
