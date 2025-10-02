@@ -10,7 +10,7 @@
           width="56px"
           height="56px"
           :src="getChecklistIconBySituationId(checklist.situationId)"
-          alt="checklist-icon"
+          alt=""
         />
       </div>
     </template>
