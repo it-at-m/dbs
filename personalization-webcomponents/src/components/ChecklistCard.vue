@@ -59,7 +59,7 @@
 
       <div v-if="checklist.lastUpdate">
         <b>Letzte Änderung:</b>
-        {{ new Date(checklist.lastUpdate).toLocaleDateString() }}
+        {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
       </div>
     </template>
   </muc-card>
@@ -74,7 +74,7 @@ import { computed } from "vue";
 import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
 import MucChip from "@/components/common/MucChip.vue";
 import {
-  getChecklistIconBySituationId,
+  getChecklistIconBySituationId, getDateInGermanDateFormat,
   QUERY_PARAM_CHECKLIST_ID,
 } from "@/util/Constants.ts";
 
