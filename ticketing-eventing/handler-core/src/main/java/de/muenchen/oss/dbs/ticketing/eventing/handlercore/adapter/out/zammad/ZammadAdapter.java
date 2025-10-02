@@ -41,6 +41,7 @@ public class ZammadAdapter implements TicketingOutPort {
     @Override
     public TicketInternal updateTicket(final UpdateTicketDTOV2 updateTicketDTO, final Collection<AbstractResource> attachments) {
         assert updateTicketDTO != null && updateTicketDTO.getId() != null;
+        log.debug("Updating ticket {}: {}, attachments: {}", updateTicketDTO.getId(), updateTicketDTO, attachments);
         try {
             final ResponseEntity<TicketInternal> response = ticketsApi
                     .updateTicketWithHttpInfo(updateTicketDTO.getId(), updateTicketDTO, null, null, attachments).block();
