@@ -58,7 +58,6 @@ public class ZammadAdapter implements TicketingOutPort {
             final Flux<DataBuffer> response = attachmentsApi.getAttachmentWithResponseSpec(ticketId, articleId, attachmentId)
                     .bodyToFlux(DataBuffer.class);
             final PipedOutputStream outputStream = new PipedOutputStream();
-            final PipedInputStream inputStream = new PipedInputStream(outputStream);
             DataBufferUtils.write(response, outputStream)
                     .publishOn(Schedulers.boundedElastic())
                     .doOnTerminate(() -> {
@@ -68,7 +67,7 @@ public class ZammadAdapter implements TicketingOutPort {
                             throw new RuntimeException("Error while closing OutputStream", e);
                         }
                     }).subscribe();
-            return inputStream;
+            return new PipedInputStream(outputStream);
         } catch (final WebClientResponseException e) {
             throw new ZammadApiException("Getting attachment with id %s failed: %s"
                     .formatted(attachmentId, e.getResponseBodyAsString()), e);
