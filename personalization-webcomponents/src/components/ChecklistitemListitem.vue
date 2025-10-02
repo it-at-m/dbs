@@ -1,7 +1,7 @@
 <template>
-  <div style="display: flex; align-items: center">
+  <div class="checklist-container">
     <checklist-checked-circle
-      style="margin-right: 12px"
+      class="checklist-check-circle"
       :checked="!!checklistItem.checked"
     >
     </checklist-checked-circle>
@@ -25,10 +25,21 @@ defineProps<{
 </script>
 
 <style scoped>
+.checklist-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.checklist-check-circle {
+  margin-top: 3px;
+  margin-right: 12px;
+}
+
 .item-title {
   font-family: "Open Sans", "sans-serif";
   font-size: 18px;
 }
+
 .item-title-checked {
   color: var(--mde-color-neutral-grey-x-light);
 }
