@@ -36,8 +36,8 @@
       >
       </checklist-card>
       <add-checklist-card
-          title="Neue Checkliste"
-          :new-checklist-url="newChecklistUrl"
+        title="Neue Checkliste"
+        :new-checklist-url="newChecklistUrl"
       >
         <template #content>
           <icon-add-checklist />
@@ -51,18 +51,18 @@
 import type Checklist from "@/api/persservice/Checklist.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
-import {MucCardContainer, MucIcon} from "@muenchen/muc-patternlab-vue";
+import { MucCardContainer, MucIcon } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { ref } from "vue";
 
 import ChecklistService from "@/api/persservice/ChecklistService.ts";
+import AddChecklistCard from "@/components/AddChecklistCard.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
+import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { setAccessToken } from "@/util/Constants.ts";
-import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
-import AddChecklistCard from "@/components/AddChecklistCard.vue";
 
 defineProps<{
   checklistDetailUrl: string;

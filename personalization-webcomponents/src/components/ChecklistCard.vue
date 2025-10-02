@@ -74,7 +74,8 @@ import { computed } from "vue";
 import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
 import MucChip from "@/components/common/MucChip.vue";
 import {
-  getChecklistIconBySituationId, getDateInGermanDateFormat,
+  getChecklistIconBySituationId,
+  getDateInGermanDateFormat,
   QUERY_PARAM_CHECKLIST_ID,
 } from "@/util/Constants.ts";
 
@@ -130,6 +131,6 @@ function gotoChecklist(checklistId: string) {
   display: flex;
   flex-wrap: wrap;
   column-gap: 8px;
-  row-gap: 8px
+  row-gap: 8px;
 }
 </style>

@@ -67,9 +67,16 @@ export function getXSRFToken() {
 
 export function getDateInGermanDateFormat(date: Date | undefined) {
   if (date) {
-    return date.toLocaleString("de-DE", {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'}) + " Uhr";
+    return (
+      date.toLocaleString("de-DE", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }) + " Uhr"
+    );
   } else {
     return "-";
   }
 }
-
