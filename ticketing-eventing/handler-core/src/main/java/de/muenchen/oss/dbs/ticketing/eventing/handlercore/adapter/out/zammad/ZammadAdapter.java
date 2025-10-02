@@ -3,11 +3,13 @@ package de.muenchen.oss.dbs.ticketing.eventing.handlercore.adapter.out.zammad;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.AttachmentsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
-import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTO;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import java.io.InputStream;
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.AbstractResource;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,11 +33,12 @@ public class ZammadAdapter implements TicketingOutPort {
     }
 
     @Override
-    public TicketInternal updateTicket(final UpdateTicketDTO updateTicketDTO) {
+    public TicketInternal updateTicket(final UpdateTicketDTOV2 updateTicketDTO, final Collection<AbstractResource> attachments) {
         assert updateTicketDTO != null && updateTicketDTO.getId() != null;
-        //TODO use v2 here --> article has to come out as mandatory-param for that
         try {
-            final ResponseEntity<TicketInternal> response = ticketsApi.updateTicket1WithHttpInfo(updateTicketDTO.getId(), updateTicketDTO, null, null).block();
+            final ResponseEntity<TicketInternal> response = ticketsApi
+                    .updateTicketWithHttpInfo(updateTicketDTO.getId(), updateTicketDTO, null, null, attachments).block();
+            log.info("Updated ticket {}", updateTicketDTO.getId());
             return response != null ? response.getBody() : null;
         } catch (WebClientResponseException e) {
             log.error(e.getResponseBodyAsString());
