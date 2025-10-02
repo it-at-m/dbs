@@ -41,23 +41,23 @@ defineSlots<{
 <style scoped>
 .no-link-style {
   text-decoration: none !important;
-  color: var(--color-neutrals-grey) !important;
+  color: var(--mde-color-neutral-grey) !important;
 }
 
 .add-card {
   cursor: pointer;
-  border: solid 1px var(--color-neutrals-blue);
-  border-bottom: solid 5px var(--color-brand-main-blue);
+  border: solid 1px var(--mde-color-neutral-beau-blue);
+  border-bottom: solid 5px var(--mde-color-brand-mde-blue);
   transition: background-color ease-in 150ms;
-  background-color: var(--color-neutrals-blue-xlight);
+  background-color: var(--mde-color-neutral-beau-blue-x-light);
 }
 
 .add-card:hover {
-  background-color: #e5eef5;
+  background-color: var(--mde-color-neutral-beau-blue-light);
 }
 
 .add-card:hover .add-card-muc-button {
-  background-color: #004376;
+  background-color: var(--mde-color-brand-mde-blue-dark);
 }
 
 .add-card-content {

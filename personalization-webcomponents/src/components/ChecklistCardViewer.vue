@@ -147,7 +147,7 @@ defineProps<{
 }
 
 .card:hover {
-  background-color: var(--color-neutrals-blue-xlight) !important;
+  background-color: var(--mde-color-neutral-beau-blue-x-light) !important;
 }
 
 .checklist-card-container {

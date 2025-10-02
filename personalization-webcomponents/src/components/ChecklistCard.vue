@@ -10,16 +10,15 @@
           width="56px"
           height="56px"
           :src="getChecklistIconBySituationId(checklist.situationId)"
-          alt="checklist-icon"
+          alt=""
         />
       </div>
     </template>
     <template #content>
-      <div>
+      <div class="chip-group">
         <muc-chip
           v-if="todoCount"
-          style="margin-right: 8px"
-          background-color="#FDD1AC"
+          background-color="var(--mde-color-status-warning-light)"
         >
           {{ todoCount }} offen
           <svg
@@ -32,7 +31,7 @@
         </muc-chip>
         <muc-chip
           v-if="doneCount"
-          background-color="#B7D2B7"
+          background-color="var(--mde-color-status-success-light)"
         >
           {{ doneCount }} erledigt
           <svg
@@ -60,7 +59,7 @@
 
       <div v-if="checklist.lastUpdate">
         <b>Letzte Änderung:</b>
-        {{ new Date(checklist.lastUpdate).toLocaleDateString() }}
+        {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
       </div>
     </template>
   </muc-card>
@@ -76,6 +75,7 @@ import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
 import MucChip from "@/components/common/MucChip.vue";
 import {
   getChecklistIconBySituationId,
+  getDateInGermanDateFormat,
   QUERY_PARAM_CHECKLIST_ID,
 } from "@/util/Constants.ts";
 
@@ -125,5 +125,12 @@ function gotoChecklist(checklistId: string) {
 
 .pb-8 {
   padding-bottom: 8px;
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 8px;
 }
 </style>

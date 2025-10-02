@@ -414,12 +414,12 @@ async function copyUrl() {
 .snServiceElement {
   cursor: pointer;
   padding: 16px 0;
-  border-top: 1px solid var(--color-neutrals-blue-xlight);
+  border-top: 1px solid var(--mde-color-neutral-beau-blue-x-light);
 }
 
 .snServiceElement span {
   font-size: 18px;
-  color: var(--color-brand-main-blue);
+  color: var(--mde-color-brand-mde-blue);
   font-weight: 700;
   line-height: 150%;
 }
@@ -430,6 +430,6 @@ async function copyUrl() {
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
-  color: var(--color-neutrals-grey-light, #617586);
+  color: var(--mde-color-neutral-grey-light);
 }
 </style>

@@ -191,21 +191,21 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 
 <style scoped>
 .drag-ghost {
-  background-color: #e1f0fc !important;
-  box-shadow: 0 2px 8px #007acc30;
+  background-color: var(--mde-color-neutral-beau-blue) !important;
+  box-shadow: 0 2px 8px var(--mde-color-neutral-grey);
 }
 
 .keyboard-dragging {
-  outline: 2px solid var(--color-brand-main-blue);
-  background-color: #d0e7ff;
+  outline: 2px solid var(--mde-color-brand-mde-blue);
+  background-color: var(--mde-color-neutral-beau-blue);
 }
 
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
-  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
+  border-top: 1px solid var(--mde-color-neutral-beau-blue-light);
+  border-bottom: 1px solid var(--mde-color-neutral-beau-blue-light);
 }
 
 .container {
@@ -217,10 +217,10 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 .list-item {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--color-neutrals-beau-blue-light, #e5eef5);
+  border-bottom: 1px solid var(--mde-color-neutral-beau-blue-light);
   user-select: none;
   cursor: grab;
-  color: var(--color-brand-main-blue);
+  color: var(--mde-color-brand-mde-blue);
 }
 
 .list-item:last-child {
@@ -229,12 +229,12 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 
 /* text grayed out when selected */
 .muted {
-  color: #7a8d9f !important;
+  color: var(--mde-color-neutral-grey-x-light) !important;
 }
 
 .label-text {
   cursor: pointer;
-  color: var(--color-brand-main-blue);
+  color: var(--mde-color-brand-mde-blue);
   /* Body/Body 1 Bold */
   font-family: "Open Sans", sans-serif;
   font-size: 18px;
@@ -262,14 +262,14 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   user-select: none;
   font-size: 24px;
   margin-left: auto;
-  color: #617586;
+  color: var(--mde-color-neutral-grey-light);
   display: flex;
   align-items: center;
 }
 
 .drag-handle:active {
   cursor: grabbing;
-  color: var(--color-brand-main-blue);
+  color: var(--mde-color-brand-mde-blue);
 }
 
 /* Modal Styles */
@@ -297,7 +297,7 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 }
 
 .required-label {
-  color: var(--neutrals-grey, #3a5368);
+  color: var(--mde-color-neutral-grey);
   /* Body/Body 2 */
   font-family: "Open Sans", sans-serif;
   font-size: 16px;

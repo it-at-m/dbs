@@ -16,12 +16,12 @@ defineProps<{
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid var(--color-neutrals-grey);
+  border: 2px solid var(--mde-color-neutral-grey);
   flex-shrink: 0;
 }
 
 .circle.checked {
-  background-color: #9ca8b3;
-  border: 2px solid #9ca8b3;
+  background-color: var(--mde-color-neutral-grey-x-light);
+  border: 2px solid var(--mde-color-neutral-grey-x-light);
 }
 </style>
