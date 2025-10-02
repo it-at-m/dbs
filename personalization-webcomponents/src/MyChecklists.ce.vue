@@ -113,8 +113,20 @@ function loadChecklists() {
 </style>
 
 <style scoped>
+main {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
 .checklist-card-container {
   grid-template-columns: repeat(auto-fit, 100%);
+}
+
+@media (min-width: 576px) {
+  main {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
 }
 
 @media (min-width: 768px) {
