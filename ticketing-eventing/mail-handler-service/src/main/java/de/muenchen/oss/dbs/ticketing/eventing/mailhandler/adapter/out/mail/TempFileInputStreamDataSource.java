@@ -26,7 +26,7 @@ public class TempFileInputStreamDataSource implements DataSource {
     public TempFileInputStreamDataSource(final String name, final String contentType, final InputStream inputStream) throws IOException {
         this.name = name;
         this.contentType = contentType;
-        final File tmpFile = File.createTempFile("attachment", null);
+        final File tmpFile = Files.createTempFile("attachment", null).toFile();
         Files.copy(inputStream, tmpFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         this.tempFile = tmpFile;
         log.debug("Stored attachment {} in temp file {}", name, tmpFile.getName());
