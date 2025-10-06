@@ -60,7 +60,7 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
   font-weight: bold;
   font-size: 16px;
   line-height: 23px;
-  color: #002877;
+  color: var(--mde-color-brand-mde-blue-x-dark);
   height: 40px;
 }
 
@@ -74,7 +74,7 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
   .skeleton-description-text {
   font-size: 13px;
   line-height: 18px;
-  color: #666666;
+  color: var(--mde-color-neutral-grey-light);
 }
 
 .skeleton-loader:empty {

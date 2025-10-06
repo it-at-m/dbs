@@ -41,7 +41,7 @@
       <template #body>
         <p>
           Ich stimme der Speicherung der Checkliste
-          <b>„{{ lebenslageTitle }}”</b> in meinem Bereich gemäß der
+          <strong>„{{ lebenslageTitle }}”</strong> in meinem Bereich gemäß der
           <a href="https://stadt.muenchen.de/infos/datenschutz.html"
             >Datenschutzerklärung</a
           >
@@ -80,7 +80,6 @@
     <muc-intro
       :title="lebenslageTitle"
       :divider="false"
-      style="margin-bottom: 56px"
     >
       <div v-if="!localStorageError">
         <p>
@@ -411,15 +410,19 @@ async function copyUrl() {
 </style>
 
 <style scoped>
+.m-intro {
+  margin-bottom: 40px;
+}
+
 .snServiceElement {
   cursor: pointer;
   padding: 16px 0;
-  border-top: 1px solid var(--color-neutrals-blue-xlight);
+  border-top: 1px solid var(--mde-color-neutral-beau-blue-x-light);
 }
 
 .snServiceElement span {
   font-size: 18px;
-  color: var(--color-brand-main-blue);
+  color: var(--mde-color-brand-mde-blue);
   font-weight: 700;
   line-height: 150%;
 }
@@ -430,6 +433,6 @@ async function copyUrl() {
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
-  color: var(--color-neutrals-grey-light, #617586);
+  color: var(--mde-color-neutral-grey-light);
 }
 </style>

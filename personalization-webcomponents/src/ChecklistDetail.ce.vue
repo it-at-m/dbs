@@ -5,10 +5,10 @@
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
 
-    <div v-if="loading">
+    <main v-if="loading">
       <skeleton-loader />
-    </div>
-    <div v-else>
+    </main>
+    <main v-else>
       <checklist-header
         v-if="checklist"
         :checklist="checklist"
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -273,6 +273,7 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+@import "../public/checklist-styles.css";
 
 .banner .m-banner .container-fluid {
   margin-left: -60px !important; /* oder eine kleinere Zahl nach Wunsch */
@@ -285,5 +286,15 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
 
 .headline {
   padding-bottom: 32px;
+}
+
+main {
+  padding: 40px 0;
+}
+
+@media (min-width: 576px) {
+  main {
+    padding: 56px 0;
+  }
 }
 </style>
