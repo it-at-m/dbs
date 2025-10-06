@@ -288,7 +288,6 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
   padding-bottom: 32px;
 }
 
-
 main {
   padding: 40px 0;
 }
