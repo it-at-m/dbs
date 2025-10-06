@@ -110,12 +110,12 @@ function loadChecklists() {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+@import "../public/checklist-styles.css";
 </style>
 
 <style scoped>
 main {
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding: 40px 0;
 }
 
 .checklist-card-container {
@@ -124,8 +124,7 @@ main {
 
 @media (min-width: 576px) {
   main {
-    padding-top: 56px;
-    padding-bottom: 56px;
+    padding: 56px 0;
   }
 }
 
