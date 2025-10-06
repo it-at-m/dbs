@@ -40,7 +40,7 @@ public class MailAdapter implements SendMailOutPort {
             }
             mailSender.send(mimeMessage);
             // cleanup tmp files
-            for (File tmpFile : tmpFiles) {
+            for (final File tmpFile : tmpFiles) {
                 if (!tmpFile.delete()) {
                     log.warn("Temp file {} couldn't be deleted", tmpFile);
                 }
