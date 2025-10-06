@@ -65,14 +65,13 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             resetTicket(ticket);
 
             log.info("Event handled successfully");
-        } catch (NoValidArticleException e) {
-            log.error(e.getMessage());
-            log.error("Event NOT handled successfully");
+        } catch (final NoValidArticleException e) {
+            log.error("Exception during event handling: {}", e.getMessage());
         }
     }
 
     private boolean isRelevantEvent(final Event event) {
-        log.debug("checking event: " + event);
+        log.debug("checking event: {}", event);
         return
         // state was changed by trigger send-to-postbox
         mailHandlerProperties.getTicketChangeAction().equals(event.action()) &&
@@ -83,7 +82,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private boolean isRelevantTicket(final TicketInternal ticket) {
-        log.debug("Checking value of sende_nachricht_nach_extern: " + ticket.getSendeNachrichtNachExtern());
+        log.debug("Checking value of sende_nachricht_nach_extern: {}", ticket.getSendeNachrichtNachExtern());
         return TO_POSTBOX_DEFAULT.equals(ticket.getSendeNachrichtNachExtern()) || TO_POSTBOX_HIGH.equals(ticket.getSendeNachrichtNachExtern());
     }
 
@@ -100,9 +99,9 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private void sendMail(final TicketInternal ticket, final Map<String, Object> form, final ArticleInternal article) {
         final String recipient = mailHandlerProperties.getRecipient();
         final String subject = buildSubject(ticket, form);
-        log.debug("Created subject: " + subject);
+        log.debug("Created subject: {}", subject);
         final String body = buildBody(article);
-        log.debug("Created body: " + body);
+        log.debug("Created body: {}", body);
         final List<MailMessage.Attachment> attachments = buildAttachments(article);
         sendMailOutport.sendMail(new MailMessage(recipient, subject, body, attachments));
     }
