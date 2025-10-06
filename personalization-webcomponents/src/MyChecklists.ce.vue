@@ -115,8 +115,7 @@ function loadChecklists() {
 
 <style scoped>
 main {
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding: 40px 0;
 }
 
 .checklist-card-container {
@@ -125,8 +124,7 @@ main {
 
 @media (min-width: 576px) {
   main {
-    padding-top: 56px;
-    padding-bottom: 56px;
+    padding: 56px 0;
   }
 }
 

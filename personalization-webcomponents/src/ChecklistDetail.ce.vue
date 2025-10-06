@@ -5,10 +5,10 @@
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
 
-    <div v-if="loading">
+    <main v-if="loading">
       <skeleton-loader />
-    </div>
-    <div v-else>
+    </main>
+    <main v-else>
       <checklist-header
         v-if="checklist"
         :checklist="checklist"
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -286,5 +286,16 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
 
 .headline {
   padding-bottom: 32px;
+}
+
+
+main {
+  padding: 40px 0;
+}
+
+@media (min-width: 576px) {
+  main {
+    padding: 56px 0;
+  }
 }
 </style>
