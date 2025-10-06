@@ -1,22 +1,21 @@
 package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.application.usecase;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleAttachment;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.in.EventHandlerInPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.domain.model.Event;
-import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.adapter.out.mail.MailMessage;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.application.port.out.SendMailOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.config.MailHandlerProperties;
-import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.exceptions.NoValidArticleException;
+import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.exception.NoValidArticleException;
+import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.mapper.ZammadMapper;
+import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.model.MailMessage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,6 +34,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     public static final String TO_POSTBOX_HIGH = "send_high_authLevel";
 
     private final XmlMapper xmlMapper = new XmlMapper();
+    private final ZammadMapper zammadMapper;
     private final MailHandlerProperties mailHandlerProperties;
     private final TicketingOutPort ticketingOutPort;
     private final SendMailOutPort sendMailOutport;
@@ -103,7 +103,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         log.debug("Created subject: " + subject);
         final String body = buildBody(article);
         log.debug("Created body: " + body);
-        final Map<String, InputStream> attachments = buildAttachments(article);
+        final List<MailMessage.Attachment> attachments = buildAttachments(article);
         sendMailOutport.sendMail(new MailMessage(recipient, subject, body, attachments));
     }
 
@@ -129,12 +129,15 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         return article.getBody();
     }
 
-    private Map<String, InputStream> buildAttachments(final ArticleInternal article) {
+    private List<MailMessage.Attachment> buildAttachments(final ArticleInternal article) {
         if (article.getAttachments() == null) {
-            return new HashMap<>();
+            return List.of();
         }
-        return article.getAttachments().stream().collect(Collectors.toMap(ArticleAttachment::getFilename,
-                a -> ticketingOutPort.getAttachmentContent(article.getTicketId(), article.getId(), a.getId())));
+        return article.getAttachments().stream()
+                .map(attachment -> {
+                    final InputStream content = ticketingOutPort.getAttachmentContent(article.getTicketId(), article.getId(), attachment.getId());
+                    return zammadMapper.toMailAttachment(attachment, content);
+                }).toList();
     }
 
     private Map<String, Object> getParsedForm(final TicketInternal ticket) {
