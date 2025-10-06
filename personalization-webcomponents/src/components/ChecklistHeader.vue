@@ -57,7 +57,10 @@ import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
 
 import MucChip from "@/components/common/MucChip.vue";
-import {getChecklistIconBySituationId, getDateInGermanDateFormat} from "@/util/Constants.ts";
+import {
+  getChecklistIconBySituationId,
+  getDateInGermanDateFormat,
+} from "@/util/Constants.ts";
 
 const props = defineProps<{
   checklist: ChecklistServiceNavigator;
