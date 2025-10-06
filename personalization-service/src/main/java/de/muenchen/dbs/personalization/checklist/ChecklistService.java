@@ -3,6 +3,7 @@ package de.muenchen.dbs.personalization.checklist;
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
@@ -87,11 +88,21 @@ public class ChecklistService {
 
         isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
-        foundChecklist.getChecklistItems().forEach(checklistItem -> {
+        List<ChecklistItem> checklistItems = foundChecklist.getChecklistItems();
+        ChecklistItem updatedChecklistItem = null;
+
+        for (ChecklistItem checklistItem : checklistItems) {
             if (checklistItem.getServiceID().equals(sanitizedServiceId)) {
                 checklistItem.setChecked(newCheckedValue);
+                updatedChecklistItem = checklistItem;
+                checklistItems.remove(checklistItem);
+                break;
             }
-        });
+        }
+        if (updatedChecklistItem != null) {
+            checklistItems.addFirst(updatedChecklistItem);
+        }
+
         foundChecklist.setLastUpdate(ZonedDateTime.now());
 
         log.debug("Update Checklist {}", foundChecklist);
