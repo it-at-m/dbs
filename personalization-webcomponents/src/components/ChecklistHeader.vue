@@ -10,7 +10,7 @@
       style="padding-bottom: 16px; padding-left: 3px"
     >
       <b>Erstellungsdatum: </b>
-      {{ new Date(checklist.lastUpdate).toLocaleString().split(",")[0] }}
+      {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
     </div>
     <table>
       <tr>
@@ -57,7 +57,7 @@ import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
 
 import MucChip from "@/components/common/MucChip.vue";
-import { getChecklistIconBySituationId } from "@/util/Constants.ts";
+import {getChecklistIconBySituationId, getDateInGermanDateFormat} from "@/util/Constants.ts";
 
 const props = defineProps<{
   checklist: ChecklistServiceNavigator;
