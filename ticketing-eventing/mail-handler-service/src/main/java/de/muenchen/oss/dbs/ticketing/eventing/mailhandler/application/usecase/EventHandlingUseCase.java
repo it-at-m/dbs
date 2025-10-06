@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleAttachment;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
-import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTO;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.in.EventHandlerInPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.domain.model.Event;
@@ -164,10 +164,10 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private void resetTicket(final TicketInternal ticket) {
-        final UpdateTicketDTO updateTicketDTO = new UpdateTicketDTO();
+        final UpdateTicketDTOV2 updateTicketDTO = new UpdateTicketDTOV2();
         updateTicketDTO.setId(ticket.getId());
         updateTicketDTO.setDirektkennwort(ticket.getDirektkennwort());
         updateTicketDTO.setSendeNachrichtNachExtern(null);
-        ticketingOutPort.updateTicket(updateTicketDTO);
+        ticketingOutPort.updateTicket(updateTicketDTO, null);
     }
 }
