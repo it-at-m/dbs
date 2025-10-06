@@ -19,7 +19,7 @@
           <div class="chips-container">
             <muc-chip
               v-if="todoCount"
-              background-color="var(--mde-color-status-warning-light)"
+              background-color="var(--checklist-color-status-open)"
             >
               {{ todoCount }} offen
               <svg
@@ -32,7 +32,7 @@
             </muc-chip>
             <muc-chip
               v-if="doneCount"
-              background-color="var(--mde-color-status-success-light)"
+              background-color="var(--checklist-color-status-closed)"
             >
               {{ doneCount }} erledigt
               <svg

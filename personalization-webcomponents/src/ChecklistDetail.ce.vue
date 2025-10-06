@@ -273,6 +273,7 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+@import "../public/checklist-styles.css";
 
 .banner .m-banner .container-fluid {
   margin-left: -60px !important; /* oder eine kleinere Zahl nach Wunsch */

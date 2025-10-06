@@ -1,0 +1,4 @@
+:host, :root {
+    --checklist-color-status-open: var(--mde-color-status-warning-light);
+    --checklist-color-status-closed: #B7D2B7;
+}
