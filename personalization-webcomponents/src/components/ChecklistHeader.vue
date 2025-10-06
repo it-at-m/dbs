@@ -118,6 +118,7 @@ const doneCount = computed(() => {
   font-weight: bold;
   vertical-align: baseline;
   padding-right: 8px;
+  padding-top: 5px;
   white-space: nowrap;
 }
 
@@ -130,7 +131,6 @@ const doneCount = computed(() => {
 @media (max-width: 450px) {
   .chips-container {
     flex-wrap: wrap;
-    flex-direction: column;
     gap: 8px;
   }
 }
