@@ -80,7 +80,6 @@
     <muc-intro
       :title="lebenslageTitle"
       :divider="false"
-      style="margin-bottom: 56px"
     >
       <div v-if="!localStorageError">
         <p>
@@ -411,6 +410,10 @@ async function copyUrl() {
 </style>
 
 <style scoped>
+.m-intro {
+  margin-bottom: 40px;
+}
+
 .snServiceElement {
   cursor: pointer;
   padding: 16px 0;
