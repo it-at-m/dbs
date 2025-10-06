@@ -9,7 +9,7 @@
       v-if="checklist.lastUpdate"
       style="padding-bottom: 16px; padding-left: 3px"
     >
-      <b>Erstellungsdatum: </b>
+      <strong>Erstellungsdatum: </strong>
       {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
     </div>
     <table>
