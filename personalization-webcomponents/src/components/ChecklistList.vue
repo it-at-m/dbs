@@ -50,7 +50,7 @@
               (evt) => (evt.keyCode == 32 ? openDialog(element, evt) : null)
             "
           >
-            <b>{{ element.title }}</b>
+            <strong>{{ element.title }}</strong>
             <span
               class="required-label"
               v-if="element.required"

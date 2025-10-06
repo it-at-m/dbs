@@ -58,7 +58,7 @@
       </div>
 
       <div v-if="checklist.lastUpdate">
-        <b>Letzte Änderung:</b>
+        <strong>Letzte Änderung:</strong>
         {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
       </div>
     </template>
