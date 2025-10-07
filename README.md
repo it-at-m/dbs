@@ -56,10 +56,6 @@ The project is built with technologies we use in our projects ([reference archit
 1. Install dependencies with `npm i`
 2. Run local dev server with `npm run dev`
 
-## Architecture
-
-![system overview Digitaler Bürgerservice DBS](docs/assets/systemueberblick_dbs.drawio.png)
-
 
 ## License
 

@@ -9,4 +9,10 @@ It currently consists of these modules:
 - DBS-Login
 - Terminvereinbarung (<https://github.com/it-at-m/eappointment>)
 
-🚧 TODO
+## Architecture
+
+![system overview Digitaler Bürgerservice DBS](docs/assets/systemueberblick_dbs.drawio.png)
+
+
+
+
