@@ -1,4 +1,4 @@
-package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.exceptions;
+package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.exception;
 
 import java.io.Serial;
 
