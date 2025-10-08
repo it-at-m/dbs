@@ -11,4 +11,4 @@ It currently consists of these modules:
 
 ## Architecture
 
-![system overview Digitaler Bürgerservice DBS](docs/assets/systemueberblick_dbs.drawio.png)
+![system overview Digitaler Bürgerservice DBS](./assets/systemueberblick_dbs.drawio.png)
