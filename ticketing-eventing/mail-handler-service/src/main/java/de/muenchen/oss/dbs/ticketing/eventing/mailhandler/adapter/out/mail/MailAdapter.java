@@ -25,13 +25,13 @@ public class MailAdapter implements SendMailOutPort {
     public void sendMail(final MailMessage mailMessage) {
         log.debug("Sending mail {}", mailMessage);
         final MimeMessage mimeMessage = mailSender.createMimeMessage();
+        final List<File> tmpFiles = new ArrayList<>();
         try {
             final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED);
             helper.setFrom(mailProperties.getFromAddress());
             helper.setTo(mailMessage.recipient());
             helper.setSubject(mailMessage.subject());
             helper.setText(mailMessage.body(), true);
-            final List<File> tmpFiles = new ArrayList<>();
             for (final MailMessage.Attachment attachment : mailMessage.attachments()) {
                 final TempFileInputStreamDataSource dataSource = new TempFileInputStreamDataSource(attachment.filename(), attachment.mimeType(),
                         attachment.content());
@@ -39,15 +39,16 @@ public class MailAdapter implements SendMailOutPort {
                 tmpFiles.add(dataSource.getTempFile());
             }
             mailSender.send(mimeMessage);
+            log.info("Sent mail '{}' to {}", mailMessage.subject(), mailMessage.subject());
+        } catch (final MessagingException | IOException e) {
+            throw new RuntimeException(e);
+        } finally {
             // cleanup tmp files
             for (final File tmpFile : tmpFiles) {
                 if (!tmpFile.delete()) {
                     log.warn("Temp file {} couldn't be deleted", tmpFile);
                 }
             }
-            log.info("Sent mail '{}' to {}", mailMessage.subject(), mailMessage.subject());
-        } catch (final MessagingException | IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }
