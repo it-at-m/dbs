@@ -127,9 +127,7 @@
               passen Sie bitte Ihre Browser-Einstellungen an und starten Sie
               dann die Abfrage erneut.
             </p>
-            <a
-              :href="newChecklistUrl"
-            >
+            <a :href="newChecklistUrl">
               <muc-button
                 icon="arrow-right"
                 iconAnimated

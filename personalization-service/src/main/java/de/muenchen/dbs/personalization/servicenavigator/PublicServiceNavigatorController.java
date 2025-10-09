@@ -4,14 +4,12 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavi
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -59,19 +57,18 @@ public class PublicServiceNavigatorController {
     @ResponseStatus(HttpStatus.OK)
     public List<ChecklistItemServiceNavigatorDTO> getServicesByIds(@RequestParam("ids") final String serviceIds) {
         return Arrays.stream(serviceIds.split(SERVICE_IDS_SEPARATOR)).map(serviceID -> {
-                    Optional<ServiceNavigatorResponse> response = snService.getServiceNavigatorService(serviceID);
-                    return response.orElseGet(() -> new ServiceNavigatorResponse(
-                            "Dienstleistung " + serviceID,
-                            null,
-                            "Dieser Dienst wurde im Dienstleistungsfinder nicht gefunden. Entweder er wurde gelöscht, oder der Dienstleistungsfinder hatte einen unerwarteten Fehler. Es wird zu einem späteren Zeitpunkt erneut versucht diese Dienstleitung zu finden.",
-                            serviceID,
-                            false,
-                            false,
-                            null,
-                            false,
-                            null
-                    ));
-                })
+            final Optional<ServiceNavigatorResponse> response = snService.getServiceNavigatorService(serviceID);
+            return response.orElseGet(() -> new ServiceNavigatorResponse(
+                    "Dienstleistung " + serviceID,
+                    null,
+                    "Dieser Dienst wurde im Dienstleistungsfinder nicht gefunden. Entweder er wurde gelöscht, oder der Dienstleistungsfinder hatte einen unerwarteten Fehler. Es wird zu einem späteren Zeitpunkt erneut versucht diese Dienstleitung zu finden.",
+                    serviceID,
+                    false,
+                    false,
+                    null,
+                    false,
+                    null));
+        })
                 .map(snService::toDto)
                 .collect(Collectors.toList());
     }

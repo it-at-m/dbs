@@ -1,10 +1,12 @@
 package de.muenchen.dbs.personalization.servicenavigator;
 
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.checklist.domain.OnlineServiceDTO;
 import de.muenchen.dbs.personalization.configuration.CacheConfiguration;
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,10 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.util.Optional;
-
 @Service
 @Slf4j
 public class ServiceNavigatorService {
@@ -28,7 +26,7 @@ public class ServiceNavigatorService {
     private final RestTemplate restTemplate;
     private final P13nConfiguration p13nConfiguration;
 
-    public ServiceNavigatorService(final P13nConfiguration p13nConfiguration, final ChecklistMapper checklistMapper) {
+    public ServiceNavigatorService(final P13nConfiguration p13nConfiguration) {
         this.p13nConfiguration = p13nConfiguration;
         if (StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
             this.restTemplate = new RestTemplate();
@@ -41,7 +39,7 @@ public class ServiceNavigatorService {
     }
 
     @Cacheable(CacheConfiguration.SERVICE_NAVIGATOR_SERVICES_CACHE_NAME)
-    public Optional<ServiceNavigatorResponse> getServiceNavigatorService(String serviceId) {
+    public Optional<ServiceNavigatorResponse> getServiceNavigatorService(final String serviceId) {
         final String url = p13nConfiguration.getServiceNavigatorUrl() + SERVICENAVIGATOR_QUERY_PARAMETER_ID + serviceId;
 
         try {
@@ -56,7 +54,7 @@ public class ServiceNavigatorService {
 
             }
         } catch (HttpStatusCodeException e) {
-            log.error("HTTP Error {} when trying to fetch Service with Service-ID {}: {}", e.getStatusCode(), serviceId,  e.getMessage());
+            log.error("HTTP Error {} when trying to fetch Service with Service-ID {}: {}", e.getStatusCode(), serviceId, e.getMessage());
             return Optional.empty();
         } catch (Exception e) {
             log.error("Network Error when trying to fetch Service with Service-ID {}", serviceId, e);

@@ -102,12 +102,12 @@ public class ChecklistService {
     }
 
     private ChecklistServiceNavigatorReadDTO populateWithServiceNavigator(final Checklist checklist) {
-        List<ChecklistItemServiceNavigatorDTO> checklistItemDtos = checklist.getChecklistItems().stream()
+        final List<ChecklistItemServiceNavigatorDTO> checklistItemDtos = checklist.getChecklistItems().stream()
                 .map(checklistItem -> {
-                    Optional<ServiceNavigatorResponse> snResponse = serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID());
+                    final Optional<ServiceNavigatorResponse> snResponse = serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID());
 
-                    ChecklistItemServiceNavigatorDTO newDto;
-                    if(snResponse.isPresent()) {
+                    final ChecklistItemServiceNavigatorDTO newDto;
+                    if (snResponse.isPresent()) {
                         newDto = serviceNavigatorService.toDto(snResponse.get());
                     } else {
                         newDto = new ChecklistItemServiceNavigatorDTO();
