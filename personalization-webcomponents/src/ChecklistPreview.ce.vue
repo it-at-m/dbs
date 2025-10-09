@@ -127,12 +127,16 @@
               passen Sie bitte Ihre Browser-Einstellungen an und starten Sie
               dann die Abfrage erneut.
             </p>
-            <muc-button
-              icon="arrow-right"
-              iconAnimated
+            <a
+              :href="newChecklistUrl"
             >
-              Abfrage neu starten
-            </muc-button>
+              <muc-button
+                icon="arrow-right"
+                iconAnimated
+              >
+                Abfrage neu starten
+              </muc-button>
+            </a>
           </div>
 
           <div v-else-if="!localStorageError && !loadingError && snServices">
@@ -221,6 +225,7 @@ const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
 const props = defineProps<{
   checklistDetailUrl: string;
+  newChecklistUrl: string;
 }>();
 
 onMounted(() => {
