@@ -2,12 +2,13 @@ package de.muenchen.dbs.personalization.checklist;
 
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
-import de.muenchen.dbs.personalization.checklist.domain.Checklist;
-import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
+import de.muenchen.dbs.personalization.checklist.domain.*;
 import de.muenchen.dbs.personalization.common.NotFoundException;
+import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorResponse;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class ChecklistService {
     private static final String JWT_CLAIM_LHM_EXT_ID = "lhmExtID";
     private final ChecklistRepository checklistRepository;
     private final ServiceNavigatorService serviceNavigatorService;
+    private final ChecklistMapper checklistMapper;
 
     public Checklist createChecklist(final Checklist checklist) {
         final String lhmExtId = getLhmExtIdFromAuthenticationOrThrow();
@@ -50,7 +52,7 @@ public class ChecklistService {
 
         isChecklistOwnerOrThrow(checklistOrThrowException, lhmExtId);
 
-        return serviceNavigatorService.getChecklistServiceNavigatorReadDTO(checklistOrThrowException);
+        return populateWithServiceNavigator(checklistOrThrowException);
     }
 
     public ChecklistServiceNavigatorReadDTO updateChecklist(final Checklist checklist, final UUID checklistId) {
@@ -66,7 +68,7 @@ public class ChecklistService {
 
         final Checklist savedChecklist = checklistRepository.save(foundChecklist);
 
-        return serviceNavigatorService.getChecklistServiceNavigatorReadDTO(savedChecklist);
+        return populateWithServiceNavigator(savedChecklist);
     }
 
     public void deleteChecklist(final UUID checklistId) {
@@ -96,7 +98,33 @@ public class ChecklistService {
 
         log.debug("Update Checklist {}", foundChecklist);
 
-        return serviceNavigatorService.getChecklistServiceNavigatorReadDTO(checklistRepository.save(foundChecklist));
+        return populateWithServiceNavigator(checklistRepository.save(foundChecklist));
+    }
+
+    private ChecklistServiceNavigatorReadDTO populateWithServiceNavigator(final Checklist checklist) {
+        List<ChecklistItemServiceNavigatorDTO> checklistItemDtos = checklist.getChecklistItems().stream()
+                .map(checklistItem -> {
+                    Optional<ServiceNavigatorResponse> snResponse = serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID());
+
+                    ChecklistItemServiceNavigatorDTO newDto;
+                    if(snResponse.isPresent()) {
+                        newDto = serviceNavigatorService.toDto(snResponse.get());
+                    } else {
+                        newDto = new ChecklistItemServiceNavigatorDTO();
+                        newDto.setServiceID(checklistItem.getServiceID());
+                        newDto.setTitle(checklistItem.getTitle());
+                        newDto.setNote(checklistItem.getNote());
+                        newDto.setRequired(checklistItem.getRequired());
+                    }
+                    newDto.setChecked(checklistItem.getChecked());
+
+                    return newDto;
+                })
+                .toList();
+
+        final ChecklistServiceNavigatorReadDTO checklistServiceNavigatorReadDTO = checklistMapper.toServiceNavigatorReadDTO(checklist);
+        checklistServiceNavigatorReadDTO.setChecklistItemServiceNavigatorDtos(checklistItemDtos);
+        return checklistServiceNavigatorReadDTO;
     }
 
     private Checklist getChecklistOrThrowException(final UUID checklistId) {
