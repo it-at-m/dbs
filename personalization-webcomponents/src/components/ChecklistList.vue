@@ -3,6 +3,7 @@
     class="container"
     tabindex="0"
     role="list"
+    @keydown="handleEnterKeyDown"
   >
     <sortable
       :list="checklistItems"
@@ -25,7 +26,6 @@
           tabindex="0"
           @focus="focusedIndex = index"
           :key="element.serviceID"
-          @keydown="handleEnterKeyDown"
         >
           <p13n-checkbox
             :id="'cb-' + element.serviceID"
@@ -113,6 +113,7 @@ const emit = defineEmits(["checked", "label-click", "sort"]);
 
 const focusedIndex = ref<number | null>(null);
 const draggedIndex = ref<number | null>(null);
+const draggedServiceId = ref<string | undefined>(undefined);
 
 const sortableOptions = computed(() => ({
   animation: 200,
@@ -160,32 +161,46 @@ function handleEnterKeyDown(event: KeyboardEvent) {
   if (!props.isDraggable || focusedIndex.value === null) return;
 
   if (event.key === "Enter") {
-    draggedIndex.value =
-      draggedIndex.value === null ? focusedIndex.value : null;
+    if (draggedIndex.value === null) {
+      draggedIndex.value = focusedIndex.value;
+      draggedServiceId.value =
+        props.checklistItems[draggedIndex.value]?.serviceID;
+    } else {
+      draggedIndex.value = null;
+      draggedServiceId.value = undefined;
+    }
   }
 }
 
 function handleArrowKeyDown(event: KeyboardEvent) {
-  if (!props.isDraggable || focusedIndex.value === null) return;
+  if (!props.isDraggable || focusedIndex.value === null || props.disabled)
+    return;
   if (draggedIndex.value === null) return;
 
   const maxIndex = props.checklistItems.length - 1;
   const move = (direction: number) => {
-    if (draggedIndex.value) {
+    if (draggedIndex.value !== null) {
       const newIndex = draggedIndex.value + direction;
       if (newIndex < 0 || newIndex > maxIndex) return;
 
-      event.preventDefault();
+      const oldServiceID = props.checklistItems[draggedIndex.value]?.serviceID;
+      if (draggedServiceId.value == oldServiceID) {
+        emit("sort", { oldIndex: draggedIndex.value, newIndex });
 
-      emit("sort", { oldIndex: draggedIndex.value, newIndex });
-
-      draggedIndex.value = newIndex;
-      focusedIndex.value = newIndex;
+        draggedIndex.value = newIndex;
+        focusedIndex.value = newIndex;
+      }
     }
   };
 
-  if (event.key === "ArrowUp") move(-1);
-  if (event.key === "ArrowDown") move(1);
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    move(-1);
+  }
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    move(1);
+  }
 }
 </script>
 
