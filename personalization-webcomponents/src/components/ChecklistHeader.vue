@@ -9,8 +9,8 @@
       v-if="checklist.lastUpdate"
       style="padding-bottom: 16px; padding-left: 3px"
     >
-      <b>Erstellungsdatum: </b>
-      {{ new Date(checklist.lastUpdate).toLocaleString().split(",")[0] }}
+      <strong>Erstellungsdatum: </strong>
+      {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
     </div>
     <table>
       <tr>
@@ -19,7 +19,7 @@
           <div class="chips-container">
             <muc-chip
               v-if="todoCount"
-              background-color="#FDD1AC"
+              background-color="var(--checklist-color-status-open)"
             >
               {{ todoCount }} offen
               <svg
@@ -32,7 +32,7 @@
             </muc-chip>
             <muc-chip
               v-if="doneCount"
-              background-color="#B7D2B7"
+              background-color="var(--checklist-color-status-closed)"
             >
               {{ doneCount }} erledigt
               <svg
@@ -57,7 +57,10 @@ import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
 
 import MucChip from "@/components/common/MucChip.vue";
-import { getChecklistIconBySituationId } from "@/util/Constants.ts";
+import {
+  getChecklistIconBySituationId,
+  getDateInGermanDateFormat,
+} from "@/util/Constants.ts";
 
 const props = defineProps<{
   checklist: ChecklistServiceNavigator;
@@ -105,11 +108,6 @@ const doneCount = computed(() => {
 });
 </script>
 <style>
-.muc-divider {
-  margin-top: 0 !important;
-  margin-bottom: 32px !important;
-}
-
 .m-intro-vertical__title {
   margin-bottom: 8px !important;
 }
@@ -118,6 +116,7 @@ const doneCount = computed(() => {
   font-weight: bold;
   vertical-align: baseline;
   padding-right: 8px;
+  padding-top: 5px;
   white-space: nowrap;
 }
 
@@ -130,7 +129,6 @@ const doneCount = computed(() => {
 @media (max-width: 450px) {
   .chips-container {
     flex-wrap: wrap;
-    flex-direction: column;
     gap: 8px;
   }
 }

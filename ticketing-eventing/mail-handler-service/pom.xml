@@ -43,10 +43,7 @@
 
         <!-- Core Frameworks -->
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version> <!-- Must match the chosen Spring Boot version -->
-        <dbs-handler-core.version>0.2.0</dbs-handler-core.version>
-
-        <!-- Apache Libs -->
-        <tika.version>2.9.4</tika.version>
+        <dbs-handler-core.version>0.3.0</dbs-handler-core.version>
 
         <!-- Logging -->
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
@@ -60,7 +57,7 @@
         <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
 
         <!-- Testing -->
-        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <argLine /> <!-- Must be empty, definition needed for integration of Jacoco and Surefire via @{argLine} lazy property evaluation -->
 
         <!-- Release -->
@@ -122,14 +119,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
-
-        <!-- Apache Libs-->
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-core</artifactId>
-            <version>${tika.version}</version>
-        </dependency>
-
 
         <!-- DBS -->
         <dependency>
@@ -397,6 +386,7 @@
                 <configuration>
                     <effort>Max</effort>
                     <excludeFilterFile>spotbugs-exclude-rules.xml</excludeFilterFile>
+                    <spotbugsXmlOutputDirectory>${project.build.directory}/spotbugs-results</spotbugsXmlOutputDirectory> <!-- required to ensure only the artifact jar is on top level when building -->
                     <plugins>
                         <plugin>
                             <groupId>com.h3xstream.findsecbugs</groupId>

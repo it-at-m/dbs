@@ -35,6 +35,14 @@
         :checklist-detail-url="checklistDetailUrl"
       >
       </checklist-card>
+      <add-checklist-card
+        title="Neue Checkliste"
+        :new-checklist-url="newChecklistUrl"
+      >
+        <template #content>
+          <icon-add-checklist />
+        </template>
+      </add-checklist-card>
     </muc-card-container>
   </main>
 </template>
@@ -49,8 +57,10 @@ import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.
 import { ref } from "vue";
 
 import ChecklistService from "@/api/persservice/ChecklistService.ts";
+import AddChecklistCard from "@/components/AddChecklistCard.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
+import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { setAccessToken } from "@/util/Constants.ts";
 
@@ -100,11 +110,22 @@ function loadChecklists() {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+@import "../public/checklist-styles.css";
 </style>
 
 <style scoped>
+main {
+  padding: 40px 0;
+}
+
 .checklist-card-container {
   grid-template-columns: repeat(auto-fit, 100%);
+}
+
+@media (min-width: 576px) {
+  main {
+    padding: 56px 0;
+  }
 }
 
 @media (min-width: 768px) {

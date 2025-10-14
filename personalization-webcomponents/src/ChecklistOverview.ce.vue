@@ -162,6 +162,7 @@ onMounted(() => {
 @import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+@import "../public/checklist-styles.css";
 </style>
 
 <style scoped>
@@ -173,7 +174,7 @@ onMounted(() => {
 
 /* Background color on details page */
 .details-background {
-  background-color: var(--color-neutrals-blue-xlight);
+  background-color: var(--mde-color-neutral-beau-blue-x-light);
   padding: 24px 0;
 }
 
