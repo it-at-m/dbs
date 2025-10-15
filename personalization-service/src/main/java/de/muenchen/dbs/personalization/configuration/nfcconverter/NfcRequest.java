@@ -1,7 +1,5 @@
 package de.muenchen.dbs.personalization.configuration.nfcconverter;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import edu.umd.cs.findbugs.annotations.SuppressMatchType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.Cookie;
@@ -12,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +37,7 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
     private Map<String, List<String>> headers;
 
     @SuppressWarnings("unused")
-    final private Set<String> contentTypes;
+    private final Set<String> contentTypes;
 
     public NfcRequest(final HttpServletRequest request, final Set<String> contentTypes) {
         super(request);
@@ -186,7 +185,6 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
         return getOriginalRequest().getParts();
     }
 
-    @SuppressFBWarnings(value = "DM_DEFAULT_ENCODING", matchType = SuppressMatchType.EXACT)
     @Override
     public ServletInputStream getInputStream() throws IOException {
 
@@ -199,7 +197,7 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
 
         log.debug("Converting InputStream data to NFC.");
         final String nfcConvertedContent = NfcHelper.nfcConverter(content);
-        return new NfcServletInputStream(new ByteArrayInputStream(nfcConvertedContent.getBytes()));
+        return new NfcServletInputStream(new ByteArrayInputStream(nfcConvertedContent.getBytes(StandardCharsets.UTF_8)));
     }
 
     private HttpServletRequest getOriginalRequest() {
