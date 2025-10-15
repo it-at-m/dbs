@@ -15,7 +15,9 @@
     </template>
 
     <template #body>
-      {{ service?.note }}
+      <p style="margin-bottom: 0;">
+        {{ service?.note }}
+      </p>
     </template>
 
     <template #buttons>
