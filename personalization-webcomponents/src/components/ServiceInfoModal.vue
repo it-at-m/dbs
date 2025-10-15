@@ -84,6 +84,8 @@
 import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 
 import { MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
+import {useMediaQuery} from "@vueuse/core";
+import {IS_MOBILE_MEDIA_QUERY} from "@/util/Constants.ts";
 
 const { open = false, showActions = false } = defineProps<{
   open?: boolean;
@@ -91,5 +93,7 @@ const { open = false, showActions = false } = defineProps<{
   showActions?: boolean;
 }>();
 
-const emit = defineEmits(["close", "cancel", "task-delete", "task-done"]);
+const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);
+
+const emit = defineEmits(["close", "cancel", "task-delete", "task-toggle"]);
 </script>

@@ -95,7 +95,8 @@ import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import { setAccessToken } from "@/util/Constants.ts";
+import {IS_MOBILE_MEDIA_QUERY, setAccessToken} from "@/util/Constants.ts";
+import {useMediaQuery} from "@vueuse/core";
 
 const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
@@ -107,7 +108,7 @@ const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
 const checklists = ref<Checklist[]>([]);
 const loading = ref(true);
 const loadingError = ref(false);
-const isMobile = ref(false);
+const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);
 const displayOptionDetailScreen =
   displayedOnDetailScreen.toLowerCase() === "true";
 
@@ -148,14 +149,6 @@ const goToChecklistOverviewLink = () => {
   location.href = checklistOverviewUrl;
 };
 
-const checksMobile = () => {
-  isMobile.value = window.matchMedia("(max-width: 767px)").matches;
-};
-
-onMounted(() => {
-  checksMobile();
-  window.addEventListener("resize", checksMobile);
-});
 </script>
 
 <style>
