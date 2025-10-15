@@ -61,22 +61,19 @@
       v-if="showActions"
       #actions
     >
-      <!--
-      todo add feature to delete checklist item
       <muc-button
         variant="ghost"
         icon="trash"
         @click="emit('task-delete')"
       >
-        Aufgabe löschen
+        {{ isMobile ? "Löschen" : "Aufgabe löschen"}}
       </muc-button>
-      -->
       <muc-button
         variant="ghost"
-        icon="check"
-        @click="emit('task-done')"
+        :icon="service.checked ? 'circle-outline' : 'check'"
+        @click="emit('task-toggle')"
       >
-        Aufgabe erledigen
+        {{ service.checked ? (isMobile ? "Aktivieren" : "Aufgabe aktivieren") : (isMobile ? "Erledigen" : "Aufgabe erledigen") }}
       </muc-button>
     </template>
   </muc-modal>
