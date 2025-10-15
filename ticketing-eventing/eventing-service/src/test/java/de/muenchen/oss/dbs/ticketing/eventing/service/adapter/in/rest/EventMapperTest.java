@@ -6,12 +6,12 @@ import de.muenchen.oss.dbs.ticketing.eventing.service.domain.model.Event;
 import org.junit.jupiter.api.Test;
 
 class EventMapperTest {
-    private final static String ACTION = "Test Action";
-    private final static String TICKET_ID = "123";
-    private final static String STATUS = "open";
-    private final static String STATUS_ID = "1";
-    private final static String ANLIEGENART = "Test Anliegen";
-    private final static String LHM_EXT_ID = "lhm-123";
+    private static final String ACTION = "Test Action";
+    private static final String TICKET_ID = "123";
+    private static final String STATUS = "open";
+    private static final String STATUS_ID = "1";
+    private static final String ANLIEGENART = "Test Anliegen";
+    private static final String LHM_EXT_ID = "lhm-123";
 
     private final EventMapper eventMapper = new EventMapperImpl();
 

@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
 
 import {
   MucCardContainer,
@@ -116,7 +116,7 @@ import ChecklistCard from "@/components/ChecklistCard.vue";
 import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
 
 defineProps<{
-  allChecklists: DummyChecklist[];
+  allChecklists: Checklist[];
   isMobile: boolean;
   newChecklistUrl: string;
   checklistDetailUrl: string;
@@ -147,7 +147,7 @@ defineProps<{
 }
 
 .card:hover {
-  background-color: var(--color-neutrals-blue-xlight) !important;
+  background-color: var(--mde-color-neutral-beau-blue-x-light) !important;
 }
 
 .checklist-card-container {

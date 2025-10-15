@@ -33,12 +33,12 @@ changes:
   # Maps lhmExtId of current client into a claim "lhmExtId"
   - addClientMapper:
       clientId: local
-      name: lhmExtId
+      name: lhmExtID
       protocolMapper: oidc-usermodel-attribute-mapper
       protocol: openid-connect
       config:
-        user.attribute: lhmExtId
-        claim.name: lhmExtId
+        user.attribute: lhmExtID
+        claim.name: lhmExtID
         jsonType.label: String
         id.token.claim: true
         access.token.claim: true

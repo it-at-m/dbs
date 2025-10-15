@@ -11,8 +11,8 @@ changes:
 
   - addRealmProfileAttribute:
       realm: local_realm
-      name: lhmExtId
-      displayName: lhmExtId
+      name: lhmExtID
+      displayName: lhmExtID
       multivalued: false
       permissions:
         view:

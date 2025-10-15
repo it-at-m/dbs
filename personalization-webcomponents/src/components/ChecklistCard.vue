@@ -9,17 +9,16 @@
         <img
           width="56px"
           height="56px"
-          :src="getChecklistIconByTitle(checklist.title)"
-          alt="checklist-icon"
+          :src="getChecklistIconBySituationId(checklist.situationId)"
+          alt=""
         />
       </div>
     </template>
     <template #content>
-      <div>
+      <div class="chip-group">
         <muc-chip
           v-if="todoCount"
-          style="margin-right: 16px"
-          background-color="#FDD1AC"
+          background-color="var(--checklist-color-status-open)"
         >
           {{ todoCount }} offen
           <svg
@@ -32,7 +31,7 @@
         </muc-chip>
         <muc-chip
           v-if="doneCount"
-          background-color="#B7D2B7"
+          background-color="var(--checklist-color-status-closed)"
         >
           {{ doneCount }} erledigt
           <svg
@@ -49,7 +48,7 @@
         <checklistitem-listitem
           v-for="(item, index) in firstThreeItemsSortedByChecked"
           :checklist-item="item"
-          :key="index"
+          :key="item.serviceID"
           :class="{
             'pt-8': index != 0,
             'pb-8': index != firstThreeItemsSortedByChecked.length - 1,
@@ -58,15 +57,16 @@
         </checklistitem-listitem>
       </div>
 
-      <div>
-        <b>Letzte Änderung:</b> {{ checklist.lastUpdated.toLocaleDateString() }}
+      <div v-if="checklist.lastUpdate">
+        <strong>Letzte Änderung:</strong>
+        {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
       </div>
     </template>
   </muc-card>
 </template>
 
 <script setup lang="ts">
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import type Checklist from "@/api/persservice/Checklist.ts";
 
 import { MucCard } from "@muenchen/muc-patternlab-vue";
 import { computed } from "vue";
@@ -74,25 +74,36 @@ import { computed } from "vue";
 import ChecklistitemListitem from "@/components/ChecklistitemListitem.vue";
 import MucChip from "@/components/common/MucChip.vue";
 import {
-  getChecklistIconByTitle,
+  getChecklistIconBySituationId,
+  getDateInGermanDateFormat,
   QUERY_PARAM_CHECKLIST_ID,
 } from "@/util/Constants.ts";
 
 const props = defineProps<{
-  checklist: DummyChecklist;
+  checklist: Checklist;
   checklistDetailUrl: string;
 }>();
 
 const todoCount = computed(() => {
-  return props.checklist.items.filter((value) => !value.checked).length;
+  if (props.checklist && props.checklist.checklistItems) {
+    return props.checklist.checklistItems.filter((value) => !value.checked)
+      .length;
+  } else {
+    return undefined;
+  }
 });
 
 const doneCount = computed(() => {
-  return props.checklist.items.filter((value) => value.checked).length;
+  if (props.checklist && props.checklist.checklistItems) {
+    return props.checklist.checklistItems.filter((value) => value.checked)
+      .length;
+  } else {
+    return undefined;
+  }
 });
 
 const firstThreeItemsSortedByChecked = computed(() => {
-  const sortedItems = [...props.checklist.items].sort((a, b) =>
+  const sortedItems = [...props.checklist.checklistItems].sort((a, b) =>
     a.checked === b.checked ? 0 : a.checked ? 1 : -1
   );
   return sortedItems.slice(0, 3);
@@ -114,5 +125,12 @@ function gotoChecklist(checklistId: string) {
 
 .pb-8 {
   padding-bottom: 8px;
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 8px;
 }
 </style>

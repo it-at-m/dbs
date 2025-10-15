@@ -5,9 +5,9 @@
     @cancel="emit('cancel')"
   >
     <template #title>
-      {{ service?.serviceName }}
+      {{ service?.title }}
       <span
-        v-if="service?.mandatory"
+        v-if="service?.required"
         class="mandatory-subtitle"
       >
         – verpflichtend
@@ -15,7 +15,7 @@
     </template>
 
     <template #body>
-      {{ service?.summary }}
+      {{ service?.note }}
     </template>
 
     <template #buttons>
@@ -59,6 +59,8 @@
       v-if="showActions"
       #actions
     >
+      <!--
+      todo add feature to delete checklist item
       <muc-button
         variant="ghost"
         icon="trash"
@@ -66,6 +68,7 @@
       >
         Aufgabe löschen
       </muc-button>
+      -->
       <muc-button
         variant="ghost"
         icon="check"
@@ -78,13 +81,13 @@
 </template>
 
 <script setup lang="ts">
-import type { SNService } from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
+import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 
 import { MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
 
 const { open = false, showActions = false } = defineProps<{
   open?: boolean;
-  service: SNService;
+  service: ChecklistItemServiceNavigator;
   showActions?: boolean;
 }>();
 

@@ -98,6 +98,7 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
             checklistItem2.setServiceID("item2");
             checklistItem3.setServiceID("item3");
             final ChecklistCreateDTO requestDTO = new ChecklistCreateDTO("title",
+                    "situationd-id-sample",
                     checklistMapper.toChecklistItemDTOList(List.of(checklistItem1, checklistItem2, checklistItem3)));
             final String requestBody = objectMapper.writeValueAsString(requestDTO);
 
@@ -132,7 +133,7 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.id", is(testChecklistId.toString())))
-                    .andExpect(jsonPath("$.checklistItems", hasSize(3)));
+                    .andExpect(jsonPath("$.checklistItemServiceNavigatorDtos", hasSize(3)));
         }
     }
 

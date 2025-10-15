@@ -2,12 +2,15 @@
   <muc-intro
     tagline="Checkliste"
     :title="checklist.title"
-    :img="getChecklistIconByTitle(checklist.title)"
+    :img="getChecklistIconBySituationId(checklist.situationId)"
     imgAlt=""
   >
-    <div style="padding-bottom: 16px; padding-left: 3px">
-      <b>Erstellungsdatum: </b
-      >{{ props.checklist.lastUpdated.toLocaleString().split(",")[0] }}
+    <div
+      v-if="checklist.lastUpdate"
+      style="padding-bottom: 16px; padding-left: 3px"
+    >
+      <strong>Erstellungsdatum: </strong>
+      {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
     </div>
     <table>
       <tr>
@@ -16,7 +19,7 @@
           <div class="chips-container">
             <muc-chip
               v-if="todoCount"
-              background-color="#FDD1AC"
+              background-color="var(--checklist-color-status-open)"
             >
               {{ todoCount }} offen
               <svg
@@ -29,7 +32,7 @@
             </muc-chip>
             <muc-chip
               v-if="doneCount"
-              background-color="#B7D2B7"
+              background-color="var(--checklist-color-status-closed)"
             >
               {{ doneCount }} erledigt
               <svg
@@ -48,16 +51,19 @@
 </template>
 
 <script setup lang="ts">
-import type DummyChecklist from "@/api/dummyservice/DummyChecklist.ts";
+import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 
 import { MucIntro } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
 
 import MucChip from "@/components/common/MucChip.vue";
-import { getChecklistIconByTitle } from "@/util/Constants.ts";
+import {
+  getChecklistIconBySituationId,
+  getDateInGermanDateFormat,
+} from "@/util/Constants.ts";
 
 const props = defineProps<{
-  checklist: DummyChecklist;
+  checklist: ChecklistServiceNavigator;
 }>();
 
 onMounted(() => {
@@ -82,19 +88,26 @@ onMounted(() => {
 });
 
 const todoCount = computed(() => {
-  return props.checklist.items.filter((value) => !value.checked).length;
+  if (props.checklist && props.checklist.checklistItemServiceNavigatorDtos) {
+    return props.checklist.checklistItemServiceNavigatorDtos.filter(
+      (value) => !value.checked
+    ).length;
+  } else {
+    return undefined;
+  }
 });
 
 const doneCount = computed(() => {
-  return props.checklist.items.filter((value) => value.checked).length;
+  if (props.checklist && props.checklist.checklistItemServiceNavigatorDtos) {
+    return props.checklist.checklistItemServiceNavigatorDtos.filter(
+      (value) => value.checked
+    ).length;
+  } else {
+    return undefined;
+  }
 });
 </script>
 <style>
-.muc-divider {
-  margin-top: 0 !important;
-  margin-bottom: 32px !important;
-}
-
 .m-intro-vertical__title {
   margin-bottom: 8px !important;
 }
@@ -103,6 +116,7 @@ const doneCount = computed(() => {
   font-weight: bold;
   vertical-align: baseline;
   padding-right: 8px;
+  padding-top: 5px;
   white-space: nowrap;
 }
 
@@ -115,7 +129,6 @@ const doneCount = computed(() => {
 @media (max-width: 450px) {
   .chips-container {
     flex-wrap: wrap;
-    flex-direction: column;
     gap: 8px;
   }
 }

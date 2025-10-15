@@ -41,7 +41,7 @@
       <template #body>
         <p>
           Ich stimme der Speicherung der Checkliste
-          <b>„{{ lebenslageTitle }}”</b> in meinem Bereich gemäß der
+          <strong>„{{ lebenslageTitle }}”</strong> in meinem Bereich gemäß der
           <a href="https://stadt.muenchen.de/infos/datenschutz.html"
             >Datenschutzerklärung</a
           >
@@ -80,7 +80,6 @@
     <muc-intro
       :title="lebenslageTitle"
       :divider="false"
-      style="margin-bottom: 56px"
     >
       <div v-if="!localStorageError">
         <p>
@@ -144,11 +143,11 @@
               <div
                 class="snServiceElement"
                 v-for="service in snServices"
-                :key="service.id"
+                :key="service.serviceID"
                 @click="openService(service)"
               >
                 <span>
-                  {{ service.serviceName }}
+                  {{ service.title }}
                 </span>
               </div>
             </div>
@@ -170,7 +169,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SNService } from "@/api/servicenavigator/ServiceNavigatorLookup.ts";
+import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 import type { ServiceNavigatorResult } from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
@@ -215,8 +214,8 @@ const saveChecklistModalOpen = ref(false);
 const dseAccepted = ref(false);
 const lebenslageTitle = ref("Meine Lebenslage");
 const lebenslageId = ref("");
-const snServices = ref<SNService[] | null>(null);
-const selectedService = ref<SNService | null>(null);
+const snServices = ref<ChecklistItemServiceNavigator[] | null>(null);
+const selectedService = ref<ChecklistItemServiceNavigator | null>(null);
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
@@ -243,9 +242,11 @@ onMounted(() => {
     })
       .then((resp) => {
         if (resp.ok) {
-          resp.json().then((snServicesBody: SNService[]) => {
-            snServices.value = snServicesBody;
-          });
+          resp
+            .json()
+            .then((snServicesBody: ChecklistItemServiceNavigator[]) => {
+              snServices.value = snServicesBody;
+            });
         } else {
           resp.text().then((errBody) => {
             throw Error(errBody);
@@ -287,19 +288,18 @@ function _saveChecklistAcceptedDSE() {
   const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
   const checklistItemsDtos = snServices.value?.map((service) => {
     return {
-      serviceID: service.id,
-      checked: null,
-      title: service.serviceName,
-      note: service.summary,
-      required: service.mandatory,
+      serviceID: service.serviceID,
+      checked: undefined,
+      title: service.title,
+      note: service.note,
+      required: service.required,
     };
   });
   const body = JSON.stringify({
     title: lebenslageTitle.value,
-    lebenslageId: lebenslageId.value,
+    situationId: lebenslageId.value,
     checklistItems: checklistItemsDtos,
   });
-
   fetch(url, {
     method: "POST",
     headers: {
@@ -388,7 +388,7 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
   }
 }
 
-function openService(service: SNService) {
+function openService(service: ChecklistItemServiceNavigator) {
   selectedService.value = service;
   serviceInfoModalOpen.value = true;
 }
@@ -410,15 +410,19 @@ async function copyUrl() {
 </style>
 
 <style scoped>
+.m-intro {
+  margin-bottom: 40px;
+}
+
 .snServiceElement {
   cursor: pointer;
   padding: 16px 0;
-  border-top: 1px solid var(--color-neutrals-blue-xlight);
+  border-top: 1px solid var(--mde-color-neutral-beau-blue-x-light);
 }
 
 .snServiceElement span {
   font-size: 18px;
-  color: var(--color-brand-main-blue);
+  color: var(--mde-color-brand-mde-blue);
   font-weight: 700;
   line-height: 150%;
 }
@@ -429,6 +433,6 @@ async function copyUrl() {
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
-  color: var(--color-neutrals-grey-light, #617586);
+  color: var(--mde-color-neutral-grey-light);
 }
 </style>

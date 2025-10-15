@@ -10,17 +10,8 @@ export const QUERY_PARAM_CHECKLIST_ID = "cl-id";
 
 let ACCESS_TOKEN: string | undefined = undefined;
 
-export function getChecklistIconByTitle(checklistTitle: string) {
-  return {
-    "Ich habe wenig Geld.":
-      "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482730.svg",
-    "Ich will umziehen.":
-      "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10482700.svg",
-    "Ich manage eine Familie.":
-      "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483310.svg",
-    Einwanderung:
-      "https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/10483311.svg",
-  }[checklistTitle];
+export function getChecklistIconBySituationId(situationId: string) {
+  return `https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/${situationId}.svg`;
 }
 
 export function getAPIBaseURL(): string {
@@ -72,4 +63,20 @@ export function getXSRFToken() {
     return "";
   }
   return XSRFToken.value;
+}
+
+export function getDateInGermanDateFormat(date: Date | undefined) {
+  if (date) {
+    return (
+      date.toLocaleString("de-DE", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }) + " Uhr"
+    );
+  } else {
+    return "-";
+  }
 }
