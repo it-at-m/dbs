@@ -32,13 +32,13 @@ public class ChecklistServiceTest {
     private static final String USER_LHM_EXT_ID = "user-lhm-ext-id";
 
     @Spy
-    private ChecklistMapper checklistMapper = new ChecklistMapperImpl();
+    private final ChecklistMapper checklistMapper = new ChecklistMapperImpl();
 
     @Mock
     private ChecklistRepository checklistRepository;
 
     @Mock
-    ServiceNavigatorService serviceNavigatorService;
+    private ServiceNavigatorService serviceNavigatorService;
 
     @InjectMocks
     private ChecklistService checklistService;

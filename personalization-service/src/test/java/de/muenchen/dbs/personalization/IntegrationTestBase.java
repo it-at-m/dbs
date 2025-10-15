@@ -46,7 +46,7 @@ public class IntegrationTestBase {
             Map.of("lhmExtID", TOKEN_USER_LHM_EXT_ID));
 
     @BeforeEach
-    public void setupZammadMock() {
+    void setupZammadMock() {
         // Create mocks for Kaptara-API
         KaptaraMocker.setupKaptaraMock();
     }

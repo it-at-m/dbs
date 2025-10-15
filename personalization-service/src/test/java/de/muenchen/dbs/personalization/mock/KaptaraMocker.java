@@ -5,9 +5,12 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-public class KaptaraMocker {
+public final class KaptaraMocker {
 
     public static final String API_BASE = "/service/rs/befi/navigator/";
+
+    private KaptaraMocker() {
+    }
 
     public static void setupKaptaraMock() {
         stubFor(any(anyUrl())

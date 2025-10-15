@@ -23,7 +23,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
-public class ChecklistIntegrationTest extends IntegrationTestBase {
+class ChecklistIntegrationTest extends IntegrationTestBase {
 
     private final ChecklistMapper checklistMapper = Mappers.getMapper(ChecklistMapper.class);
 
@@ -39,14 +39,14 @@ public class ChecklistIntegrationTest extends IntegrationTestBase {
     private ChecklistRepository checklistRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         checklistRepository.deleteAll();
         final Checklist exampleChecklist = createTestChecklist(null, TOKEN_USER_LHM_EXT_ID, null);
         testChecklistId = checklistRepository.save(exampleChecklist).getId();
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         checklistRepository.deleteById(testChecklistId);
     }
 
