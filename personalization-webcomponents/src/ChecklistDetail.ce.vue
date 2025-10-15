@@ -11,16 +11,14 @@
       @close="openAcceptDeleteDialog = false"
       @cancel="openAcceptDeleteDialog = false"
     >
-      <template #title>
-        Löschen der Aufgabe
-      </template>
+      <template #title> Löschen der Aufgabe </template>
 
       <template #body>
-        <muc-banner
-          type="warning"
-        >
+        <muc-banner type="warning">
           <p>
-            Mit dieser Aktion entfernen Sie die Aufgabe <strong>{{ requestToDeleteItem.title }}</strong> endgültig aus Ihrer Checkliste.
+            Mit dieser Aktion entfernen Sie die Aufgabe
+            <strong>{{ requestToDeleteItem.title }}</strong> endgültig aus Ihrer
+            Checkliste.
           </p>
         </muc-banner>
       </template>
@@ -32,8 +30,8 @@
           Aufgabe löschen
         </muc-button>
         <muc-button
-            variant="secondary"
-            @click="openAcceptDeleteDialog = false"
+          variant="secondary"
+          @click="openAcceptDeleteDialog = false"
         >
           Abbrechen
         </muc-button>
@@ -106,10 +104,10 @@ import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemS
 import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
-import {MucBanner, MucButton, MucModal} from "@muenchen/muc-patternlab-vue";
+import { MucBanner, MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import {computed, type Ref, ref, type UnwrapRef} from "vue";
+import { computed, ref } from "vue";
 
 import ChecklistService from "@/api/persservice/ChecklistService.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
@@ -257,12 +255,11 @@ function onRequestDeleteItem(checklistItem: ChecklistItemServiceNavigator) {
 function deleteItem(checklistItem: ChecklistItemServiceNavigator) {
   openAcceptDeleteDialog.value = false;
   loadingUpdate.value = true;
-  const indexOfItem = checklist.value?.checklistItemServiceNavigatorDtos.findIndex(
-      (item) => {
-        return item.serviceID === checklistItem.serviceID;
-      }
-  ) as number;
-  if(checklist.value && indexOfItem > -1) {
+  const indexOfItem =
+    checklist.value?.checklistItemServiceNavigatorDtos.findIndex((item) => {
+      return item.serviceID === checklistItem.serviceID;
+    }) as number;
+  if (checklist.value && indexOfItem > -1) {
     checklist.value.checklistItemServiceNavigatorDtos.splice(indexOfItem, 1);
     _updateChecklist(checklist.value);
   }
@@ -312,22 +309,22 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 
   const service = new ChecklistService();
   service
-      .updateChecklist(updateChecklist)
-      .then((resp) => {
-        if (resp.ok) {
-          resp.json().then((newChecklist) => {
-            checklist = newChecklist;
-          });
-        } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
-          });
-        }
-      })
-      .catch((err) => {
-        console.debug(err);
-      })
-      .finally(() => (loadingUpdate.value = false));
+    .updateChecklist(updateChecklist)
+    .then((resp) => {
+      if (resp.ok) {
+        resp.json().then((newChecklist) => {
+          checklist = newChecklist;
+        });
+      } else {
+        resp.text().then((errBody) => {
+          throw Error(errBody);
+        });
+      }
+    })
+    .catch((err) => {
+      console.debug(err);
+    })
+    .finally(() => (loadingUpdate.value = false));
 }
 </script>
 

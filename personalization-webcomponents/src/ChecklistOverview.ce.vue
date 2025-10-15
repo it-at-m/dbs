@@ -88,15 +88,15 @@ import {
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref } from "vue";
+import { useMediaQuery } from "@vueuse/core";
+import { ref } from "vue";
 
 import ChecklistService from "@/api/persservice/ChecklistService.ts";
 import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import {IS_MOBILE_MEDIA_QUERY, setAccessToken} from "@/util/Constants.ts";
-import {useMediaQuery} from "@vueuse/core";
+import { IS_MOBILE_MEDIA_QUERY, setAccessToken } from "@/util/Constants.ts";
 
 const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
@@ -148,7 +148,6 @@ function loadChecklists() {
 const goToChecklistOverviewLink = () => {
   location.href = checklistOverviewUrl;
 };
-
 </script>
 
 <style>

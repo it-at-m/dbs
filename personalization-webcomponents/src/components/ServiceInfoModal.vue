@@ -15,7 +15,7 @@
     </template>
 
     <template #body>
-      <p style="margin-bottom: 0;">
+      <p style="margin-bottom: 0">
         {{ service?.note }}
       </p>
     </template>
@@ -66,14 +66,22 @@
         icon="trash"
         @click="emit('task-delete')"
       >
-        {{ isMobile ? "Löschen" : "Aufgabe löschen"}}
+        {{ isMobile ? "Löschen" : "Aufgabe löschen" }}
       </muc-button>
       <muc-button
         variant="ghost"
         :icon="service.checked ? 'circle-outline' : 'check'"
         @click="emit('task-toggle')"
       >
-        {{ service.checked ? (isMobile ? "Aktivieren" : "Aufgabe aktivieren") : (isMobile ? "Erledigen" : "Aufgabe erledigen") }}
+        {{
+          service.checked
+            ? isMobile
+              ? "Aktivieren"
+              : "Aufgabe aktivieren"
+            : isMobile
+              ? "Erledigen"
+              : "Aufgabe erledigen"
+        }}
       </muc-button>
     </template>
   </muc-modal>
@@ -83,8 +91,9 @@
 import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 
 import { MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
-import {useMediaQuery} from "@vueuse/core";
-import {IS_MOBILE_MEDIA_QUERY} from "@/util/Constants.ts";
+import { useMediaQuery } from "@vueuse/core";
+
+import { IS_MOBILE_MEDIA_QUERY } from "@/util/Constants.ts";
 
 const { open = false, showActions = false } = defineProps<{
   open?: boolean;

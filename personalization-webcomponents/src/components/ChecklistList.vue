@@ -82,7 +82,9 @@
       @close="closeDialog"
       @cancel="closeDialog"
       @task-delete="onDeleteItem(dialogItem)"
-      @task-toggle="() => (dialogItem ? onSelectChange(dialogItem.serviceID) : null)"
+      @task-toggle="
+        () => (dialogItem ? onSelectChange(dialogItem.serviceID) : null)
+      "
     />
   </div>
 </template>
