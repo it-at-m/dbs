@@ -158,10 +158,12 @@
 
           <div v-else>
             <muc-callout type="error">
-              <template #header> Fehler</template>
+              <template #header>
+                Die Checkliste kann nicht geladen werden.
+              </template>
               <template #content>
-                Beim Laden der Daten ist ein Fehler aufgetreten. Bitte versuchen
-                Sie es zu einem späteren Zeitpunkt noch einmal.
+                Es gibt aktuell leider ein technisches Problem mit dieser
+                Funktion. Bitte versuchen Sie es später noch einmal.
               </template>
             </muc-callout>
           </div>
@@ -179,6 +181,7 @@ import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts
 import {
   MucBanner,
   MucButton,
+  MucCallout,
   MucCheckbox,
   MucIntro,
   MucModal,
@@ -229,6 +232,7 @@ const props = defineProps<{
 
 onMounted(() => {
   loading.value = true;
+  loadingError.value = "";
 
   const snResult = getSnResults();
 
@@ -243,6 +247,9 @@ onMounted(() => {
       snResult.services.join(",");
     fetch(url, {
       mode: "cors",
+      headers: {
+        Accept: "application/json",
+      },
     })
       .then((resp) => {
         if (resp.ok) {
@@ -252,13 +259,15 @@ onMounted(() => {
               snServices.value = snServicesBody;
             });
         } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
+          resp.text().then((errorText) => {
+            console.debug("Error loading checklist: ", errorText);
+            loadingError.value = errorText;
           });
         }
       })
       .catch((error) => {
-        console.debug(error);
+        console.debug("Error loading checklist: ", error);
+        loadingError.value = error;
       })
       .finally(() => (loading.value = false));
   } else {
@@ -289,6 +298,7 @@ function _requestLogin() {
 function _saveChecklistAcceptedDSE() {
   //todo replace with openapi generated client when backend is finished
   loading.value = true;
+  loadingError.value = "";
   const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
   const checklistItemsDtos = snServices.value?.map((service) => {
     return {
