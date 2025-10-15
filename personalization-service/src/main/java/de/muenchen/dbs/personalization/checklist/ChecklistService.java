@@ -4,7 +4,6 @@ import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.M
 
 import de.muenchen.dbs.personalization.checklist.domain.*;
 import de.muenchen.dbs.personalization.common.NotFoundException;
-import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorResponse;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -103,21 +102,16 @@ public class ChecklistService {
 
     private ChecklistServiceNavigatorReadDTO populateWithServiceNavigator(final Checklist checklist) {
         final List<ChecklistItemServiceNavigatorDTO> checklistItemDtos = checklist.getChecklistItems().stream()
-                .map(checklistItem -> {
-                    final Optional<ServiceNavigatorResponse> snResponse = serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID());
-
-                    final ChecklistItemServiceNavigatorDTO newDto;
-                    if (snResponse.isPresent()) {
-                        newDto = serviceNavigatorService.toDto(snResponse.get());
-                    } else {
-                        newDto = new ChecklistItemServiceNavigatorDTO();
-                        newDto.setServiceID(checklistItem.getServiceID());
-                        newDto.setTitle(checklistItem.getTitle());
-                        newDto.setNote(checklistItem.getNote());
-                        newDto.setRequired(checklistItem.getRequired());
-                    }
-                    newDto.setChecked(checklistItem.getChecked());
-
+                .map(checklistItem -> serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID()))
+                .flatMap(Optional::stream)
+                .map(snResponse -> {
+                    final ChecklistItemServiceNavigatorDTO newDto = serviceNavigatorService.toDto(snResponse);
+                    newDto.setChecked(
+                            checklist.getChecklistItems().stream()
+                                    .filter(checklistItem -> snResponse.id().equals(checklistItem.getServiceID()))
+                                    .findFirst()
+                                    .orElseGet(() -> new ChecklistItem(null, null, null, null, null))
+                                    .getChecked());
                     return newDto;
                 })
                 .toList();

@@ -14,8 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
@@ -51,14 +52,14 @@ public class ServiceNavigatorService {
             } else {
                 log.warn("Searching Service with Service-ID {} returned a !2xx HTTP Response of {}. Returning empty.", serviceId, response.getStatusCode());
                 return Optional.empty();
-
             }
-        } catch (HttpStatusCodeException e) {
-            log.error("HTTP Error {} when trying to fetch Service with Service-ID {}: {}", e.getStatusCode(), serviceId, e.getMessage());
+        } catch (HttpClientErrorException e) {
+            log.error("HTTP Client-Error {} when trying to fetch Service with Service-ID {}: {}. Returning empty response.", e.getStatusCode(), serviceId,
+                    e.getMessage());
             return Optional.empty();
         } catch (Exception e) {
-            log.error("Network Error when trying to fetch Service with Service-ID {}", serviceId, e);
-            return Optional.empty();
+            log.error("Network Error when trying to fetch Service with Service-ID {}. Throwing Service Unavailable.", serviceId, e);
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "ServiceNavigator was unreachable", e);
         }
     }
 

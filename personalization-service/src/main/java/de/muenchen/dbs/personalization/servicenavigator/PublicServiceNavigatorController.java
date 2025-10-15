@@ -9,17 +9,14 @@ import java.net.Proxy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,23 +51,12 @@ public class PublicServiceNavigatorController {
 
     @GetMapping
     @Operation(summary = "Lookup ServiceNavigator Services by ServiceID. Returns a list of services for the given service IDs.")
-    @ResponseStatus(HttpStatus.OK)
     public List<ChecklistItemServiceNavigatorDTO> getServicesByIds(@RequestParam("ids") final String serviceIds) {
-        return Arrays.stream(serviceIds.split(SERVICE_IDS_SEPARATOR)).map(serviceID -> {
-            final Optional<ServiceNavigatorResponse> response = snService.getServiceNavigatorService(serviceID);
-            return response.orElseGet(() -> new ServiceNavigatorResponse(
-                    "Dienstleistung " + serviceID,
-                    null,
-                    "Dieser Dienst wurde im Dienstleistungsfinder nicht gefunden. Entweder er wurde gelöscht, oder der Dienstleistungsfinder hatte einen unerwarteten Fehler. Es wird zu einem späteren Zeitpunkt erneut versucht diese Dienstleitung zu finden.",
-                    serviceID,
-                    false,
-                    false,
-                    null,
-                    false,
-                    null));
-        })
+        return Arrays.stream(serviceIds.split(SERVICE_IDS_SEPARATOR))
+                .map(snService::getServiceNavigatorService)
+                .flatMap(Optional::stream)
                 .map(snService::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }
