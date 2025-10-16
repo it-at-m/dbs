@@ -5,6 +5,39 @@
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
 
+    <muc-modal
+      v-if="requestToDeleteItem"
+      :open="openAcceptDeleteDialog"
+      @close="openAcceptDeleteDialog = false"
+      @cancel="openAcceptDeleteDialog = false"
+    >
+      <template #title> Löschen der Aufgabe</template>
+
+      <template #body>
+        <muc-banner type="warning">
+          <p>
+            Mit dieser Aktion entfernen Sie die Aufgabe
+            <strong>{{ requestToDeleteItem.title }}</strong> endgültig aus Ihrer
+            Checkliste.
+          </p>
+        </muc-banner>
+      </template>
+      <template #buttons>
+        <muc-button
+          icon="trash"
+          @click="deleteItem(requestToDeleteItem)"
+        >
+          Aufgabe löschen
+        </muc-button>
+        <muc-button
+          variant="secondary"
+          @click="openAcceptDeleteDialog = false"
+        >
+          Abbrechen
+        </muc-button>
+      </template>
+    </muc-modal>
+
     <main>
       <muc-intro
         v-if="!loggedIn"
@@ -46,7 +79,7 @@
                 v-if="noQueryParamError"
                 type="info"
               >
-                <template #header> Keine Checklisten-ID gefunden </template>
+                <template #header> Keine Checklisten-ID gefunden</template>
                 <template #content>
                   <p>
                     Bitte überprüfen Sie den Link über den Sie auf diese Seite
@@ -90,8 +123,9 @@
                 <checklist-list
                   v-if="openCheckList.length !== 0"
                   :checklist-items="openCheckList"
-                  :disabled="loadingSort || loadingCheck"
+                  :disabled="loadingUpdate || loadingCheck"
                   @checked="onCheckedOpen"
+                  @delete="onRequestDeleteItem"
                   @sort="onSortOpen"
                 ></checklist-list>
                 <muc-banner
@@ -108,9 +142,10 @@
                 </h2>
                 <checklist-list
                   v-if="closedCheckList.length !== 0"
-                  :disabled="loadingSort || loadingCheck"
+                  :disabled="loadingUpdate || loadingCheck"
                   :checklist-items="closedCheckList"
                   @checked="onCheckedClosed"
+                  @delete="onRequestDeleteItem"
                   :is-draggable="false"
                 ></checklist-list>
                 <muc-banner
@@ -141,6 +176,7 @@ import {
   MucButton,
   MucCallout,
   MucIntro,
+  MucModal,
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
@@ -159,10 +195,13 @@ defineProps<{
 
 const checklist = ref<ChecklistServiceNavigator | null>(null);
 const loading = ref(true);
-const loadingSort = ref(false);
+const loadingUpdate = ref(false);
 const loadingCheck = ref(false);
 const loadingError = ref("");
 const noQueryParamError = ref(false);
+
+const requestToDeleteItem = ref<ChecklistItemServiceNavigator | null>(null);
+const openAcceptDeleteDialog = ref(false);
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
@@ -301,6 +340,24 @@ function onCheckedClosed(serviceID: string) {
   }
 }
 
+function onRequestDeleteItem(checklistItem: ChecklistItemServiceNavigator) {
+  requestToDeleteItem.value = checklistItem;
+  openAcceptDeleteDialog.value = true;
+}
+
+function deleteItem(checklistItem: ChecklistItemServiceNavigator) {
+  openAcceptDeleteDialog.value = false;
+  loadingUpdate.value = true;
+  const indexOfItem =
+    checklist.value?.checklistItemServiceNavigatorDtos.findIndex((item) => {
+      return item.serviceID === checklistItem.serviceID;
+    }) as number;
+  if (checklist.value && indexOfItem > -1) {
+    checklist.value.checklistItemServiceNavigatorDtos.splice(indexOfItem, 1);
+    _updateChecklist(checklist.value);
+  }
+}
+
 /**
  * When sort-event occurs, we need to find out the new order of elements.
  *
@@ -318,7 +375,7 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
     }
   ) as number;
   if (oldIndex >= 0 && checklist.value) {
-    loadingSort.value = true;
+    loadingUpdate.value = true;
 
     const newIndex = oldIndex + (evt.newIndex - evt.oldIndex);
     const element = checklist.value.checklistItemServiceNavigatorDtos[
@@ -331,33 +388,36 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
       element
     );
 
-    const updateChecklist = {} as Checklist;
-    updateChecklist.id = checklist.value.id;
-    updateChecklist.title = checklist.value.title;
-    updateChecklist.lhmExtId = checklist.value.lhmExtId;
-    updateChecklist.situationId = checklist.value.situationId;
-    updateChecklist.checklistItems =
-      checklist.value.checklistItemServiceNavigatorDtos;
-
-    const service = new ChecklistService();
-    service
-      .updateChecklist(updateChecklist)
-      .then((resp) => {
-        if (resp.ok) {
-          resp.json().then((newChecklist) => {
-            checklist.value = newChecklist;
-          });
-        } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
-          });
-        }
-      })
-      .catch((err) => {
-        console.debug(err);
-      })
-      .finally(() => (loadingSort.value = false));
+    _updateChecklist(checklist.value);
   }
+}
+
+function _updateChecklist(checklist: ChecklistServiceNavigator) {
+  const updateChecklist = {} as Checklist;
+  updateChecklist.id = checklist.id;
+  updateChecklist.title = checklist.title;
+  updateChecklist.lhmExtId = checklist.lhmExtId;
+  updateChecklist.situationId = checklist.situationId;
+  updateChecklist.checklistItems = checklist.checklistItemServiceNavigatorDtos;
+
+  const service = new ChecklistService();
+  service
+    .updateChecklist(updateChecklist)
+    .then((resp) => {
+      if (resp.ok) {
+        resp.json().then((newChecklist) => {
+          checklist = newChecklist;
+        });
+      } else {
+        resp.text().then((errBody) => {
+          throw Error(errBody);
+        });
+      }
+    })
+    .catch((err) => {
+      console.debug(err);
+    })
+    .finally(() => (loadingUpdate.value = false));
 }
 </script>
 

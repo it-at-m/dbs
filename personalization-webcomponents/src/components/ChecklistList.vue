@@ -80,7 +80,8 @@
       :show-actions="true"
       @close="closeDialog"
       @cancel="closeDialog"
-      @task-done="
+      @task-delete="onDeleteItem(dialogItem)"
+      @task-toggle="
         () => (dialogItem ? onSelectChange(dialogItem.serviceID) : null)
       "
     />
@@ -108,7 +109,7 @@ const props = withDefaults(
     disabled: false,
   }
 );
-const emit = defineEmits(["checked", "label-click", "sort"]);
+const emit = defineEmits(["checked", "delete", "label-click", "sort"]);
 
 const focusedIndex = ref<number | null>(null);
 const draggedIndex = ref<number | null>(null);
@@ -136,6 +137,11 @@ onBeforeUnmount(() => {
 
 function onSelectChange(serviceID: string) {
   emit("checked", serviceID);
+  closeDialog();
+}
+
+function onDeleteItem(checklistItem: ChecklistItemServiceNavigator) {
+  emit("delete", checklistItem);
   closeDialog();
 }
 

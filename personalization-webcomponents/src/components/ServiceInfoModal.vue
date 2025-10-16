@@ -15,7 +15,9 @@
     </template>
 
     <template #body>
-      {{ service?.note }}
+      <p style="margin-bottom: 0">
+        {{ service?.note }}
+      </p>
     </template>
 
     <template #buttons>
@@ -60,22 +62,27 @@
       v-if="showActions"
       #actions
     >
-      <!--
-      todo add feature to delete checklist item
       <muc-button
         variant="ghost"
         icon="trash"
         @click="emit('task-delete')"
       >
-        Aufgabe löschen
+        {{ isMobile ? "Löschen" : "Aufgabe löschen" }}
       </muc-button>
-      -->
       <muc-button
         variant="ghost"
-        icon="check"
-        @click="emit('task-done')"
+        :icon="service.checked ? 'circle-outline' : 'check'"
+        @click="emit('task-toggle')"
       >
-        Aufgabe erledigen
+        {{
+          service.checked
+            ? isMobile
+              ? "Aktivieren"
+              : "Aufgabe aktivieren"
+            : isMobile
+              ? "Erledigen"
+              : "Aufgabe erledigen"
+        }}
       </muc-button>
     </template>
   </muc-modal>
@@ -85,6 +92,9 @@
 import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
 
 import { MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
+import { useMediaQuery } from "@vueuse/core";
+
+import { IS_MOBILE_MEDIA_QUERY } from "@/util/Constants.ts";
 
 const { open = false, showActions = false } = defineProps<{
   open?: boolean;
@@ -92,5 +102,7 @@ const { open = false, showActions = false } = defineProps<{
   showActions?: boolean;
 }>();
 
-const emit = defineEmits(["close", "cancel", "task-delete", "task-done"]);
+const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);
+
+const emit = defineEmits(["close", "cancel", "task-delete", "task-toggle"]);
 </script>

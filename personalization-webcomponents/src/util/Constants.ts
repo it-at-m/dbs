@@ -8,6 +8,8 @@ export const QUERY_PARAM_SN_RESULT_SERVICES = "p13n-services";
 
 export const QUERY_PARAM_CHECKLIST_ID = "cl-id";
 
+export const IS_MOBILE_MEDIA_QUERY = "(max-width: 767px)";
+
 let ACCESS_TOKEN: string | undefined = undefined;
 
 export function getChecklistIconBySituationId(situationId: string) {
