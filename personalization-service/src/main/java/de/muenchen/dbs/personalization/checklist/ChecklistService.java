@@ -2,7 +2,11 @@ package de.muenchen.dbs.personalization.checklist;
 
 import static de.muenchen.dbs.personalization.common.ExceptionMessageConstants.MSG_NOT_FOUND;
 
-import de.muenchen.dbs.personalization.checklist.domain.*;
+import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItem;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.ZonedDateTime;

@@ -5,7 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import de.muenchen.dbs.personalization.checklist.domain.*;
+import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistCreateDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistReadDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistUpdateDTO;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Nested;

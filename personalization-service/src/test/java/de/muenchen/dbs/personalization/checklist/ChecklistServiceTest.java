@@ -3,7 +3,11 @@ package de.muenchen.dbs.personalization.checklist;
 import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.createTestChecklist;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
@@ -12,7 +16,11 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigato
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
