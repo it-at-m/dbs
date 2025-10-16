@@ -1,21 +1,22 @@
 package de.muenchen.dbs.personalization.servicenavigator;
 
-import de.muenchen.dbs.personalization.checklist.domain.*;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
+import de.muenchen.dbs.personalization.checklist.domain.OnlineServiceDTO;
+import de.muenchen.dbs.personalization.configuration.CacheConfiguration;
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
@@ -25,11 +26,9 @@ public class ServiceNavigatorService {
 
     private final RestTemplate restTemplate;
     private final P13nConfiguration p13nConfiguration;
-    private final ChecklistMapper checklistMapper;
 
-    public ServiceNavigatorService(final P13nConfiguration p13nConfiguration, final ChecklistMapper checklistMapper) {
+    public ServiceNavigatorService(final P13nConfiguration p13nConfiguration) {
         this.p13nConfiguration = p13nConfiguration;
-        this.checklistMapper = checklistMapper;
         if (StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
             this.restTemplate = new RestTemplate();
         } else {
@@ -40,84 +39,49 @@ public class ServiceNavigatorService {
         }
     }
 
-    public ChecklistServiceNavigatorReadDTO getChecklistServiceNavigatorReadDTO(final Checklist checklist) {
-        final String serviceIDs = checklist.getChecklistItems().stream()
-                .map(ChecklistItem::getServiceID)
-                .collect(Collectors.joining(","));
+    @Cacheable(CacheConfiguration.SERVICE_NAVIGATOR_SERVICES_CACHE_NAME)
+    public Optional<ServiceNavigatorResponse> getServiceNavigatorService(final String serviceId) {
+        final String url = p13nConfiguration.getServiceNavigatorUrl() + SERVICENAVIGATOR_QUERY_PARAMETER_ID + serviceId;
 
-        final String url = p13nConfiguration.getServiceNavigatorUrl() + SERVICENAVIGATOR_QUERY_PARAMETER_ID + serviceIDs;
-        List<ChecklistItemServiceNavigatorDTO> checklistItemServiceNavigatorDTOList = new ArrayList<>();
-
-        log.debug("Get all service infos from {}", url);
         try {
-            final ResponseEntity<List<ServiceNavigatorResponse>> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<>() {
-                    });
+            log.debug("#getServiceNavigatorService: Loading {}", url);
+            final ResponseEntity<ServiceNavigatorResponse> response = restTemplate.getForEntity(url, ServiceNavigatorResponse.class);
 
-            checklistItemServiceNavigatorDTOList = toDto(Objects.requireNonNull(response.getBody()));
-
-        } catch (final Exception e) {
-            log.error("Error retrieving ServiceNavigator data from {}", url, e);
-            for (final ChecklistItem item : checklist.getChecklistItems()) {
-                final ChecklistItemServiceNavigatorDTO itemServiceNavigatorDTO = new ChecklistItemServiceNavigatorDTO();
-                itemServiceNavigatorDTO.setServiceID(item.getServiceID());
-                itemServiceNavigatorDTO.setNote(item.getNote());
-                itemServiceNavigatorDTO.setTitle(item.getTitle());
-                itemServiceNavigatorDTO.setRequired(item.getRequired());
-                itemServiceNavigatorDTO.setChecked(item.getChecked());
-                checklistItemServiceNavigatorDTOList.add(itemServiceNavigatorDTO);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                return Optional.of(response.getBody());
+            } else {
+                log.warn("Searching Service with Service-ID {} returned a !2xx HTTP Response of {}. Returning empty.", serviceId, response.getStatusCode());
+                return Optional.empty();
             }
+        } catch (HttpClientErrorException e) {
+            log.error("HTTP Client-Error {} when trying to fetch Service with Service-ID {}: {}. Returning empty response.", e.getStatusCode(), serviceId,
+                    e.getMessage());
+            return Optional.empty();
+        } catch (Exception e) {
+            log.error("Network Error when trying to fetch Service with Service-ID {}. Throwing Service Unavailable.", serviceId, e);
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "ServiceNavigator was unreachable", e);
         }
-
-        checklistItemServiceNavigatorDTOList.forEach(itemDto -> itemDto.setChecked(
-                checklist.getChecklistItems().stream()
-                        .filter(checklistItem -> checklistItem.getServiceID().equals(itemDto.getServiceID()))
-                        .findFirst()
-                        .orElseGet(ChecklistItem::new)
-                        .getChecked()));
-
-        final ChecklistServiceNavigatorReadDTO checklistServiceNavigatorReadDTO = checklistMapper.toServiceNavigatorReadDTO(checklist);
-        checklistServiceNavigatorReadDTO.setChecklistItemServiceNavigatorDtos(checklistItemServiceNavigatorDTOList);
-        return checklistServiceNavigatorReadDTO;
-
     }
 
-    public List<ChecklistItemServiceNavigatorDTO> getChecklistServiceNavigatorReadDTO(final String serviceIds) {
-        final String url = p13nConfiguration.getServiceNavigatorUrl() + SERVICENAVIGATOR_QUERY_PARAMETER_ID + serviceIds;
-        final ResponseEntity<List<ServiceNavigatorResponse>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                });
-
-        return toDto(Objects.requireNonNull(response.getBody()));
-    }
-
-    private List<ChecklistItemServiceNavigatorDTO> toDto(final List<ServiceNavigatorResponse> snResponseList) {
+    public ChecklistItemServiceNavigatorDTO toDto(final ServiceNavigatorResponse snResponse) {
         //todo make nice with mapstruct
-        return Objects.requireNonNull(snResponseList).stream().map(snResponse -> {
-            final ChecklistItemServiceNavigatorDTO mappedDto = new ChecklistItemServiceNavigatorDTO();
-            mappedDto.setServiceID(snResponse.id());
-            mappedDto.setTitle(snResponse.serviceName());
-            mappedDto.setNote(snResponse.summary());
-            mappedDto.setPublicUrl(snResponse.publicUrl());
-            mappedDto.setRequired(snResponse.mandatory());
-            mappedDto.setIsExternal(snResponse.isExternal());
-            mappedDto.setAppointmentService(snResponse.appointmentService());
-            mappedDto.setAppointmentServiceUrl(snResponse.appointmentServiceUrl());
-            if (snResponse.onlineServices() != null) {
-                mappedDto.setOnlineServices(snResponse.onlineServices().stream().map(onlineService -> {
-                    final OnlineServiceDTO mappedOSDTO = new OnlineServiceDTO();
-                    mappedOSDTO.setUri(onlineService.uri());
-                    mappedOSDTO.setLabel(onlineService.label());
-                    return mappedOSDTO;
-                }).toList());
-            }
-            return mappedDto;
-        }).toList();
+        final ChecklistItemServiceNavigatorDTO mappedDto = new ChecklistItemServiceNavigatorDTO();
+        mappedDto.setServiceID(snResponse.id());
+        mappedDto.setTitle(snResponse.serviceName());
+        mappedDto.setNote(snResponse.summary());
+        mappedDto.setPublicUrl(snResponse.publicUrl());
+        mappedDto.setRequired(snResponse.mandatory());
+        mappedDto.setIsExternal(snResponse.isExternal());
+        mappedDto.setAppointmentService(snResponse.appointmentService());
+        mappedDto.setAppointmentServiceUrl(snResponse.appointmentServiceUrl());
+        if (snResponse.onlineServices() != null) {
+            mappedDto.setOnlineServices(snResponse.onlineServices().stream().map(onlineService -> {
+                final OnlineServiceDTO mappedOSDTO = new OnlineServiceDTO();
+                mappedOSDTO.setUri(onlineService.uri());
+                mappedOSDTO.setLabel(onlineService.label());
+                return mappedOSDTO;
+            }).toList());
+        }
+        return mappedDto;
     }
 }

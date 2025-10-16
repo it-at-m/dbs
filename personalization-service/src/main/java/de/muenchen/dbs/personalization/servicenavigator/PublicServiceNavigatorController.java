@@ -6,17 +6,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 public class PublicServiceNavigatorController {
 
     private static final String SERVICENAVIGATOR_QUERY_PARAMETER_ID = "?id=";
+    public static final String SERVICE_IDS_SEPARATOR = ",";
 
     private final RestTemplate restTemplate;
     private final P13nConfiguration p13nConfiguration;
@@ -50,9 +51,12 @@ public class PublicServiceNavigatorController {
 
     @GetMapping
     @Operation(summary = "Lookup ServiceNavigator Services by ServiceID. Returns a list of services for the given service IDs.")
-    @ResponseStatus(HttpStatus.OK)
     public List<ChecklistItemServiceNavigatorDTO> getServicesByIds(@RequestParam("ids") final String serviceIds) {
-        return snService.getChecklistServiceNavigatorReadDTO(serviceIds);
+        return Arrays.stream(serviceIds.split(SERVICE_IDS_SEPARATOR))
+                .map(snService::getServiceNavigatorService)
+                .flatMap(Optional::stream)
+                .map(snService::toDto)
+                .toList();
     }
 
 }

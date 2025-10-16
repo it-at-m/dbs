@@ -80,6 +80,7 @@
     <muc-intro
       :title="lebenslageTitle"
       :divider="false"
+      variant="detail"
     >
       <div v-if="!localStorageError">
         <p>
@@ -128,12 +129,14 @@
               passen Sie bitte Ihre Browser-Einstellungen an und starten Sie
               dann die Abfrage erneut.
             </p>
-            <muc-button
-              icon="arrow-right"
-              iconAnimated
-            >
-              Abfrage neu starten
-            </muc-button>
+            <a :href="newChecklistUrl">
+              <muc-button
+                icon="arrow-right"
+                iconAnimated
+              >
+                Abfrage neu starten
+              </muc-button>
+            </a>
           </div>
 
           <div v-else-if="!localStorageError && !loadingError && snServices">
@@ -156,10 +159,12 @@
 
           <div v-else>
             <muc-callout type="error">
-              <template #header> Fehler</template>
+              <template #header>
+                Die Checkliste kann nicht geladen werden.
+              </template>
               <template #content>
-                Beim Laden der Daten ist ein Fehler aufgetreten. Bitte versuchen
-                Sie es zu einem späteren Zeitpunkt noch einmal.
+                Es gibt aktuell leider ein technisches Problem mit dieser
+                Funktion. Bitte versuchen Sie es später noch einmal.
               </template>
             </muc-callout>
           </div>
@@ -177,6 +182,7 @@ import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts
 import {
   MucBanner,
   MucButton,
+  MucCallout,
   MucCheckbox,
   MucIntro,
   MucModal,
@@ -222,10 +228,12 @@ const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
 const props = defineProps<{
   checklistDetailUrl: string;
+  newChecklistUrl: string;
 }>();
 
 onMounted(() => {
   loading.value = true;
+  loadingError.value = "";
 
   const snResult = getSnResults();
 
@@ -240,6 +248,9 @@ onMounted(() => {
       snResult.services.join(",");
     fetch(url, {
       mode: "cors",
+      headers: {
+        Accept: "application/json",
+      },
     })
       .then((resp) => {
         if (resp.ok) {
@@ -249,13 +260,15 @@ onMounted(() => {
               snServices.value = snServicesBody;
             });
         } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
+          resp.text().then((errorText) => {
+            console.debug("Error loading checklist: ", errorText);
+            loadingError.value = errorText;
           });
         }
       })
       .catch((error) => {
-        console.debug(error);
+        console.debug("Error loading checklist: ", error);
+        loadingError.value = error;
       })
       .finally(() => (loading.value = false));
   } else {
@@ -286,6 +299,7 @@ function _requestLogin() {
 function _saveChecklistAcceptedDSE() {
   //todo replace with openapi generated client when backend is finished
   loading.value = true;
+  loadingError.value = "";
   const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
   const checklistItemsDtos = snServices.value?.map((service) => {
     return {
@@ -405,7 +419,7 @@ async function copyUrl() {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.6/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 </style>

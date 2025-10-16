@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                         PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/swagger-ui/**"),
                         // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
                         PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/actuator/metrics"),
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/error"),
                         PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/public/**"))
                         .permitAll())
                 .authorizeHttpRequests((requests) -> requests.requestMatchers("/**")
