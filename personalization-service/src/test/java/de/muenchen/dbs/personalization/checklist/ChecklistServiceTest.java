@@ -2,6 +2,7 @@ package de.muenchen.dbs.personalization.checklist;
 
 import static de.muenchen.dbs.personalization.checklist.ChecklistTestHelper.createTestChecklist;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.argThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -9,10 +10,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.muenchen.dbs.personalization.checklist.domain.Checklist;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapperImpl;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -33,6 +38,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 public class ChecklistServiceTest {
 
     private static final String USER_LHM_EXT_ID = "user-lhm-ext-id";
+
+    @Spy
+    private final ChecklistMapper checklistMapper = new ChecklistMapperImpl();
 
     @Mock
     private ChecklistRepository checklistRepository;
@@ -115,10 +123,13 @@ public class ChecklistServiceTest {
             final Checklist checklist = createTestChecklist(id, USER_LHM_EXT_ID, null);
 
             when(checklistRepository.findById(id)).thenReturn(Optional.of(checklist));
+            when(serviceNavigatorService.getServiceNavigatorService(anyString())).thenReturn(Optional.empty());
+
             final ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
             expectedChecklistServiceNavigatorReadDTO.setId(checklist.getId());
+            expectedChecklistServiceNavigatorReadDTO.setTitle("title");
             expectedChecklistServiceNavigatorReadDTO.setLhmExtId(checklist.getLhmExtId());
-            when(serviceNavigatorService.getChecklistServiceNavigatorReadDTO(checklist)).thenReturn(expectedChecklistServiceNavigatorReadDTO);
+            expectedChecklistServiceNavigatorReadDTO.setChecklistItemServiceNavigatorDtos(new ArrayList<>());
 
             // When
             final ChecklistServiceNavigatorReadDTO result = checklistService.getChecklist(id);
@@ -160,11 +171,12 @@ public class ChecklistServiceTest {
             expectedChecklistServiceNavigatorReadDTO.setId(expectedChecklist.getId());
             expectedChecklistServiceNavigatorReadDTO.setLhmExtId(expectedChecklist.getLhmExtId());
             expectedChecklistServiceNavigatorReadDTO.setTitle(expectedChecklist.getTitle());
+            expectedChecklistServiceNavigatorReadDTO.setChecklistItemServiceNavigatorDtos(new ArrayList<>());
 
             // Mock-Verhalten
             when(checklistRepository.findById(checklistToUpdateId)).thenReturn(Optional.of(checklistToUpdate));
             when(checklistRepository.save(checklistToUpdate)).thenReturn(expectedChecklist);
-            when(serviceNavigatorService.getChecklistServiceNavigatorReadDTO(expectedChecklist)).thenReturn(expectedChecklistServiceNavigatorReadDTO);
+            when(serviceNavigatorService.getServiceNavigatorService(anyString())).thenReturn(Optional.empty());
 
             // When
             final ChecklistServiceNavigatorReadDTO result = checklistService.updateChecklist(checklistToUpdate, checklistToUpdateId);

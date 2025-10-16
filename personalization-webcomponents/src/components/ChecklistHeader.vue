@@ -4,6 +4,7 @@
     :title="checklist.title"
     :img="getChecklistIconBySituationId(checklist.situationId)"
     imgAlt=""
+    variant="detail"
   >
     <div
       v-if="checklist.lastUpdate"

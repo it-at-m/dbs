@@ -44,7 +44,8 @@
       </a>
 
       <a
-        :href="service?.publicUrl"
+        v-if="service?.publicUrl"
+        :href="service.publicUrl"
         target="_blank"
       >
         <muc-button

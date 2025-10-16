@@ -6,10 +6,10 @@
     <div v-html="customIconsSprite" />
 
     <muc-modal
-      v-if="requestToDeleteItem"
-      :open="openAcceptDeleteDialog"
-      @close="openAcceptDeleteDialog = false"
-      @cancel="openAcceptDeleteDialog = false"
+        v-if="requestToDeleteItem"
+        :open="openAcceptDeleteDialog"
+        @close="openAcceptDeleteDialog = false"
+        @cancel="openAcceptDeleteDialog = false"
     >
       <template #title> Löschen der Aufgabe </template>
 
@@ -24,40 +24,106 @@
       </template>
       <template #buttons>
         <muc-button
-          icon="trash"
-          @click="deleteItem(requestToDeleteItem)"
+            icon="trash"
+            @click="deleteItem(requestToDeleteItem)"
         >
           Aufgabe löschen
         </muc-button>
         <muc-button
-          variant="secondary"
-          @click="openAcceptDeleteDialog = false"
+            variant="secondary"
+            @click="openAcceptDeleteDialog = false"
         >
           Abbrechen
         </muc-button>
       </template>
     </muc-modal>
 
-    <main v-if="loading">
-      <skeleton-loader />
-    </main>
-    <main v-else>
+    <main>
+      <muc-intro
+        v-if="!loggedIn"
+        title="Meine Checkliste"
+        tagline="Checkliste"
+        variant="detail"
+      >
+        <p style="padding-bottom: 8px">
+          <strong>Sie sind nicht angemeldet.</strong>
+        </p>
+        <p style="padding-bottom: 32px">
+          Um Ihre Checkliste einzusehen, melden Sie sich bei dem Konto an, das
+          Sie für das Speichern der Liste genutzt haben.
+        </p>
+        <muc-button
+          icon="sing-in"
+          icon-animated
+          @click="login"
+        >
+          Anmelden
+        </muc-button>
+      </muc-intro>
       <checklist-header
-        v-if="checklist"
+        v-else-if="checklist"
         :checklist="checklist"
       ></checklist-header>
+      <muc-intro
+        v-else
+        title="Meine Checkliste"
+        tagline="Checkliste"
+        :divider="false"
+        variant="detail"
+      />
       <div class="m-component m-component-form">
         <div class="container">
           <div class="m-component__grid">
             <div class="m-component__column">
-              <h2 class="headline">
-                Offene Aufgaben ({{ openCheckList.length }})
-              </h2>
+              <muc-callout
+                v-if="noQueryParamError"
+                type="info"
+              >
+                <template #header> Keine Checklisten-ID gefunden </template>
+                <template #content>
+                  <p>
+                    Bitte überprüfen Sie den Link über den Sie auf diese Seite
+                    gelangt sind und stellen Sie sicher, dass Sie die
+                    vollständige URL in die Adresszeile Ihres Browsers
+                    eingegeben haben.
+                  </p>
+                </template>
+              </muc-callout>
+
+              <skeleton-loader v-else-if="loading && loggedIn" />
+
+              <muc-callout
+                v-else-if="loadingError && loggedIn"
+                type="error"
+              >
+                <template #header>
+                  Die Checkliste kann nicht geladen werden.
+                </template>
+                <template #content>
+                  Es gibt aktuell leider ein technisches Problem mit dieser
+                  Funktion. Bitte versuchen Sie es später noch einmal.
+                </template>
+                <template #buttons>
+                  <a :href="myChecklistsUrl">
+                    <muc-button
+                      icon="arrow-right"
+                      icon-animated
+                    >
+                      Zurück zur Übersicht
+                    </muc-button>
+                  </a>
+                </template>
+              </muc-callout>
+
+              <div v-else-if="loggedIn">
+                <h2 class="headline">
+                  Offene Aufgaben ({{ openCheckList.length }})
+                </h2>
 
               <checklist-list
                 v-if="openCheckList.length !== 0"
                 :checklist-items="openCheckList"
-                :disabled="loadingUpdate || loadingCheck"
+                :disabled="loadingSort || loadingCheck"
                 @checked="onCheckedOpen"
                 @delete="onRequestDeleteItem"
                 @sort="onSortOpen"
@@ -76,7 +142,7 @@
               </h2>
               <checklist-list
                 v-if="closedCheckList.length !== 0"
-                :disabled="loadingUpdate || loadingCheck"
+                :disabled="loadingSort || loadingCheck"
                 :checklist-items="closedCheckList"
                 @checked="onCheckedClosed"
                 @delete="onRequestDeleteItem"
@@ -104,7 +170,13 @@ import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemS
 import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
-import { MucBanner, MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
+import {
+  MucBanner,
+  MucButton,
+  MucCallout,
+  MucIntro,
+  MucModal
+} from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { computed, ref } from "vue";
@@ -116,10 +188,16 @@ import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
 
+defineProps<{
+  myChecklistsUrl: string;
+}>();
+
 const checklist = ref<ChecklistServiceNavigator | null>(null);
 const loading = ref(true);
 const loadingUpdate = ref(false);
 const loadingCheck = ref(false);
+const loadingError = ref("");
+const noQueryParamError = ref(false);
 
 const requestToDeleteItem = ref<ChecklistItemServiceNavigator | null>(null);
 const openAcceptDeleteDialog = ref(false);
@@ -135,6 +213,7 @@ function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
 
 function loadChecklists() {
   if (loggedIn.value) {
+    loadingError.value = "";
     loading.value = true;
     const service = new ChecklistService();
 
@@ -151,16 +230,18 @@ function loadChecklists() {
             });
           } else {
             resp.text().then((errBody) => {
-              throw Error(errBody);
+              loadingError.value = errBody;
+              console.debug("Error loading checklist: ", errBody);
             });
           }
         })
         .catch((error) => {
-          console.debug(error);
+          loadingError.value = error;
+          console.debug("Error loading checklist: ", error);
         })
         .finally(() => (loading.value = false));
     } else {
-      //todo show error no query param in url
+      noQueryParamError.value = true;
     }
   }
 }
@@ -198,6 +279,17 @@ const deletionDate = computed(() => {
     return "nächsten Jahr";
   }
 });
+
+function login() {
+  document.dispatchEvent(
+    new CustomEvent("authorization-request", {
+      detail: {
+        loginProvider: undefined,
+        authLevel: undefined,
+      },
+    })
+  );
+}
 
 function onCheckedOpen(serviceID: string) {
   if (checklist.value) {
@@ -329,15 +421,10 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.0.10/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.6/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 @import "../public/checklist-styles.css";
-
-.banner .m-banner .container-fluid {
-  margin-left: -60px !important; /* oder eine kleinere Zahl nach Wunsch */
-  min-width: 575px !important;
-}
 
 .banner {
   padding-bottom: 56px;
