@@ -92,7 +92,7 @@ import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemS
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import {computed, onBeforeUnmount, onMounted, ref} from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import P13nCheckbox from "@/components/P13nCheckbox.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
@@ -165,17 +165,23 @@ function getCheckedOfFocusedElement(): boolean | null {
   }
 
   if (active) {
-    const childWithId = (active as HTMLElement).querySelector("[id]") as HTMLInputElement | null;
+    const childWithId = (active as HTMLElement).querySelector(
+      "[id]"
+    ) as HTMLInputElement | null;
     const isChecked = childWithId?.getAttribute("checked");
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return JSON.parse(isChecked!);
-
   }
   return null;
 }
 
 function handleEnterKeyDown(event: KeyboardEvent) {
-  if (!props.isDraggable || focusedIndex.value === null || getCheckedOfFocusedElement()) return;
+  if (
+    !props.isDraggable ||
+    focusedIndex.value === null ||
+    getCheckedOfFocusedElement()
+  )
+    return;
 
   if (event.key === "Enter") {
     if (draggedIndex.value === null) {
