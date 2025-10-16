@@ -98,7 +98,8 @@
           <muc-button
             @click="copyUrl"
             variant="secondary"
-            icon="copy"
+            icon="copy-link"
+            spin-icon-on-click
           >
             Link kopieren
           </muc-button>
