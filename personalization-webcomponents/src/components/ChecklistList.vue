@@ -3,7 +3,6 @@
     class="container"
     tabindex="0"
     role="list"
-    @keydown="handleEnterKeyDown"
   >
     <sortable
       :list="checklistItems"
@@ -93,7 +92,7 @@ import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemS
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 
 import P13nCheckbox from "@/components/P13nCheckbox.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
@@ -127,10 +126,12 @@ const dialogItem = ref<ChecklistItemServiceNavigator | null>(null);
 
 onMounted(() => {
   window.addEventListener("keydown", handleArrowKeyDown);
+  window.addEventListener("keydown", handleEnterKeyDown);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", handleArrowKeyDown);
+  window.removeEventListener("keydown", handleEnterKeyDown);
 });
 
 function onSelectChange(serviceID: string) {
@@ -157,8 +158,24 @@ function onSortEnd(evt: { oldIndex: number; newIndex: number }) {
   }
 }
 
+function getCheckedOfFocusedElement(): boolean | null {
+  let active = document.activeElement;
+  while (active && active.shadowRoot?.activeElement) {
+    active = active.shadowRoot.activeElement;
+  }
+
+  if (active) {
+    const childWithId = (active as HTMLElement).querySelector("[id]") as HTMLInputElement | null;
+    const isChecked = childWithId?.getAttribute("checked");
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return JSON.parse(isChecked!);
+
+  }
+  return null;
+}
+
 function handleEnterKeyDown(event: KeyboardEvent) {
-  if (!props.isDraggable || focusedIndex.value === null) return;
+  if (!props.isDraggable || focusedIndex.value === null || getCheckedOfFocusedElement()) return;
 
   if (event.key === "Enter") {
     if (draggedIndex.value === null) {
