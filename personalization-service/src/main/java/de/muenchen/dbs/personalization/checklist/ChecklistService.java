@@ -92,10 +92,10 @@ public class ChecklistService {
 
         isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
-        List<ChecklistItem> checklistItems = foundChecklist.getChecklistItems();
+        final List<ChecklistItem> checklistItems = foundChecklist.getChecklistItems();
         ChecklistItem updatedChecklistItem = null;
 
-        for (ChecklistItem checklistItem : checklistItems) {
+        for (final ChecklistItem checklistItem : checklistItems) {
             if (checklistItem.getServiceID().equals(sanitizedServiceId)) {
                 checklistItem.setChecked(newCheckedValue);
                 updatedChecklistItem = checklistItem;
