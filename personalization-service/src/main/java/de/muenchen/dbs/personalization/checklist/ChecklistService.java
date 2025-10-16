@@ -92,11 +92,21 @@ public class ChecklistService {
 
         isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
-        foundChecklist.getChecklistItems().forEach(checklistItem -> {
+        final List<ChecklistItem> checklistItems = foundChecklist.getChecklistItems();
+        ChecklistItem updatedChecklistItem = null;
+
+        for (final ChecklistItem checklistItem : checklistItems) {
             if (checklistItem.getServiceID().equals(sanitizedServiceId)) {
                 checklistItem.setChecked(newCheckedValue);
+                updatedChecklistItem = checklistItem;
+                checklistItems.remove(checklistItem);
+                break;
             }
-        });
+        }
+        if (updatedChecklistItem != null) {
+            checklistItems.addFirst(updatedChecklistItem);
+        }
+
         foundChecklist.setLastUpdate(ZonedDateTime.now());
 
         log.debug("Update Checklist {}", foundChecklist);
