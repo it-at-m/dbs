@@ -1,15 +1,15 @@
 <template>
   <div>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="mucIconsSprite"/>
+    <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="customIconsSprite"/>
+    <div v-html="customIconsSprite" />
 
     <muc-modal
-        v-if="requestToDeleteItem"
-        :open="openAcceptDeleteDialog"
-        @close="openAcceptDeleteDialog = false"
-        @cancel="openAcceptDeleteDialog = false"
+      v-if="requestToDeleteItem"
+      :open="openAcceptDeleteDialog"
+      @close="openAcceptDeleteDialog = false"
+      @cancel="openAcceptDeleteDialog = false"
     >
       <template #title> Löschen der Aufgabe</template>
 
@@ -24,14 +24,14 @@
       </template>
       <template #buttons>
         <muc-button
-            icon="trash"
-            @click="deleteItem(requestToDeleteItem)"
+          icon="trash"
+          @click="deleteItem(requestToDeleteItem)"
         >
           Aufgabe löschen
         </muc-button>
         <muc-button
-            variant="secondary"
-            @click="openAcceptDeleteDialog = false"
+          variant="secondary"
+          @click="openAcceptDeleteDialog = false"
         >
           Abbrechen
         </muc-button>
@@ -40,10 +40,10 @@
 
     <main>
       <muc-intro
-          v-if="!loggedIn"
-          title="Meine Checkliste"
-          tagline="Checkliste"
-          variant="detail"
+        v-if="!loggedIn"
+        title="Meine Checkliste"
+        tagline="Checkliste"
+        variant="detail"
       >
         <p style="padding-bottom: 8px">
           <strong>Sie sind nicht angemeldet.</strong>
@@ -53,31 +53,31 @@
           Sie für das Speichern der Liste genutzt haben.
         </p>
         <muc-button
-            icon="sing-in"
-            icon-animated
-            @click="login"
+          icon="sing-in"
+          icon-animated
+          @click="login"
         >
           Anmelden
         </muc-button>
       </muc-intro>
       <checklist-header
-          v-else-if="checklist"
-          :checklist="checklist"
+        v-else-if="checklist"
+        :checklist="checklist"
       ></checklist-header>
       <muc-intro
-          v-else
-          title="Meine Checkliste"
-          tagline="Checkliste"
-          :divider="false"
-          variant="detail"
+        v-else
+        title="Meine Checkliste"
+        tagline="Checkliste"
+        :divider="false"
+        variant="detail"
       />
       <div class="m-component m-component-form">
         <div class="container">
           <div class="m-component__grid">
             <div class="m-component__column">
               <muc-callout
-                  v-if="noQueryParamError"
-                  type="info"
+                v-if="noQueryParamError"
+                type="info"
               >
                 <template #header> Keine Checklisten-ID gefunden</template>
                 <template #content>
@@ -90,11 +90,11 @@
                 </template>
               </muc-callout>
 
-              <skeleton-loader v-else-if="loading && loggedIn"/>
+              <skeleton-loader v-else-if="loading && loggedIn" />
 
               <muc-callout
-                  v-else-if="loadingError && loggedIn"
-                  type="error"
+                v-else-if="loadingError && loggedIn"
+                type="error"
               >
                 <template #header>
                   Die Checkliste kann nicht geladen werden.
@@ -106,8 +106,8 @@
                 <template #buttons>
                   <a :href="myChecklistsUrl">
                     <muc-button
-                        icon="arrow-right"
-                        icon-animated
+                      icon="arrow-right"
+                      icon-animated
                     >
                       Zurück zur Übersicht
                     </muc-button>
@@ -121,17 +121,17 @@
                 </h2>
 
                 <checklist-list
-                    v-if="openCheckList.length !== 0"
-                    :checklist-items="openCheckList"
-                    :disabled="loadingUpdate || loadingCheck"
-                    @checked="onCheckedOpen"
-                    @delete="onRequestDeleteItem"
-                    @sort="onSortOpen"
+                  v-if="openCheckList.length !== 0"
+                  :checklist-items="openCheckList"
+                  :disabled="loadingUpdate || loadingCheck"
+                  @checked="onCheckedOpen"
+                  @delete="onRequestDeleteItem"
+                  @sort="onSortOpen"
                 ></checklist-list>
                 <muc-banner
-                    v-else
-                    class="banner"
-                    type="success"
+                  v-else
+                  class="banner"
+                  type="success"
                 >
                   Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
                   bewahren diese Checkliste noch bis zum {{ deletionDate }} für
@@ -141,20 +141,20 @@
                   Erledigte Aufgaben ({{ closedCheckList.length }})
                 </h2>
                 <checklist-list
-                    v-if="closedCheckList.length !== 0"
-                    :disabled="loadingUpdate || loadingCheck"
-                    :checklist-items="closedCheckList"
-                    @checked="onCheckedClosed"
-                    @delete="onRequestDeleteItem"
-                    :is-draggable="false"
+                  v-if="closedCheckList.length !== 0"
+                  :disabled="loadingUpdate || loadingCheck"
+                  :checklist-items="closedCheckList"
+                  @checked="onCheckedClosed"
+                  @delete="onRequestDeleteItem"
+                  :is-draggable="false"
                 ></checklist-list>
                 <muc-banner
-                    v-else
-                    class="banner"
-                    type="info"
+                  v-else
+                  class="banner"
+                  type="info"
                 >
-                  Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
-                  der Checkliste ab, um sie als erledigt zu markieren.
+                  Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben
+                  in der Checkliste ab, um sie als erledigt zu markieren.
                 </muc-banner>
               </div>
             </div>
@@ -176,18 +176,18 @@ import {
   MucButton,
   MucCallout,
   MucIntro,
-  MucModal
+  MucModal,
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 
 import ChecklistService from "@/api/persservice/ChecklistService.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
 import ChecklistList from "@/components/ChecklistList.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
-import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import {QUERY_PARAM_CHECKLIST_ID, setAccessToken} from "@/util/Constants.ts";
+import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
 
 defineProps<{
   myChecklistsUrl: string;
@@ -203,7 +203,7 @@ const noQueryParamError = ref(false);
 const requestToDeleteItem = ref<ChecklistItemServiceNavigator | null>(null);
 const openAcceptDeleteDialog = ref(false);
 
-const {loggedIn} = useDBSLoginWebcomponentPlugin(_authChangedCallback);
+const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
   if (authEventDetails && authEventDetails.accessToken) {
@@ -223,24 +223,24 @@ function loadChecklists() {
 
     if (checklistId) {
       service
-          .getChecklist(checklistId)
-          .then((resp) => {
-            if (resp.ok) {
-              resp.json().then((checklistResponse: ChecklistServiceNavigator) => {
-                checklist.value = checklistResponse;
-              });
-            } else {
-              resp.text().then((errBody) => {
-                loadingError.value = errBody;
-                console.debug("Error loading checklist: ", errBody);
-              });
-            }
-          })
-          .catch((error) => {
-            loadingError.value = error;
-            console.debug("Error loading checklist: ", error);
-          })
-          .finally(() => (loading.value = false));
+        .getChecklist(checklistId)
+        .then((resp) => {
+          if (resp.ok) {
+            resp.json().then((checklistResponse: ChecklistServiceNavigator) => {
+              checklist.value = checklistResponse;
+            });
+          } else {
+            resp.text().then((errBody) => {
+              loadingError.value = errBody;
+              console.debug("Error loading checklist: ", errBody);
+            });
+          }
+        })
+        .catch((error) => {
+          loadingError.value = error;
+          console.debug("Error loading checklist: ", error);
+        })
+        .finally(() => (loading.value = false));
     } else {
       noQueryParamError.value = true;
     }
@@ -250,7 +250,7 @@ function loadChecklists() {
 const openCheckList = computed(() => {
   if (checklist.value && checklist.value.checklistItemServiceNavigatorDtos) {
     return checklist.value.checklistItemServiceNavigatorDtos.filter(
-        (value) => !value.checked
+      (value) => !value.checked
     );
   } else {
     return [];
@@ -260,7 +260,7 @@ const openCheckList = computed(() => {
 const closedCheckList = computed(() => {
   if (checklist.value && checklist.value.checklistItemServiceNavigatorDtos) {
     return checklist.value.checklistItemServiceNavigatorDtos.filter(
-        (value) => value.checked
+      (value) => value.checked
     );
   } else {
     return [];
@@ -283,12 +283,12 @@ const deletionDate = computed(() => {
 
 function login() {
   document.dispatchEvent(
-      new CustomEvent("authorization-request", {
-        detail: {
-          loginProvider: undefined,
-          authLevel: undefined,
-        },
-      })
+    new CustomEvent("authorization-request", {
+      detail: {
+        loginProvider: undefined,
+        authLevel: undefined,
+      },
+    })
   );
 }
 
@@ -297,22 +297,22 @@ function onCheckedOpen(serviceID: string) {
     loadingCheck.value = true;
     const service = new ChecklistService();
     service
-        .checkChecklistentry(checklist.value.id, serviceID)
-        .then((resp) => {
-          if (resp.ok) {
-            resp.json().then((newChecklist) => {
-              checklist.value = newChecklist;
-            });
-          } else {
-            resp.text().then((errBody) => {
-              throw Error(errBody);
-            });
-          }
-        })
-        .catch((err) => {
-          console.debug(err);
-        })
-        .finally(() => (loadingCheck.value = false));
+      .checkChecklistentry(checklist.value.id, serviceID)
+      .then((resp) => {
+        if (resp.ok) {
+          resp.json().then((newChecklist) => {
+            checklist.value = newChecklist;
+          });
+        } else {
+          resp.text().then((errBody) => {
+            throw Error(errBody);
+          });
+        }
+      })
+      .catch((err) => {
+        console.debug(err);
+      })
+      .finally(() => (loadingCheck.value = false));
   }
 }
 
@@ -321,22 +321,22 @@ function onCheckedClosed(serviceID: string) {
     loadingCheck.value = true;
     const service = new ChecklistService();
     service
-        .uncheckChecklistentry(checklist.value.id, serviceID)
-        .then((resp) => {
-          if (resp.ok) {
-            resp.json().then((newChecklist) => {
-              checklist.value = newChecklist;
-            });
-          } else {
-            resp.text().then((errBody) => {
-              throw Error(errBody);
-            });
-          }
-        })
-        .catch((err) => {
-          console.debug(err);
-        })
-        .finally(() => (loadingCheck.value = false));
+      .uncheckChecklistentry(checklist.value.id, serviceID)
+      .then((resp) => {
+        if (resp.ok) {
+          resp.json().then((newChecklist) => {
+            checklist.value = newChecklist;
+          });
+        } else {
+          resp.text().then((errBody) => {
+            throw Error(errBody);
+          });
+        }
+      })
+      .catch((err) => {
+        console.debug(err);
+      })
+      .finally(() => (loadingCheck.value = false));
   }
 }
 
@@ -349,9 +349,9 @@ function deleteItem(checklistItem: ChecklistItemServiceNavigator) {
   openAcceptDeleteDialog.value = false;
   loadingUpdate.value = true;
   const indexOfItem =
-      checklist.value?.checklistItemServiceNavigatorDtos.findIndex((item) => {
-        return item.serviceID === checklistItem.serviceID;
-      }) as number;
+    checklist.value?.checklistItemServiceNavigatorDtos.findIndex((item) => {
+      return item.serviceID === checklistItem.serviceID;
+    }) as number;
   if (checklist.value && indexOfItem > -1) {
     checklist.value.checklistItemServiceNavigatorDtos.splice(indexOfItem, 1);
     _updateChecklist(checklist.value);
@@ -367,25 +367,25 @@ function deleteItem(checklistItem: ChecklistItemServiceNavigator) {
  */
 function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
   const elementToSort = openCheckList.value[
-      evt.oldIndex
-      ] as ChecklistItemServiceNavigator;
+    evt.oldIndex
+  ] as ChecklistItemServiceNavigator;
   const oldIndex = checklist.value?.checklistItemServiceNavigatorDtos.findIndex(
-      (item) => {
-        return item.serviceID === elementToSort.serviceID;
-      }
+    (item) => {
+      return item.serviceID === elementToSort.serviceID;
+    }
   ) as number;
   if (oldIndex >= 0 && checklist.value) {
     loadingUpdate.value = true;
 
     const newIndex = oldIndex + (evt.newIndex - evt.oldIndex);
     const element = checklist.value.checklistItemServiceNavigatorDtos[
-        oldIndex
-        ] as ChecklistItemServiceNavigator;
+      oldIndex
+    ] as ChecklistItemServiceNavigator;
     checklist.value.checklistItemServiceNavigatorDtos.splice(oldIndex, 1);
     checklist.value.checklistItemServiceNavigatorDtos.splice(
-        newIndex,
-        0,
-        element
+      newIndex,
+      0,
+      element
     );
 
     _updateChecklist(checklist.value);
@@ -402,22 +402,22 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 
   const service = new ChecklistService();
   service
-      .updateChecklist(updateChecklist)
-      .then((resp) => {
-        if (resp.ok) {
-          resp.json().then((newChecklist) => {
-            checklist = newChecklist;
-          });
-        } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
-          });
-        }
-      })
-      .catch((err) => {
-        console.debug(err);
-      })
-      .finally(() => (loadingUpdate.value = false));
+    .updateChecklist(updateChecklist)
+    .then((resp) => {
+      if (resp.ok) {
+        resp.json().then((newChecklist) => {
+          checklist = newChecklist;
+        });
+      } else {
+        resp.text().then((errBody) => {
+          throw Error(errBody);
+        });
+      }
+    })
+    .catch((err) => {
+      console.debug(err);
+    })
+    .finally(() => (loadingUpdate.value = false));
 }
 </script>
 
