@@ -10,4 +10,4 @@ security:
   logging-mode: all
 
 p13n:
-  service-navigator-url: "https://stadt.muenchen.de/service/rs/befi/navigator/"
+  service-navigator-url: "http://localhost:${wiremock.server.port}/service/rs/befi/navigator/"
