@@ -10,6 +10,7 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigato
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -92,7 +93,7 @@ public class ChecklistService {
 
         isChecklistOwnerOrThrow(foundChecklist, lhmExtId);
 
-        final List<ChecklistItem> checklistItems = foundChecklist.getChecklistItems();
+        List<ChecklistItem> checklistItems = foundChecklist.getChecklistItems();
         ChecklistItem updatedChecklistItem = null;
 
         for (final ChecklistItem checklistItem : checklistItems) {
@@ -106,6 +107,10 @@ public class ChecklistService {
         if (updatedChecklistItem != null) {
             checklistItems.addFirst(updatedChecklistItem);
         }
+
+        // do it only for hibernate...https://stackoverflow.com/questions/8773311/unique-constraint-violation-with-ordered-hibernate-list
+        checklistItems = new ArrayList<>(checklistItems);
+        foundChecklist.setChecklistItems(checklistItems);
 
         foundChecklist.setLastUpdate(ZonedDateTime.now());
 
