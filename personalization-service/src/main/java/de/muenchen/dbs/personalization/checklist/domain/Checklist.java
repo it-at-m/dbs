@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OrderColumn;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import java.time.ZonedDateTime;
@@ -41,5 +42,6 @@ public class Checklist extends BaseEntity {
 
     @ElementCollection
     @CollectionTable(name = "checklist_item", joinColumns = @JoinColumn(name = "checklist_id"))
+    @OrderColumn(name = "checklistitem_order")
     private List<ChecklistItem> checklistItems;
 }

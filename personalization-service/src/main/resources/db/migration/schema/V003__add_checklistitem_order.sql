@@ -1,0 +1,2 @@
+ALTER TABLE checklist_item
+ADD checklistitem_order integer;
