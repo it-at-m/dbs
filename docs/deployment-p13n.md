@@ -17,7 +17,7 @@ There are multiple webcomponents available which should be integrated to separat
 Shows a "preview" of all services in the calculated checklist. Grabs it's data from localstorage.
 
 | Property               | Type   | Description                                        | Default |
-|------------------------|--------|----------------------------------------------------|---------|
+| ---------------------- | ------ | -------------------------------------------------- | ------- |
 | `checklist-detail-url` | string | URL to the checklist detail page                   | -       |
 | `new-checklist-url`    | string | URL to the page where the "Lebenslagen" get chosen | -       |
 
@@ -26,7 +26,7 @@ Shows a "preview" of all services in the calculated checklist. Grabs it's data f
 Shows first (max 2) checklists of the current user to be displayed on an overview-page.
 
 | Property                     | Type   | Description                                                                                                                                                                                        | Default |
-|------------------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| ---------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `checklist-detail-url`       | string | URL to the checklist detail page                                                                                                                                                                   | -       |
 | `checklist-overview-url`     | string | URL to the checklist overview page                                                                                                                                                                 | -       |
 | `new-checklist-url`          | string | URL to the page where the "Lebenslagen" get chosen                                                                                                                                                 | -       |
@@ -37,16 +37,16 @@ Shows first (max 2) checklists of the current user to be displayed on an overvie
 Shows detailed data of a specific checklist.
 
 | Property            | Type   | Description                  | Default |
-|---------------------|--------|------------------------------|---------|
+| ------------------- | ------ | ---------------------------- | ------- |
 | `my-checklists-url` | string | URL to the my checklist page | -       |
 
 | Query-Parameter | Description                    |
-|-----------------|--------------------------------|
+| --------------- | ------------------------------ |
 | `cl-id`         | ID of the checklist to display |
 
 ### `my-checklists`
 
 | Property               | Type   | Description                      | Default |
-|------------------------|--------|----------------------------------|---------|
+| ---------------------- | ------ | -------------------------------- | ------- |
 | `checklist-detail-url` | string | URL to the checklist detail page | -       |
 | `new-checklist-url`    | string | URL to the new checklist page    | -       |
