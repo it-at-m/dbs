@@ -107,7 +107,7 @@
       </div>
     </muc-intro>
 
-    <div class="container">
+    <div class="container" style="padding-top: 2rem">
       <div class="m-intro-vertical__grid">
         <div class="m-intro-vertical__grid-inner">
           <div v-if="loading">
