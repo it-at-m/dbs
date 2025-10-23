@@ -448,6 +448,10 @@ async function copyUrl() {
   line-height: 150%;
 }
 
+.snServiceElement span:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--mde-color-brand-mde-blue-x-dark);
+}
 
 .snServiceElement .required-label {
   color: var(--mde-color-neutral-grey-light);
