@@ -152,6 +152,12 @@
               >
                 <span>
                   {{ service.title }}
+
+                   <span
+                       class="required-label"
+                       v-if="service.required">- verpflichtend
+                   </span>
+
                 </span>
               </div>
             </div>
@@ -436,18 +442,19 @@ async function copyUrl() {
 }
 
 .snServiceElement span {
-  font-size: 18px;
+  font-size: 1rem;
   color: var(--mde-color-brand-mde-blue);
   font-weight: 700;
   line-height: 150%;
 }
 
-.mandatory-subtitle {
-  font-family: "Open Sans";
-  font-size: 18px;
+
+.snServiceElement .required-label {
+  color: var(--mde-color-neutral-grey-light);
+  font-family: "Open Sans", sans-serif;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
-  color: var(--mde-color-neutral-grey-light);
 }
 </style>
