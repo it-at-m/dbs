@@ -295,6 +295,10 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   text-decoration: underline;
 }
 
+.label-text:hover .required-label {
+  color: var(--mde-color-neutral-grey-light);
+}
+
 @media (max-width: 576px) {
   .label-text {
     padding: 12px 8px;
@@ -348,5 +352,9 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
+}
+
+.muted .required-label {
+  color: var(--mde-color-neutral-grey-x-light) !important;
 }
 </style>
