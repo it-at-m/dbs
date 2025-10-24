@@ -3,7 +3,6 @@
     tagline="Checkliste"
     :title="checklist.title"
     :img="getChecklistIconBySituationId(checklist.situationId)"
-    imgAlt=""
     variant="detail"
   >
     <div
