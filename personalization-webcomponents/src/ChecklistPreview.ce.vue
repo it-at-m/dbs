@@ -107,7 +107,10 @@
       </div>
     </muc-intro>
 
-    <div class="container">
+    <div
+      class="container"
+      style="padding-top: 2rem"
+    >
       <div class="m-intro-vertical__grid">
         <div class="m-intro-vertical__grid-inner">
           <div v-if="loading">
@@ -152,6 +155,12 @@
               >
                 <span>
                   {{ service.title }}
+
+                  <span
+                    class="required-label"
+                    v-if="service.required"
+                    >- verpflichtend
+                  </span>
                 </span>
               </div>
             </div>
@@ -436,18 +445,27 @@ async function copyUrl() {
 }
 
 .snServiceElement span {
-  font-size: 18px;
+  font-size: 1rem;
   color: var(--mde-color-brand-mde-blue);
   font-weight: 700;
   line-height: 150%;
 }
 
-.mandatory-subtitle {
-  font-family: "Open Sans";
-  font-size: 18px;
+.snServiceElement span:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--mde-color-brand-mde-blue-x-dark);
+}
+
+.snServiceElement span:hover .required-label {
+  color: var(--mde-color-neutral-grey-light);
+}
+
+.snServiceElement .required-label {
+  color: var(--mde-color-neutral-grey);
+  font-family: "Open Sans", sans-serif;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
-  color: var(--mde-color-neutral-grey-light);
 }
 </style>
