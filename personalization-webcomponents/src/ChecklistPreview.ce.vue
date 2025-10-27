@@ -90,7 +90,7 @@
         <div style="padding-top: 32px">
           <muc-button
             icon="order-bool-ascending"
-            style="margin-right: 16px"
+            style="margin-right: 16px; margin-bottom: 16px"
             @click="saveChecklistClicked"
           >
             Als Checkliste speichern
