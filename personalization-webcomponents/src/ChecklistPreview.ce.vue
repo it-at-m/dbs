@@ -179,7 +179,7 @@
                   <span
                     class="required-label"
                     v-if="service.required"
-                    >- verpflichtend
+                    >– verpflichtend
                   </span>
                 </span>
               </div>
