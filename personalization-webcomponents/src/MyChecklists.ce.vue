@@ -1,7 +1,5 @@
 <template>
-  <main
-    v-if="loggedIn"
-  >
+  <main v-if="loggedIn">
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->

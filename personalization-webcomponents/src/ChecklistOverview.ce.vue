@@ -96,7 +96,11 @@ import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import {IS_MOBILE_MEDIA_QUERY, QUERY_PARAM_CHECKLIST_ID, setAccessToken} from "@/util/Constants.ts";
+import {
+  IS_MOBILE_MEDIA_QUERY,
+  QUERY_PARAM_CHECKLIST_ID,
+  setAccessToken,
+} from "@/util/Constants.ts";
 
 const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
@@ -135,7 +139,7 @@ function loadChecklists() {
               const urlParams = new URLSearchParams(window.location.search);
               const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
               checklists.value = checklists.value.filter(
-                  (checklist) => checklist.id != checklistId
+                (checklist) => checklist.id != checklistId
               );
             }
           });

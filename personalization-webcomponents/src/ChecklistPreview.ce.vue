@@ -39,42 +39,49 @@
     >
       <template #title>Speichern als Checkliste</template>
       <template #body>
-<!--        <p>-->
-<!--          Ich stimme der Speicherung der Checkliste-->
-<!--          <strong>„{{ lebenslageTitle }}”</strong> in meinem Bereich gemäß der-->
-<!--          <a href="https://stadt.muenchen.de/infos/datenschutz.html"-->
-<!--            >Datenschutzerklärung</a-->
-<!--          >-->
-<!--          zu.-->
-<!--        </p>-->
-<!--        <muc-checkbox-->
-<!--          id="dseAcceptCheckbox"-->
-<!--          v-model:="dseAccepted"-->
-<!--          label="Ich stimme zu."-->
-<!--        />-->
-
+        <!--        <p>-->
+        <!--          Ich stimme der Speicherung der Checkliste-->
+        <!--          <strong>„{{ lebenslageTitle }}”</strong> in meinem Bereich gemäß der-->
+        <!--          <a href="https://stadt.muenchen.de/infos/datenschutz.html"-->
+        <!--            >Datenschutzerklärung</a-->
+        <!--          >-->
+        <!--          zu.-->
+        <!--        </p>-->
+        <!--        <muc-checkbox-->
+        <!--          id="dseAcceptCheckbox"-->
+        <!--          v-model:="dseAccepted"-->
+        <!--          label="Ich stimme zu."-->
+        <!--        />-->
 
         <div class="m-content">
           <div class="m-checkboxes">
             <div class="m-checkboxes__item">
               <input
-                  id="checkbox-privacy-policy"
-                  class="m-checkboxes__input"
-                  name="checkbox-privacy-policy"
-                  type="checkbox"
-                  aria-required="true"
-                  v-model="dseAccepted"
+                id="checkbox-privacy-policy"
+                class="m-checkboxes__input"
+                name="checkbox-privacy-policy"
+                type="checkbox"
+                aria-required="true"
+                v-model="dseAccepted"
               />
               <label
-                  class="m-label m-checkboxes__label"
-                  for="checkbox-privacy-policy"
+                class="m-label m-checkboxes__label"
+                for="checkbox-privacy-policy"
               >
                 Ich stimme der Speicherung der Checkliste
-                <strong>„{{lebenslageTitle}}”</strong>
+                <strong>„{{ lebenslageTitle }}”</strong>
                 in meinem Bereich gemäß der
-                <a href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html" target='_blank'>Hinweise zur elektronischen Kommunikation</a>
+                <a
+                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
+                  target="_blank"
+                  >Hinweise zur elektronischen Kommunikation</a
+                >
                 und der
-                <a href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf" target='_blank'>Datenschutzerklärung</a>
+                <a
+                  href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf"
+                  target="_blank"
+                  >Datenschutzerklärung</a
+                >
                 zu.
               </label>
             </div>
@@ -219,7 +226,6 @@ import {
   MucBanner,
   MucButton,
   MucCallout,
-  MucCheckbox,
   MucIntro,
   MucModal,
   MucPercentageSpinner,
@@ -233,7 +239,7 @@ import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import {
   getAccessToken,
-  getAPIBaseURL, getPrivacyPolicyStringWithLink,
+  getAPIBaseURL,
   getXSRFToken,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
@@ -452,7 +458,6 @@ async function copyUrl() {
   const clipboardItem = new ClipboardItem(clipboardItemData);
   await navigator.clipboard.write([clipboardItem]);
 }
-
 </script>
 
 <style>

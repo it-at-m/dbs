@@ -100,7 +100,8 @@
                   Ihr Checkliste konnte nicht geladen werden.
                 </template>
                 <template #content>
-                  Bitte überprüfen Sie, ob Sie den korrekten Link sowie das richtige Konto für die Anmeldung genutzt haben.
+                  Bitte überprüfen Sie, ob Sie den korrekten Link sowie das
+                  richtige Konto für die Anmeldung genutzt haben.
                 </template>
                 <template #buttons>
                   <a :href="myChecklistsUrl">
