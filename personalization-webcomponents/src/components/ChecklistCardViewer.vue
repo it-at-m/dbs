@@ -16,7 +16,7 @@
   <div v-else-if="isMobile">
     <muc-slider
       v-if="allChecklists.length < 2"
-      class="slider-content"
+      :class="resizeSliderContent ? 'slider-content-resized' : 'slider-content'"
     >
       <muc-slider-item
         v-for="(checklist, index) in allChecklists"
@@ -44,7 +44,7 @@
     </muc-slider>
     <muc-slider
       v-else
-      class="slider-content"
+      :class="resizeSliderContent ? 'slider-content-resized' : 'slider-content'"
     >
       <muc-slider-item
         v-for="(checklist, index) in allChecklists.slice(0, 2)"
@@ -110,10 +110,12 @@ import {
   MucSlider,
   MucSliderItem,
 } from "@muenchen/muc-patternlab-vue";
+import { useMediaQuery } from "@vueuse/core";
 
 import AddChecklistCard from "@/components/AddChecklistCard.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
+import { IS_RESIZE_SLIDER_CONTENT_MEDIA_QUERY } from "@/util/Constants.ts";
 
 defineProps<{
   allChecklists: Checklist[];
@@ -122,6 +124,8 @@ defineProps<{
   checklistDetailUrl: string;
   displayedOnDetailScreen: boolean;
 }>();
+
+const resizeSliderContent = useMediaQuery(IS_RESIZE_SLIDER_CONTENT_MEDIA_QUERY);
 </script>
 
 <style scoped>
@@ -134,6 +138,11 @@ defineProps<{
 .slider-content {
   margin-left: -1.5rem;
   margin-right: -1.5rem;
+}
+
+.slider-content-resized {
+  margin-left: -3rem;
+  margin-right: -3rem;
 }
 
 /* Background color of the cards */
