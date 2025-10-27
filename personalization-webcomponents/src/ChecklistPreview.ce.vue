@@ -39,20 +39,40 @@
     >
       <template #title>Speichern als Checkliste</template>
       <template #body>
-        <p>
-          Ich stimme der Speicherung der Checkliste
-          <strong>„{{ lebenslageTitle }}”</strong> in meinem Bereich gemäß der
-          <a href="https://stadt.muenchen.de/infos/datenschutz.html"
-            >Datenschutzerklärung</a
-          >
-          zu.
-        </p>
-        <muc-checkbox
-          id="dseAcceptCheckbox"
-          v-model:="dseAccepted"
-          label="Ich stimme zu."
-        />
-
+        <div class="m-content">
+          <div class="m-checkboxes">
+            <div class="m-checkboxes__item">
+              <input
+                id="checkbox-privacy-policy"
+                class="m-checkboxes__input"
+                name="checkbox-privacy-policy"
+                type="checkbox"
+                aria-required="true"
+                v-model="dseAccepted"
+              />
+              <label
+                class="m-label m-checkboxes__label"
+                for="checkbox-privacy-policy"
+              >
+                Ich stimme der Speicherung der Checkliste
+                <strong>„{{ lebenslageTitle }}”</strong>
+                in meinem Bereich gemäß der
+                <a
+                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
+                  target="_blank"
+                  >Hinweise zur elektronischen Kommunikation</a
+                >
+                und der
+                <a
+                  href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf"
+                  target="_blank"
+                  >Datenschutzerklärung</a
+                >
+                zu.
+              </label>
+            </div>
+          </div>
+        </div>
         <muc-banner
           v-if="loadingError"
           type="emergency"
@@ -159,7 +179,7 @@
                   <span
                     class="required-label"
                     v-if="service.required"
-                    >- verpflichtend
+                    >– verpflichtend
                   </span>
                 </span>
               </div>
@@ -192,7 +212,6 @@ import {
   MucBanner,
   MucButton,
   MucCallout,
-  MucCheckbox,
   MucIntro,
   MucModal,
   MucPercentageSpinner,

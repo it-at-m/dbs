@@ -30,7 +30,7 @@
                 checklists.length && !displayOptionDetailScreen && !loadingError
               "
             >
-              ({{ checklists.length }})</span
+              &nbsp;({{ checklists.length }})</span
             >
           </h2>
           <muc-button
@@ -96,7 +96,11 @@ import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import { IS_MOBILE_MEDIA_QUERY, setAccessToken } from "@/util/Constants.ts";
+import {
+  IS_MOBILE_MEDIA_QUERY,
+  QUERY_PARAM_CHECKLIST_ID,
+  setAccessToken,
+} from "@/util/Constants.ts";
 
 const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
@@ -131,6 +135,13 @@ function loadChecklists() {
         if (resp.ok) {
           resp.json().then((checklistResponse: Checklist[]) => {
             checklists.value = checklistResponse;
+            if (displayOptionDetailScreen) {
+              const urlParams = new URLSearchParams(window.location.search);
+              const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
+              checklists.value = checklists.value.filter(
+                (checklist) => checklist.id != checklistId
+              );
+            }
           });
         } else {
           resp.text().then((errBody) => {

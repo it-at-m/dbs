@@ -54,7 +54,7 @@
               class="required-label"
               v-if="element.required"
             >
-              - verpflichtend
+              – verpflichtend
             </span>
           </span>
           <span
