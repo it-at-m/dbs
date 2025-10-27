@@ -39,20 +39,6 @@
     >
       <template #title>Speichern als Checkliste</template>
       <template #body>
-        <!--        <p>-->
-        <!--          Ich stimme der Speicherung der Checkliste-->
-        <!--          <strong>„{{ lebenslageTitle }}”</strong> in meinem Bereich gemäß der-->
-        <!--          <a href="https://stadt.muenchen.de/infos/datenschutz.html"-->
-        <!--            >Datenschutzerklärung</a-->
-        <!--          >-->
-        <!--          zu.-->
-        <!--        </p>-->
-        <!--        <muc-checkbox-->
-        <!--          id="dseAcceptCheckbox"-->
-        <!--          v-model:="dseAccepted"-->
-        <!--          label="Ich stimme zu."-->
-        <!--        />-->
-
         <div class="m-content">
           <div class="m-checkboxes">
             <div class="m-checkboxes__item">
