@@ -221,6 +221,8 @@ const loading = ref(false);
 const localStorageError = ref("");
 const loadingError = ref("");
 
+const LOCALSTORAGE_KEY_LOGGED_IN = "logged.in";
+
 // Modal states
 const serviceInfoModalOpen = ref(false);
 const requestLoginModalOpen = ref(false);
@@ -286,6 +288,11 @@ onMounted(() => {
       LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT;
     loading.value = false;
   }
+
+  if (localStorage.getItem(LOCALSTORAGE_KEY_LOGGED_IN)) {
+    saveChecklistModalOpen.value = true;
+    localStorage.removeItem(LOCALSTORAGE_KEY_LOGGED_IN);
+  }
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
@@ -303,6 +310,7 @@ function _requestLogin() {
       },
     })
   );
+  localStorage.setItem(LOCALSTORAGE_KEY_LOGGED_IN, "true");
 }
 
 function _saveChecklistAcceptedDSE() {
