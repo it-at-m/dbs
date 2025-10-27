@@ -1,49 +1,50 @@
 <template>
   <main
     v-if="loggedIn"
-    class="container"
   >
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="mucIconsSprite" />
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
-    <h2 style="display: flex; align-items: center; margin-bottom: 24px">
-      <muc-icon
-        style="width: 32px; height: 32px; margin-right: 8px"
-        icon="order-bool-ascending"
-      ></muc-icon>
-      Aktive Checklisten ({{ checklists.length }})
-    </h2>
-    <muc-card-container
-      v-if="loading"
-      class="checklist-card-container"
-    >
-      <skeleton-loader
-        v-for="elem in [1, 2, 3, 4]"
-        :key="elem"
+    <div class="container">
+      <h2 style="display: flex; align-items: center; margin-bottom: 24px">
+        <muc-icon
+          style="width: 32px; height: 32px; margin-right: 8px"
+          icon="order-bool-ascending"
+        ></muc-icon>
+        Aktive Checklisten ({{ checklists.length }})
+      </h2>
+      <muc-card-container
+        v-if="loading"
+        class="checklist-card-container"
       >
-      </skeleton-loader>
-    </muc-card-container>
-    <muc-card-container
-      v-else
-      class="checklist-card-container"
-    >
-      <checklist-card
-        v-for="checklist in checklists"
-        :key="checklist.id"
-        :checklist="checklist"
-        :checklist-detail-url="checklistDetailUrl"
+        <skeleton-loader
+          v-for="elem in [1, 2, 3, 4]"
+          :key="elem"
+        >
+        </skeleton-loader>
+      </muc-card-container>
+      <muc-card-container
+        v-else
+        class="checklist-card-container"
       >
-      </checklist-card>
-      <add-checklist-card
-        title="Neue Checkliste"
-        :new-checklist-url="newChecklistUrl"
-      >
-        <template #content>
-          <icon-add-checklist />
-        </template>
-      </add-checklist-card>
-    </muc-card-container>
+        <checklist-card
+          v-for="checklist in checklists"
+          :key="checklist.id"
+          :checklist="checklist"
+          :checklist-detail-url="checklistDetailUrl"
+        >
+        </checklist-card>
+        <add-checklist-card
+          title="Neue Checkliste"
+          :new-checklist-url="newChecklistUrl"
+        >
+          <template #content>
+            <icon-add-checklist />
+          </template>
+        </add-checklist-card>
+      </muc-card-container>
+    </div>
   </main>
 </template>
 
