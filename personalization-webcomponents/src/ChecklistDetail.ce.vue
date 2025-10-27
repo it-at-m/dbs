@@ -97,7 +97,7 @@
                 type="error"
               >
                 <template #header>
-                  Ihr Checkliste konnte nicht geladen werden.
+                  Ihre Checkliste konnte nicht geladen werden.
                 </template>
                 <template #content>
                   Bitte überprüfen Sie, ob Sie den korrekten Link sowie das
