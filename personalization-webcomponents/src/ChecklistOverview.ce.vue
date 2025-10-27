@@ -30,7 +30,7 @@
                 checklists.length && !displayOptionDetailScreen && !loadingError
               "
             >
-              ({{ checklists.length }})</span
+              &nbsp;({{ checklists.length }})</span
             >
           </h2>
           <muc-button
