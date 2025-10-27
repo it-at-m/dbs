@@ -97,11 +97,10 @@
                 type="error"
               >
                 <template #header>
-                  Die Checkliste kann nicht geladen werden.
+                  Ihr Checkliste konnte nicht geladen werden.
                 </template>
                 <template #content>
-                  Es gibt aktuell leider ein technisches Problem mit dieser
-                  Funktion. Bitte versuchen Sie es später noch einmal.
+                  Bitte überprüfen Sie, ob Sie den korrekten Link sowie das richtige Konto für die Anmeldung genutzt haben.
                 </template>
                 <template #buttons>
                   <a :href="myChecklistsUrl">
