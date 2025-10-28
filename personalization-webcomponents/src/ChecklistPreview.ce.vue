@@ -77,8 +77,8 @@
           v-if="loadingError"
           type="emergency"
         >
-          Es ist ein Fehler beim speichern der Checkliste aufgetreten. Bitte
-          versuchen Sie es zu einem späteren Zeitpunkt nochmal.
+          Es ist ein Fehler beim Speichern der Checkliste aufgetreten. Bitte
+          versuchen Sie es zu einem späteren Zeitpunkt noch einmal.
         </muc-banner>
       </template>
       <template #buttons>
