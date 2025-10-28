@@ -11,7 +11,7 @@
 
     <groupId>de.muenchen.dbs.personalization</groupId>
     <artifactId>personalization-service</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>personalization_service</name>
     <description>Personalization service for the digital citizen service of the City of Munich</description>
     <url>https://github.com/it-at-m/dbs</url>
@@ -257,7 +257,7 @@
     <scm>
         <connection>scm:git:https://github.com/it-at-m/dbs.git</connection>
         <developerConnection>scm:git:https://github.com/it-at-m/dbs.git</developerConnection>
-        <tag>personalization-service-1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <build>
