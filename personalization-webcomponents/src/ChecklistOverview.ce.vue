@@ -97,7 +97,7 @@ import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import {
-  IS_MOBILE_MEDIA_QUERY,
+  IS_MOBILE_SLIDER_MEDIA_QUERY,
   QUERY_PARAM_CHECKLIST_ID,
   setAccessToken,
 } from "@/util/Constants.ts";
@@ -112,7 +112,7 @@ const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
 const checklists = ref<Checklist[]>([]);
 const loading = ref(true);
 const loadingError = ref(false);
-const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);
+const isMobile = useMediaQuery(IS_MOBILE_SLIDER_MEDIA_QUERY);
 const displayOptionDetailScreen =
   displayedOnDetailScreen.toLowerCase() === "true";
 
