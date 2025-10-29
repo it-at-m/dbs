@@ -38,7 +38,7 @@
       </template>
     </muc-modal>
 
-    <main>
+
       <muc-intro
         v-if="!loggedIn"
         title="Meine Checkliste"
@@ -161,7 +161,6 @@
           </div>
         </div>
       </div>
-    </main>
   </div>
 </template>
 
@@ -433,15 +432,5 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 
 .headline {
   padding-bottom: 32px;
-}
-
-main {
-  padding: 40px 0;
-}
-
-@media (min-width: 576px) {
-  main {
-    padding: 56px 0;
-  }
 }
 </style>
