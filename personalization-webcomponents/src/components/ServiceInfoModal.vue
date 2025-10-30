@@ -122,5 +122,4 @@ const emit = defineEmits(["close", "cancel", "task-delete", "task-toggle"]);
     font-size: 1rem;
   }
 }
-
 </style>
