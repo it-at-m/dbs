@@ -49,33 +49,74 @@
     </table>
 
     <div style="padding-top: 32px">
-
       <muc-button
-          icon="trash"
-          variant="secondary"
-          @click="deleteChecklist"
+        icon="trash"
+        variant="secondary"
+        @click="openAcceptDeleteDialog = true"
       >
         Checkliste löschen
       </muc-button>
     </div>
   </muc-intro>
+
+  <muc-modal
+    :open="openAcceptDeleteDialog"
+    @close="openAcceptDeleteDialog = false"
+    @cancel="openAcceptDeleteDialog = false"
+  >
+    <template #title> Löschen der Checkliste</template>
+
+    <template #body>
+      <muc-banner
+        noIcon
+        type="warning"
+      >
+        <p>
+          Mit dieser Aktion entfernen Sie die Checkliste
+          <strong>„{{ checklist.title }}”</strong> und alle enthaltenen Aufgaben
+          endgültig aus Ihrem Bereich.
+        </p>
+      </muc-banner>
+    </template>
+    <template #buttons>
+      <muc-button
+        icon="trash"
+        @click="deleteChecklist"
+      >
+        Checkliste löschen
+      </muc-button>
+      <muc-button
+        variant="secondary"
+        @click="openAcceptDeleteDialog = false"
+      >
+        Abbrechen
+      </muc-button>
+    </template>
+  </muc-modal>
 </template>
 
 <script setup lang="ts">
 import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 
-import {MucButton, MucIntro} from "@muenchen/muc-patternlab-vue";
-import { computed, onMounted } from "vue";
+import {
+  MucBanner,
+  MucButton,
+  MucIntro,
+  MucModal,
+} from "@muenchen/muc-patternlab-vue";
+import { computed, onMounted, ref } from "vue";
 
+import ChecklistService from "@/api/persservice/ChecklistService.ts";
 import MucChip from "@/components/common/MucChip.vue";
 import {
   getChecklistIconBySituationId,
   getDateInGermanDateFormat,
 } from "@/util/Constants.ts";
-import ChecklistService from "@/api/persservice/ChecklistService.ts";
+
+const openAcceptDeleteDialog = ref(false);
 
 const props = defineProps<{
-  checklist: ChecklistServiceNavigator,
+  checklist: ChecklistServiceNavigator;
   checklistOverviewUrl: string;
 }>();
 
@@ -120,7 +161,7 @@ const doneCount = computed(() => {
   }
 });
 
-function deleteChecklist(){
+function deleteChecklist() {
   const service = new ChecklistService();
   service.deleteChecklist(props.checklist.id).then((resp) => {
     if (resp.ok) {
@@ -130,9 +171,8 @@ function deleteChecklist(){
         throw Error(errBody);
       });
     }
-  })
+  });
 }
-
 </script>
 <style>
 .m-intro-vertical__title {

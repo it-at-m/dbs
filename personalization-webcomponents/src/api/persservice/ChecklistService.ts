@@ -49,7 +49,7 @@ export default class ChecklistService {
     });
   }
 
-  deleteChecklist(id:string): Promise<Response> {
+  deleteChecklist(id: string): Promise<Response> {
     //todo replace with openapi generated client when backend is finished
     const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist/" + id;
 
