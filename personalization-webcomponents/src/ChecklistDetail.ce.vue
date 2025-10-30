@@ -14,7 +14,7 @@
       <template #title> Löschen der Aufgabe</template>
 
       <template #body>
-        <muc-banner type="warning">
+        <muc-banner noIcon type="warning">
           <p>
             Mit dieser Aktion entfernen Sie die Aufgabe
             <strong>{{ requestToDeleteItem.title }}</strong> endgültig aus Ihrer
