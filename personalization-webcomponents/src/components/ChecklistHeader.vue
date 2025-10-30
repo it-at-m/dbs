@@ -47,13 +47,24 @@
         </td>
       </tr>
     </table>
+
+    <div style="padding-top: 32px">
+
+      <muc-button
+          icon="trash"
+          variant="secondary"
+          @click="deleteChecklist"
+      >
+        Checkliste löschen
+      </muc-button>
+    </div>
   </muc-intro>
 </template>
 
 <script setup lang="ts">
 import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 
-import { MucIntro } from "@muenchen/muc-patternlab-vue";
+import {MucButton, MucIntro} from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted } from "vue";
 
 import MucChip from "@/components/common/MucChip.vue";
@@ -61,9 +72,11 @@ import {
   getChecklistIconBySituationId,
   getDateInGermanDateFormat,
 } from "@/util/Constants.ts";
+import ChecklistService from "@/api/persservice/ChecklistService.ts";
 
 const props = defineProps<{
-  checklist: ChecklistServiceNavigator;
+  checklist: ChecklistServiceNavigator,
+  checklistOverviewUrl: string;
 }>();
 
 onMounted(() => {
@@ -106,6 +119,20 @@ const doneCount = computed(() => {
     return undefined;
   }
 });
+
+function deleteChecklist(){
+  const service = new ChecklistService();
+  service.deleteChecklist(props.checklist.id).then((resp) => {
+    if (resp.ok) {
+      location.href = props.checklistOverviewUrl;
+    } else {
+      resp.text().then((errBody) => {
+        throw Error(errBody);
+      });
+    }
+  })
+}
+
 </script>
 <style>
 .m-intro-vertical__title {
