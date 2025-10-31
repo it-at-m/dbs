@@ -488,7 +488,6 @@ async function copyUrl() {
 .snServiceElement:hover,
 .snServiceElement:focus {
   text-decoration: underline;
-  text-decoration-color: var(--mde-color-brand-mde-blue-x-dark);
 }
 
 .snServiceElement .required-label {
