@@ -36,7 +36,7 @@ defineProps<{
 }
 
 .item-title {
-  font-family: "Open Sans", "sans-serif";
+  font-family: "Open Sans", sans-serif;
   font-size: 1rem;
 }
 
