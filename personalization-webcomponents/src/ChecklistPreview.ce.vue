@@ -56,19 +56,19 @@
               >
                 Ich stimme der Speicherung der Checkliste
                 <strong>„{{ lebenslageTitle }}”</strong>
-                in meinem Bereich gemäß der
-                <a
-                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
-                  target="_blank"
-                  >Hinweise zur elektronischen Kommunikation</a
-                >
-                und der
+                gemäß der
                 <a
                   href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf"
                   target="_blank"
                   >Datenschutzerklärung</a
                 >
-                zu.
+                und der
+                <a
+                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
+                  target="_blank"
+                  >Hinweise zur elektronischen Kommunikation</a
+                >
+                zu. Meine Zustimmung kann ich jederzeit widerrufen.
               </label>
             </div>
           </div>
