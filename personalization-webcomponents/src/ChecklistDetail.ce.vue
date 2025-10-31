@@ -14,7 +14,10 @@
       <template #title> Löschen der Aufgabe</template>
 
       <template #body>
-        <muc-banner type="warning">
+        <muc-banner
+          noIcon
+          type="warning"
+        >
           <p>
             Mit dieser Aktion entfernen Sie die Aufgabe
             <strong>{{ requestToDeleteItem.title }}</strong> endgültig aus Ihrer
@@ -38,130 +41,127 @@
       </template>
     </muc-modal>
 
-    <main>
-      <muc-intro
-        v-if="!loggedIn"
-        title="Meine Checkliste"
-        tagline="Checkliste"
-        variant="detail"
+    <muc-intro
+      v-if="!loggedIn"
+      title="Meine Checkliste"
+      tagline="Checkliste"
+      variant="detail"
+    >
+      <p style="padding-bottom: 8px">
+        <strong>Sie sind nicht angemeldet.</strong>
+      </p>
+      <p style="padding-bottom: 32px">
+        Um Ihre Checkliste einzusehen, melden Sie sich bei dem Konto an, das Sie
+        für das Speichern der Liste genutzt haben.
+      </p>
+      <muc-button
+        icon="sing-in"
+        icon-animated
+        @click="login"
       >
-        <p style="padding-bottom: 8px">
-          <strong>Sie sind nicht angemeldet.</strong>
-        </p>
-        <p style="padding-bottom: 32px">
-          Um Ihre Checkliste einzusehen, melden Sie sich bei dem Konto an, das
-          Sie für das Speichern der Liste genutzt haben.
-        </p>
-        <muc-button
-          icon="sing-in"
-          icon-animated
-          @click="login"
-        >
-          Anmelden
-        </muc-button>
-      </muc-intro>
-      <checklist-header
-        v-else-if="checklist"
-        :checklist="checklist"
-      ></checklist-header>
-      <muc-intro
-        v-else
-        title="Meine Checkliste"
-        tagline="Checkliste"
-        :divider="false"
-        variant="detail"
-      />
-      <div class="m-component m-component-form">
-        <div class="container">
-          <div class="m-component__grid">
-            <div class="m-component__column">
-              <muc-callout
-                v-if="noQueryParamError"
+        Anmelden
+      </muc-button>
+    </muc-intro>
+    <checklist-header
+      v-else-if="checklist"
+      :checklist="checklist"
+    ></checklist-header>
+    <muc-intro
+      v-else
+      title="Meine Checkliste"
+      tagline="Checkliste"
+      :divider="false"
+      variant="detail"
+    />
+    <div class="m-component m-component-form">
+      <div class="container">
+        <div class="m-component__grid">
+          <div class="m-component__column">
+            <muc-callout
+              v-if="noQueryParamError"
+              type="info"
+            >
+              <template #header> Keine Checklisten-ID gefunden</template>
+              <template #content>
+                <p>
+                  Bitte überprüfen Sie den Link über den Sie auf diese Seite
+                  gelangt sind und stellen Sie sicher, dass Sie die vollständige
+                  URL in die Adresszeile Ihres Browsers eingegeben haben.
+                </p>
+              </template>
+            </muc-callout>
+
+            <skeleton-loader v-else-if="loading && loggedIn" />
+
+            <muc-callout
+              v-else-if="loadingError && loggedIn"
+              type="error"
+            >
+              <template #header>
+                Ihre Checkliste konnte nicht geladen werden.
+              </template>
+              <template #content>
+                Bitte überprüfen Sie, ob Sie den korrekten Link sowie das
+                richtige Konto für die Anmeldung genutzt haben.
+              </template>
+              <template #buttons>
+                <a :href="myChecklistsUrl">
+                  <muc-button
+                    icon="arrow-right"
+                    icon-animated
+                  >
+                    Zurück zur Übersicht
+                  </muc-button>
+                </a>
+              </template>
+            </muc-callout>
+
+            <div v-else-if="loggedIn">
+              <h2 class="headline">
+                Offene Aufgaben ({{ openCheckList.length }})
+              </h2>
+
+              <checklist-list
+                v-if="openCheckList.length !== 0"
+                :checklist-items="openCheckList"
+                :disabled="loadingUpdate || loadingCheck"
+                @checked="onCheckedOpen"
+                @delete="onRequestDeleteItem"
+                @sort="onSortOpen"
+              ></checklist-list>
+              <muc-banner
+                v-else
+                class="banner"
+                type="success"
+              >
+                Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
+                bewahren diese Checkliste noch bis zum {{ deletionDate }} für
+                Sie auf. Danach wird sie automatisch gelöscht.
+              </muc-banner>
+              <h2 class="headline">
+                Erledigte Aufgaben ({{ closedCheckList.length }})
+              </h2>
+              <checklist-list
+                v-if="closedCheckList.length !== 0"
+                :disabled="loadingUpdate || loadingCheck"
+                :checklist-items="closedCheckList"
+                @checked="onCheckedClosed"
+                @delete="onRequestDeleteItem"
+                :is-draggable="false"
+              ></checklist-list>
+              <muc-banner
+                v-else
+                class="banner"
                 type="info"
               >
-                <template #header> Keine Checklisten-ID gefunden</template>
-                <template #content>
-                  <p>
-                    Bitte überprüfen Sie den Link über den Sie auf diese Seite
-                    gelangt sind und stellen Sie sicher, dass Sie die
-                    vollständige URL in die Adresszeile Ihres Browsers
-                    eingegeben haben.
-                  </p>
-                </template>
-              </muc-callout>
-
-              <skeleton-loader v-else-if="loading && loggedIn" />
-
-              <muc-callout
-                v-else-if="loadingError && loggedIn"
-                type="error"
-              >
-                <template #header>
-                  Ihre Checkliste konnte nicht geladen werden.
-                </template>
-                <template #content>
-                  Bitte überprüfen Sie, ob Sie den korrekten Link sowie das
-                  richtige Konto für die Anmeldung genutzt haben.
-                </template>
-                <template #buttons>
-                  <a :href="myChecklistsUrl">
-                    <muc-button
-                      icon="arrow-right"
-                      icon-animated
-                    >
-                      Zurück zur Übersicht
-                    </muc-button>
-                  </a>
-                </template>
-              </muc-callout>
-
-              <div v-else-if="loggedIn">
-                <h2 class="headline">
-                  Offene Aufgaben ({{ openCheckList.length }})
-                </h2>
-
-                <checklist-list
-                  v-if="openCheckList.length !== 0"
-                  :checklist-items="openCheckList"
-                  :disabled="loadingUpdate || loadingCheck"
-                  @checked="onCheckedOpen"
-                  @delete="onRequestDeleteItem"
-                  @sort="onSortOpen"
-                ></checklist-list>
-                <muc-banner
-                  v-else
-                  class="banner"
-                  type="success"
-                >
-                  Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
-                  bewahren diese Checkliste noch bis zum {{ deletionDate }} für
-                  Sie auf. Danach wird sie automatisch gelöscht.
-                </muc-banner>
-                <h2 class="headline">
-                  Erledigte Aufgaben ({{ closedCheckList.length }})
-                </h2>
-                <checklist-list
-                  v-if="closedCheckList.length !== 0"
-                  :disabled="loadingUpdate || loadingCheck"
-                  :checklist-items="closedCheckList"
-                  @checked="onCheckedClosed"
-                  @delete="onRequestDeleteItem"
-                  :is-draggable="false"
-                ></checklist-list>
-                <muc-banner
-                  v-else
-                  class="banner"
-                  type="info"
-                >
-                  Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben
-                  in der Checkliste ab, um sie als erledigt zu markieren.
-                </muc-banner>
-              </div>
+                Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
+                der Checkliste ab, um sie als erledigt zu markieren.
+              </muc-banner>
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
@@ -433,15 +433,5 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 
 .headline {
   padding-bottom: 32px;
-}
-
-main {
-  padding: 40px 0;
-}
-
-@media (min-width: 576px) {
-  main {
-    padding: 56px 0;
-  }
 }
 </style>
