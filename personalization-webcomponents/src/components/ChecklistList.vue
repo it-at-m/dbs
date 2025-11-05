@@ -273,7 +273,7 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 
 /* text grayed out when selected */
 .muted {
-  color: #7A8D9F !important;
+  color: #7a8d9f !important;
 }
 
 .label-text {
@@ -355,6 +355,6 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 }
 
 .muted .required-label {
-  color: #7A8D9F !important;
+  color: #7a8d9f !important;
 }
 </style>
