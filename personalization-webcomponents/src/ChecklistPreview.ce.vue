@@ -56,19 +56,19 @@
               >
                 Ich stimme der Speicherung der Checkliste
                 <strong>„{{ lebenslageTitle }}”</strong>
-                in meinem Bereich gemäß der
-                <a
-                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
-                  target="_blank"
-                  >Hinweise zur elektronischen Kommunikation</a
-                >
-                und der
+                gemäß der
                 <a
                   href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf"
                   target="_blank"
                   >Datenschutzerklärung</a
                 >
-                zu.
+                und der
+                <a
+                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
+                  target="_blank"
+                  >Hinweise zur elektronischen Kommunikation</a
+                >
+                zu. Meine Zustimmung kann ich jederzeit widerrufen.
               </label>
             </div>
           </div>
@@ -166,24 +166,28 @@
             <h2 style="padding-bottom: 32px">
               Vorgeschlagene Leistungen ({{ snServices.length }})
             </h2>
-            <div>
-              <div
+            <ul class="snServiceList">
+              <li
                 class="snServiceElement"
                 v-for="service in snServices"
                 :key="service.serviceID"
                 @click="openService(service)"
+                tabindex="0"
+                @keydown.enter="openService(service)"
+                :aria-label="
+                  service.required
+                    ? service.title + ' – verpflichtend'
+                    : service.title
+                "
               >
-                <span>
-                  {{ service.title }}
-
-                  <span
-                    class="required-label"
-                    v-if="service.required"
-                    >– verpflichtend
-                  </span>
-                </span>
-              </div>
-            </div>
+                {{ service.title }}
+                <span
+                  class="required-label"
+                  v-if="service.required"
+                  >– verpflichtend</span
+                >
+              </li>
+            </ul>
           </div>
 
           <div v-else>
@@ -465,26 +469,25 @@ async function copyUrl() {
   margin-bottom: 40px;
 }
 
+.snServiceList {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
 .snServiceElement {
   cursor: pointer;
   padding: 16px 0;
   border-top: 1px solid var(--mde-color-neutral-beau-blue-x-light);
-}
-
-.snServiceElement span {
   font-size: 1rem;
   color: var(--mde-color-brand-mde-blue);
   font-weight: 700;
   line-height: 150%;
 }
 
-.snServiceElement span:hover {
+.snServiceElement:hover,
+.snServiceElement:focus {
   text-decoration: underline;
-  text-decoration-color: var(--mde-color-brand-mde-blue-x-dark);
-}
-
-.snServiceElement span:hover .required-label {
-  color: var(--mde-color-neutral-grey-light);
 }
 
 .snServiceElement .required-label {
@@ -494,5 +497,10 @@ async function copyUrl() {
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
+}
+
+.snServiceElement:hover .required-label,
+.snServiceElement:focus .required-label {
+  color: var(--mde-color-neutral-grey-light);
 }
 </style>

@@ -71,7 +71,6 @@ const emit = defineEmits(["check"]);
 
 .radio-look[disabled="true"] {
   border-color: var(--mde-color-neutral-grey);
-  background: var(--mde-color-neutral-grey-x-light);
 }
 
 .radio-look[checked][disabled="false"]:hover,
@@ -84,6 +83,7 @@ const emit = defineEmits(["check"]);
 .radio-look[checked="false"][disabled="false"]:focus .check-icon {
   opacity: 1;
 }
+
 .radio-look[checked="true"][disabled="false"]:hover .check-icon,
 .radio-look[checked="true"][disabled="false"]:focus .check-icon {
   opacity: 0;
@@ -91,11 +91,10 @@ const emit = defineEmits(["check"]);
 
 .radio-look[checked="true"][disabled="false"] {
   border-color: var(--mde-color-brand-mde-blue-dark);
-  background-color: var(--mde-color-brand-mde-blue);
+  background-color: var(--mde-color-brand-mde-blue-dark);
 }
 
 .radio-look[checked="true"] .check-icon {
   opacity: 1;
 }
 </style>
-<script setup lang="ts"></script>

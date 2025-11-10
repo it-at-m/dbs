@@ -273,7 +273,7 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 
 /* text grayed out when selected */
 .muted {
-  color: var(--mde-color-neutral-grey-x-light) !important;
+  color: #7a8d9f !important;
 }
 
 .label-text {
@@ -281,7 +281,7 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   color: var(--mde-color-brand-mde-blue);
   /* Body/Body 1 Bold */
   font-family: "Open Sans", sans-serif;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;
   line-height: 150%; /* 27px */
@@ -348,13 +348,13 @@ function handleArrowKeyDown(event: KeyboardEvent) {
   color: var(--mde-color-neutral-grey);
   /* Body/Body 2 */
   font-family: "Open Sans", sans-serif;
-  font-size: 16px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
 }
 
 .muted .required-label {
-  color: var(--mde-color-neutral-grey-x-light) !important;
+  color: #7a8d9f !important;
 }
 </style>
