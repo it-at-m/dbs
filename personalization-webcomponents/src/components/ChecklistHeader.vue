@@ -87,7 +87,6 @@ onMounted(() => {
   }
 
   document.title = props.checklist.title + " - Landeshauptstadt München";
-
 });
 
 const todoCount = computed(() => {
