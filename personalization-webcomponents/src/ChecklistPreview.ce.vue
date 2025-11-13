@@ -316,6 +316,16 @@ onMounted(() => {
     saveChecklistModalOpen.value = true;
     localStorage.removeItem(LOCALSTORAGE_KEY_LOGGED_IN);
   }
+
+  const updateLebenslage = document.querySelector(
+      ".m-breadcrumb__list-item-current"
+  );
+  if (updateLebenslage) {
+    updateLebenslage.textContent = lebenslageTitle.value;
+  }
+
+  document.title = lebenslageTitle.value + " - Landeshauptstadt München";
+
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
