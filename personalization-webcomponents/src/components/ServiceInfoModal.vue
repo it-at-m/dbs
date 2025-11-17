@@ -26,6 +26,7 @@
         :key="onlineService.uri"
         :href="onlineService.uri"
         target="_blank"
+        tabindex="-1"
       >
         <muc-button
           icon="arrow-right"
@@ -47,6 +48,7 @@
         v-if="service?.publicUrl"
         :href="service.publicUrl"
         target="_blank"
+        tabindex="-1"
       >
         <muc-button
           icon="arrow-right"
