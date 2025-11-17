@@ -468,7 +468,7 @@ async function copyUrl() {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.6/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.15/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 </style>
