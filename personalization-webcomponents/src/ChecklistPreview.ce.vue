@@ -291,7 +291,9 @@ onMounted(() => {
           resp
             .json()
             .then((snServicesBody: ChecklistItemServiceNavigator[]) => {
-              snServices.value = snServicesBody;
+              snServices.value = snServicesBody.sort((a, b) => {
+                return a.required === b.required ? 0 : a.required ? -1 : 1;
+              });
             });
         } else {
           resp.text().then((errorText) => {
