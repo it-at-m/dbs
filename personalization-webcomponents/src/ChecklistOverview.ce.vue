@@ -13,7 +13,6 @@
       <div class="container">
         <div class="header">
           <h2
-            tabindex="0"
             style="display: flex; align-items: center"
           >
             <muc-icon
