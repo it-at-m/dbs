@@ -65,6 +65,7 @@
     <checklist-header
       v-else-if="checklist"
       :checklist="checklist"
+      :checklist-overview-url="checklistOverviewUrl"
     ></checklist-header>
     <muc-intro
       v-else
@@ -191,6 +192,7 @@ import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
 
 defineProps<{
   myChecklistsUrl: string;
+  checklistOverviewUrl: string;
 }>();
 
 const checklist = ref<ChecklistServiceNavigator | null>(null);
