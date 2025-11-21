@@ -12,9 +12,7 @@
     >
       <div class="container">
         <div class="header">
-          <h2
-            style="display: flex; align-items: center"
-          >
+          <h2 style="display: flex; align-items: center">
             <muc-icon
               style="width: 32px; height: 32px; margin-right: 8px"
               icon="order-bool-ascending"
