@@ -126,12 +126,10 @@ const doneCount = computed(() => {
 
 .task {
   font-weight: bold;
-
   padding-right: 8px;
   padding-left: 3px;
   padding-top: 5px;
   white-space: nowrap;
-  background-color: red;
 }
 
 .chips-container {
