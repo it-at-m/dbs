@@ -59,7 +59,7 @@
 
       <div v-if="checklist.lastUpdate">
         <strong>Letzte Änderung:</strong>
-        {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
+        {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate), false) }}
       </div>
     </template>
   </muc-card>
