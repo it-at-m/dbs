@@ -31,12 +31,12 @@ and not via Zammad.
 Keycloak uses two realms for this purpose:
 
 - the realm `public`,
-which manages citizens according to their trust level.
+  which manages citizens according to their trust level.
 - and the realm `muenchen.de` to manage the city of Munich employees
-which are automatically created with their associated group structures
-(department, team, etc) with the [zammad-ldap-sync](https://github.com/it-at-m/zammad-ldap-sync),
-changed or removed if necessary. This ensures that only authorized persons
-have access to the pending requests from citizens.
+  which are automatically created with their associated group structures
+  (department, team, etc) with the [zammad-ldap-sync](https://github.com/it-at-m/zammad-ldap-sync),
+  changed or removed if necessary. This ensures that only authorized persons
+  have access to the pending requests from citizens.
 
 ### Data protection
 
