@@ -13,7 +13,7 @@ It currently consists of these modules:
 
 [![system overview Digitaler Bürgerservice DBS](./assets/systemueberblick_dbs.drawio.png)](https://github.com/it-at-m/dbs/blob/main/docs/assets/systemueberblick_dbs.drawio.png)
 
-Citizens submit requests to the form server (e.g [Meldung von Insektennestern](https://service.muenchen.de/intelliform/forms/01/09/09/meldung_insektennest/index)), which sends the request to Zammad via the `dbs-ticketing-webcomponent` and the [dbs-ticketing-eai](https://github.com/it-at-m/dbs/tree/main/ticketing-eai).
+Citizens submit requests to the form server (e.g [Meldung von Insektennestern](https://service.muenchen.de/intelliform/forms/01/09/09/meldung_insektennest/index)), which sends the request to Zammad via the [dbs-ticketing-eai](https://github.com/it-at-m/dbs/tree/main/ticketing-eai).
 Zammad serves as the backend of the DBS, where the clerks process the requests and communicate with the citizen via our own frontend `dbs-ticketing-webcomponents`.
 This is integrated with [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) into the official site of the City of Munich.
 
@@ -23,13 +23,13 @@ The authentication of applicants and administrators takes place via a [Keycloak]
 Keycloak uses two realms for this purpose:
 
 * the realm `public` in which citizens are managed and, depending on the level of trust
-* and the realm `muenchen.de` to manage the city of Munich Employees are automatically created with their associated group structures (department, team, etc) with the [zammad-ldap-sync](https://github.com/it-at-m/zammad-ldap-sync), changed or removed if necessary. This ensures that only authorized persons have access to the pending requests from citizens.
+* and the realm `muenchen.de` to manage the city of Munich employees which are automatically created with their associated group structures (department, team, etc) with the [zammad-ldap-sync](https://github.com/it-at-m/zammad-ldap-sync), changed or removed if necessary. This ensures that only authorized persons have access to the pending requests from citizens.
 
 
 ### Data protection
 
 As DBS also processes highly sensitive personal data, it is important that we ensure data protection.
-DBS does not send any information to applicants by e-mail, but only posts it in its frontend `dbs-ticketing-webcomponents`
+DBS does not send any information to applicants by e-mail, but only makes it accessible in its frontend `dbs-ticketing-webcomponents`
 
 
 ### Reporting
