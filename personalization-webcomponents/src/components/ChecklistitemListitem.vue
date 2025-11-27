@@ -41,6 +41,6 @@ defineProps<{
 }
 
 .item-title-checked {
-  color: var(--mde-color-neutral-grey-x-light);
+  color: #7a8d9f;
 }
 </style>

@@ -12,10 +12,7 @@
     >
       <div class="container">
         <div class="header">
-          <h2
-            tabindex="0"
-            style="display: flex; align-items: center"
-          >
+          <h2 style="display: flex; align-items: center">
             <muc-icon
               style="width: 32px; height: 32px; margin-right: 8px"
               icon="order-bool-ascending"
@@ -162,7 +159,7 @@ const goToChecklistOverviewLink = () => {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.6/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.15/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 @import "../public/checklist-styles.css";

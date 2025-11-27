@@ -70,17 +70,21 @@ export function getXSRFToken() {
   return XSRFToken.value;
 }
 
-export function getDateInGermanDateFormat(date: Date | undefined) {
+export function getDateInGermanDateFormat(
+  date: Date | undefined,
+  showTime = true
+) {
   if (date) {
-    return (
-      date.toLocaleString("de-DE", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }) + " Uhr"
-    );
+    const options: Intl.DateTimeFormatOptions = showTime
+      ? {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      : { year: "numeric", month: "numeric", day: "numeric" };
+    return date.toLocaleString("de-DE", options) + (showTime ? " Uhr" : "");
   } else {
     return "-";
   }
