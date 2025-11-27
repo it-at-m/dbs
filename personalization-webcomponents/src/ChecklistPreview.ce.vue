@@ -76,6 +76,7 @@
         <muc-banner
           v-if="loadingError"
           type="emergency"
+          variant="content"
         >
           Es ist ein Fehler beim Speichern der Checkliste aufgetreten. Bitte
           versuchen Sie es zu einem späteren Zeitpunkt noch einmal.
