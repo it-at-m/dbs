@@ -5,18 +5,6 @@
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="customIconsSprite" />
 
-    <muc-intro
-      title="Benutzerdaten verwalten"
-      tagline="Formulardaten"
-      :divider="false"
-      variant="detail"
-    >
-      <p>
-        Geben Sie Ihre persönlichen Daten ein. Diese werden lokal in Ihrem
-        Browser gespeichert.
-      </p>
-    </muc-intro>
-
     <div class="m-component m-component-form">
       <div class="container">
         <muc-banner
@@ -34,37 +22,92 @@
               @submit.prevent="saveData"
               class="form-content"
             >
-              <div class="m-form-group">
-                <label
-                  for="firstName"
-                  class="m-label"
-                >
-                  Vorname
-                </label>
-                <input
-                  id="firstName"
-                  v-model="firstName"
-                  type="text"
-                  placeholder="Vorname eingeben"
-                  class="m-textfield"
-                />
-              </div>
+              <!-- Fieldset 1: Personal Information -->
+              <fieldset class="form-fieldset">
+                <legend>Persönliche Informationen</legend>
+                
+                <div class="m-form-group">
+                  <label for="firstName" class="m-label">Vorname</label>
+                  <input id="firstName" v-model="firstName" type="text" 
+                         placeholder="Vorname eingeben" class="m-textfield" />
+                </div>
+                
+                <div class="m-form-group">
+                  <label for="lastName" class="m-label">Nachname</label>
+                  <input id="lastName" v-model="lastName" type="text" 
+                         placeholder="Nachname eingeben" class="m-textfield" />
+                </div>
+                
+                <div class="m-form-group">
+                  <label for="geburtsdatum" class="m-label">Geburtsdatum</label>
+                  <input id="geburtsdatum" v-model="geburtsdatum" type="date" class="m-textfield" />
+                </div>
+              </fieldset>
 
-              <div class="m-form-group">
-                <label
-                  for="lastName"
-                  class="m-label"
-                >
-                  Nachname
-                </label>
-                <input
-                  id="lastName"
-                  v-model="lastName"
-                  type="text"
-                  placeholder="Nachname eingeben"
-                  class="m-textfield"
-                />
-              </div>
+              <!-- Fieldset 2: Location -->
+              <fieldset class="form-fieldset">
+                <legend>Wohnort</legend>
+                
+                <div class="m-form-group">
+                  <label for="stadt" class="m-label">Stadt</label>
+                  <input id="stadt" v-model="stadt" type="text" 
+                         placeholder="z.B. München" class="m-textfield" />
+                </div>
+              </fieldset>
+
+              <!-- Fieldset 3: Financial Information -->
+              <fieldset class="form-fieldset">
+                <legend>Finanzielle Angaben</legend>
+                
+                <div class="m-form-group">
+                  <label for="nettoEinkommen" class="m-label">Monatliches Nettoeinkommen (€)</label>
+                  <input id="nettoEinkommen" v-model.number="nettoEinkommenMonatlich" 
+                         type="number" step="0.01" placeholder="z.B. 1500" class="m-textfield" />
+                </div>
+                
+                <div class="m-form-group">
+                  <label for="miete" class="m-label">Monatliche Miete (€)</label>
+                  <input id="miete" v-model.number="mieteMietzinsMonatlich" 
+                         type="number" step="0.01" placeholder="z.B. 800" class="m-textfield" />
+                </div>
+              </fieldset>
+
+              <!-- Fieldset 4: Household Information -->
+              <fieldset class="form-fieldset">
+                <legend>Haushalt</legend>
+                
+                <div class="m-form-group">
+                  <label for="haushalt" class="m-label">Anzahl Personen im Haushalt</label>
+                  <input id="haushalt" v-model.number="anzahlPersonenHaushalt" 
+                         type="number" min="1" placeholder="z.B. 2" class="m-textfield" />
+                </div>
+                
+                <!-- Conditional field: only show if household > 1 -->
+                <div v-if="anzahlPersonenHaushalt && anzahlPersonenHaushalt > 1" class="m-form-group">
+                  <label for="kinder" class="m-label">Anzahl Kinder</label>
+                  <input id="kinder" v-model.number="anzahlKinder" 
+                         type="number" min="0" placeholder="z.B. 1" class="m-textfield" />
+                </div>
+              </fieldset>
+
+              <!-- Fieldset 5: Status -->
+              <fieldset class="form-fieldset">
+                <legend>Status</legend>
+                
+                <div class="m-form-group m-form-group-checkbox">
+                  <label class="m-checkbox-label">
+                    <input type="checkbox" v-model="istStudent" class="m-checkbox" />
+                    <span>Ich bin Student/in</span>
+                  </label>
+                </div>
+                
+                <div class="m-form-group m-form-group-checkbox">
+                  <label class="m-checkbox-label">
+                    <input type="checkbox" v-model="beziehtAlg2" class="m-checkbox" />
+                    <span>Ich beziehe Bürgergeld (ALG II)</span>
+                  </label>
+                </div>
+              </fieldset>
 
               <div class="button-group">
                 <muc-button
@@ -91,17 +134,6 @@
                 </muc-button>
               </div>
             </form>
-
-            <div
-              v-if="firstName || lastName"
-              class="data-display"
-            >
-              <h2 class="data-display-title">Aktuelle Daten:</h2>
-              <div class="data-display-content">
-                <p><strong>Vorname:</strong> {{ firstName || '(leer)' }}</p>
-                <p><strong>Nachname:</strong> {{ lastName || '(leer)' }}</p>
-              </div>
-            </div>
           </div>
 
           <!-- Right Column: Results -->
@@ -192,11 +224,18 @@ import type {
   FormData,
 } from "@/types/EligibilityCheckInterface";
 
-const LOCALSTORAGE_KEY_FIRSTNAME = "user.firstName";
-const LOCALSTORAGE_KEY_LASTNAME = "user.lastName";
+const LOCALSTORAGE_KEY_FORMDATA = "user.formData";
 
 const firstName = ref("");
 const lastName = ref("");
+const geburtsdatum = ref("");
+const stadt = ref("");
+const nettoEinkommenMonatlich = ref<number | undefined>(undefined);
+const mieteMietzinsMonatlich = ref<number | undefined>(undefined);
+const anzahlPersonenHaushalt = ref<number | undefined>(undefined);
+const anzahlKinder = ref<number | undefined>(undefined);
+const istStudent = ref(false);
+const beziehtAlg2 = ref(false);
 const message = ref("");
 const messageType = ref<"success" | "info" | "warning" | "emergency">("success");
 const eligibilityResults = ref<EligibilityResult[]>([]);
@@ -209,8 +248,20 @@ onMounted(() => {
 
 function saveData() {
   try {
-    localStorage.setItem(LOCALSTORAGE_KEY_FIRSTNAME, firstName.value);
-    localStorage.setItem(LOCALSTORAGE_KEY_LASTNAME, lastName.value);
+    const formData: FormData = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      geburtsdatum: geburtsdatum.value || undefined,
+      stadt: stadt.value || undefined,
+      nettoEinkommenMonatlich: nettoEinkommenMonatlich.value,
+      mieteMietzinsMonatlich: mieteMietzinsMonatlich.value,
+      anzahlPersonenHaushalt: anzahlPersonenHaushalt.value,
+      anzahlKinder: anzahlKinder.value,
+      istStudent: istStudent.value,
+      beziehtAlg2: beziehtAlg2.value,
+    };
+    
+    localStorage.setItem(LOCALSTORAGE_KEY_FORMDATA, JSON.stringify(formData));
     showMessage("Daten wurden erfolgreich gespeichert!", "success");
     checkEligibility();
   } catch (error) {
@@ -220,17 +271,22 @@ function saveData() {
 
 function loadData() {
   try {
-    const savedFirstName = localStorage.getItem(LOCALSTORAGE_KEY_FIRSTNAME);
-    const savedLastName = localStorage.getItem(LOCALSTORAGE_KEY_LASTNAME);
+    const savedData = localStorage.getItem(LOCALSTORAGE_KEY_FORMDATA);
     
-    if (savedFirstName !== null) {
-      firstName.value = savedFirstName;
-    }
-    if (savedLastName !== null) {
-      lastName.value = savedLastName;
-    }
-    
-    if (savedFirstName || savedLastName) {
+    if (savedData) {
+      const formData: FormData = JSON.parse(savedData);
+      
+      firstName.value = formData.firstName || "";
+      lastName.value = formData.lastName || "";
+      geburtsdatum.value = formData.geburtsdatum || "";
+      stadt.value = formData.stadt || "";
+      nettoEinkommenMonatlich.value = formData.nettoEinkommenMonatlich;
+      mieteMietzinsMonatlich.value = formData.mieteMietzinsMonatlich;
+      anzahlPersonenHaushalt.value = formData.anzahlPersonenHaushalt;
+      anzahlKinder.value = formData.anzahlKinder;
+      istStudent.value = formData.istStudent || false;
+      beziehtAlg2.value = formData.beziehtAlg2 || false;
+      
       showMessage("Daten wurden aus dem localStorage geladen", "success");
       checkEligibility();
     } else {
@@ -243,10 +299,17 @@ function loadData() {
 
 function clearData() {
   try {
-    localStorage.removeItem(LOCALSTORAGE_KEY_FIRSTNAME);
-    localStorage.removeItem(LOCALSTORAGE_KEY_LASTNAME);
+    localStorage.removeItem(LOCALSTORAGE_KEY_FORMDATA);
     firstName.value = "";
     lastName.value = "";
+    geburtsdatum.value = "";
+    stadt.value = "";
+    nettoEinkommenMonatlich.value = undefined;
+    mieteMietzinsMonatlich.value = undefined;
+    anzahlPersonenHaushalt.value = undefined;
+    anzahlKinder.value = undefined;
+    istStudent.value = false;
+    beziehtAlg2.value = false;
     eligibilityResults.value = [];
     showMessage("Daten wurden erfolgreich gelöscht!", "success");
   } catch (error) {
@@ -258,6 +321,14 @@ function checkEligibility() {
   const formData: FormData = {
     firstName: firstName.value,
     lastName: lastName.value,
+    geburtsdatum: geburtsdatum.value || undefined,
+    stadt: stadt.value || undefined,
+    nettoEinkommenMonatlich: nettoEinkommenMonatlich.value,
+    mieteMietzinsMonatlich: mieteMietzinsMonatlich.value,
+    anzahlPersonenHaushalt: anzahlPersonenHaushalt.value,
+    anzahlKinder: anzahlKinder.value,
+    istStudent: istStudent.value,
+    beziehtAlg2: beziehtAlg2.value,
   };
 
   const checks = eligibilityRegistry.getAllChecks();
@@ -490,5 +561,36 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   .two-column-layout {
     gap: 32px;
   }
+}
+
+.form-fieldset {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.form-fieldset legend {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0 8px;
+  color: #333;
+}
+
+.m-form-group-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.m-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.m-checkbox {
+  margin-right: 8px;
+  cursor: pointer;
 }
 </style>

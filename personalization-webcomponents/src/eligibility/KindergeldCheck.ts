@@ -10,22 +10,22 @@ export class KindergeldCheck implements EligibilityCheckInterface {
   }
 
   evaluate(formData: FormData): EligibilityResult {
-    // POC: Trigger if last name is söder
-    const isEligible = formData.lastName.toLowerCase() === "söder";
+    // Simplified: Check if they have children
+    const hasChildren = formData.anzahlKinder && formData.anzahlKinder > 0;
 
-    if (isEligible) {
+    if (hasChildren) {
+      const childCount = formData.anzahlKinder || 0;
       return {
         eligible: true,
         subsidyName: this.getName(),
         reason:
-          "Da sie Söder heißen, sind sie für Kindergeld berechtigt.",
-        url: "https://www.muenchen.de/rathaus/Stadtverwaltung/Sozialreferat/Jugendamt/Leistungen/Kindergeld.html",
+          `Sie haben ${childCount} ${childCount === 1 ? 'Kind' : 'Kinder'} angegeben. Sie könnten für Kindergeld berechtigt sein.`,
+        url: "https://www.arbeitsagentur.de/familie-und-kinder/kindergeld",
       };
     }
 
     return {
       eligible: false,
-      reason: "Da sie nicht Söder heißen, sind sie für Kindergeld nicht berechtigt.",
       subsidyName: this.getName(),
     };
   }
