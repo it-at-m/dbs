@@ -19,16 +19,17 @@
 
     <div class="m-component m-component-form">
       <div class="container">
-        <div class="m-component__grid">
-          <div class="m-component__column">
-            <muc-banner
-              v-if="message"
-              :type="messageType"
-              class="message-banner"
-            >
-              {{ message }}
-            </muc-banner>
+        <muc-banner
+          v-if="message"
+          :type="messageType"
+          class="message-banner"
+        >
+          {{ message }}
+        </muc-banner>
 
+        <div class="two-column-layout">
+          <!-- Left Column: Form -->
+          <div class="left-column">
             <form
               @submit.prevent="saveData"
               class="form-content"
@@ -101,7 +102,10 @@
                 <p><strong>Nachname:</strong> {{ lastName || '(leer)' }}</p>
               </div>
             </div>
+          </div>
 
+          <!-- Right Column: Results -->
+          <div class="right-column">
             <div
               v-if="eligibilityResults.length > 0"
               class="eligibility-results"
@@ -143,11 +147,26 @@
                       icon="arrow-right"
                       icon-animated
                     >
-                      Mehr erfahren
+                      Zum Antrag
                     </muc-button>
                   </a>
                 </div>
               </div>
+            </div>
+            <div
+              v-else-if="firstName || lastName"
+              class="no-results-placeholder"
+            >
+              <muc-callout type="info">
+                <template #header> Keine passenden Leistungen gefunden</template>
+                <template #content>
+                  <p>
+                    Basierend auf Ihren aktuellen Angaben konnten wir keine
+                    passenden Leistungen ermitteln. Bitte überprüfen Sie Ihre
+                    Eingaben oder kontaktieren Sie uns für weitere Informationen.
+                  </p>
+                </template>
+              </muc-callout>
             </div>
           </div>
         </div>
@@ -157,7 +176,12 @@
 </template>
 
 <script setup lang="ts">
-import { MucBanner, MucButton, MucIntro } from "@muenchen/muc-patternlab-vue";
+import {
+  MucBanner,
+  MucButton,
+  MucCallout,
+  MucIntro,
+} from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { onMounted, ref } from "vue";
@@ -267,6 +291,26 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   margin-bottom: 32px;
 }
 
+.two-column-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.right-column {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
 .form-content {
   background: white;
   padding: 0;
@@ -312,7 +356,6 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
 }
 
 .data-display {
-  margin-top: 48px;
   padding: 24px;
   background: var(--mde-color-neutral-beau-blue-x-light);
   border-radius: 4px;
@@ -332,20 +375,10 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   line-height: 1.5;
 }
 
-@media (max-width: 768px) {
-  .button-group {
-    flex-direction: column;
-  }
-  
-  .button-group button {
-    width: 100%;
-  }
-}
-
 .eligibility-results {
-  margin-top: 56px;
-  padding-top: 40px;
-  border-top: 2px solid var(--mde-color-neutral-beau-blue);
+  background: var(--mde-color-neutral-beau-blue-x-light);
+  padding: 24px;
+  border-radius: 4px;
 }
 
 .eligibility-title {
@@ -353,12 +386,13 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   font-weight: 700;
   color: var(--mde-color-neutral-grey-dark);
   margin-bottom: 16px;
+  margin-top: 0;
 }
 
 .eligibility-subtitle {
   font-size: 1rem;
   color: var(--mde-color-neutral-grey);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   line-height: 1.5;
 }
 
@@ -369,6 +403,10 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   padding: 24px;
   margin-bottom: 16px;
   transition: all 0.3s ease;
+}
+
+.eligibility-card:last-child {
+  margin-bottom: 0;
 }
 
 .eligibility-card:hover {
@@ -417,6 +455,40 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   text-decoration: none;
 }
 
+.no-results-placeholder {
+  background: var(--mde-color-neutral-beau-blue-x-light);
+  padding: 24px;
+  border-radius: 4px;
+}
+
+/* Desktop: Two columns side by side */
+@media (min-width: 992px) {
+  .two-column-layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+}
+
+/* Tablet and mobile: Stack vertically */
+@media (max-width: 991px) {
+  .right-column {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .button-group button {
+    width: 100%;
+  }
+  
+  .two-column-layout {
+    gap: 32px;
+  }
+}
 </style>
-
-

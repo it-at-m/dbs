@@ -1,6 +1,6 @@
 import type { EligibilityCheckInterface } from "@/types/EligibilityCheckInterface";
 import { WohnGeldCheck } from "./WohnGeldCheck";
-// import { KindergeldCheck } from "./KindergeldCheck";
+import { KindergeldCheck } from "./KindergeldCheck";
 
 export class EligibilityCheckRegistry {
   private checks: EligibilityCheckInterface[] = [];
@@ -8,9 +8,9 @@ export class EligibilityCheckRegistry {
   constructor() {
     // Register all eligibility checks here
     this.registerCheck(new WohnGeldCheck());
-    
+    this.registerCheck(new KindergeldCheck());
+
     // Uncomment to enable additional checks:
-    // this.registerCheck(new KindergeldCheck());
     // this.registerCheck(new BildungUndTeilhabeCheck());
   }
 

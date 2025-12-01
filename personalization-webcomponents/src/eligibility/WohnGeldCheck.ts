@@ -17,7 +17,7 @@ export class WohnGeldCheck implements EligibilityCheckInterface {
         eligible: true,
         subsidyName: this.getName(),
         reason:
-          "Basierend auf Ihren Angaben könnten Sie für Wohngeld berechtigt sein.",
+          "Da sie Luis heißen, sind sie für Wohngeld berechtigt.",
         url: "https://www.muenchen.de/rathaus/Stadtverwaltung/Sozialreferat/Wohnungsamt/Mietzuschuss.html",
       };
     }
@@ -25,7 +25,7 @@ export class WohnGeldCheck implements EligibilityCheckInterface {
     return {
       eligible: false,
       subsidyName: this.getName(),
-      reason: "Sie erfüllen derzeit nicht die Voraussetzungen für Wohngeld.",
+      reason: "Da sie nicht Luis heißen, sind sie für Wohngeld nicht berechtigt.",
     };
   }
 }
