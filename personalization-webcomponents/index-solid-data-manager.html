@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta
+			name="robots"
+			content="noindex"
+	/>
+	<link
+			href="/favicon.ico"
+			rel="icon"
+	/>
+	<meta
+			content="width=device-width, initial-scale=1.0"
+			name="viewport"
+	/>
+	<title>personalization-webcomponent</title>
+
+	<!-- Muenchen.de Fontfaces -->
+	<link
+			href="https://assets.muenchen.de/mde/1.1.6/css/fonts.css"
+			rel="stylesheet"
+	/>
+
+	<script
+			src="https://dbs-login-webcomponent-integration-dbs-login.apps.capk.muenchen.de/loader.js"
+			type="text/javascript"
+	></script>
+
+	<!-- built files will be auto injected -->
+	<script
+			src="src/SolidDataManagerWebcomponent.ts"
+			type="module"
+	></script>
+</head>
+<body>
+<noscript>
+	<strong>
+		In order for the development page to work correctly, JavaScript needs to
+		be activated.
+	</strong>
+</noscript>
+<dbs-login
+		kc-url="http://keycloak:8100/auth/"
+		kc-realm="local_realm"
+		kc-client-id="local"
+		overview-link="http://localhost:3000/"
+		ticket-link="http://localhost:3000/"
+		appointment-link="http://localhost:3000/"
+></dbs-login>
+<div>
+	<solid-data-manager
+			checklist-detail-url="./index-checklist-detail.html"
+			new-checklist-url="./index.html"
+	/>
+</div>
+</body>
+</html>

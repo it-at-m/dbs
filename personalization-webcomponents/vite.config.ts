@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
           "checklist-overview": "./src/ChecklistOverviewWebcomponent.ts",
           "checklist-preview": "./src/ChecklistPreviewWebcomponent.ts",
           "my-checklists": "./src/MyChecklistsWebcomponent.ts",
+          "solid-data-manager": "./src/SolidDataManagerWebcomponent.ts",
         },
         output: {
           entryFileNames: "entry-[name]-[hash].js",
