@@ -394,12 +394,11 @@
               class="no-results-placeholder"
             >
               <muc-callout type="info">
-                <template #header> Keine passenden Leistungen gefunden</template>
+                <template #header> Keine Daten zur Prüfung vorhanden</template>
                 <template #content>
                   <p>
-                    Basierend auf Ihren aktuellen Angaben konnten wir keine
-                    passenden Leistungen ermitteln. Bitte überprüfen Sie Ihre
-                    Eingaben oder kontaktieren Sie uns für weitere Informationen.
+                    Bitte füllen Sie das Formular aus und klicken Sie auf "Speichern",
+                    um Ihre Berechtigung zu prüfen.
                   </p>
                 </template>
               </muc-callout>
