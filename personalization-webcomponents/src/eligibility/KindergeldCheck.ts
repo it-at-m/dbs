@@ -26,6 +26,7 @@ export class KindergeldCheck implements EligibilityCheckInterface {
 
     return {
       eligible: false,
+      reason: "Sie haben keine Kinder",
       subsidyName: this.getName(),
     };
   }
