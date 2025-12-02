@@ -77,48 +77,7 @@
                 </div>
               </fieldset>
 
-              <!-- Fieldset 2: Address Information -->
-              <fieldset class="form-fieldset">
-                <legend>Adresse</legend>
-                
-                <div class="m-form-group">
-                  <label for="strasse" class="m-label">Straße</label>
-                  <input id="strasse" v-model="strasse" type="text" 
-                         placeholder="Straßenname" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="hausnummer" class="m-label">Hausnummer</label>
-                  <input id="hausnummer" v-model="hausnummer" type="text" 
-                         placeholder="z.B. 42a" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="postleitzahl" class="m-label">Postleitzahl</label>
-                  <input id="postleitzahl" v-model="postleitzahl" type="text" 
-                         placeholder="z.B. 80331" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="stadt" class="m-label">Stadt</label>
-                  <input id="stadt" v-model="stadt" type="text" 
-                         placeholder="z.B. München" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="bundesland" class="m-label">Bundesland</label>
-                  <input id="bundesland" v-model="bundesland" type="text" 
-                         placeholder="z.B. Bayern" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="wohnflaeche" class="m-label">Wohnfläche (m²)</label>
-                  <input id="wohnflaeche" v-model.number="wohnflaeche" 
-                         type="number" step="0.01" placeholder="z.B. 65" class="m-textfield" />
-                </div>
-              </fieldset>
-
-              <!-- Fieldset 3: Financial Information -->
+              <!-- Fieldset 2: Financial Information -->
               <fieldset class="form-fieldset">
                 <legend>Finanzielle Angaben</legend>
                 
@@ -438,14 +397,6 @@ const geschlecht = ref<'männlich' | 'weiblich' | 'divers' | 'keine Angabe' | un
 const familienstand = ref<'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt' | undefined>(undefined);
 const staatsangehoerigkeit = ref<'Deutsch' | 'EU' | 'Nicht-EU' | undefined>(undefined);
 
-// Address Information
-const strasse = ref("");
-const hausnummer = ref("");
-const postleitzahl = ref("");
-const stadt = ref("");
-const bundesland = ref("");
-const wohnflaeche = ref<number | undefined>(undefined);
-
 // Financial Information
 const bruttoEinkommenMonatlich = ref<number | undefined>(undefined);
 const nettoEinkommenMonatlich = ref<number | undefined>(undefined);
@@ -523,14 +474,6 @@ function saveData() {
       familienstand: familienstand.value,
       staatsangehoerigkeit: staatsangehoerigkeit.value || undefined,
       
-      // Address Information
-      strasse: strasse.value || undefined,
-      hausnummer: hausnummer.value || undefined,
-      postleitzahl: postleitzahl.value || undefined,
-      stadt: stadt.value || undefined,
-      bundesland: bundesland.value || undefined,
-      wohnflaeche: wohnflaeche.value,
-      
       // Financial Information
       bruttoEinkommenMonatlich: bruttoEinkommenMonatlich.value,
       nettoEinkommenMonatlich: nettoEinkommenMonatlich.value,
@@ -588,14 +531,6 @@ function loadData() {
       familienstand.value = formData.familienstand;
       staatsangehoerigkeit.value = formData.staatsangehoerigkeit;
       
-      // Address Information
-      strasse.value = formData.strasse || "";
-      hausnummer.value = formData.hausnummer || "";
-      postleitzahl.value = formData.postleitzahl || "";
-      stadt.value = formData.stadt || "";
-      bundesland.value = formData.bundesland || "";
-      wohnflaeche.value = formData.wohnflaeche;
-      
       // Financial Information
       bruttoEinkommenMonatlich.value = formData.bruttoEinkommenMonatlich;
       nettoEinkommenMonatlich.value = formData.nettoEinkommenMonatlich;
@@ -651,14 +586,6 @@ function clearData() {
     familienstand.value = undefined;
     staatsangehoerigkeit.value = undefined;
     
-    // Address Information
-    strasse.value = "";
-    hausnummer.value = "";
-    postleitzahl.value = "";
-    stadt.value = "";
-    bundesland.value = "";
-    wohnflaeche.value = undefined;
-    
     // Financial Information
     bruttoEinkommenMonatlich.value = undefined;
     nettoEinkommenMonatlich.value = undefined;
@@ -708,14 +635,6 @@ function checkEligibility() {
     geschlecht: geschlecht.value,
     familienstand: familienstand.value,
     staatsangehoerigkeit: staatsangehoerigkeit.value || undefined,
-    
-    // Address Information
-    strasse: strasse.value || undefined,
-    hausnummer: hausnummer.value || undefined,
-    postleitzahl: postleitzahl.value || undefined,
-    stadt: stadt.value || undefined,
-    bundesland: bundesland.value || undefined,
-    wohnflaeche: wohnflaeche.value,
     
     // Financial Information
     bruttoEinkommenMonatlich: bruttoEinkommenMonatlich.value,

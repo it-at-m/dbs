@@ -10,14 +10,6 @@ export interface FormData {
   aufenthaltsstatus?: 'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine'; // For non-German citizens
   wohnsitzInDeutschland?: boolean; // Habitual residence in Germany
   
-  // Address Information
-  strasse?: string;
-  hausnummer?: string;
-  postleitzahl?: string;
-  stadt?: string;
-  bundesland?: string;
-  wohnflaeche?: number; // in m²
-  
   // Financial Information
   bruttoEinkommenMonatlich?: number;
   nettoEinkommenMonatlich?: number;
