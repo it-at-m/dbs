@@ -36,9 +36,9 @@ Shows first (max 2) checklists of the current user to be displayed on an overvie
 
 Shows detailed data of a specific checklist.
 
-| Property                 | Type   | Description                        | Default |
-| ------------------------ | ------ | ---------------------------------- | ------- |
-| `my-checklists-url`      | string | URL to the my checklist page       | -       |
+| Property            | Type   | Description                  | Default |
+| ------------------- | ------ | ---------------------------- | ------- |
+| `my-checklists-url` | string | URL to the my checklist page | -       |
 
 | Query-Parameter | Description                    |
 | --------------- | ------------------------------ |
