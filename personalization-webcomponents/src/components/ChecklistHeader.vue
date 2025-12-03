@@ -53,9 +53,9 @@
     </div>
     <div style="padding-top: 32px">
       <muc-button
-          icon="trash"
-          variant="secondary"
-          @click="openAcceptDeleteDialog = true"
+        icon="trash"
+        variant="secondary"
+        @click="openAcceptDeleteDialog = true"
       >
         Checkliste löschen
       </muc-button>

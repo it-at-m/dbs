@@ -39,7 +39,6 @@ Shows detailed data of a specific checklist.
 | Property                 | Type   | Description                        | Default |
 | ------------------------ | ------ | ---------------------------------- | ------- |
 | `my-checklists-url`      | string | URL to the my checklist page       | -       |
-| `checklist-overview-url` | string | URL to the checklist overview page | -       |
 
 | Query-Parameter | Description                    |
 | --------------- | ------------------------------ |
