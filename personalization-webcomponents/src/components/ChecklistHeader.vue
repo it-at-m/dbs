@@ -12,41 +12,45 @@
       <strong>Erstellungsdatum: </strong>
       {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
     </div>
-    <table>
-      <tr>
-        <td class="task">Aufgaben:</td>
-        <td>
-          <div class="chips-container">
-            <muc-chip
-              v-if="todoCount"
-              background-color="var(--checklist-color-status-open)"
-            >
-              {{ todoCount }} offen
-              <svg
-                style="margin-left: 8px; width: 20px; height: 20px"
-                aria-hidden="true"
-                class="m-button__icon"
-              >
-                <use href="#icon-pencil" />
-              </svg>
-            </muc-chip>
-            <muc-chip
-              v-if="doneCount"
-              background-color="var(--checklist-color-status-closed)"
-            >
-              {{ doneCount }} erledigt
-              <svg
-                style="margin-left: 8px; width: 20px; height: 20px"
-                aria-hidden="true"
-                class="m-button__icon"
-              >
-                <use href="#icon-check" />
-              </svg>
-            </muc-chip>
-          </div>
-        </td>
-      </tr>
-    </table>
+    <div class="task-container">
+      <div
+        class="task"
+        aria-hidden="true"
+      >
+        Aufgaben:
+      </div>
+      <div class="chips-container">
+        <muc-chip
+          v-if="todoCount"
+          background-color="var(--checklist-color-status-open)"
+        >
+          {{ todoCount }} offen
+          <svg
+            style="margin-left: 8px; width: 20px; height: 20px"
+            aria-hidden="true"
+            class="m-button__icon"
+          >
+            <use href="#icon-pencil" />
+          </svg>
+        </muc-chip>
+        <muc-chip
+          v-if="doneCount"
+          background-color="var(--checklist-color-status-closed)"
+          role="status"
+          aria-live="polite"
+          aria-label="{{ doneCount }} erledigt"
+        >
+          {{ doneCount }} erledigt
+          <svg
+            style="margin-left: 8px; width: 20px; height: 20px"
+            aria-hidden="true"
+            class="m-button__icon"
+          >
+            <use href="#icon-check" />
+          </svg>
+        </muc-chip>
+      </div>
+    </div>
   </muc-intro>
 </template>
 
@@ -85,6 +89,8 @@ onMounted(() => {
       }
     });
   }
+
+  document.title = props.checklist.title + " - Landeshauptstadt München";
 });
 
 const todoCount = computed(() => {
@@ -112,10 +118,16 @@ const doneCount = computed(() => {
   margin-bottom: 8px !important;
 }
 
+.task-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
 .task {
   font-weight: bold;
-  vertical-align: baseline;
   padding-right: 8px;
+  padding-left: 3px;
   padding-top: 5px;
   white-space: nowrap;
 }
@@ -123,13 +135,7 @@ const doneCount = computed(() => {
 .chips-container {
   display: flex;
   gap: 8px;
-  flex-wrap: nowrap;
-}
-
-@media (max-width: 450px) {
-  .chips-container {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 </style>

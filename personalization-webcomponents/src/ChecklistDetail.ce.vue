@@ -17,6 +17,7 @@
         <muc-banner
           noIcon
           type="warning"
+          variant="content"
         >
           <p>
             Mit dieser Aktion entfernen Sie die Aufgabe
@@ -120,43 +121,52 @@
               <h2 class="headline">
                 Offene Aufgaben ({{ openCheckList.length }})
               </h2>
-
-              <checklist-list
-                v-if="openCheckList.length !== 0"
-                :checklist-items="openCheckList"
-                :disabled="loadingUpdate || loadingCheck"
-                @checked="onCheckedOpen"
-                @delete="onRequestDeleteItem"
-                @sort="onSortOpen"
-              ></checklist-list>
-              <muc-banner
+              <div v-if="openCheckList.length !== 0">
+                <checklist-list
+                  :checklist-items="openCheckList"
+                  :disabled="loadingUpdate || loadingCheck"
+                  @checked="onCheckedOpen"
+                  @delete="onRequestDeleteItem"
+                  @sort="onSortOpen"
+                ></checklist-list>
+              </div>
+              <div
                 v-else
                 class="banner"
-                type="success"
               >
-                Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
-                bewahren diese Checkliste noch bis zum {{ deletionDate }} für
-                Sie auf. Danach wird sie automatisch gelöscht.
-              </muc-banner>
+                <muc-banner
+                  type="success"
+                  variant="content"
+                >
+                  Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
+                  bewahren diese Checkliste noch bis zum {{ deletionDate }} für
+                  Sie auf. Danach wird sie automatisch gelöscht.
+                </muc-banner>
+              </div>
               <h2 class="headline">
                 Erledigte Aufgaben ({{ closedCheckList.length }})
               </h2>
-              <checklist-list
-                v-if="closedCheckList.length !== 0"
-                :disabled="loadingUpdate || loadingCheck"
-                :checklist-items="closedCheckList"
-                @checked="onCheckedClosed"
-                @delete="onRequestDeleteItem"
-                :is-draggable="false"
-              ></checklist-list>
-              <muc-banner
+              <div v-if="closedCheckList.length !== 0">
+                <checklist-list
+                  :disabled="loadingUpdate || loadingCheck"
+                  :checklist-items="closedCheckList"
+                  @checked="onCheckedClosed"
+                  @delete="onRequestDeleteItem"
+                  :is-draggable="false"
+                ></checklist-list>
+              </div>
+              <div
                 v-else
                 class="banner"
-                type="info"
               >
-                Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben in
-                der Checkliste ab, um sie als erledigt zu markieren.
-              </muc-banner>
+                <muc-banner
+                  type="info"
+                  variant="content"
+                >
+                  Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben
+                  in der Checkliste ab, um sie als erledigt zu markieren.
+                </muc-banner>
+              </div>
             </div>
           </div>
         </div>
@@ -422,7 +432,7 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.6/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.15/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 @import "../public/checklist-styles.css";
