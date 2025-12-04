@@ -51,23 +51,75 @@
         </muc-chip>
       </div>
     </div>
+    <div style="padding-top: 32px">
+      <muc-button
+        icon="trash"
+        variant="secondary"
+        @click="openAcceptDeleteDialog = true"
+      >
+        Checkliste löschen
+      </muc-button>
+    </div>
   </muc-intro>
+
+  <muc-modal
+    :open="openAcceptDeleteDialog"
+    @close="openAcceptDeleteDialog = false"
+    @cancel="openAcceptDeleteDialog = false"
+  >
+    <template #title> Löschen der Checkliste</template>
+
+    <template #body>
+      <muc-banner
+        noIcon
+        type="warning"
+        variant="content"
+      >
+        Mit dieser Aktion entfernen Sie die Checkliste
+        <strong>„{{ checklist.title }}”</strong> und alle enthaltenen Aufgaben
+        endgültig aus Ihrem Bereich.
+      </muc-banner>
+    </template>
+    <template #buttons>
+      <muc-button
+        icon="trash"
+        @click="deleteChecklist"
+      >
+        Checkliste löschen
+      </muc-button>
+      <muc-button
+        variant="secondary"
+        @click="openAcceptDeleteDialog = false"
+      >
+        Abbrechen
+      </muc-button>
+    </template>
+  </muc-modal>
 </template>
 
 <script setup lang="ts">
 import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
 
-import { MucIntro } from "@muenchen/muc-patternlab-vue";
-import { computed, onMounted } from "vue";
+import {
+  MucBanner,
+  MucButton,
+  MucIntro,
+  MucModal,
+} from "@muenchen/muc-patternlab-vue";
+import { computed, onMounted, ref } from "vue";
 
+import ChecklistService from "@/api/persservice/ChecklistService.ts";
 import MucChip from "@/components/common/MucChip.vue";
 import {
   getChecklistIconBySituationId,
   getDateInGermanDateFormat,
 } from "@/util/Constants.ts";
 
+const openAcceptDeleteDialog = ref(false);
+
 const props = defineProps<{
   checklist: ChecklistServiceNavigator;
+  checklistOverviewUrl: string;
 }>();
 
 onMounted(() => {
@@ -112,6 +164,19 @@ const doneCount = computed(() => {
     return undefined;
   }
 });
+
+function deleteChecklist() {
+  const service = new ChecklistService();
+  service.deleteChecklist(props.checklist.id).then((resp) => {
+    if (resp.ok) {
+      location.href = props.checklistOverviewUrl;
+    } else {
+      resp.text().then((errBody) => {
+        throw Error(errBody);
+      });
+    }
+  });
+}
 </script>
 <style>
 .m-intro-vertical__title {

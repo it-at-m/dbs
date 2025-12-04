@@ -49,6 +49,20 @@ export default class ChecklistService {
     });
   }
 
+  deleteChecklist(id: string): Promise<Response> {
+    //todo replace with openapi generated client when backend is finished
+    const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist/" + id;
+
+    return fetch(url, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + getAccessToken(),
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+  }
+
   checkChecklistentry(
     checklistID: string,
     serviceID: string

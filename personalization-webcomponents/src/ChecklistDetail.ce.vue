@@ -66,6 +66,7 @@
     <checklist-header
       v-else-if="checklist"
       :checklist="checklist"
+      :checklist-overview-url="myChecklistsUrl"
     ></checklist-header>
     <muc-intro
       v-else
