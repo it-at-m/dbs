@@ -75,11 +75,9 @@
         type="warning"
         variant="content"
       >
-        <p>
-          Mit dieser Aktion entfernen Sie die Checkliste
-          <strong>„{{ checklist.title }}”</strong> und alle enthaltenen Aufgaben
-          endgültig aus Ihrem Bereich.
-        </p>
+        Mit dieser Aktion entfernen Sie die Checkliste
+        <strong>„{{ checklist.title }}”</strong> und alle enthaltenen Aufgaben
+        endgültig aus Ihrem Bereich.
       </muc-banner>
     </template>
     <template #buttons>
