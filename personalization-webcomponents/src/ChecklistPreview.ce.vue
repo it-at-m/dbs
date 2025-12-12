@@ -327,7 +327,8 @@ onMounted(() => {
     updateLebenslage.textContent = "Lebenslage: " + lebenslageTitle.value;
   }
 
-  document.title = "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
+  document.title =
+    "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {

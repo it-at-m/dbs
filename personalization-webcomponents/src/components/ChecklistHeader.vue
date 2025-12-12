@@ -142,7 +142,8 @@ onMounted(() => {
     });
   }
 
-  document.title = "Checkliste: " + props.checklist.title + " - Landeshauptstadt München";
+  document.title =
+    "Checkliste: " + props.checklist.title + " - Landeshauptstadt München";
 });
 
 const todoCount = computed(() => {
