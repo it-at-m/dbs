@@ -127,7 +127,7 @@ onMounted(() => {
     '[data-fragment-placeholder="breadcrumb-label"]'
   );
   if (element) {
-    element.innerHTML = props.checklist.title;
+    element.innerHTML = "Checkliste: " + props.checklist.title;
   }
 
   // Don't show breadcrump "Checkliste"
@@ -142,7 +142,8 @@ onMounted(() => {
     });
   }
 
-  document.title = props.checklist.title + " - Landeshauptstadt München";
+  document.title =
+    "Checkliste: " + props.checklist.title + " - Landeshauptstadt München";
 });
 
 const todoCount = computed(() => {

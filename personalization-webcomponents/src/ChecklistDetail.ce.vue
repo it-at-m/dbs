@@ -10,6 +10,7 @@
       :open="openAcceptDeleteDialog"
       @close="openAcceptDeleteDialog = false"
       @cancel="openAcceptDeleteDialog = false"
+      aria-live="polite"
     >
       <template #title> Löschen der Aufgabe</template>
 
@@ -138,6 +139,7 @@
                 <muc-banner
                   type="success"
                   variant="content"
+                  aria-live="polite"
                 >
                   Herzlichen Glückwunsch, Sie haben alle Aufgaben erledigt! Wir
                   bewahren diese Checkliste noch bis zum {{ deletionDate }} für
@@ -163,6 +165,7 @@
                 <muc-banner
                   type="info"
                   variant="content"
+                  aria-live="polite"
                 >
                   Sie haben noch keine erledigten Aufgaben. Haken Sie Aufgaben
                   in der Checkliste ab, um sie als erledigt zu markieren.
