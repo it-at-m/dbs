@@ -40,6 +40,7 @@
         v-if="service?.appointmentService"
         :href="service.appointmentServiceUrl"
         target="_blank"
+        tabindex="-1"
       >
         <muc-button icon="calendar"> Termin vereinbaren </muc-button>
       </a>
