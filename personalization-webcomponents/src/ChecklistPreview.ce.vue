@@ -76,6 +76,7 @@
         <muc-banner
           v-if="loadingError"
           type="emergency"
+          variant="content"
         >
           Es ist ein Fehler beim Speichern der Checkliste aufgetreten. Bitte
           versuchen Sie es zu einem späteren Zeitpunkt noch einmal.
@@ -318,6 +319,16 @@ onMounted(() => {
     saveChecklistModalOpen.value = true;
     localStorage.removeItem(LOCALSTORAGE_KEY_LOGGED_IN);
   }
+
+  const updateLebenslage = document.querySelector(
+    ".m-breadcrumb__list-item-current"
+  );
+  if (updateLebenslage) {
+    updateLebenslage.textContent = "Lebenslage: " + lebenslageTitle.value;
+  }
+
+  document.title =
+    "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
@@ -461,7 +472,7 @@ async function copyUrl() {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.6/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.15/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 </style>
