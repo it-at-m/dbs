@@ -1083,6 +1083,47 @@
         ]
       }
     },
+    "/users/byEmail/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Find user in Zammad by email.",
+        "description": "Authorization: READ_USERS",
+        "operationId": "getUsersByEmail",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "The email to look for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dbs-ticketing-eai-secscheme": []
+          }
+        ]
+      }
+    },
     "/tickets/byNummer/{ticketNumber}": {
       "get": {
         "tags": [
@@ -1663,6 +1704,9 @@
           "vertrauensniveau": {
             "type": "string"
           },
+          "vertrauensniveau_ticket": {
+            "type": "string"
+          },
           "verwendeter_idp_bei_ticketerstellung": {
             "type": "string"
           },
@@ -1966,6 +2010,9 @@
           "vertrauensniveau": {
             "type": "string"
           },
+          "vertrauensniveau_ticket": {
+            "type": "string"
+          },
           "verwendeter_idp_bei_ticketerstellung": {
             "type": "string"
           },
@@ -2133,6 +2180,9 @@
             "type": "string"
           },
           "vertrauensniveau": {
+            "type": "string"
+          },
+          "vertrauensniveau_ticket": {
             "type": "string"
           },
           "verwendeter_idp_bei_ticketerstellung": {
