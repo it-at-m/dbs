@@ -8,3 +8,4 @@ const SolidDataManagerWebcomponent = defineCustomElement(
 
 customElements.define("solid-data-manager", SolidDataManagerWebcomponent);
 
+

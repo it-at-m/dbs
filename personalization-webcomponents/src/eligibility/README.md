@@ -108,3 +108,4 @@ To enable KindergeldCheck, uncomment the import and registration in `Eligibility
 - Add eligibility score/confidence level
 - Support for partial eligibility with recommendations
 
+

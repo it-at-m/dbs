@@ -1,8 +1,4 @@
-import type {
-  EligibilityCheckInterface,
-  EligibilityResult,
-  FormData,
-} from "@/types/EligibilityCheckInterface";
+import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
 
 export class BaföGCheck implements EligibilityCheckInterface {
   getName(): string {
@@ -10,17 +6,13 @@ export class BaföGCheck implements EligibilityCheckInterface {
   }
 
   evaluate(formData: FormData): EligibilityResult {
-    // 1. Check age requirement (15 to 35)
-    if (!formData.alter || formData.alter < 15 || formData.alter >= 36) {
-      return {
-        eligible: false,
-        subsidyName: this.getName(),
-        reason: "Das Alter muss zwischen 15 und 35 Jahren liegen.",
-      };
-    }
+    // Start with empty missing fields and build it up
+    const missingFields = new Set<FormDataField>();
 
-    // 2. Check no financial difficulty (must be false)
-    if (formData.hatFinanzielleNotlage === true) {
+    // 1. Check no financial difficulty (must be false)
+    if (formData.hasFinancialHardship === undefined || formData.hasFinancialHardship === null) {
+      missingFields.add('hasFinancialHardship');
+    } else if (formData.hasFinancialHardship === true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -28,8 +20,10 @@ export class BaföGCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 3. Check health insurance (must have insurance)
-    if (formData.krankenversicherung === 'keine') {
+    // 2. Check health insurance (must have insurance)
+    if (formData.healthInsurance === undefined || formData.healthInsurance === null) {
+      missingFields.add('healthInsurance');
+    } else if (formData.healthInsurance === 'keine') {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -37,8 +31,21 @@ export class BaföGCheck implements EligibilityCheckInterface {
       };
     }
 
+    // 3. Check age requirement (15 to 35)
+    if (formData.age === undefined || formData.age === null) {
+      missingFields.add('age');
+    } else if (formData.age < 15 || formData.age >= 36) {
+      return {
+        eligible: false,
+        subsidyName: this.getName(),
+        reason: "Das Alter muss zwischen 15 und 35 Jahren liegen.",
+      };
+    }
+
     // 4. Check care insurance (must have Pflegeversicherung)
-    if (formData.hatPflegeversicherung !== true) {
+    if (formData.hasCareInsurance === undefined || formData.hasCareInsurance === null) {
+      missingFields.add('hasCareInsurance');
+    } else if (formData.hasCareInsurance !== true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -47,7 +54,9 @@ export class BaföGCheck implements EligibilityCheckInterface {
     }
 
     // 5. Check work ability (must NOT be none)
-    if (formData.arbeitsfahigkeit === 'keine') {
+    if (formData.workAbility === undefined || formData.workAbility === null) {
+      missingFields.add('workAbility');
+    } else if (formData.workAbility === 'keine') {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -56,7 +65,9 @@ export class BaföGCheck implements EligibilityCheckInterface {
     }
 
     // 6. Check employment status (must be in education)
-    if (formData.beschaeftigungsstatus !== 'student') {
+    if (formData.employmentStatus === undefined || formData.employmentStatus === null) {
+      missingFields.add('employmentStatus');
+    } else if (formData.employmentStatus !== 'student') {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -65,7 +76,9 @@ export class BaföGCheck implements EligibilityCheckInterface {
     }
 
     // 7. Check NOT receiving pension
-    if (formData.beziehtRente === true) {
+    if (formData.receivesPension === undefined || formData.receivesPension === null) {
+      missingFields.add('receivesPension');
+    } else if (formData.receivesPension === true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -73,7 +86,16 @@ export class BaföGCheck implements EligibilityCheckInterface {
       };
     }
 
-    // All conditions met
+    // Only return missingFields at the end
+    if (missingFields.size > 0) {
+      return {
+        missingFields,
+        subsidyName: this.getName(),
+        reason: "Bitte geben Sie alle erforderlichen Informationen an.",
+      };
+    }
+
+    // Only return eligible at the end
     return {
       eligible: true,
       subsidyName: this.getName(),
@@ -83,4 +105,3 @@ export class BaföGCheck implements EligibilityCheckInterface {
     };
   }
 }
-

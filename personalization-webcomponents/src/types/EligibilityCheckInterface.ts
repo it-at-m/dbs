@@ -1,57 +1,60 @@
 export interface FormData {
   // Personal Information
-  firstName: string;
-  lastName: string;
-  geburtsdatum?: string; // ISO date string (YYYY-MM-DD)
-  alter?: number; // Age (can be derived)
-  geschlecht?: 'männlich' | 'weiblich' | 'divers' | 'keine Angabe';
-  familienstand?: 'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt';
-  staatsangehoerigkeit?: 'Deutsch' | 'EU' | 'Nicht-EU';
-  aufenthaltsstatus?: 'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine'; // For non-German citizens
-  wohnsitzInDeutschland?: boolean; // Habitual residence in Germany
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string; // ISO date string (YYYY-MM-DD)
+  age?: number; // Age (can be derived)
+  gender?: 'männlich' | 'weiblich' | 'divers' | 'keine Angabe';
+  maritalStatus?: 'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt';
+  nationality?: 'Deutsch' | 'EU' | 'Nicht-EU';
+  residenceStatus?: 'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine'; // For non-German citizens
+  residenceInGermany?: boolean; // Habitual residence in Germany
   
   // Financial Information
-  bruttoEinkommenMonatlich?: number;
-  nettoEinkommenMonatlich?: number;
-  vermoegen?: number;
-  mieteMietzinsMonatlich?: number;
+  grossMonthlyIncome?: number;
+  netMonthlyIncome?: number;
+  assets?: number;
+  monthlyRent?: number;
   
   // Household Information
-  anzahlPersonenHaushalt?: number;
-  anzahlKinder?: number;
-  kinderAlter?: number[]; // Array of children ages
+  householdSize?: number;
+  numberOfChildren?: number;
+  childrenAges?: number[]; // Array of children ages
   
   // Education & Employment
-  beschaeftigungsstatus?: 'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges';
-  bildungsstand?: 'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium';
-  istStudent?: boolean;
+  employmentStatus?: 'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges';
+  educationLevel?: 'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium';
+  isStudent?: boolean;
   
   // Special Circumstances
-  hatBehinderung?: boolean;
-  gradDerBehinderung?: number; // 0-100
-  beziehtAlg1?: boolean;
-  beziehtAlg2?: boolean;
-  beziehtRente?: boolean;
-  rentenberechtigt?: boolean; // Eligible for pension (reached pension age)
-  istSchwanger?: boolean;
-  istAlleinerziehend?: boolean;
-  hatPflegebeduerftigkeit?: boolean;
-  buergergeldLetzte3Jahre?: boolean; // Received Bürgergeld in last 3 years
+  hasDisability?: boolean;
+  disabilityDegree?: number; // 0-100
+  receivesUnemploymentBenefit1?: boolean;
+  receivesUnemploymentBenefit2?: boolean;
+  receivesPension?: boolean;
+  pensionEligible?: boolean; // Eligible for pension (reached pension age)
+  isPregnant?: boolean;
+  isSingleParent?: boolean;
+  hasCareNeeds?: boolean;
+  citizenBenefitLast3Years?: boolean; // Received Bürgergeld in last 3 years
   
   // Insurance & Benefits
-  krankenversicherung?: 'gesetzlich' | 'privat' | 'keine';
-  hatPflegeversicherung?: boolean;
-  beziehtKindergeld?: boolean;
-  beziehtWohngeld?: boolean;
-  beziehtBafög?: boolean;
+  healthInsurance?: 'gesetzlich' | 'privat' | 'keine';
+  hasCareInsurance?: boolean;
+  receivesChildBenefit?: boolean;
+  receivesHousingBenefit?: boolean;
+  receivesStudentAid?: boolean;
   
   // Additional for BAföG
-  hatFinanzielleNotlage?: boolean; // Financial difficulty
-  arbeitsfahigkeit?: 'voll' | 'eingeschraenkt' | 'keine'; // Work ability
+  hasFinancialHardship?: boolean; // Financial difficulty
+  workAbility?: 'voll' | 'eingeschraenkt' | 'keine'; // Work ability
 }
 
+export type FormDataField = keyof FormData;
+
 export interface EligibilityResult {
-  eligible: boolean;
+  eligible?: boolean;
+  missingFields?: Set<FormDataField>;
   subsidyName: string;
   reason?: string;
   url?: string;

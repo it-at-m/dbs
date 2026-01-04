@@ -2,6 +2,7 @@ import type {
   EligibilityCheckInterface,
   EligibilityResult,
   FormData,
+  FormDataField,
 } from "@/types/EligibilityCheckInterface";
 
 export class BürgergeldCheck implements EligibilityCheckInterface {
@@ -10,8 +11,13 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
   }
 
   evaluate(formData: FormData): EligibilityResult {
+    // Start with empty missing fields and build it up
+    const missingFields = new Set<FormDataField>();
+
     // 1. Check financial difficulty (must be true)
-    if (formData.hatFinanzielleNotlage !== true) {
+    if (formData.hasFinancialHardship === undefined || formData.hasFinancialHardship === null) {
+      missingFields.add('hasFinancialHardship');
+    } else if (formData.hasFinancialHardship !== true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -19,22 +25,34 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 2. Check citizenship and residency status
-    const hasValidCitizenship = formData.staatsangehoerigkeit === 'Deutsch';
-    const hasValidResidency = 
-      formData.aufenthaltsstatus === 'Aufenthaltserlaubnis' || 
-      formData.aufenthaltsstatus === 'Niederlassungserlaubnis';
-    
-    if (!hasValidCitizenship && !hasValidResidency) {
-      return {
-        eligible: false,
-        subsidyName: this.getName(),
-        reason: "Sie benötigen die deutsche Staatsbürgerschaft oder eine gültige Aufenthaltserlaubnis/Niederlassungserlaubnis.",
-      };
+    // 2. Check citizenship
+    if (formData.nationality === undefined || formData.nationality === null) {
+      missingFields.add('nationality');
     }
 
-    // 3. Check habitual residence in Germany
-    if (formData.wohnsitzInDeutschland !== true) {
+    // 3. Check residency status (only if not German)
+    if (formData.nationality !== 'Deutsch' && formData.nationality !== undefined && formData.nationality !== null) {
+      if (formData.residenceStatus === undefined || formData.residenceStatus === null) {
+        missingFields.add('residenceStatus');
+      } else {
+        const hasValidResidency = 
+          formData.residenceStatus === 'Aufenthaltserlaubnis' || 
+          formData.residenceStatus === 'Niederlassungserlaubnis';
+        
+        if (!hasValidResidency) {
+          return {
+            eligible: false,
+            subsidyName: this.getName(),
+            reason: "Sie benötigen die deutsche Staatsbürgerschaft oder eine gültige Aufenthaltserlaubnis/Niederlassungserlaubnis.",
+          };
+        }
+      }
+    }
+
+    // 4. Check habitual residence in Germany
+    if (formData.residenceInGermany === undefined || formData.residenceInGermany === null) {
+      missingFields.add('residenceInGermany');
+    } else if (formData.residenceInGermany !== true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -42,8 +60,10 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 4. Check age requirement (must be >= 15)
-    if (!formData.alter || formData.alter < 15) {
+    // 5. Check age requirement (must be >= 15)
+    if (formData.age === undefined || formData.age === null) {
+      missingFields.add('age');
+    } else if (formData.age < 15) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -51,8 +71,10 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 5. Check not pensionable (not reached pension age)
-    if (formData.rentenberechtigt === true) {
+    // 6. Check not pensionable (not reached pension age)
+    if (formData.pensionEligible === undefined || formData.pensionEligible === null) {
+      missingFields.add('pensionEligible');
+    } else if (formData.pensionEligible === true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -60,8 +82,10 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 6. Check work ability (must NOT be none)
-    if (formData.arbeitsfahigkeit === 'keine') {
+    // 7. Check work ability (must NOT be none)
+    if (formData.workAbility === undefined || formData.workAbility === null) {
+      missingFields.add('workAbility');
+    } else if (formData.workAbility === 'keine') {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -69,11 +93,13 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 7. Check employment status (must NOT be in education, self-employed, or pension)
-    if (
-      formData.beschaeftigungsstatus === 'student' ||
-      formData.beschaeftigungsstatus === 'selbststaendig' ||
-      formData.beschaeftigungsstatus === 'rentner'
+    // 8. Check employment status (must NOT be in education, self-employed, or pension)
+    if (formData.employmentStatus === undefined || formData.employmentStatus === null) {
+      missingFields.add('employmentStatus');
+    } else if (
+      formData.employmentStatus === 'student' ||
+      formData.employmentStatus === 'selbststaendig' ||
+      formData.employmentStatus === 'rentner'
     ) {
       return {
         eligible: false,
@@ -82,8 +108,10 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 8. Check NOT already receiving conflicting benefits
-    if (formData.beziehtAlg2 === true) {
+    // 9. Check NOT already receiving conflicting benefits
+    if (formData.receivesUnemploymentBenefit2 === undefined || formData.receivesUnemploymentBenefit2 === null) {
+      missingFields.add('receivesUnemploymentBenefit2');
+    } else if (formData.receivesUnemploymentBenefit2 === true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -91,7 +119,9 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    if (formData.beziehtRente === true) {
+    if (formData.receivesPension === undefined || formData.receivesPension === null) {
+      missingFields.add('receivesPension');
+    } else if (formData.receivesPension === true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -99,7 +129,9 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    if (formData.beziehtWohngeld === true) {
+    if (formData.receivesHousingBenefit === undefined || formData.receivesHousingBenefit === null) {
+      missingFields.add('receivesHousingBenefit');
+    } else if (formData.receivesHousingBenefit === true) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -107,8 +139,10 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 9. Check household members (must be >= 1)
-    if (!formData.anzahlPersonenHaushalt || formData.anzahlPersonenHaushalt < 1) {
+    // 10. Check household members (must be >= 1)
+    if (formData.householdSize === undefined || formData.householdSize === null) {
+      missingFields.add('householdSize');
+    } else if (formData.householdSize < 1) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -116,18 +150,31 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 10. Check assets limit (simplified - actual limits are complex and depend on household)
-    // Basic limit is around 15,000 EUR for single person, plus 500 EUR per year of age
-    const assetLimit = 15000 + ((formData.alter || 0) * 500);
-    if (formData.vermoegen && formData.vermoegen > assetLimit) {
+    // 11. Check assets limit (simplified - actual limits are complex and depend on household)
+    if (formData.assets === undefined || formData.assets === null) {
+      missingFields.add('assets');
+    } else if (formData.age !== undefined && formData.age !== null) {
+      // Can only check asset limit if age is known
+      const assetLimit = 15000 + (formData.age * 500);
+      if (formData.assets > assetLimit) {
+        return {
+          eligible: false,
+          subsidyName: this.getName(),
+          reason: `Ihr Vermögen (${formData.assets}€) überschreitet die Freigrenze (ca. ${assetLimit.toFixed(0)}€).`,
+        };
+      }
+    }
+
+    // Only return missingFields at the end
+    if (missingFields.size > 0) {
       return {
-        eligible: false,
+        missingFields,
         subsidyName: this.getName(),
-        reason: `Ihr Vermögen (${formData.vermoegen}€) überschreitet die Freigrenze (ca. ${assetLimit.toFixed(0)}€).`,
+        reason: "Bitte geben Sie alle erforderlichen Informationen an.",
       };
     }
 
-    // All conditions met
+    // Only return eligible at the end
     return {
       eligible: true,
       subsidyName: this.getName(),
@@ -137,4 +184,3 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
     };
   }
 }
-

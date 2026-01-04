@@ -15,6 +15,14 @@
           {{ message }}
         </muc-banner>
 
+        <muc-banner
+          v-if="missingFields.length > 0"
+          type="info"
+          class="message-banner"
+        >
+          Es werden nur die Felder angezeigt, die für die Berechnung Ihrer Berechtigung benötigt werden ({{ missingFields.length }} Feld{{ missingFields.length !== 1 ? 'er' : '' }}).
+        </muc-banner>
+
         <div class="two-column-layout">
           <!-- Left Column: Form -->
           <div class="left-column">
@@ -22,240 +30,64 @@
               @submit.prevent="saveData"
               class="form-content"
             >
-              <!-- Fieldset 1: Personal Information -->
-              <fieldset class="form-fieldset">
-                <legend>Persönliche Informationen</legend>
-                
-                <div class="m-form-group">
-                  <label for="firstName" class="m-label">Vorname</label>
-                  <input id="firstName" v-model="firstName" type="text" 
-                         placeholder="Vorname eingeben" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="lastName" class="m-label">Nachname</label>
-                  <input id="lastName" v-model="lastName" type="text" 
-                         placeholder="Nachname eingeben" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="geburtsdatum" class="m-label">Geburtsdatum</label>
-                  <input id="geburtsdatum" v-model="geburtsdatum" type="date" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="geschlecht" class="m-label">Geschlecht</label>
-                  <select id="geschlecht" v-model="geschlecht" class="m-textfield">
-                    <option :value="undefined">Bitte wählen</option>
-                    <option value="männlich">Männlich</option>
-                    <option value="weiblich">Weiblich</option>
-                    <option value="divers">Divers</option>
-                    <option value="keine Angabe">Keine Angabe</option>
-                  </select>
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="familienstand" class="m-label">Familienstand</label>
-                  <select id="familienstand" v-model="familienstand" class="m-textfield">
-                    <option :value="undefined">Bitte wählen</option>
-                    <option value="ledig">Ledig</option>
-                    <option value="verheiratet">Verheiratet</option>
-                    <option value="geschieden">Geschieden</option>
-                    <option value="verwitwet">Verwitwet</option>
-                    <option value="getrennt">Getrennt</option>
-                  </select>
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="staatsangehoerigkeit" class="m-label">Staatsangehörigkeit</label>
-                  <select id="staatsangehoerigkeit" v-model="staatsangehoerigkeit" class="m-textfield">
-                    <option :value="undefined">Bitte wählen</option>
-                    <option value="Deutsch">Deutsch</option>
-                    <option value="EU">Europäisch (EU)</option>
-                    <option value="Nicht-EU">Nicht-EU</option>
-                  </select>
-                </div>
-              </fieldset>
+              <PersonalInformationForm
+                v-model:firstName="firstName"
+                v-model:lastName="lastName"
+                v-model:dateOfBirth="dateOfBirth"
+                v-model:gender="gender"
+                v-model:maritalStatus="maritalStatus"
+                v-model:nationality="nationality"
+                v-model:residenceStatus="residenceStatus"
+                v-model:residenceInGermany="residenceInGermany"
+                :shouldShowField="shouldShowField"
+              />
 
-              <!-- Fieldset 2: Financial Information -->
-              <fieldset class="form-fieldset">
-                <legend>Finanzielle Angaben</legend>
-                
-                <div class="m-form-group">
-                  <label for="bruttoEinkommen" class="m-label">Monatliches Bruttoeinkommen (€)</label>
-                  <input id="bruttoEinkommen" v-model.number="bruttoEinkommenMonatlich" 
-                         type="number" step="0.01" placeholder="z.B. 2000" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="nettoEinkommen" class="m-label">Monatliches Nettoeinkommen (€)</label>
-                  <input id="nettoEinkommen" v-model.number="nettoEinkommenMonatlich" 
-                         type="number" step="0.01" placeholder="z.B. 1500" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="vermoegen" class="m-label">Vermögen (€)</label>
-                  <input id="vermoegen" v-model.number="vermoegen" 
-                         type="number" step="0.01" placeholder="z.B. 5000" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="miete" class="m-label">Monatliche Miete (€)</label>
-                  <input id="miete" v-model.number="mieteMietzinsMonatlich" 
-                         type="number" step="0.01" placeholder="z.B. 800" class="m-textfield" />
-                </div>
-              </fieldset>
+              <FinancialInformationForm
+                v-model:grossMonthlyIncome="grossMonthlyIncome"
+                v-model:netMonthlyIncome="netMonthlyIncome"
+                v-model:assets="assets"
+                v-model:monthlyRent="monthlyRent"
+                :shouldShowField="shouldShowField"
+              />
 
-              <!-- Fieldset 4: Household Information -->
-              <fieldset class="form-fieldset">
-                <legend>Haushalt</legend>
-                
-                <div class="m-form-group">
-                  <label for="haushalt" class="m-label">Anzahl Personen im Haushalt</label>
-                  <input id="haushalt" v-model.number="anzahlPersonenHaushalt" 
-                         type="number" min="1" placeholder="z.B. 2" class="m-textfield" />
-                </div>
-                
-                <div v-if="anzahlPersonenHaushalt && anzahlPersonenHaushalt > 1" class="m-form-group">
-                  <label for="kinder" class="m-label">Anzahl Kinder</label>
-                  <input id="kinder" v-model.number="anzahlKinder" 
-                         type="number" min="0" placeholder="z.B. 1" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="istAlleinerziehend" class="m-checkbox" />
-                    <span>Alleinerziehend</span>
-                  </label>
-                </div>
-              </fieldset>
+              <HouseholdInformationForm
+                v-model:householdSize="householdSize"
+                v-model:numberOfChildren="numberOfChildren"
+                v-model:childrenAges="childrenAges"
+                v-model:isSingleParent="isSingleParent"
+                :shouldShowField="shouldShowField"
+              />
 
-              <!-- Fieldset 5: Education & Employment -->
-              <fieldset class="form-fieldset">
-                <legend>Bildung & Beschäftigung</legend>
-                
-                <div class="m-form-group">
-                  <label for="beschaeftigungsstatus" class="m-label">Beschäftigungsstatus</label>
-                  <select id="beschaeftigungsstatus" v-model="beschaeftigungsstatus" class="m-textfield">
-                    <option :value="undefined">Bitte wählen</option>
-                    <option value="angestellt">Angestellt</option>
-                    <option value="selbststaendig">Selbstständig</option>
-                    <option value="arbeitslos">Arbeitslos</option>
-                    <option value="student">Student/in</option>
-                    <option value="rentner">Rentner/in</option>
-                    <option value="sonstiges">Sonstiges</option>
-                  </select>
-                </div>
-                
-                <div class="m-form-group">
-                  <label for="bildungsstand" class="m-label">Bildungsstand</label>
-                  <select id="bildungsstand" v-model="bildungsstand" class="m-textfield">
-                    <option :value="undefined">Bitte wählen</option>
-                    <option value="kein_abschluss">Kein Abschluss</option>
-                    <option value="hauptschule">Hauptschule</option>
-                    <option value="realschule">Realschule</option>
-                    <option value="abitur">Abitur</option>
-                    <option value="ausbildung">Ausbildung</option>
-                    <option value="studium">Studium</option>
-                  </select>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="istStudent" class="m-checkbox" />
-                    <span>Ich bin Student/in</span>
-                  </label>
-                </div>
-              </fieldset>
+              <EducationEmploymentForm
+                v-model:employmentStatus="employmentStatus"
+                v-model:educationLevel="educationLevel"
+                v-model:isStudent="isStudent"
+                :shouldShowField="shouldShowField"
+              />
 
-              <!-- Fieldset 6: Special Circumstances -->
-              <fieldset class="form-fieldset">
-                <legend>Besondere Umstände</legend>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="hatBehinderung" class="m-checkbox" />
-                    <span>Behinderung</span>
-                  </label>
-                </div>
-                
-                <div v-if="hatBehinderung" class="m-form-group">
-                  <label for="gradDerBehinderung" class="m-label">Grad der Behinderung (%)</label>
-                  <input id="gradDerBehinderung" v-model.number="gradDerBehinderung" 
-                         type="number" min="0" max="100" placeholder="z.B. 50" class="m-textfield" />
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="istSchwanger" class="m-checkbox" />
-                    <span>Schwanger</span>
-                  </label>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="hatPflegebeduerftigkeit" class="m-checkbox" />
-                    <span>Pflegebedürftigkeit</span>
-                  </label>
-                </div>
-              </fieldset>
+              <SpecialCircumstancesForm
+                v-model:hasDisability="hasDisability"
+                v-model:disabilityDegree="disabilityDegree"
+                v-model:isPregnant="isPregnant"
+                v-model:hasCareNeeds="hasCareNeeds"
+                v-model:pensionEligible="pensionEligible"
+                v-model:citizenBenefitLast3Years="citizenBenefitLast3Years"
+                v-model:hasFinancialHardship="hasFinancialHardship"
+                v-model:workAbility="workAbility"
+                :shouldShowField="shouldShowField"
+              />
 
-              <!-- Fieldset 7: Insurance & Benefits -->
-              <fieldset class="form-fieldset">
-                <legend>Versicherung & Leistungen</legend>
-                
-                <div class="m-form-group">
-                  <label for="krankenversicherung" class="m-label">Krankenversicherung</label>
-                  <select id="krankenversicherung" v-model="krankenversicherung" class="m-textfield">
-                    <option :value="undefined">Bitte wählen</option>
-                    <option value="gesetzlich">Gesetzlich</option>
-                    <option value="privat">Privat</option>
-                    <option value="keine">Keine</option>
-                  </select>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="beziehtAlg1" class="m-checkbox" />
-                    <span>Beziehe Arbeitslosengeld I</span>
-                  </label>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="beziehtAlg2" class="m-checkbox" />
-                    <span>Beziehe Bürgergeld (ALG II)</span>
-                  </label>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="beziehtRente" class="m-checkbox" />
-                    <span>Beziehe Rente</span>
-                  </label>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="beziehtKindergeld" class="m-checkbox" />
-                    <span>Beziehe Kindergeld</span>
-                  </label>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="beziehtWohngeld" class="m-checkbox" />
-                    <span>Beziehe Wohngeld</span>
-                  </label>
-                </div>
-                
-                <div class="m-form-group m-form-group-checkbox">
-                  <label class="m-checkbox-label">
-                    <input type="checkbox" v-model="beziehtBafög" class="m-checkbox" />
-                    <span>Beziehe BAföG</span>
-                  </label>
-                </div>
-              </fieldset>
+              <InsuranceBenefitsForm
+                v-model:healthInsurance="healthInsurance"
+                v-model:hasCareInsurance="hasCareInsurance"
+                v-model:receivesUnemploymentBenefit1="receivesUnemploymentBenefit1"
+                v-model:receivesUnemploymentBenefit2="receivesUnemploymentBenefit2"
+                v-model:receivesPension="receivesPension"
+                v-model:receivesChildBenefit="receivesChildBenefit"
+                v-model:receivesHousingBenefit="receivesHousingBenefit"
+                v-model:receivesStudentAid="receivesStudentAid"
+                :shouldShowField="shouldShowField"
+              />
 
               <div class="button-group">
                 <muc-button
@@ -378,67 +210,110 @@ import {
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 
 import { EligibilityCheckRegistry } from "@/eligibility/EligibilityCheckRegistry";
 import type {
   EligibilityResult,
   FormData,
+  FormDataField,
 } from "@/types/EligibilityCheckInterface";
+
+// Import form components
+import PersonalInformationForm from "@/components/forms/PersonalInformationForm.vue";
+import FinancialInformationForm from "@/components/forms/FinancialInformationForm.vue";
+import HouseholdInformationForm from "@/components/forms/HouseholdInformationForm.vue";
+import EducationEmploymentForm from "@/components/forms/EducationEmploymentForm.vue";
+import SpecialCircumstancesForm from "@/components/forms/SpecialCircumstancesForm.vue";
+import InsuranceBenefitsForm from "@/components/forms/InsuranceBenefitsForm.vue";
 
 const LOCALSTORAGE_KEY_FORMDATA = "user.formData";
 
 // Personal Information
-const firstName = ref("");
-const lastName = ref("");
-const geburtsdatum = ref("");
-const alter = ref<number | undefined>(undefined);
-const geschlecht = ref<'männlich' | 'weiblich' | 'divers' | 'keine Angabe' | undefined>(undefined);
-const familienstand = ref<'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt' | undefined>(undefined);
-const staatsangehoerigkeit = ref<'Deutsch' | 'EU' | 'Nicht-EU' | undefined>(undefined);
+const firstName = ref<string | undefined>(undefined);
+const lastName = ref<string | undefined>(undefined);
+const dateOfBirth = ref<string | undefined>(undefined);
+const age = ref<number | undefined>(undefined);
+const gender = ref<'männlich' | 'weiblich' | 'divers' | 'keine Angabe' | undefined>(undefined);
+const maritalStatus = ref<'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt' | undefined>(undefined);
+const nationality = ref<'Deutsch' | 'EU' | 'Nicht-EU' | undefined>(undefined);
+const residenceStatus = ref<'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine' | undefined>(undefined);
+const residenceInGermany = ref<boolean | undefined>(undefined);
 
 // Financial Information
-const bruttoEinkommenMonatlich = ref<number | undefined>(undefined);
-const nettoEinkommenMonatlich = ref<number | undefined>(undefined);
-const vermoegen = ref<number | undefined>(undefined);
-const mieteMietzinsMonatlich = ref<number | undefined>(undefined);
+const grossMonthlyIncome = ref<number | undefined>(undefined);
+const netMonthlyIncome = ref<number | undefined>(undefined);
+const assets = ref<number | undefined>(undefined);
+const monthlyRent = ref<number | undefined>(undefined);
 
 // Household Information
-const anzahlPersonenHaushalt = ref<number | undefined>(undefined);
-const anzahlKinder = ref<number | undefined>(undefined);
-const kinderAlter = ref<number[]>([]);
+const householdSize = ref<number | undefined>(undefined);
+const numberOfChildren = ref<number | undefined>(undefined);
+const childrenAges = ref<number[] | undefined>(undefined);
 
 // Education & Employment
-const beschaeftigungsstatus = ref<'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges' | undefined>(undefined);
-const bildungsstand = ref<'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium' | undefined>(undefined);
-const istStudent = ref(false);
+const employmentStatus = ref<'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges' | undefined>(undefined);
+const educationLevel = ref<'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium' | undefined>(undefined);
+const isStudent = ref<boolean | undefined>(undefined);
 
 // Special Circumstances
-const hatBehinderung = ref(false);
-const gradDerBehinderung = ref<number | undefined>(undefined);
-const beziehtAlg1 = ref(false);
-const beziehtAlg2 = ref(false);
-const beziehtRente = ref(false);
-const istSchwanger = ref(false);
-const istAlleinerziehend = ref(false);
-const hatPflegebeduerftigkeit = ref(false);
+const hasDisability = ref<boolean | undefined>(undefined);
+const disabilityDegree = ref<number | undefined>(undefined);
+const receivesUnemploymentBenefit1 = ref<boolean | undefined>(undefined);
+const receivesUnemploymentBenefit2 = ref<boolean | undefined>(undefined);
+const receivesPension = ref<boolean | undefined>(undefined);
+const pensionEligible = ref<boolean | undefined>(undefined);
+const isPregnant = ref<boolean | undefined>(undefined);
+const isSingleParent = ref<boolean | undefined>(undefined);
+const hasCareNeeds = ref<boolean | undefined>(undefined);
+const citizenBenefitLast3Years = ref<boolean | undefined>(undefined);
+const hasFinancialHardship = ref<boolean | undefined>(undefined);
+const workAbility = ref<'voll' | 'eingeschraenkt' | 'keine' | undefined>(undefined);
 
 // Insurance & Benefits
-const krankenversicherung = ref<'gesetzlich' | 'privat' | 'keine' | undefined>(undefined);
-const beziehtKindergeld = ref(false);
-const beziehtWohngeld = ref(false);
-const beziehtBafög = ref(false);
+const healthInsurance = ref<'gesetzlich' | 'privat' | 'keine' | undefined>(undefined);
+const hasCareInsurance = ref<boolean | undefined>(undefined);
+const receivesChildBenefit = ref<boolean | undefined>(undefined);
+const receivesHousingBenefit = ref<boolean | undefined>(undefined);
+const receivesStudentAid = ref<boolean | undefined>(undefined);
 
 const message = ref("");
 const messageType = ref<"success" | "info" | "warning" | "emergency">("success");
 const eligibilityResults = ref<EligibilityResult[]>([]);
 const allEligibilityResults = ref<EligibilityResult[]>([]);
+const missingFields = ref<FormDataField[]>([]);
 const showAllResults = ref(false);
 
 const eligibilityRegistry = new EligibilityCheckRegistry();
+// Watch all form fields and automatically check eligibility when they change
+watch(
+  [
+    // Personal Information
+    firstName, lastName, dateOfBirth, gender, maritalStatus, nationality, 
+    residenceStatus, residenceInGermany,
+    // Financial Information
+    grossMonthlyIncome, netMonthlyIncome, assets, monthlyRent,
+    // Household Information
+    householdSize, numberOfChildren, childrenAges,
+    // Education & Employment
+    employmentStatus, educationLevel, isStudent,
+    // Special Circumstances
+    hasDisability, disabilityDegree, receivesUnemploymentBenefit1, 
+    receivesUnemploymentBenefit2, receivesPension, pensionEligible, 
+    isPregnant, isSingleParent, hasCareNeeds, citizenBenefitLast3Years, 
+    hasFinancialHardship, workAbility,
+    // Insurance & Benefits
+    healthInsurance, hasCareInsurance, receivesChildBenefit, 
+    receivesHousingBenefit, receivesStudentAid
+  ],
+  () => {
+    checkEligibility();
+  },
+  { deep: true }
+);
 
 // Helper function to calculate age from birth date
-function calculateAge(birthDateString: string): number | undefined {
+function calculateAge(birthDateString: string | undefined): number | undefined {
   if (!birthDateString) return undefined;
   
   const birthDate = new Date(birthDateString);
@@ -456,7 +331,12 @@ function calculateAge(birthDateString: string): number | undefined {
 }
 
 // Computed property for age based on birth date
-const calculatedAge = computed(() => calculateAge(geburtsdatum.value));
+const calculatedAge = computed(() => calculateAge(dateOfBirth.value));
+
+// Helper function to check if a field should be shown
+const shouldShowField = (fieldName: FormDataField): boolean => {
+  return missingFields.value.includes(fieldName);
+};
 
 onMounted(() => {
   loadData();
@@ -468,43 +348,50 @@ function saveData() {
       // Personal Information
       firstName: firstName.value,
       lastName: lastName.value,
-      geburtsdatum: geburtsdatum.value || undefined,
-      alter: calculatedAge.value, // Use calculated age
-      geschlecht: geschlecht.value,
-      familienstand: familienstand.value,
-      staatsangehoerigkeit: staatsangehoerigkeit.value || undefined,
+      dateOfBirth: dateOfBirth.value,
+      age: calculatedAge.value, // Use calculated age
+      gender: gender.value,
+      maritalStatus: maritalStatus.value,
+      nationality: nationality.value,
+      residenceStatus: residenceStatus.value,
+      residenceInGermany: residenceInGermany.value,
       
       // Financial Information
-      bruttoEinkommenMonatlich: bruttoEinkommenMonatlich.value,
-      nettoEinkommenMonatlich: nettoEinkommenMonatlich.value,
-      vermoegen: vermoegen.value,
-      mieteMietzinsMonatlich: mieteMietzinsMonatlich.value,
+      grossMonthlyIncome: grossMonthlyIncome.value,
+      netMonthlyIncome: netMonthlyIncome.value,
+      assets: assets.value,
+      monthlyRent: monthlyRent.value,
       
       // Household Information
-      anzahlPersonenHaushalt: anzahlPersonenHaushalt.value,
-      anzahlKinder: anzahlKinder.value,
-      kinderAlter: kinderAlter.value,
+      householdSize: householdSize.value,
+      numberOfChildren: numberOfChildren.value,
+      childrenAges: childrenAges.value,
       
       // Education & Employment
-      beschaeftigungsstatus: beschaeftigungsstatus.value,
-      bildungsstand: bildungsstand.value,
-      istStudent: istStudent.value,
+      employmentStatus: employmentStatus.value,
+      educationLevel: educationLevel.value,
+      isStudent: isStudent.value,
       
       // Special Circumstances
-      hatBehinderung: hatBehinderung.value,
-      gradDerBehinderung: gradDerBehinderung.value,
-      beziehtAlg1: beziehtAlg1.value,
-      beziehtAlg2: beziehtAlg2.value,
-      beziehtRente: beziehtRente.value,
-      istSchwanger: istSchwanger.value,
-      istAlleinerziehend: istAlleinerziehend.value,
-      hatPflegebeduerftigkeit: hatPflegebeduerftigkeit.value,
+      hasDisability: hasDisability.value,
+      disabilityDegree: disabilityDegree.value,
+      receivesUnemploymentBenefit1: receivesUnemploymentBenefit1.value,
+      receivesUnemploymentBenefit2: receivesUnemploymentBenefit2.value,
+      receivesPension: receivesPension.value,
+      pensionEligible: pensionEligible.value,
+      isPregnant: isPregnant.value,
+      isSingleParent: isSingleParent.value,
+      hasCareNeeds: hasCareNeeds.value,
+      citizenBenefitLast3Years: citizenBenefitLast3Years.value,
+      hasFinancialHardship: hasFinancialHardship.value,
+      workAbility: workAbility.value,
       
       // Insurance & Benefits
-      krankenversicherung: krankenversicherung.value,
-      beziehtKindergeld: beziehtKindergeld.value,
-      beziehtWohngeld: beziehtWohngeld.value,
-      beziehtBafög: beziehtBafög.value,
+      healthInsurance: healthInsurance.value,
+      hasCareInsurance: hasCareInsurance.value,
+      receivesChildBenefit: receivesChildBenefit.value,
+      receivesHousingBenefit: receivesHousingBenefit.value,
+      receivesStudentAid: receivesStudentAid.value,
     };
     
     localStorage.setItem(LOCALSTORAGE_KEY_FORMDATA, JSON.stringify(formData));
@@ -515,6 +402,7 @@ function saveData() {
   }
 }
 
+
 function loadData() {
   try {
     const savedData = localStorage.getItem(LOCALSTORAGE_KEY_FORMDATA);
@@ -523,45 +411,52 @@ function loadData() {
       const formData: FormData = JSON.parse(savedData);
       
       // Personal Information
-      firstName.value = formData.firstName || "";
-      lastName.value = formData.lastName || "";
-      geburtsdatum.value = formData.geburtsdatum || "";
-      alter.value = formData.alter;
-      geschlecht.value = formData.geschlecht;
-      familienstand.value = formData.familienstand;
-      staatsangehoerigkeit.value = formData.staatsangehoerigkeit;
+      firstName.value = formData.firstName;
+      lastName.value = formData.lastName;
+      dateOfBirth.value = formData.dateOfBirth;
+      age.value = formData.age;
+      gender.value = formData.gender;
+      maritalStatus.value = formData.maritalStatus;
+      nationality.value = formData.nationality;
+      residenceStatus.value = formData.residenceStatus;
+      residenceInGermany.value = formData.residenceInGermany;
       
       // Financial Information
-      bruttoEinkommenMonatlich.value = formData.bruttoEinkommenMonatlich;
-      nettoEinkommenMonatlich.value = formData.nettoEinkommenMonatlich;
-      vermoegen.value = formData.vermoegen;
-      mieteMietzinsMonatlich.value = formData.mieteMietzinsMonatlich;
+      grossMonthlyIncome.value = formData.grossMonthlyIncome;
+      netMonthlyIncome.value = formData.netMonthlyIncome;
+      assets.value = formData.assets;
+      monthlyRent.value = formData.monthlyRent;
       
       // Household Information
-      anzahlPersonenHaushalt.value = formData.anzahlPersonenHaushalt;
-      anzahlKinder.value = formData.anzahlKinder;
-      kinderAlter.value = formData.kinderAlter || [];
+      householdSize.value = formData.householdSize;
+      numberOfChildren.value = formData.numberOfChildren;
+      childrenAges.value = formData.childrenAges;
       
       // Education & Employment
-      beschaeftigungsstatus.value = formData.beschaeftigungsstatus;
-      bildungsstand.value = formData.bildungsstand;
-      istStudent.value = formData.istStudent || false;
+      employmentStatus.value = formData.employmentStatus;
+      educationLevel.value = formData.educationLevel;
+      isStudent.value = formData.isStudent;
       
       // Special Circumstances
-      hatBehinderung.value = formData.hatBehinderung || false;
-      gradDerBehinderung.value = formData.gradDerBehinderung;
-      beziehtAlg1.value = formData.beziehtAlg1 || false;
-      beziehtAlg2.value = formData.beziehtAlg2 || false;
-      beziehtRente.value = formData.beziehtRente || false;
-      istSchwanger.value = formData.istSchwanger || false;
-      istAlleinerziehend.value = formData.istAlleinerziehend || false;
-      hatPflegebeduerftigkeit.value = formData.hatPflegebeduerftigkeit || false;
+      hasDisability.value = formData.hasDisability;
+      disabilityDegree.value = formData.disabilityDegree;
+      receivesUnemploymentBenefit1.value = formData.receivesUnemploymentBenefit1;
+      receivesUnemploymentBenefit2.value = formData.receivesUnemploymentBenefit2;
+      receivesPension.value = formData.receivesPension;
+      pensionEligible.value = formData.pensionEligible;
+      isPregnant.value = formData.isPregnant;
+      isSingleParent.value = formData.isSingleParent;
+      hasCareNeeds.value = formData.hasCareNeeds;
+      citizenBenefitLast3Years.value = formData.citizenBenefitLast3Years;
+      hasFinancialHardship.value = formData.hasFinancialHardship;
+      workAbility.value = formData.workAbility;
       
       // Insurance & Benefits
-      krankenversicherung.value = formData.krankenversicherung;
-      beziehtKindergeld.value = formData.beziehtKindergeld || false;
-      beziehtWohngeld.value = formData.beziehtWohngeld || false;
-      beziehtBafög.value = formData.beziehtBafög || false;
+      healthInsurance.value = formData.healthInsurance;
+      hasCareInsurance.value = formData.hasCareInsurance;
+      receivesChildBenefit.value = formData.receivesChildBenefit;
+      receivesHousingBenefit.value = formData.receivesHousingBenefit;
+      receivesStudentAid.value = formData.receivesStudentAid;
       
       showMessage("Daten wurden aus dem localStorage geladen", "success");
       checkEligibility();
@@ -578,45 +473,52 @@ function clearData() {
     localStorage.removeItem(LOCALSTORAGE_KEY_FORMDATA);
     
     // Personal Information
-    firstName.value = "";
-    lastName.value = "";
-    geburtsdatum.value = "";
-    alter.value = undefined;
-    geschlecht.value = undefined;
-    familienstand.value = undefined;
-    staatsangehoerigkeit.value = undefined;
+    firstName.value = undefined;
+    lastName.value = undefined;
+    dateOfBirth.value = undefined;
+    age.value = undefined;
+    gender.value = undefined;
+    maritalStatus.value = undefined;
+    nationality.value = undefined;
+    residenceStatus.value = undefined;
+    residenceInGermany.value = undefined;
     
     // Financial Information
-    bruttoEinkommenMonatlich.value = undefined;
-    nettoEinkommenMonatlich.value = undefined;
-    vermoegen.value = undefined;
-    mieteMietzinsMonatlich.value = undefined;
+    grossMonthlyIncome.value = undefined;
+    netMonthlyIncome.value = undefined;
+    assets.value = undefined;
+    monthlyRent.value = undefined;
     
     // Household Information
-    anzahlPersonenHaushalt.value = undefined;
-    anzahlKinder.value = undefined;
-    kinderAlter.value = [];
+    householdSize.value = undefined;
+    numberOfChildren.value = undefined;
+    childrenAges.value = undefined;
     
     // Education & Employment
-    beschaeftigungsstatus.value = undefined;
-    bildungsstand.value = undefined;
-    istStudent.value = false;
+    employmentStatus.value = undefined;
+    educationLevel.value = undefined;
+    isStudent.value = undefined;
     
     // Special Circumstances
-    hatBehinderung.value = false;
-    gradDerBehinderung.value = undefined;
-    beziehtAlg1.value = false;
-    beziehtAlg2.value = false;
-    beziehtRente.value = false;
-    istSchwanger.value = false;
-    istAlleinerziehend.value = false;
-    hatPflegebeduerftigkeit.value = false;
+    hasDisability.value = undefined;
+    disabilityDegree.value = undefined;
+    receivesUnemploymentBenefit1.value = undefined;
+    receivesUnemploymentBenefit2.value = undefined;
+    receivesPension.value = undefined;
+    pensionEligible.value = undefined;
+    isPregnant.value = undefined;
+    isSingleParent.value = undefined;
+    hasCareNeeds.value = undefined;
+    citizenBenefitLast3Years.value = undefined;
+    hasFinancialHardship.value = undefined;
+    workAbility.value = undefined;
     
     // Insurance & Benefits
-    krankenversicherung.value = undefined;
-    beziehtKindergeld.value = false;
-    beziehtWohngeld.value = false;
-    beziehtBafög.value = false;
+    healthInsurance.value = undefined;
+    hasCareInsurance.value = undefined;
+    receivesChildBenefit.value = undefined;
+    receivesHousingBenefit.value = undefined;
+    receivesStudentAid.value = undefined;
     
     eligibilityResults.value = [];
     showMessage("Daten wurden erfolgreich gelöscht!", "success");
@@ -630,51 +532,61 @@ function checkEligibility() {
     // Personal Information
     firstName: firstName.value,
     lastName: lastName.value,
-    geburtsdatum: geburtsdatum.value || undefined,
-    alter: calculatedAge.value, // Use calculated age
-    geschlecht: geschlecht.value,
-    familienstand: familienstand.value,
-    staatsangehoerigkeit: staatsangehoerigkeit.value || undefined,
+    dateOfBirth: dateOfBirth.value,
+    age: calculatedAge.value, // Use calculated age
+    gender: gender.value,
+    maritalStatus: maritalStatus.value,
+    nationality: nationality.value,
+    residenceStatus: residenceStatus.value,
+    residenceInGermany: residenceInGermany.value,
     
     // Financial Information
-    bruttoEinkommenMonatlich: bruttoEinkommenMonatlich.value,
-    nettoEinkommenMonatlich: nettoEinkommenMonatlich.value,
-    vermoegen: vermoegen.value,
-    mieteMietzinsMonatlich: mieteMietzinsMonatlich.value,
+    grossMonthlyIncome: grossMonthlyIncome.value,
+    netMonthlyIncome: netMonthlyIncome.value,
+    assets: assets.value,
+    monthlyRent: monthlyRent.value,
     
     // Household Information
-    anzahlPersonenHaushalt: anzahlPersonenHaushalt.value,
-    anzahlKinder: anzahlKinder.value,
-    kinderAlter: kinderAlter.value,
+    householdSize: householdSize.value,
+    numberOfChildren: numberOfChildren.value,
+    childrenAges: childrenAges.value,
     
     // Education & Employment
-    beschaeftigungsstatus: beschaeftigungsstatus.value,
-    bildungsstand: bildungsstand.value,
-    istStudent: istStudent.value,
+    employmentStatus: employmentStatus.value,
+    educationLevel: educationLevel.value,
+    isStudent: isStudent.value,
     
     // Special Circumstances
-    hatBehinderung: hatBehinderung.value,
-    gradDerBehinderung: gradDerBehinderung.value,
-    beziehtAlg1: beziehtAlg1.value,
-    beziehtAlg2: beziehtAlg2.value,
-    beziehtRente: beziehtRente.value,
-    istSchwanger: istSchwanger.value,
-    istAlleinerziehend: istAlleinerziehend.value,
-    hatPflegebeduerftigkeit: hatPflegebeduerftigkeit.value,
+    hasDisability: hasDisability.value,
+    disabilityDegree: disabilityDegree.value,
+    receivesUnemploymentBenefit1: receivesUnemploymentBenefit1.value,
+    receivesUnemploymentBenefit2: receivesUnemploymentBenefit2.value,
+    receivesPension: receivesPension.value,
+    pensionEligible: pensionEligible.value,
+    isPregnant: isPregnant.value,
+    isSingleParent: isSingleParent.value,
+    hasCareNeeds: hasCareNeeds.value,
+    citizenBenefitLast3Years: citizenBenefitLast3Years.value,
+    hasFinancialHardship: hasFinancialHardship.value,
+    workAbility: workAbility.value,
     
     // Insurance & Benefits
-    krankenversicherung: krankenversicherung.value,
-    beziehtKindergeld: beziehtKindergeld.value,
-    beziehtWohngeld: beziehtWohngeld.value,
-    beziehtBafög: beziehtBafög.value,
+    healthInsurance: healthInsurance.value,
+    hasCareInsurance: hasCareInsurance.value,
+    receivesChildBenefit: receivesChildBenefit.value,
+    receivesHousingBenefit: receivesHousingBenefit.value,
+    receivesStudentAid: receivesStudentAid.value,
   };
 
-  const checks = eligibilityRegistry.getAllChecks();
-  const allResults = checks.map((check) => check.evaluate(formData));
+  // Use the registry to evaluate all checks
+  const result = eligibilityRegistry.evaluateAll(formData);
   
-  allEligibilityResults.value = allResults;
-  eligibilityResults.value = allResults.filter((result) => result.eligible);
+  allEligibilityResults.value = result.all;
+  eligibilityResults.value = result.eligible;
+  missingFields.value = result.missingFields;
 }
+checkEligibility();
+
 
 function showMessage(msg: string, type: "success" | "info" | "warning" | "emergency") {
   message.value = msg;
@@ -690,6 +602,70 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 @import "../public/checklist-styles.css";
+
+/* Form styles - unscoped so they apply to child components */
+.m-form-group {
+  margin-bottom: 24px;
+}
+
+.m-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--mde-color-neutral-grey-dark);
+  font-size: 1rem;
+}
+
+.m-textfield {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid var(--mde-color-neutral-grey-light);
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+}
+
+.m-textfield:focus {
+  outline: none;
+  border-color: var(--mde-color-brand-mde-blue);
+}
+
+.m-textfield:hover {
+  border-color: var(--mde-color-brand-mde-blue-light);
+}
+
+.form-fieldset {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.form-fieldset legend {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0 8px;
+  color: #333;
+}
+
+.m-form-group-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.m-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.m-checkbox {
+  margin-right: 8px;
+  cursor: pointer;
+}
 </style>
 
 <style scoped>
@@ -724,38 +700,6 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
 .form-content {
   background: white;
   padding: 0;
-}
-
-.m-form-group {
-  margin-bottom: 24px;
-}
-
-.m-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--mde-color-neutral-grey-dark);
-  font-size: 1rem;
-}
-
-.m-textfield {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 1rem;
-  border: 2px solid var(--mde-color-neutral-grey-light);
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-  font-family: "Open Sans", sans-serif;
-}
-
-.m-textfield:focus {
-  outline: none;
-  border-color: var(--mde-color-brand-mde-blue);
-}
-
-.m-textfield:hover {
-  border-color: var(--mde-color-brand-mde-blue-light);
 }
 
 .button-group {
@@ -926,36 +870,5 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   .two-column-layout {
     gap: 32px;
   }
-}
-
-.form-fieldset {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  padding: 20px;
-  margin-bottom: 24px;
-}
-
-.form-fieldset legend {
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 0 8px;
-  color: #333;
-}
-
-.m-form-group-checkbox {
-  display: flex;
-  align-items: center;
-}
-
-.m-checkbox-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-}
-
-.m-checkbox {
-  margin-right: 8px;
-  cursor: pointer;
 }
 </style>
