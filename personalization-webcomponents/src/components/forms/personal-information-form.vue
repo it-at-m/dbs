@@ -79,7 +79,7 @@
       </select>
     </div>
     
-    <div v-if="shouldShowField('residenceStatus') && nationality !== 'Deutsch'" class="m-form-group">
+    <div v-if="shouldShowField('residenceStatus') && nationality !== 'German'" class="m-form-group">
       <label for="residenceStatus" class="m-label">Aufenthaltsstatus</label>
       <select 
         id="residenceStatus" 
@@ -112,10 +112,10 @@ const props = defineProps<{
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string;
-  gender?: 'männlich' | 'weiblich' | 'divers' | 'keine Angabe';
-  maritalStatus?: 'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt';
-  nationality?: 'Deutsch' | 'EU' | 'Nicht-EU';
-  residenceStatus?: 'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine';
+  gender?: 'male' | 'female' | 'diverse' | 'unspecified';
+  maritalStatus?: 'single' | 'married' | 'divorced' | 'widowed' | 'separated';
+  nationality?: 'German' | 'EU' | 'Non-EU';
+  residenceStatus?: 'residence_permit' | 'permanent_residence' | 'none';
   residenceInGermany?: boolean;
   shouldShowField: (field: FormDataField) => boolean;
 }>();
@@ -124,10 +124,10 @@ const emit = defineEmits<{
   'update:firstName': [value: string | undefined];
   'update:lastName': [value: string | undefined];
   'update:dateOfBirth': [value: string | undefined];
-  'update:gender': [value: 'männlich' | 'weiblich' | 'divers' | 'keine Angabe' | undefined];
-  'update:maritalStatus': [value: 'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt' | undefined];
-  'update:nationality': [value: 'Deutsch' | 'EU' | 'Nicht-EU' | undefined];
-  'update:residenceStatus': [value: 'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine' | undefined];
+  'update:gender': [value: 'male' | 'female' | 'diverse' | 'unspecified' | undefined];
+  'update:maritalStatus': [value: 'single' | 'married' | 'divorced' | 'widowed' | 'separated' | undefined];
+  'update:nationality': [value: 'German' | 'EU' | 'Non-EU' | undefined];
+  'update:residenceStatus': [value: 'residence_permit' | 'permanent_residence' | 'none' | undefined];
   'update:residenceInGermany': [value: boolean | undefined];
 }>();
 

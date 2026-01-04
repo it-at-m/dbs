@@ -52,15 +52,15 @@ import type { FormDataField } from "@/types/EligibilityCheckInterface";
 import YesNoInput from "@/components/YesNoInput.vue";
 
 const props = defineProps<{
-  employmentStatus?: 'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges';
-  educationLevel?: 'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium';
+  employmentStatus?: 'employed' | 'self_employed' | 'unemployed' | 'student' | 'retired' | 'other';
+  educationLevel?: 'no_degree' | 'lower_secondary' | 'secondary' | 'high_school' | 'vocational_training' | 'university';
   isStudent?: boolean;
   shouldShowField: (field: FormDataField) => boolean;
 }>();
 
 const emit = defineEmits<{
-  'update:employmentStatus': [value: 'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges' | undefined];
-  'update:educationLevel': [value: 'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium' | undefined];
+  'update:employmentStatus': [value: 'employed' | 'self_employed' | 'unemployed' | 'student' | 'retired' | 'other' | undefined];
+  'update:educationLevel': [value: 'no_degree' | 'lower_secondary' | 'secondary' | 'high_school' | 'vocational_training' | 'university' | undefined];
   'update:isStudent': [value: boolean | undefined];
 }>();
 

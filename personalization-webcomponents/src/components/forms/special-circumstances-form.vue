@@ -92,7 +92,7 @@ const props = defineProps<{
   pensionEligible?: boolean;
   citizenBenefitLast3Years?: boolean;
   hasFinancialHardship?: boolean;
-  workAbility?: 'voll' | 'eingeschraenkt' | 'keine';
+  workAbility?: 'full' | 'limited' | 'none';
   shouldShowField: (field: FormDataField) => boolean;
 }>();
 
@@ -104,7 +104,7 @@ const emit = defineEmits<{
   'update:pensionEligible': [value: boolean | undefined];
   'update:citizenBenefitLast3Years': [value: boolean | undefined];
   'update:hasFinancialHardship': [value: boolean | undefined];
-  'update:workAbility': [value: 'voll' | 'eingeschraenkt' | 'keine' | undefined];
+  'update:workAbility': [value: 'full' | 'limited' | 'none' | undefined];
 }>();
 
 // Create computed properties with getters/setters for v-model

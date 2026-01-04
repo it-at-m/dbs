@@ -80,7 +80,7 @@ import type { FormDataField } from "@/types/EligibilityCheckInterface";
 import YesNoInput from "@/components/YesNoInput.vue";
 
 const props = defineProps<{
-  healthInsurance?: 'gesetzlich' | 'privat' | 'keine';
+  healthInsurance?: 'public' | 'private' | 'none';
   hasCareInsurance?: boolean;
   receivesUnemploymentBenefit1?: boolean;
   receivesUnemploymentBenefit2?: boolean;
@@ -92,7 +92,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  'update:healthInsurance': [value: 'gesetzlich' | 'privat' | 'keine' | undefined];
+  'update:healthInsurance': [value: 'public' | 'private' | 'none' | undefined];
   'update:hasCareInsurance': [value: boolean | undefined];
   'update:receivesUnemploymentBenefit1': [value: boolean | undefined];
   'update:receivesUnemploymentBenefit2': [value: boolean | undefined];
