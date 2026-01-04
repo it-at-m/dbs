@@ -472,6 +472,9 @@ function clearData() {
   try {
     localStorage.removeItem(LOCALSTORAGE_KEY_FORMDATA);
     
+    // Reset the permanently missing fields tracking
+    eligibilityRegistry.resetMissingFieldsTracking();
+    
     // Personal Information
     firstName.value = undefined;
     lastName.value = undefined;
@@ -521,6 +524,7 @@ function clearData() {
     receivesStudentAid.value = undefined;
     
     eligibilityResults.value = [];
+    missingFields.value = [];
     showMessage("Daten wurden erfolgreich gelöscht!", "success");
   } catch (error) {
     showMessage("Fehler beim Löschen der Daten: " + error, "emergency");
