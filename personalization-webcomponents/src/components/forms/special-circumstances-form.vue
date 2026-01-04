@@ -3,7 +3,7 @@
     <legend>Besondere Umstände</legend>
     
     <div v-if="shouldShowField('hasDisability')">
-      <YesNoInput
+      <yes-no-input
         v-model="hasDisabilityModel"
         label="Behinderung"
         name="hasDisability"
@@ -24,7 +24,7 @@
     </div>
     
     <div v-if="shouldShowField('isPregnant')">
-      <YesNoInput
+      <yes-no-input
         v-model="isPregnantModel"
         label="Schwanger"
         name="isPregnant"
@@ -32,7 +32,7 @@
     </div>
     
     <div v-if="shouldShowField('hasCareNeeds')">
-      <YesNoInput
+      <yes-no-input
         v-model="hasCareNeedsModel"
         label="Pflegebedürftigkeit"
         name="hasCareNeeds"
@@ -40,7 +40,7 @@
     </div>
     
     <div v-if="shouldShowField('pensionEligible')">
-      <YesNoInput
+      <yes-no-input
         v-model="pensionEligibleModel"
         label="Rentenberechtigt (Rentenalter erreicht)"
         name="pensionEligible"
@@ -48,7 +48,7 @@
     </div>
     
     <div v-if="shouldShowField('citizenBenefitLast3Years')">
-      <YesNoInput
+      <yes-no-input
         v-model="citizenBenefitLast3YearsModel"
         label="Bürgergeld in den letzten 3 Jahren bezogen"
         name="citizenBenefitLast3Years"
@@ -56,7 +56,7 @@
     </div>
     
     <div v-if="shouldShowField('hasFinancialHardship')">
-      <YesNoInput
+      <yes-no-input
         v-model="hasFinancialHardshipModel"
         label="Finanzielle Notlage"
         name="hasFinancialHardship"
@@ -71,9 +71,9 @@
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="voll">Voll arbeitsfähig</option>
-        <option value="eingeschraenkt">Eingeschränkt arbeitsfähig</option>
-        <option value="keine">Nicht arbeitsfähig</option>
+        <option value="full">Voll arbeitsfähig</option>
+        <option value="limited">Eingeschränkt arbeitsfähig</option>
+        <option value="none">Nicht arbeitsfähig</option>
       </select>
     </div>
   </fieldset>

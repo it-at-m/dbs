@@ -10,14 +10,14 @@
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="gesetzlich">Gesetzlich</option>
-        <option value="privat">Privat</option>
-        <option value="keine">Keine</option>
+        <option value="public">Gesetzlich</option>
+        <option value="private">Privat</option>
+        <option value="none">Keine</option>
       </select>
     </div>
     
     <div v-if="shouldShowField('hasCareInsurance')">
-      <YesNoInput
+      <yes-no-input
         v-model="hasCareInsuranceModel"
         label="Habe Pflegeversicherung"
         name="hasCareInsurance"
@@ -25,7 +25,7 @@
     </div>
     
     <div v-if="shouldShowField('receivesUnemploymentBenefit1')">
-      <YesNoInput
+      <yes-no-input
         v-model="receivesUnemploymentBenefit1Model"
         label="Beziehe Arbeitslosengeld I"
         name="receivesUnemploymentBenefit1"
@@ -33,7 +33,7 @@
     </div>
     
     <div v-if="shouldShowField('receivesUnemploymentBenefit2')">
-      <YesNoInput
+      <yes-no-input
         v-model="receivesUnemploymentBenefit2Model"
         label="Beziehe Bürgergeld (ALG II)"
         name="receivesUnemploymentBenefit2"
@@ -41,7 +41,7 @@
     </div>
     
     <div v-if="shouldShowField('receivesPension')">
-      <YesNoInput
+      <yes-no-input
         v-model="receivesPensionModel"
         label="Beziehe Rente"
         name="receivesPension"
@@ -49,7 +49,7 @@
     </div>
     
     <div v-if="shouldShowField('receivesChildBenefit')">
-      <YesNoInput
+      <yes-no-input
         v-model="receivesChildBenefitModel"
         label="Beziehe Kindergeld"
         name="receivesChildBenefit"
@@ -57,7 +57,7 @@
     </div>
     
     <div v-if="shouldShowField('receivesHousingBenefit')">
-      <YesNoInput
+      <yes-no-input
         v-model="receivesHousingBenefitModel"
         label="Beziehe Wohngeld"
         name="receivesHousingBenefit"
@@ -65,7 +65,7 @@
     </div>
     
     <div v-if="shouldShowField('receivesStudentAid')">
-      <YesNoInput
+      <yes-no-input
         v-model="receivesStudentAidModel"
         label="Beziehe BAföG"
         name="receivesStudentAid"

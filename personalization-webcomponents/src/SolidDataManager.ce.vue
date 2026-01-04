@@ -50,6 +50,7 @@
                   v-model:numberOfChildren="formFields.numberOfChildren"
                   v-model:childrenAges="formFields.childrenAges"
                   v-model:isSingleParent="formFields.isSingleParent"
+                  v-model:livesWithParents="formFields.livesWithParents"
                   :shouldShowField="shouldShowField"
                 />
 

@@ -15,7 +15,7 @@ export class Test2 implements EligibilityCheckInterface {
 
     if (formData.nationality === undefined) {
       missingFields.add("nationality");
-    } else if (formData.nationality === "Deutsch") {
+    } else if (formData.nationality === "German") {
       return {
         eligible: false,
         subsidyName: this.getName(),

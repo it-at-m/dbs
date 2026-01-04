@@ -1,43 +1,43 @@
 <template>
   <fieldset class="form-fieldset">
     <legend>Bildung & Beschäftigung</legend>
-    
+
     <div v-if="shouldShowField('employmentStatus')" class="m-form-group">
       <label for="employmentStatus" class="m-label">Beschäftigungsstatus</label>
-      <select 
-        id="employmentStatus" 
+      <select
+        id="employmentStatus"
         v-model="employmentStatusModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="angestellt">Angestellt</option>
-        <option value="selbststaendig">Selbstständig</option>
-        <option value="arbeitslos">Arbeitslos</option>
+        <option value="employed">Angestellt</option>
+        <option value="self_employed">Selbstständig</option>
+        <option value="unemployed">Arbeitslos</option>
         <option value="student">Student/in</option>
-        <option value="rentner">Rentner/in</option>
-        <option value="sonstiges">Sonstiges</option>
+        <option value="retired">Rentner/in</option>
+        <option value="other">Sonstiges</option>
       </select>
     </div>
     
     <div v-if="shouldShowField('educationLevel')" class="m-form-group">
       <label for="educationLevel" class="m-label">Bildungsstand</label>
-      <select 
-        id="educationLevel" 
+      <select
+        id="educationLevel"
         v-model="educationLevelModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="kein_abschluss">Kein Abschluss</option>
-        <option value="hauptschule">Hauptschule</option>
-        <option value="realschule">Realschule</option>
-        <option value="abitur">Abitur</option>
-        <option value="ausbildung">Ausbildung</option>
-        <option value="studium">Studium</option>
+        <option value="no_degree">Kein Abschluss</option>
+        <option value="lower_secondary">Hauptschule</option>
+        <option value="secondary">Realschule</option>
+        <option value="high_school">Abitur</option>
+        <option value="vocational_training">Ausbildung</option>
+        <option value="university">Studium</option>
       </select>
     </div>
     
     <div v-if="shouldShowField('isStudent')">
-      <YesNoInput
+      <yes-no-input
         v-model="isStudentModel"
         label="Ich bin Student/in"
         name="isStudent"
@@ -80,4 +80,3 @@ const isStudentModel = computed({
   set: (value) => emit('update:isStudent', value)
 });
 </script>
-

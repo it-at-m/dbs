@@ -42,10 +42,10 @@
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="männlich">Männlich</option>
-        <option value="weiblich">Weiblich</option>
-        <option value="divers">Divers</option>
-        <option value="keine Angabe">Keine Angabe</option>
+        <option value="male">Männlich</option>
+        <option value="female">Weiblich</option>
+        <option value="diverse">Divers</option>
+        <option value="unspecified">Keine Angabe</option>
       </select>
     </div>
     
@@ -57,11 +57,11 @@
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="ledig">Ledig</option>
-        <option value="verheiratet">Verheiratet</option>
-        <option value="geschieden">Geschieden</option>
-        <option value="verwitwet">Verwitwet</option>
-        <option value="getrennt">Getrennt</option>
+        <option value="single">Ledig</option>
+        <option value="married">Verheiratet</option>
+        <option value="divorced">Geschieden</option>
+        <option value="widowed">Verwitwet</option>
+        <option value="separated">Getrennt</option>
       </select>
     </div>
     
@@ -73,9 +73,9 @@
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="Deutsch">Deutsch</option>
+        <option value="German">Deutsch</option>
         <option value="EU">Europäisch (EU)</option>
-        <option value="Nicht-EU">Nicht-EU</option>
+        <option value="Non-EU">Nicht-EU</option>
       </select>
     </div>
     
@@ -87,14 +87,14 @@
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
-        <option value="Aufenthaltserlaubnis">Aufenthaltserlaubnis</option>
-        <option value="Niederlassungserlaubnis">Niederlassungserlaubnis</option>
-        <option value="Keine">Keine</option>
+        <option value="residence_permit">Aufenthaltserlaubnis</option>
+        <option value="permanent_residence">Niederlassungserlaubnis</option>
+        <option value="none">Keine</option>
       </select>
     </div>
     
     <div v-if="shouldShowField('residenceInGermany')">
-      <YesNoInput
+      <yes-no-input
         v-model="residenceInGermanyModel"
         label="Gewöhnlicher Aufenthalt in Deutschland"
         name="residenceInGermany"
@@ -172,4 +172,3 @@ const residenceInGermanyModel = computed({
   set: (value) => emit('update:residenceInGermany', value)
 });
 </script>
-

@@ -20,7 +20,8 @@ export interface FormData {
   householdSize?: number;
   numberOfChildren?: number;
   childrenAges?: number[]; // Array of children ages
-  
+  livesWithParents?: boolean; // Lives with parents
+
   // Education & Employment
   employmentStatus?: 'employed' | 'self_employed' | 'unemployed' | 'student' | 'retired' | 'other';
   educationLevel?: 'no_degree' | 'lower_secondary' | 'secondary' | 'high_school' | 'vocational_training' | 'university';

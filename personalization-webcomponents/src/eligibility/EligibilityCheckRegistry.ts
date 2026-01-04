@@ -2,9 +2,15 @@ import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataFi
 
 
 
+import { ArbeitslosengeldCheck } from "@/eligibility/ArbeitslosengeldCheck.ts";
 import { BafoegCheck } from "@/eligibility/BafoegCheck.ts";
+import { BerufsausbildungsbeihilfeCheck } from "@/eligibility/BerufsausbildungsbeihilfeCheck.ts";
+import { BildungUndTeilhabeCheck } from "@/eligibility/BildungUndTeilhabeCheck.ts";
 import { BuergergeldCheck } from "@/eligibility/BuergergeldCheck.ts";
+import { GrundsicherungCheck } from "@/eligibility/GrundsicherungCheck.ts";
+import { HilfeZumLebensunterhaltCheck } from "@/eligibility/HilfeZumLebensunterhaltCheck.ts";
 import { KindergeldCheck } from "@/eligibility/KindergeldCheck.ts";
+import { KinderzuschlagCheck } from "@/eligibility/KinderzuschlagCheck.ts";
 import { OrderedNextSectionStrategy } from "@/eligibility/NextSectionStrategy.ts";
 import { WohnGeldCheck } from "@/eligibility/WohnGeldCheck.ts";
 
@@ -70,6 +76,7 @@ export class EligibilityCheckRegistry {
       "numberOfChildren",
       "childrenAges",
       "isSingleParent",
+      "livesWithParents"
     ],
     educationEmployment: ["employmentStatus", "educationLevel", "isStudent"],
     specialCircumstances: [
@@ -100,6 +107,12 @@ export class EligibilityCheckRegistry {
     this.registerCheck(new BuergergeldCheck());
     this.registerCheck(new BafoegCheck());
     this.registerCheck(new KindergeldCheck());
+    this.registerCheck(new KinderzuschlagCheck());
+    this.registerCheck(new ArbeitslosengeldCheck());
+    this.registerCheck(new GrundsicherungCheck());
+    this.registerCheck(new BildungUndTeilhabeCheck());
+    this.registerCheck(new HilfeZumLebensunterhaltCheck());
+    this.registerCheck(new BerufsausbildungsbeihilfeCheck());
   }
 
   registerCheck(check: EligibilityCheckInterface): void {
