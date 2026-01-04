@@ -276,7 +276,6 @@ import {
   getFile, 
   overwriteFile 
 } from "@inrupt/solid-client";
-
 const LOCALSTORAGE_KEY_FORMDATA = "user.formData";
 const SOLID_DATA_FILE = "private/personalization/eligibility-data.json";
 
@@ -585,6 +584,7 @@ onMounted(async () => {
   } catch (err) {
     console.error("Solid Redirect handling error:", err);
   }
+
 
   loadData();
 });
