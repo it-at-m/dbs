@@ -118,6 +118,43 @@
 
           <!-- Right Column: Results -->
           <div class="right-column">
+            
+            <!-- Solid Pod Integration Hub -->
+            <div class="solid-sidebar-section" style="margin-bottom: 24px; padding: 24px; background: var(--mde-color-neutral-beau-blue-x-light); border-radius: 4px;">
+                <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: var(--mde-color-neutral-grey-dark);">Solid Pod</h2>
+                
+                <div v-if="!isSolidConnected">
+                  <div class="m-form-group" style="margin-bottom: 16px;">
+                      <label class="m-label">Provider URL</label>
+                      <input v-model="solidIssuer" type="text" class="m-textfield" placeholder="https://solidcommunity.net" style="width: 100%;" />
+                  </div>
+                  <muc-button @click="connectToSolid" :disabled="solidLoading" icon="login" style="width: 100%;">
+                      Anmelden
+                  </muc-button>
+                </div>
+                
+                <div v-else style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="font-size: 0.85em; color: var(--mde-color-neutral-grey-dark); background: rgba(255,255,255,0.5); padding: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                         <div style="word-break: break-all;">
+                            <span style="font-weight: 600;">Verbunden als:</span><br/>
+                            {{ solidWebId }}
+                         </div>
+                         <muc-button variant="ghost" @click="disconnectSolid" :loading="solidLoading" icon="logout" size="small" style="flex-shrink: 0;">
+                            Abmelden
+                         </muc-button>
+                    </div>
+                    
+                    <div style="display: flex; gap: 8px;">
+                         <muc-button variant="secondary" @click="loadFromPod" :loading="solidLoading" icon="download" style="flex: 1;">
+                            Laden
+                         </muc-button>
+                         <muc-button variant="primary" @click="saveToPod" :loading="solidLoading" icon="upload" style="flex: 1;">
+                            Speichern
+                         </muc-button>
+                    </div>
+                </div>
+            </div>
+
             <div
               v-if="eligibilityResults.length > 0 || allEligibilityResults.length > 0"
               class="eligibility-results"
@@ -227,8 +264,207 @@ import EducationEmploymentForm from "@/components/forms/EducationEmploymentForm.
 import SpecialCircumstancesForm from "@/components/forms/SpecialCircumstancesForm.vue";
 import InsuranceBenefitsForm from "@/components/forms/InsuranceBenefitsForm.vue";
 
-const LOCALSTORAGE_KEY_FORMDATA = "user.formData";
+// Solid Imports
+import { 
+  login, 
+  handleIncomingRedirect, 
+  getDefaultSession,
+  fetch as solidFetch,
+  logout
+} from "@inrupt/solid-client-authn-browser";
+import { 
+  getFile, 
+  overwriteFile 
+} from "@inrupt/solid-client";
 
+const LOCALSTORAGE_KEY_FORMDATA = "user.formData";
+const SOLID_DATA_FILE = "private/personalization/eligibility-data.json";
+
+// Solid State
+const solidIssuer = ref("https://solidcommunity.net");
+const solidSession = getDefaultSession();
+const isSolidConnected = ref(false);
+const solidWebId = ref<string | undefined>(undefined);
+const solidLoading = ref(false);
+
+async function connectToSolid() {
+  solidLoading.value = true;
+  try {
+    await login({
+      oidcIssuer: solidIssuer.value,
+      redirectUrl: window.location.href,
+      clientName: "Solid Data Manager"
+    });
+  } catch (err) {
+    showMessage("Fehler bei der Solid-Anmeldung: " + err, "emergency");
+  } finally {
+    solidLoading.value = false;
+  }
+}
+
+async function disconnectSolid() {
+  solidLoading.value = true;
+  try {
+    await logout();
+    isSolidConnected.value = false;
+    solidWebId.value = undefined;
+    showMessage("Erfolgreich abgemeldet", "info");
+  } catch (err) {
+    showMessage("Fehler beim Abmelden: " + err, "emergency");
+  } finally {
+    solidLoading.value = false;
+  }
+}
+
+function getPodRoot(webId: string): string {
+  // Simple heuristic: assume Pod root is the origin
+  // In a production app, we would query the profile for ws:storage
+  return new URL(webId).origin + "/";
+}
+
+async function saveToPod() {
+  if (!solidWebId.value) return;
+  
+  solidLoading.value = true;
+  try {
+     const formData: FormData = {
+      // Personal Information
+      firstName: firstName.value,
+      lastName: lastName.value,
+      dateOfBirth: dateOfBirth.value,
+      age: calculatedAge.value, // Use calculated age
+      gender: gender.value,
+      maritalStatus: maritalStatus.value,
+      nationality: nationality.value,
+      residenceStatus: residenceStatus.value,
+      residenceInGermany: residenceInGermany.value,
+      
+      // Financial Information
+      grossMonthlyIncome: grossMonthlyIncome.value,
+      netMonthlyIncome: netMonthlyIncome.value,
+      assets: assets.value,
+      monthlyRent: monthlyRent.value,
+      
+      // Household Information
+      householdSize: householdSize.value,
+      numberOfChildren: numberOfChildren.value,
+      childrenAges: childrenAges.value,
+      
+      // Education & Employment
+      employmentStatus: employmentStatus.value,
+      educationLevel: educationLevel.value,
+      isStudent: isStudent.value,
+      
+      // Special Circumstances
+      hasDisability: hasDisability.value,
+      disabilityDegree: disabilityDegree.value,
+      receivesUnemploymentBenefit1: receivesUnemploymentBenefit1.value,
+      receivesUnemploymentBenefit2: receivesUnemploymentBenefit2.value,
+      receivesPension: receivesPension.value,
+      pensionEligible: pensionEligible.value,
+      isPregnant: isPregnant.value,
+      isSingleParent: isSingleParent.value,
+      hasCareNeeds: hasCareNeeds.value,
+      citizenBenefitLast3Years: citizenBenefitLast3Years.value,
+      hasFinancialHardship: hasFinancialHardship.value,
+      workAbility: workAbility.value,
+      
+      // Insurance & Benefits
+      healthInsurance: healthInsurance.value,
+      hasCareInsurance: hasCareInsurance.value,
+      receivesChildBenefit: receivesChildBenefit.value,
+      receivesHousingBenefit: receivesHousingBenefit.value,
+      receivesStudentAid: receivesStudentAid.value,
+    };
+
+    const podRoot = getPodRoot(solidWebId.value);
+    const fileUrl = `${podRoot}${SOLID_DATA_FILE}`;
+    
+    const blob = new Blob([JSON.stringify(formData, null, 2)], { type: "application/json" });
+    
+    await overwriteFile(fileUrl, blob, { fetch: solidFetch });
+    
+    showMessage("Daten erfolgreich im Solid Pod gespeichert!", "success");
+  } catch (err) {
+    console.error(err);
+    showMessage("Fehler beim Speichern im Pod: " + err, "emergency");
+  } finally {
+    solidLoading.value = false;
+  }
+}
+
+async function loadFromPod() {
+  if (!solidWebId.value) return;
+
+  solidLoading.value = true;
+  try {
+    const podRoot = getPodRoot(solidWebId.value);
+    const fileUrl = `${podRoot}${SOLID_DATA_FILE}`;
+
+    const file = await getFile(fileUrl, { fetch: solidFetch });
+    const text = await file.text();
+    const formData: FormData = JSON.parse(text);
+
+     // map to refs
+      // Personal Information
+      firstName.value = formData.firstName;
+      lastName.value = formData.lastName;
+      dateOfBirth.value = formData.dateOfBirth;
+      age.value = formData.age;
+      gender.value = formData.gender;
+      maritalStatus.value = formData.maritalStatus;
+      nationality.value = formData.nationality;
+      residenceStatus.value = formData.residenceStatus;
+      residenceInGermany.value = formData.residenceInGermany;
+      
+      // Financial Information
+      grossMonthlyIncome.value = formData.grossMonthlyIncome;
+      netMonthlyIncome.value = formData.netMonthlyIncome;
+      assets.value = formData.assets;
+      monthlyRent.value = formData.monthlyRent;
+      
+      // Household Information
+      householdSize.value = formData.householdSize;
+      numberOfChildren.value = formData.numberOfChildren;
+      childrenAges.value = formData.childrenAges;
+      
+      // Education & Employment
+      employmentStatus.value = formData.employmentStatus;
+      educationLevel.value = formData.educationLevel;
+      isStudent.value = formData.isStudent;
+      
+      // Special Circumstances
+      hasDisability.value = formData.hasDisability;
+      disabilityDegree.value = formData.disabilityDegree;
+      receivesUnemploymentBenefit1.value = formData.receivesUnemploymentBenefit1;
+      receivesUnemploymentBenefit2.value = formData.receivesUnemploymentBenefit2;
+      receivesPension.value = formData.receivesPension;
+      pensionEligible.value = formData.pensionEligible;
+      isPregnant.value = formData.isPregnant;
+      isSingleParent.value = formData.isSingleParent;
+      hasCareNeeds.value = formData.hasCareNeeds;
+      citizenBenefitLast3Years.value = formData.citizenBenefitLast3Years;
+      hasFinancialHardship.value = formData.hasFinancialHardship;
+      workAbility.value = formData.workAbility;
+      
+      // Insurance & Benefits
+      healthInsurance.value = formData.healthInsurance;
+      hasCareInsurance.value = formData.hasCareInsurance;
+      receivesChildBenefit.value = formData.receivesChildBenefit;
+      receivesHousingBenefit.value = formData.receivesHousingBenefit;
+      receivesStudentAid.value = formData.receivesStudentAid;
+
+    showMessage("Daten erfolgreich aus dem Solid Pod geladen!", "success");
+    checkEligibility();
+
+  } catch (err) {
+    console.error(err);
+    showMessage("Fehler beim Laden aus dem Pod (Existiert die Datei?): " + err, "warning");
+  } finally {
+    solidLoading.value = false;
+  }
+}
+ 
 // Personal Information
 const firstName = ref<string | undefined>(undefined);
 const lastName = ref<string | undefined>(undefined);
@@ -338,7 +574,18 @@ const shouldShowField = (fieldName: FormDataField): boolean => {
   return missingFields.value.includes(fieldName);
 };
 
-onMounted(() => {
+onMounted(async () => {
+  // Handle Solid Redirect
+  try {
+    await handleIncomingRedirect({
+      restorePreviousSession: true
+    });
+    isSolidConnected.value = solidSession.info.isLoggedIn;
+    solidWebId.value = solidSession.info.webId;
+  } catch (err) {
+    console.error("Solid Redirect handling error:", err);
+  }
+
   loadData();
 });
 
