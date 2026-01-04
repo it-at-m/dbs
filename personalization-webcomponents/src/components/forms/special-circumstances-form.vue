@@ -4,8 +4,7 @@
     
     <div v-if="shouldShowField('hasDisability')">
       <YesNoInput
-        :model-value="hasDisability"
-        @update:model-value="$emit('update:hasDisability', $event)"
+        v-model="hasDisabilityModel"
         label="Behinderung"
         name="hasDisability"
       />
@@ -15,8 +14,7 @@
       <label for="disabilityDegree" class="m-label">Grad der Behinderung (%)</label>
       <input 
         id="disabilityDegree" 
-        :value="disabilityDegree" 
-        @input="$emit('update:disabilityDegree', parseNumberOrUndefined(($event.target as HTMLInputElement).value))"
+        v-model.number="disabilityDegreeModel"
         type="number" 
         min="0" 
         max="100" 
@@ -27,8 +25,7 @@
     
     <div v-if="shouldShowField('isPregnant')">
       <YesNoInput
-        :model-value="isPregnant"
-        @update:model-value="$emit('update:isPregnant', $event)"
+        v-model="isPregnantModel"
         label="Schwanger"
         name="isPregnant"
       />
@@ -36,8 +33,7 @@
     
     <div v-if="shouldShowField('hasCareNeeds')">
       <YesNoInput
-        :model-value="hasCareNeeds"
-        @update:model-value="$emit('update:hasCareNeeds', $event)"
+        v-model="hasCareNeedsModel"
         label="Pflegebedürftigkeit"
         name="hasCareNeeds"
       />
@@ -45,8 +41,7 @@
     
     <div v-if="shouldShowField('pensionEligible')">
       <YesNoInput
-        :model-value="pensionEligible"
-        @update:model-value="$emit('update:pensionEligible', $event)"
+        v-model="pensionEligibleModel"
         label="Rentenberechtigt (Rentenalter erreicht)"
         name="pensionEligible"
       />
@@ -54,8 +49,7 @@
     
     <div v-if="shouldShowField('citizenBenefitLast3Years')">
       <YesNoInput
-        :model-value="citizenBenefitLast3Years"
-        @update:model-value="$emit('update:citizenBenefitLast3Years', $event)"
+        v-model="citizenBenefitLast3YearsModel"
         label="Bürgergeld in den letzten 3 Jahren bezogen"
         name="citizenBenefitLast3Years"
       />
@@ -63,8 +57,7 @@
     
     <div v-if="shouldShowField('hasFinancialHardship')">
       <YesNoInput
-        :model-value="hasFinancialHardship"
-        @update:model-value="$emit('update:hasFinancialHardship', $event)"
+        v-model="hasFinancialHardshipModel"
         label="Finanzielle Notlage"
         name="hasFinancialHardship"
       />
@@ -74,8 +67,7 @@
       <label for="workAbility" class="m-label">Arbeitsfähigkeit</label>
       <select 
         id="workAbility" 
-        :value="workAbility" 
-        @change="$emit('update:workAbility', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="workAbilityModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -88,10 +80,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { FormDataField } from "@/types/EligibilityCheckInterface";
 import YesNoInput from "@/components/YesNoInput.vue";
 
-defineProps<{
+const props = defineProps<{
   hasDisability?: boolean;
   disabilityDegree?: number;
   isPregnant?: boolean;
@@ -103,7 +96,7 @@ defineProps<{
   shouldShowField: (field: FormDataField) => boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'update:hasDisability': [value: boolean | undefined];
   'update:disabilityDegree': [value: number | undefined];
   'update:isPregnant': [value: boolean | undefined];
@@ -114,8 +107,44 @@ defineEmits<{
   'update:workAbility': [value: 'voll' | 'eingeschraenkt' | 'keine' | undefined];
 }>();
 
-const parseNumberOrUndefined = (value: string): number | undefined => {
-  const parsed = parseFloat(value);
-  return isNaN(parsed) ? undefined : parsed;
-};
+// Create computed properties with getters/setters for v-model
+const hasDisabilityModel = computed({
+  get: () => props.hasDisability,
+  set: (value) => emit('update:hasDisability', value)
+});
+
+const disabilityDegreeModel = computed({
+  get: () => props.disabilityDegree,
+  set: (value) => emit('update:disabilityDegree', value || undefined)
+});
+
+const isPregnantModel = computed({
+  get: () => props.isPregnant,
+  set: (value) => emit('update:isPregnant', value)
+});
+
+const hasCareNeedsModel = computed({
+  get: () => props.hasCareNeeds,
+  set: (value) => emit('update:hasCareNeeds', value)
+});
+
+const pensionEligibleModel = computed({
+  get: () => props.pensionEligible,
+  set: (value) => emit('update:pensionEligible', value)
+});
+
+const citizenBenefitLast3YearsModel = computed({
+  get: () => props.citizenBenefitLast3Years,
+  set: (value) => emit('update:citizenBenefitLast3Years', value)
+});
+
+const hasFinancialHardshipModel = computed({
+  get: () => props.hasFinancialHardship,
+  set: (value) => emit('update:hasFinancialHardship', value)
+});
+
+const workAbilityModel = computed({
+  get: () => props.workAbility,
+  set: (value) => emit('update:workAbility', value || undefined)
+});
 </script>

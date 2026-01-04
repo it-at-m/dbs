@@ -6,8 +6,7 @@
       <label for="healthInsurance" class="m-label">Krankenversicherung</label>
       <select 
         id="healthInsurance" 
-        :value="healthInsurance" 
-        @change="$emit('update:healthInsurance', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="healthInsuranceModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -19,8 +18,7 @@
     
     <div v-if="shouldShowField('hasCareInsurance')">
       <YesNoInput
-        :model-value="hasCareInsurance"
-        @update:model-value="$emit('update:hasCareInsurance', $event)"
+        v-model="hasCareInsuranceModel"
         label="Habe Pflegeversicherung"
         name="hasCareInsurance"
       />
@@ -28,8 +26,7 @@
     
     <div v-if="shouldShowField('receivesUnemploymentBenefit1')">
       <YesNoInput
-        :model-value="receivesUnemploymentBenefit1"
-        @update:model-value="$emit('update:receivesUnemploymentBenefit1', $event)"
+        v-model="receivesUnemploymentBenefit1Model"
         label="Beziehe Arbeitslosengeld I"
         name="receivesUnemploymentBenefit1"
       />
@@ -37,8 +34,7 @@
     
     <div v-if="shouldShowField('receivesUnemploymentBenefit2')">
       <YesNoInput
-        :model-value="receivesUnemploymentBenefit2"
-        @update:model-value="$emit('update:receivesUnemploymentBenefit2', $event)"
+        v-model="receivesUnemploymentBenefit2Model"
         label="Beziehe Bürgergeld (ALG II)"
         name="receivesUnemploymentBenefit2"
       />
@@ -46,8 +42,7 @@
     
     <div v-if="shouldShowField('receivesPension')">
       <YesNoInput
-        :model-value="receivesPension"
-        @update:model-value="$emit('update:receivesPension', $event)"
+        v-model="receivesPensionModel"
         label="Beziehe Rente"
         name="receivesPension"
       />
@@ -55,8 +50,7 @@
     
     <div v-if="shouldShowField('receivesChildBenefit')">
       <YesNoInput
-        :model-value="receivesChildBenefit"
-        @update:model-value="$emit('update:receivesChildBenefit', $event)"
+        v-model="receivesChildBenefitModel"
         label="Beziehe Kindergeld"
         name="receivesChildBenefit"
       />
@@ -64,8 +58,7 @@
     
     <div v-if="shouldShowField('receivesHousingBenefit')">
       <YesNoInput
-        :model-value="receivesHousingBenefit"
-        @update:model-value="$emit('update:receivesHousingBenefit', $event)"
+        v-model="receivesHousingBenefitModel"
         label="Beziehe Wohngeld"
         name="receivesHousingBenefit"
       />
@@ -73,8 +66,7 @@
     
     <div v-if="shouldShowField('receivesStudentAid')">
       <YesNoInput
-        :model-value="receivesStudentAid"
-        @update:model-value="$emit('update:receivesStudentAid', $event)"
+        v-model="receivesStudentAidModel"
         label="Beziehe BAföG"
         name="receivesStudentAid"
       />
@@ -83,10 +75,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { FormDataField } from "@/types/EligibilityCheckInterface";
 import YesNoInput from "@/components/YesNoInput.vue";
 
-defineProps<{
+const props = defineProps<{
   healthInsurance?: 'gesetzlich' | 'privat' | 'keine';
   hasCareInsurance?: boolean;
   receivesUnemploymentBenefit1?: boolean;
@@ -98,7 +91,7 @@ defineProps<{
   shouldShowField: (field: FormDataField) => boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'update:healthInsurance': [value: 'gesetzlich' | 'privat' | 'keine' | undefined];
   'update:hasCareInsurance': [value: boolean | undefined];
   'update:receivesUnemploymentBenefit1': [value: boolean | undefined];
@@ -108,4 +101,44 @@ defineEmits<{
   'update:receivesHousingBenefit': [value: boolean | undefined];
   'update:receivesStudentAid': [value: boolean | undefined];
 }>();
+
+const healthInsuranceModel = computed({
+  get: () => props.healthInsurance,
+  set: (value) => emit('update:healthInsurance', value || undefined)
+});
+
+const hasCareInsuranceModel = computed({
+  get: () => props.hasCareInsurance,
+  set: (value) => emit('update:hasCareInsurance', value)
+});
+
+const receivesUnemploymentBenefit1Model = computed({
+  get: () => props.receivesUnemploymentBenefit1,
+  set: (value) => emit('update:receivesUnemploymentBenefit1', value)
+});
+
+const receivesUnemploymentBenefit2Model = computed({
+  get: () => props.receivesUnemploymentBenefit2,
+  set: (value) => emit('update:receivesUnemploymentBenefit2', value)
+});
+
+const receivesPensionModel = computed({
+  get: () => props.receivesPension,
+  set: (value) => emit('update:receivesPension', value)
+});
+
+const receivesChildBenefitModel = computed({
+  get: () => props.receivesChildBenefit,
+  set: (value) => emit('update:receivesChildBenefit', value)
+});
+
+const receivesHousingBenefitModel = computed({
+  get: () => props.receivesHousingBenefit,
+  set: (value) => emit('update:receivesHousingBenefit', value)
+});
+
+const receivesStudentAidModel = computed({
+  get: () => props.receivesStudentAid,
+  set: (value) => emit('update:receivesStudentAid', value)
+});
 </script>

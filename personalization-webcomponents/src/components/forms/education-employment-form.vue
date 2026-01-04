@@ -6,8 +6,7 @@
       <label for="employmentStatus" class="m-label">Beschäftigungsstatus</label>
       <select 
         id="employmentStatus" 
-        :value="employmentStatus" 
-        @change="$emit('update:employmentStatus', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="employmentStatusModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -24,8 +23,7 @@
       <label for="educationLevel" class="m-label">Bildungsstand</label>
       <select 
         id="educationLevel" 
-        :value="educationLevel" 
-        @change="$emit('update:educationLevel', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="educationLevelModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -40,8 +38,7 @@
     
     <div v-if="shouldShowField('isStudent')">
       <YesNoInput
-        :model-value="isStudent"
-        @update:model-value="$emit('update:isStudent', $event)"
+        v-model="isStudentModel"
         label="Ich bin Student/in"
         name="isStudent"
       />
@@ -50,20 +47,37 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { FormDataField } from "@/types/EligibilityCheckInterface";
 import YesNoInput from "@/components/YesNoInput.vue";
 
-defineProps<{
+const props = defineProps<{
   employmentStatus?: 'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges';
   educationLevel?: 'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium';
   isStudent?: boolean;
   shouldShowField: (field: FormDataField) => boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'update:employmentStatus': [value: 'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges' | undefined];
   'update:educationLevel': [value: 'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium' | undefined];
   'update:isStudent': [value: boolean | undefined];
 }>();
+
+// Create computed properties with getters/setters for v-model
+const employmentStatusModel = computed({
+  get: () => props.employmentStatus,
+  set: (value) => emit('update:employmentStatus', value || undefined)
+});
+
+const educationLevelModel = computed({
+  get: () => props.educationLevel,
+  set: (value) => emit('update:educationLevel', value || undefined)
+});
+
+const isStudentModel = computed({
+  get: () => props.isStudent,
+  set: (value) => emit('update:isStudent', value)
+});
 </script>
 

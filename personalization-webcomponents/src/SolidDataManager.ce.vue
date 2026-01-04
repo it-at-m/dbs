@@ -263,12 +263,12 @@ import type {
 } from "@/types/EligibilityCheckInterface";
 
 // Import form components
-import PersonalInformationForm from "@/components/forms/PersonalInformationForm.vue";
-import FinancialInformationForm from "@/components/forms/FinancialInformationForm.vue";
-import HouseholdInformationForm from "@/components/forms/HouseholdInformationForm.vue";
-import EducationEmploymentForm from "@/components/forms/EducationEmploymentForm.vue";
-import SpecialCircumstancesForm from "@/components/forms/SpecialCircumstancesForm.vue";
-import InsuranceBenefitsForm from "@/components/forms/InsuranceBenefitsForm.vue";
+import PersonalInformationForm from "@/components/forms/personal-information-form.vue";
+import FinancialInformationForm from "@/components/forms/financial-information-form.vue";
+import HouseholdInformationForm from "@/components/forms/household-information-form.vue";
+import EducationEmploymentForm from "@/components/forms/education-employment-form.vue";
+import SpecialCircumstancesForm from "@/components/forms/special-circumstances-form.vue";
+import InsuranceBenefitsForm from "@/components/forms/insurance-benefits-form.vue";
 
 // Solid Imports
 import { 

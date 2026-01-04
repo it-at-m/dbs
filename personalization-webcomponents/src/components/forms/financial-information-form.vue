@@ -6,8 +6,7 @@
       <label for="grossMonthlyIncome" class="m-label">Monatliches Bruttoeinkommen (€)</label>
       <input 
         id="grossMonthlyIncome" 
-        :value="grossMonthlyIncome" 
-        @input="$emit('update:grossMonthlyIncome', parseNumberOrUndefined(($event.target as HTMLInputElement).value))"
+        v-model.number="grossMonthlyIncomeModel"
         type="number" 
         step="0.01" 
         placeholder="z.B. 2000" 
@@ -19,8 +18,7 @@
       <label for="netMonthlyIncome" class="m-label">Monatliches Nettoeinkommen (€)</label>
       <input 
         id="netMonthlyIncome" 
-        :value="netMonthlyIncome" 
-        @input="$emit('update:netMonthlyIncome', parseNumberOrUndefined(($event.target as HTMLInputElement).value))"
+        v-model.number="netMonthlyIncomeModel"
         type="number" 
         step="0.01" 
         placeholder="z.B. 1500" 
@@ -32,8 +30,7 @@
       <label for="assets" class="m-label">Vermögen (€)</label>
       <input 
         id="assets" 
-        :value="assets" 
-        @input="$emit('update:assets', parseNumberOrUndefined(($event.target as HTMLInputElement).value))"
+        v-model.number="assetsModel"
         type="number" 
         step="0.01" 
         placeholder="z.B. 5000" 
@@ -45,8 +42,7 @@
       <label for="monthlyRent" class="m-label">Monatliche Miete (€)</label>
       <input 
         id="monthlyRent" 
-        :value="monthlyRent" 
-        @input="$emit('update:monthlyRent', parseNumberOrUndefined(($event.target as HTMLInputElement).value))"
+        v-model.number="monthlyRentModel"
         type="number" 
         step="0.01" 
         placeholder="z.B. 800" 
@@ -57,9 +53,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { FormDataField } from "@/types/EligibilityCheckInterface";
 
-defineProps<{
+const props = defineProps<{
   grossMonthlyIncome?: number;
   netMonthlyIncome?: number;
   assets?: number;
@@ -67,16 +64,32 @@ defineProps<{
   shouldShowField: (field: FormDataField) => boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'update:grossMonthlyIncome': [value: number | undefined];
   'update:netMonthlyIncome': [value: number | undefined];
   'update:assets': [value: number | undefined];
   'update:monthlyRent': [value: number | undefined];
 }>();
 
-const parseNumberOrUndefined = (value: string): number | undefined => {
-  const parsed = parseFloat(value);
-  return isNaN(parsed) ? undefined : parsed;
-};
+// Create computed properties with getters/setters for v-model
+const grossMonthlyIncomeModel = computed({
+  get: () => props.grossMonthlyIncome,
+  set: (value) => emit('update:grossMonthlyIncome', value || undefined)
+});
+
+const netMonthlyIncomeModel = computed({
+  get: () => props.netMonthlyIncome,
+  set: (value) => emit('update:netMonthlyIncome', value || undefined)
+});
+
+const assetsModel = computed({
+  get: () => props.assets,
+  set: (value) => emit('update:assets', value || undefined)
+});
+
+const monthlyRentModel = computed({
+  get: () => props.monthlyRent,
+  set: (value) => emit('update:monthlyRent', value || undefined)
+});
 </script>
 

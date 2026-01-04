@@ -6,8 +6,7 @@
       <label for="firstName" class="m-label">Vorname</label>
       <input 
         id="firstName" 
-        :value="firstName" 
-        @input="$emit('update:firstName', ($event.target as HTMLInputElement).value || undefined)"
+        v-model="firstNameModel"
         type="text" 
         placeholder="Vorname eingeben" 
         class="m-textfield" 
@@ -18,8 +17,7 @@
       <label for="lastName" class="m-label">Nachname</label>
       <input 
         id="lastName" 
-        :value="lastName" 
-        @input="$emit('update:lastName', ($event.target as HTMLInputElement).value || undefined)"
+        v-model="lastNameModel"
         type="text" 
         placeholder="Nachname eingeben" 
         class="m-textfield" 
@@ -30,8 +28,7 @@
       <label for="dateOfBirth" class="m-label">Geburtsdatum</label>
       <input 
         id="dateOfBirth" 
-        :value="dateOfBirth" 
-        @input="$emit('update:dateOfBirth', ($event.target as HTMLInputElement).value || undefined)"
+        v-model="dateOfBirthModel"
         type="date" 
         class="m-textfield" 
       />
@@ -41,8 +38,7 @@
       <label for="gender" class="m-label">Geschlecht</label>
       <select 
         id="gender" 
-        :value="gender" 
-        @change="$emit('update:gender', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="genderModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -57,8 +53,7 @@
       <label for="maritalStatus" class="m-label">Familienstand</label>
       <select 
         id="maritalStatus" 
-        :value="maritalStatus" 
-        @change="$emit('update:maritalStatus', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="maritalStatusModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -74,8 +69,7 @@
       <label for="nationality" class="m-label">Staatsangehörigkeit</label>
       <select 
         id="nationality" 
-        :value="nationality" 
-        @change="$emit('update:nationality', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="nationalityModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -89,8 +83,7 @@
       <label for="residenceStatus" class="m-label">Aufenthaltsstatus</label>
       <select 
         id="residenceStatus" 
-        :value="residenceStatus" 
-        @change="$emit('update:residenceStatus', ($event.target as HTMLSelectElement).value || undefined)"
+        v-model="residenceStatusModel"
         class="m-textfield"
       >
         <option :value="undefined">Bitte wählen</option>
@@ -102,8 +95,7 @@
     
     <div v-if="shouldShowField('residenceInGermany')">
       <YesNoInput
-        :model-value="residenceInGermany"
-        @update:model-value="$emit('update:residenceInGermany', $event)"
+        v-model="residenceInGermanyModel"
         label="Gewöhnlicher Aufenthalt in Deutschland"
         name="residenceInGermany"
       />
@@ -112,10 +104,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { FormDataField } from "@/types/EligibilityCheckInterface";
 import YesNoInput from "@/components/YesNoInput.vue";
 
-defineProps<{
+const props = defineProps<{
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string;
@@ -127,7 +120,7 @@ defineProps<{
   shouldShowField: (field: FormDataField) => boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'update:firstName': [value: string | undefined];
   'update:lastName': [value: string | undefined];
   'update:dateOfBirth': [value: string | undefined];
@@ -137,5 +130,46 @@ defineEmits<{
   'update:residenceStatus': [value: 'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine' | undefined];
   'update:residenceInGermany': [value: boolean | undefined];
 }>();
+
+// Create computed properties with getters/setters for v-model
+const firstNameModel = computed({
+  get: () => props.firstName,
+  set: (value) => emit('update:firstName', value || undefined)
+});
+
+const lastNameModel = computed({
+  get: () => props.lastName,
+  set: (value) => emit('update:lastName', value || undefined)
+});
+
+const dateOfBirthModel = computed({
+  get: () => props.dateOfBirth,
+  set: (value) => emit('update:dateOfBirth', value || undefined)
+});
+
+const genderModel = computed({
+  get: () => props.gender,
+  set: (value) => emit('update:gender', value || undefined)
+});
+
+const maritalStatusModel = computed({
+  get: () => props.maritalStatus,
+  set: (value) => emit('update:maritalStatus', value || undefined)
+});
+
+const nationalityModel = computed({
+  get: () => props.nationality,
+  set: (value) => emit('update:nationality', value || undefined)
+});
+
+const residenceStatusModel = computed({
+  get: () => props.residenceStatus,
+  set: (value) => emit('update:residenceStatus', value || undefined)
+});
+
+const residenceInGermanyModel = computed({
+  get: () => props.residenceInGermany,
+  set: (value) => emit('update:residenceInGermany', value)
+});
 </script>
 
