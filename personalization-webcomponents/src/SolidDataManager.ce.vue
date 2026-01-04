@@ -31,6 +31,7 @@
               class="form-content"
             >
               <PersonalInformationForm
+                v-if="personalInfoRequiredFields"
                 v-model:firstName="firstName"
                 v-model:lastName="lastName"
                 v-model:dateOfBirth="dateOfBirth"
@@ -43,6 +44,7 @@
               />
 
               <FinancialInformationForm
+                v-if="financialInfoRequiredFields"
                 v-model:grossMonthlyIncome="grossMonthlyIncome"
                 v-model:netMonthlyIncome="netMonthlyIncome"
                 v-model:assets="assets"
@@ -51,6 +53,7 @@
               />
 
               <HouseholdInformationForm
+                v-if="householdInfoRequiredFields"
                 v-model:householdSize="householdSize"
                 v-model:numberOfChildren="numberOfChildren"
                 v-model:childrenAges="childrenAges"
@@ -59,6 +62,7 @@
               />
 
               <EducationEmploymentForm
+                v-if="educationEmploymentRequiredFields"
                 v-model:employmentStatus="employmentStatus"
                 v-model:educationLevel="educationLevel"
                 v-model:isStudent="isStudent"
@@ -66,6 +70,7 @@
               />
 
               <SpecialCircumstancesForm
+                v-if="specialCircumstancesRequiredFields"
                 v-model:hasDisability="hasDisability"
                 v-model:disabilityDegree="disabilityDegree"
                 v-model:isPregnant="isPregnant"
@@ -78,6 +83,7 @@
               />
 
               <InsuranceBenefitsForm
+                v-if="insuranceBenefitsRequiredFields"
                 v-model:healthInsurance="healthInsurance"
                 v-model:hasCareInsurance="hasCareInsurance"
                 v-model:receivesUnemploymentBenefit1="receivesUnemploymentBenefit1"
@@ -520,6 +526,127 @@ const missingFields = ref<FormDataField[]>([]);
 const showAllResults = ref(false);
 
 const eligibilityRegistry = new EligibilityCheckRegistry();
+
+// Define which fields belong to each form group
+const personalInfoFields: FormDataField[] = [
+  'firstName', 'lastName', 'age', 'dateOfBirth', 'gender', 'maritalStatus', 
+  'nationality', 'residenceStatus', 'residenceInGermany'
+];
+
+const financialInfoFields: FormDataField[] = [
+  'grossMonthlyIncome', 'netMonthlyIncome', 'assets', 'monthlyRent'
+];
+
+const householdInfoFields: FormDataField[] = [
+  'householdSize', 'numberOfChildren', 'childrenAges', 'isSingleParent'
+];
+
+const educationEmploymentFields: FormDataField[] = [
+  'employmentStatus', 'educationLevel', 'isStudent'
+];
+
+const specialCircumstancesFields: FormDataField[] = [
+  'hasDisability', 'disabilityDegree', 'isPregnant', 'hasCareNeeds', 
+  'pensionEligible', 'citizenBenefitLast3Years', 'hasFinancialHardship', 'workAbility'
+];
+
+const insuranceBenefitsFields: FormDataField[] = [
+  'healthInsurance', 'hasCareInsurance', 'receivesUnemploymentBenefit1', 
+  'receivesUnemploymentBenefit2', 'receivesPension', 'receivesChildBenefit', 
+  'receivesHousingBenefit', 'receivesStudentAid'
+];
+
+// Helper function to get the value of a field by name
+const getFieldValue = (fieldName: FormDataField): any => {
+  switch (fieldName) {
+    case 'firstName': return firstName.value;
+    case 'lastName': return lastName.value;
+    case 'dateOfBirth': return dateOfBirth.value;
+    case 'age': return calculatedAge.value;
+    case 'gender': return gender.value;
+    case 'maritalStatus': return maritalStatus.value;
+    case 'nationality': return nationality.value;
+    case 'residenceStatus': return residenceStatus.value;
+    case 'residenceInGermany': return residenceInGermany.value;
+    case 'grossMonthlyIncome': return grossMonthlyIncome.value;
+    case 'netMonthlyIncome': return netMonthlyIncome.value;
+    case 'assets': return assets.value;
+    case 'monthlyRent': return monthlyRent.value;
+    case 'householdSize': return householdSize.value;
+    case 'numberOfChildren': return numberOfChildren.value;
+    case 'childrenAges': return childrenAges.value;
+    case 'isSingleParent': return isSingleParent.value;
+    case 'employmentStatus': return employmentStatus.value;
+    case 'educationLevel': return educationLevel.value;
+    case 'isStudent': return isStudent.value;
+    case 'hasDisability': return hasDisability.value;
+    case 'disabilityDegree': return disabilityDegree.value;
+    case 'receivesUnemploymentBenefit1': return receivesUnemploymentBenefit1.value;
+    case 'receivesUnemploymentBenefit2': return receivesUnemploymentBenefit2.value;
+    case 'receivesPension': return receivesPension.value;
+    case 'pensionEligible': return pensionEligible.value;
+    case 'isPregnant': return isPregnant.value;
+    case 'hasCareNeeds': return hasCareNeeds.value;
+    case 'citizenBenefitLast3Years': return citizenBenefitLast3Years.value;
+    case 'hasFinancialHardship': return hasFinancialHardship.value;
+    case 'workAbility': return workAbility.value;
+    case 'healthInsurance': return healthInsurance.value;
+    case 'hasCareInsurance': return hasCareInsurance.value;
+    case 'receivesChildBenefit': return receivesChildBenefit.value;
+    case 'receivesHousingBenefit': return receivesHousingBenefit.value;
+    case 'receivesStudentAid': return receivesStudentAid.value;
+    default: return undefined;
+  }
+};
+
+// Helper function to check if all missing fields from a section are filled
+const areAllMissingFieldsFilled = (sectionFields: FormDataField[]): boolean => {
+  // Get only the fields from this section that are in missingFields
+  const missingFieldsInSection = sectionFields.filter(field => 
+    missingFields.value.includes(field)
+  );
+  
+  // If there are no missing fields in this section, consider it complete
+  if (missingFieldsInSection.length === 0) {
+    return true;
+  }
+  
+  // Check if ALL missing fields in this section are now filled (not undefined)
+  return missingFieldsInSection.every(field => getFieldValue(field) !== undefined);
+};
+
+// Define which fields are required to show each form group
+// Show the next section only if ALL missing fields from the previous section are filled
+const personalInfoRequiredFields = computed(() => {
+  // Always show personal information group first
+  return true;
+});
+
+const financialInfoRequiredFields = computed(() => {
+  // Show if all missing fields from personal info section are filled
+  return areAllMissingFieldsFilled(personalInfoFields);
+});
+
+const householdInfoRequiredFields = computed(() => {
+  // Show if all missing fields from financial info section are filled
+  return areAllMissingFieldsFilled(financialInfoFields);
+});
+
+const educationEmploymentRequiredFields = computed(() => {
+  // Show if all missing fields from household info section are filled
+  return areAllMissingFieldsFilled(householdInfoFields);
+});
+
+const specialCircumstancesRequiredFields = computed(() => {
+  // Show if all missing fields from education/employment section are filled
+  return areAllMissingFieldsFilled(educationEmploymentFields);
+});
+
+const insuranceBenefitsRequiredFields = computed(() => {
+  // Show if all missing fields from special circumstances section are filled
+  return areAllMissingFieldsFilled(specialCircumstancesFields);
+});
+
 // Watch all form fields and automatically check eligibility when they change
 watch(
   [
