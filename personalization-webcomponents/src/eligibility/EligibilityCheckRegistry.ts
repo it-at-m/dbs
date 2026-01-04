@@ -1,9 +1,13 @@
 import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
-import { OrderedNextSectionStrategy } from "@/eligibility/NextSectionStrategy.ts";
-import { BuergergeldCheck } from "@/eligibility/BuergergeldCheck.ts";
+
+
+
 import { BafoegCheck } from "@/eligibility/BafoegCheck.ts";
+import { BuergergeldCheck } from "@/eligibility/BuergergeldCheck.ts";
 import { KindergeldCheck } from "@/eligibility/KindergeldCheck.ts";
+import { OrderedNextSectionStrategy } from "@/eligibility/NextSectionStrategy.ts";
 import { WohnGeldCheck } from "@/eligibility/WohnGeldCheck.ts";
+
 
 export interface EligibilityEvaluationResult {
   eligible: EligibilityResult[];
@@ -11,6 +15,19 @@ export interface EligibilityEvaluationResult {
   all: EligibilityResult[];
   visibleFields: FormDataField[];
   visibleSections: FormSection[];
+}
+
+export type PrefilledFields = {
+  [K in FormDataField]?: FormData[K];
+};
+
+export interface PrefilledEligibilityEvaluationResult {
+  eligible: EligibilityResult[];
+  ineligible: EligibilityResult[];
+  all: EligibilityResult[];
+  visibleFields: FormDataField[];
+  visibleSections: FormSection[];
+  prefilledFields: PrefilledFields;
 }
 
 export type FormSection =
@@ -89,9 +106,36 @@ export class EligibilityCheckRegistry {
     this.checks.push(check);
   }
 
-  getVisibleSections(formData: FormData): EligibilityEvaluationResult {
+  addAndPrefillField(
+    field: FormDataField,
+    prefilledFields: PrefilledFields,
+    prefillFormData?: FormData,
+  ): PrefilledFields {
+    if (!this.visibleFields.has(field)) {
+      this.visibleFields.add(field);
+      if (prefillFormData === undefined) {
+        console.log("prefill undefined");
+
+        return prefilledFields;
+      }
+
+      console.log("prefill")
+      return {
+        ...prefilledFields,
+        [field]: prefillFormData[field],
+      };
+    }
+
+    return {
+      ...prefilledFields,
+    };
+  }
+
+  refreshEligibilityForm(formData: FormData, prefillFormData?: FormData): PrefilledEligibilityEvaluationResult {
     const allResults = [];
     const allMissingFields = new Set<FormDataField>();
+
+    let prefilledFields: PrefilledFields = {};
 
     for (const check of this.checks) {
       const result = check.evaluate(formData);
@@ -115,7 +159,7 @@ export class EligibilityCheckRegistry {
         allResults
       );
 
-      if(firstSection === null){
+      if (firstSection === null) {
         throw new Error("alles kaputt");
       }
 
@@ -125,7 +169,11 @@ export class EligibilityCheckRegistry {
 
       this.visibleSections.push(firstSection);
       for (const field of newFields) {
-        this.visibleFields.add(field);
+        prefilledFields = this.addAndPrefillField(
+          field,
+          prefilledFields,
+          prefillFormData
+        );
       }
 
       return {
@@ -134,21 +182,31 @@ export class EligibilityCheckRegistry {
         all: allResults,
         visibleSections: this.visibleSections,
         visibleFields: Array.from(this.visibleFields),
+        prefilledFields
       };
     }
 
     for (const section of this.visibleSections) {
-      const fieldsInSection = this.sectionFields[section].filter((field) =>
-        allMissingFields.has(field) || this.visibleFields.has(field)
+      const fieldsInSection = this.sectionFields[section].filter(
+        (field) => allMissingFields.has(field) || this.visibleFields.has(field)
       );
 
-      fieldsInSection.forEach(field => this.visibleFields.add(field));
+      fieldsInSection.forEach((field) =>
+        prefilledFields = this.addAndPrefillField(
+          field,
+          prefilledFields,
+          prefillFormData
+        )
+      );
     }
 
     const allCurrentSectionsFilled = Array.from(this.visibleFields).every(
-      (visibleField) => !allMissingFields.has(visibleField)
+      (visibleField) => formData[visibleField] !== undefined
     );
+    console.log("m", allMissingFields);
+    console.log("v", this.visibleFields);
     const skippedSections: FormSection[] = [];
+
     while (
       this.visibleSections.length + skippedSections.length <
         Object.keys(this.sectionFields).length &&
@@ -160,7 +218,7 @@ export class EligibilityCheckRegistry {
         allResults
       );
 
-      if(nextSection === null){
+      if (nextSection === null) {
         break;
       }
 
@@ -168,23 +226,34 @@ export class EligibilityCheckRegistry {
         allMissingFields.has(field)
       );
 
-      if(newFields.length === 0){
+      console.log("newFields", newFields)
+      if (newFields.length === 0) {
         skippedSections.push(nextSection);
         continue;
       }
 
       this.visibleSections.push(nextSection);
+      let newPrefilledFields = {};
       for (const field of newFields) {
-        this.visibleFields.add(field);
+        newPrefilledFields = this.addAndPrefillField(
+          field,
+          newPrefilledFields,
+          prefillFormData
+        );
+      }
+      if (Object.values(newPrefilledFields).filter(value => value !== undefined).length === newFields.length) {
+        prefilledFields = {...prefilledFields, ...newPrefilledFields};
+        continue;
       }
 
-      return {
-        eligible,
-        ineligible,
-        all: allResults,
-        visibleSections: this.visibleSections,
-        visibleFields: Array.from(this.visibleFields),
-      };
+        return {
+          eligible,
+          ineligible,
+          all: allResults,
+          visibleSections: this.visibleSections,
+          visibleFields: Array.from(this.visibleFields),
+          prefilledFields,
+        };
     }
 
     return {
@@ -193,6 +262,7 @@ export class EligibilityCheckRegistry {
       all: allResults,
       visibleSections: this.visibleSections,
       visibleFields: Array.from(this.visibleFields),
+      prefilledFields,
     };
   }
 }
