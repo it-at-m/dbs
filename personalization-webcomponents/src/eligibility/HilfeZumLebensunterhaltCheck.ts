@@ -19,11 +19,6 @@ export class HilfeZumLebensunterhaltCheck implements EligibilityCheckInterface {
       };
     }
 
-    // 2. Check age (birth date required)
-    if (formData.age === undefined || formData.age === null) {
-      missingFields.add("age");
-    }
-
     // 3. Check not pensionable (must NOT have reached pension age)
     if (formData.pensionEligible === undefined || formData.pensionEligible === null) {
       missingFields.add("pensionEligible");

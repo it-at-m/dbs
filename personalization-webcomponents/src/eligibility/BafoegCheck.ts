@@ -1,5 +1,10 @@
 import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
 
+
+
+import { calculateAge } from "@/eligibility/util.ts";
+
+
 export class BafoegCheck implements EligibilityCheckInterface {
   getName(): string {
     return "BAföG";
@@ -32,9 +37,10 @@ export class BafoegCheck implements EligibilityCheckInterface {
     }
 
     // 3. Check age requirement (15 to 35)
-    if (formData.age === undefined || formData.age === null) {
-      missingFields.add('age');
-    } else if (formData.age < 15 || formData.age >= 36) {
+    const age = calculateAge(formData.dateOfBirth);
+    if (age === undefined || age === null) {
+      missingFields.add("dateOfBirth");
+    } else if (age < 15 || age >= 36) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -105,4 +111,3 @@ export class BafoegCheck implements EligibilityCheckInterface {
     };
   }
 }
-

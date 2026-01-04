@@ -24,7 +24,7 @@
       />
     </div>
     
-    <div v-if="shouldShowField('age')" class="m-form-group">
+    <div v-if="shouldShowField('dateOfBirth')" class="m-form-group">
       <label for="dateOfBirth" class="m-label">Geburtsdatum</label>
       <input 
         id="dateOfBirth" 

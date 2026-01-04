@@ -7,12 +7,7 @@ export class GrundsicherungCheck implements EligibilityCheckInterface {
 
   evaluate(formData: FormData): EligibilityResult {
     const missingFields = new Set<FormDataField>();
-
-    // 1. Check age (birth date required)
-    if (formData.age === undefined || formData.age === null) {
-      missingFields.add("age");
-    }
-
+    
     // 2. Check habitual residence in Germany
     if (formData.residenceInGermany === undefined || formData.residenceInGermany === null) {
       missingFields.add("residenceInGermany");

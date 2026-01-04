@@ -1,6 +1,10 @@
 import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
 
 
+
+import { calculateAge } from "@/eligibility/util.ts";
+
+
 export class BuergergeldCheck implements EligibilityCheckInterface {
   getName(): string {
     return "Bürgergeld";
@@ -68,9 +72,10 @@ export class BuergergeldCheck implements EligibilityCheckInterface {
     }
 
     // 5. Check age requirement (must be >= 15)
-    if (formData.age === undefined || formData.age === null) {
-      missingFields.add('age');
-    } else if (formData.age < 15) {
+    const age = calculateAge(formData.dateOfBirth);
+    if (age === undefined || age === null) {
+      missingFields.add("dateOfBirth");
+    } else if (age < 15) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -160,9 +165,9 @@ export class BuergergeldCheck implements EligibilityCheckInterface {
     // 11. Check assets limit (simplified - actual limits are complex and depend on household)
     if (formData.assets === undefined || formData.assets === null) {
       missingFields.add('assets');
-    } else if (formData.age !== undefined && formData.age !== null) {
+    } else if (age !== undefined && age !== null) {
       // Can only check asset limit if age is known
-      const assetLimit = 15000 + (formData.age * 500);
+      const assetLimit = 15000 + (age * 500);
       if (formData.assets > assetLimit) {
         return {
           eligible: false,
@@ -191,4 +196,3 @@ export class BuergergeldCheck implements EligibilityCheckInterface {
     };
   }
 }
-

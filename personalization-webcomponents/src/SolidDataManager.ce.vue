@@ -181,15 +181,6 @@
 
                 <div style="display: flex; gap: 8px">
                   <muc-button
-                    variant="secondary"
-                    @click="loadFromPod"
-                    :loading="solidLoading"
-                    icon="download"
-                    style="flex: 1"
-                  >
-                    Laden
-                  </muc-button>
-                  <muc-button
                     variant="primary"
                     @click="saveToPod"
                     :loading="solidLoading"
@@ -423,7 +414,6 @@ async function loadFromPod() {
     solidPodData.value = loadedData;
 
     showMessage("Daten erfolgreich aus dem Solid Pod geladen!", "success");
-    checkEligibility();
   } catch (err) {
     showMessage(
       "Fehler beim Laden aus dem Pod (Existiert die Datei?): " + err,
@@ -449,41 +439,8 @@ const eligibilityRegistry = new EligibilityCheckRegistry();
 
 const isCheckingEligibility = ref(false);
 
-// Helper function to calculate age from birth date
-function calculateAge(birthDateString: string | undefined): number | undefined {
-  if (!birthDateString) return undefined;
-
-  const birthDate = new Date(birthDateString);
-  const today = new Date();
-
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-
-  // If birthday hasn't occurred this year yet, subtract 1
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && today.getDate() < birthDate.getDate())
-  ) {
-    age--;
-  }
-
-  return age;
-}
-
-// Computed property for age based on birth date
-const calculatedAge = computed(() =>
-  calculateAge(formFields.value.dateOfBirth)
-);
-
-// Keep age in sync with dateOfBirth
-watch(calculatedAge, (newAge) => {
-  formFields.value.age = newAge;
-});
-
-// Get visible sections from the registry
 const visibleSections = ref<FormSection[]>();
 
-// Watch all form fields and automatically check eligibility when they change
 watch(
   formFields,
   () => {
@@ -492,7 +449,6 @@ watch(
   { deep: true }
 );
 
-// Helper function to check if a field should be shown
 const shouldShowField = (fieldName: FormDataField): boolean => {
   return visibleFields.value.includes(fieldName);
 };
@@ -505,6 +461,8 @@ onMounted(async () => {
     });
     isSolidConnected.value = solidSession.info.isLoggedIn;
     solidWebId.value = solidSession.info.webId;
+    await loadFromPod();
+    checkEligibility();
   } catch (err) {
     console.error("Solid Redirect handling error:", err);
   }
@@ -517,27 +475,29 @@ function checkEligibility() {
   }
   isCheckingEligibility.value = true;
 
-  console.log(formFields.value);
+  console.log("solid", solidPodData.value);
   const result = eligibilityRegistry.refreshEligibilityForm(
     formFields.value,
     solidPodData.value
   );
 
   const prefillData = result.prefilledFields;
-  console.log(result.prefilledFields);
+  console.log("prefill", result.prefilledFields);
 
   formFields.value = { ...formFields.value, ...prefillData };
+  console.log("form", formFields.value);
+
   visibleSections.value = result.visibleSections;
   prefilledFields.value = result.prefilledFields;
   allEligibilityResults.value = result.all;
   eligibilityResults.value = result.eligible;
   visibleFields.value = result.visibleFields;
+  console.log("form", visibleFields.value);
 
   setTimeout(() => {
     isCheckingEligibility.value = false;
   }, 0);
 }
-onMounted(() => checkEligibility());
 
 function showMessage(
   msg: string,

@@ -8,11 +8,6 @@ export class ArbeitslosengeldCheck implements EligibilityCheckInterface {
   evaluate(formData: FormData): EligibilityResult {
     const missingFields = new Set<FormDataField>();
 
-    // 1. Check age (birth date required)
-    if (formData.age === undefined || formData.age === null) {
-      missingFields.add("age");
-    }
-
     // 2. Check not pensionable (must NOT have reached pension age)
     if (formData.pensionEligible === undefined || formData.pensionEligible === null) {
       missingFields.add("pensionEligible");

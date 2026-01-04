@@ -3,7 +3,6 @@ export interface FormData {
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string; // ISO date string (YYYY-MM-DD)
-  age?: number; // Age (can be derived)
   gender?: 'male' | 'female' | 'diverse' | 'unspecified';
   maritalStatus?: 'single' | 'married' | 'divorced' | 'widowed' | 'separated';
   nationality?: 'German' | 'EU' | 'Non-EU';

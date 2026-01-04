@@ -14,15 +14,6 @@ import { KinderzuschlagCheck } from "@/eligibility/KinderzuschlagCheck.ts";
 import { OrderedNextSectionStrategy } from "@/eligibility/NextSectionStrategy.ts";
 import { WohnGeldCheck } from "@/eligibility/WohnGeldCheck.ts";
 
-
-export interface EligibilityEvaluationResult {
-  eligible: EligibilityResult[];
-  ineligible: EligibilityResult[];
-  all: EligibilityResult[];
-  visibleFields: FormDataField[];
-  visibleSections: FormSection[];
-}
-
 export type PrefilledFields = {
   [K in FormDataField]?: FormData[K];
 };
@@ -57,7 +48,6 @@ export class EligibilityCheckRegistry {
     personalInfo: [
       "firstName",
       "lastName",
-      "age",
       "dateOfBirth",
       "gender",
       "maritalStatus",
@@ -164,40 +154,6 @@ export class EligibilityCheckRegistry {
 
     const eligible = allResults.filter((result) => result.eligible === true);
     const ineligible = allResults.filter((result) => result.eligible === false);
-
-    if (this.visibleSections.length === 0) {
-      const firstSection = this.nextSectionStrategy.getNextSection(
-        this.visibleSections,
-        formData,
-        allResults
-      );
-
-      if (firstSection === null) {
-        throw new Error("alles kaputt");
-      }
-
-      const newFields = this.sectionFields[firstSection].filter((field) =>
-        allMissingFields.has(field)
-      );
-
-      this.visibleSections.push(firstSection);
-      for (const field of newFields) {
-        prefilledFields = this.addAndPrefillField(
-          field,
-          prefilledFields,
-          prefillFormData
-        );
-      }
-
-      return {
-        eligible,
-        ineligible,
-        all: allResults,
-        visibleSections: this.visibleSections,
-        visibleFields: Array.from(this.visibleFields),
-        prefilledFields
-      };
-    }
 
     for (const section of this.visibleSections) {
       const fieldsInSection = this.sectionFields[section].filter(
