@@ -4,10 +4,10 @@ export interface FormData {
   lastName?: string;
   dateOfBirth?: string; // ISO date string (YYYY-MM-DD)
   age?: number; // Age (can be derived)
-  gender?: 'männlich' | 'weiblich' | 'divers' | 'keine Angabe';
-  maritalStatus?: 'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt';
-  nationality?: 'Deutsch' | 'EU' | 'Nicht-EU';
-  residenceStatus?: 'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine'; // For non-German citizens
+  gender?: 'male' | 'female' | 'diverse' | 'unspecified';
+  maritalStatus?: 'single' | 'married' | 'divorced' | 'widowed' | 'separated';
+  nationality?: 'German' | 'EU' | 'Non-EU';
+  residenceStatus?: 'residence_permit' | 'permanent_residence' | 'none'; // For non-German citizens
   residenceInGermany?: boolean; // Habitual residence in Germany
   
   // Financial Information
@@ -22,8 +22,8 @@ export interface FormData {
   childrenAges?: number[]; // Array of children ages
   
   // Education & Employment
-  employmentStatus?: 'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges';
-  educationLevel?: 'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium';
+  employmentStatus?: 'employed' | 'self_employed' | 'unemployed' | 'student' | 'retired' | 'other';
+  educationLevel?: 'no_degree' | 'lower_secondary' | 'secondary' | 'high_school' | 'vocational_training' | 'university';
   isStudent?: boolean;
   
   // Special Circumstances
@@ -39,7 +39,7 @@ export interface FormData {
   citizenBenefitLast3Years?: boolean; // Received Bürgergeld in last 3 years
   
   // Insurance & Benefits
-  healthInsurance?: 'gesetzlich' | 'privat' | 'keine';
+  healthInsurance?: 'public' | 'private' | 'none';
   hasCareInsurance?: boolean;
   receivesChildBenefit?: boolean;
   receivesHousingBenefit?: boolean;
@@ -47,7 +47,7 @@ export interface FormData {
   
   // Additional for BAföG
   hasFinancialHardship?: boolean; // Financial difficulty
-  workAbility?: 'voll' | 'eingeschraenkt' | 'keine'; // Work ability
+  workAbility?: 'full' | 'limited' | 'none'; // Work ability
 }
 
 export type FormDataField = keyof FormData;
@@ -64,4 +64,3 @@ export interface EligibilityCheckInterface {
   getName(): string;
   evaluate(formData: FormData): EligibilityResult;
 }
-

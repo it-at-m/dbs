@@ -1,6 +1,6 @@
 import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
 
-export class BaföGCheck implements EligibilityCheckInterface {
+export class BafoegCheck implements EligibilityCheckInterface {
   getName(): string {
     return "BAföG";
   }
@@ -12,7 +12,7 @@ export class BaföGCheck implements EligibilityCheckInterface {
     // 1. Check no financial difficulty (must be false)
     if (formData.hasFinancialHardship === undefined || formData.hasFinancialHardship === null) {
       missingFields.add('hasFinancialHardship');
-    } else if (formData.hasFinancialHardship === true) {
+    } else if (formData.hasFinancialHardship) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -23,7 +23,7 @@ export class BaföGCheck implements EligibilityCheckInterface {
     // 2. Check health insurance (must have insurance)
     if (formData.healthInsurance === undefined || formData.healthInsurance === null) {
       missingFields.add('healthInsurance');
-    } else if (formData.healthInsurance === 'keine') {
+    } else if (formData.healthInsurance === 'none') {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -45,7 +45,7 @@ export class BaföGCheck implements EligibilityCheckInterface {
     // 4. Check care insurance (must have Pflegeversicherung)
     if (formData.hasCareInsurance === undefined || formData.hasCareInsurance === null) {
       missingFields.add('hasCareInsurance');
-    } else if (formData.hasCareInsurance !== true) {
+    } else if (!formData.hasCareInsurance) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -56,7 +56,7 @@ export class BaföGCheck implements EligibilityCheckInterface {
     // 5. Check work ability (must NOT be none)
     if (formData.workAbility === undefined || formData.workAbility === null) {
       missingFields.add('workAbility');
-    } else if (formData.workAbility === 'keine') {
+    } else if (formData.workAbility === 'none') {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -78,7 +78,7 @@ export class BaföGCheck implements EligibilityCheckInterface {
     // 7. Check NOT receiving pension
     if (formData.receivesPension === undefined || formData.receivesPension === null) {
       missingFields.add('receivesPension');
-    } else if (formData.receivesPension === true) {
+    } else if (formData.receivesPension) {
       return {
         eligible: false,
         subsidyName: this.getName(),
@@ -105,3 +105,4 @@ export class BaföGCheck implements EligibilityCheckInterface {
     };
   }
 }
+

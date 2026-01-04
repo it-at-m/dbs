@@ -556,14 +556,14 @@ const lastName = ref<string | undefined>(undefined);
 const dateOfBirth = ref<string | undefined>(undefined);
 const age = ref<number | undefined>(undefined);
 const gender = ref<
-  "männlich" | "weiblich" | "divers" | "keine Angabe" | undefined
+  "male" | "female" | "diverse" | "unspecified" | undefined
 >(undefined);
 const maritalStatus = ref<
-  "ledig" | "verheiratet" | "geschieden" | "verwitwet" | "getrennt" | undefined
+  "single" | "married" | "divorced" | "widowed" | "separated" | undefined
 >(undefined);
-const nationality = ref<"Deutsch" | "EU" | "Nicht-EU" | undefined>(undefined);
+const nationality = ref<"German" | "EU" | "Non-EU" | undefined>(undefined);
 const residenceStatus = ref<
-  "Aufenthaltserlaubnis" | "Niederlassungserlaubnis" | "Keine" | undefined
+  "residence_permit" | "permanent_residence" | "none" | undefined
 >(undefined);
 const residenceInGermany = ref<boolean | undefined>(undefined);
 
@@ -580,21 +580,21 @@ const childrenAges = ref<number[] | undefined>(undefined);
 
 // Education & Employment
 const employmentStatus = ref<
-  | "angestellt"
-  | "selbststaendig"
-  | "arbeitslos"
+  | "employed"
+  | "self_employed"
+  | "unemployed"
   | "student"
-  | "rentner"
-  | "sonstiges"
+  | "retired"
+  | "other"
   | undefined
 >(undefined);
 const educationLevel = ref<
-  | "kein_abschluss"
-  | "hauptschule"
-  | "realschule"
-  | "abitur"
-  | "ausbildung"
-  | "studium"
+  | "no_degree"
+  | "lower_secondary"
+  | "secondary"
+  | "high_school"
+  | "vocational_training"
+  | "university"
   | undefined
 >(undefined);
 const isStudent = ref<boolean | undefined>(undefined);
@@ -611,12 +611,12 @@ const isSingleParent = ref<boolean | undefined>(undefined);
 const hasCareNeeds = ref<boolean | undefined>(undefined);
 const citizenBenefitLast3Years = ref<boolean | undefined>(undefined);
 const hasFinancialHardship = ref<boolean | undefined>(undefined);
-const workAbility = ref<"voll" | "eingeschraenkt" | "keine" | undefined>(
+const workAbility = ref<"full" | "limited" | "none" | undefined>(
   undefined
 );
 
 // Insurance & Benefits
-const healthInsurance = ref<"gesetzlich" | "privat" | "keine" | undefined>(
+const healthInsurance = ref<"public" | "private" | "none" | undefined>(
   undefined
 );
 const hasCareInsurance = ref<boolean | undefined>(undefined);

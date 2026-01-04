@@ -1,7 +1,9 @@
 import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
 import { OrderedNextSectionStrategy } from "@/eligibility/NextSectionStrategy.ts";
-import { Test1 } from "@/eligibility/Test1.ts";
-import { Test2 } from "@/eligibility/Test2.ts";
+import { BuergergeldCheck } from "@/eligibility/BuergergeldCheck.ts";
+import { BafoegCheck } from "@/eligibility/BafoegCheck.ts";
+import { KindergeldCheck } from "@/eligibility/KindergeldCheck.ts";
+import { WohnGeldCheck } from "@/eligibility/WohnGeldCheck.ts";
 
 export interface EligibilityEvaluationResult {
   eligible: EligibilityResult[];
@@ -77,11 +79,10 @@ export class EligibilityCheckRegistry {
 
   constructor() {
     // Register all eligibility checks here
-    //this.registerCheck(new WohnGeldCheck());
-    this.registerCheck(new Test1());
-    this.registerCheck(new Test2());
-    //this.registerCheck(new BaföGCheck());
-    //this.registerCheck(new KindergeldCheck());
+    this.registerCheck(new WohnGeldCheck());
+    this.registerCheck(new BuergergeldCheck());
+    this.registerCheck(new BafoegCheck());
+    this.registerCheck(new KindergeldCheck());
   }
 
   registerCheck(check: EligibilityCheckInterface): void {
