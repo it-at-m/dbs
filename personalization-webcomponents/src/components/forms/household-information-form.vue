@@ -14,7 +14,7 @@
       />
     </div>
     
-    <div v-if="shouldShowField('numberOfChildren') && householdSize && householdSize > 1" class="m-form-group">
+    <div v-if="shouldShowField('numberOfChildren')" class="m-form-group">
       <label for="numberOfChildren" class="m-label">Anzahl Kinder</label>
       <input 
         id="numberOfChildren" 
@@ -26,7 +26,7 @@
       />
     </div>
     
-    <div v-if="shouldShowField('childrenAges') && numberOfChildren && numberOfChildren > 0" class="m-form-group">
+    <div v-if="shouldShowField('childrenAges')" class="m-form-group">
       <label for="childrenAges" class="m-label">Alter der Kinder (kommagetrennt)</label>
       <input 
         id="childrenAges" 

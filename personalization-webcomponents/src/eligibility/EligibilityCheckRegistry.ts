@@ -1,82 +1,197 @@
-import type { 
-  EligibilityCheckInterface, 
-  EligibilityResult, 
-  FormData,
-  FormDataField 
-} from "@/types/EligibilityCheckInterface";
-import { BaföGCheck } from "./BaföGCheck";
-import { WohnGeldCheck } from "./WohnGeldCheck";
-import { BürgergeldCheck } from "./BürgergeldCheck";
-import { KindergeldCheck } from "./KindergeldCheck";
+import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
+import { OrderedNextSectionStrategy } from "@/eligibility/NextSectionStrategy.ts";
+import { Test1 } from "@/eligibility/Test1.ts";
+import { Test2 } from "@/eligibility/Test2.ts";
 
 export interface EligibilityEvaluationResult {
   eligible: EligibilityResult[];
   ineligible: EligibilityResult[];
   all: EligibilityResult[];
-  missingFields: FormDataField[];
+  visibleFields: FormDataField[];
+  visibleSections: FormSection[];
 }
+
+export type FormSection =
+  | "personalInfo"
+  | "financialInfo"
+  | "householdInfo"
+  | "educationEmployment"
+  | "specialCircumstances"
+  | "insuranceBenefits";
+
+export type SectionFieldMap = Record<FormSection, FormDataField[]>;
 
 export class EligibilityCheckRegistry {
   private checks: EligibilityCheckInterface[] = [];
-  private displayedFields: Set<FormDataField> = new Set<FormDataField>();
-  private permanentlyMissingFields: Set<FormDataField> = new Set<FormDataField>();
-  
+  private visibleSections: FormSection[] = [];
+  private visibleFields = new Set<FormDataField>();
+
+  private nextSectionStrategy = new OrderedNextSectionStrategy();
+
+  private sectionFields: SectionFieldMap = {
+    personalInfo: [
+      "firstName",
+      "lastName",
+      "age",
+      "dateOfBirth",
+      "gender",
+      "maritalStatus",
+      "nationality",
+      "residenceStatus",
+      "residenceInGermany",
+    ],
+    financialInfo: [
+      "grossMonthlyIncome",
+      "netMonthlyIncome",
+      "assets",
+      "monthlyRent",
+    ],
+    householdInfo: [
+      "householdSize",
+      "numberOfChildren",
+      "childrenAges",
+      "isSingleParent",
+    ],
+    educationEmployment: ["employmentStatus", "educationLevel", "isStudent"],
+    specialCircumstances: [
+      "hasDisability",
+      "disabilityDegree",
+      "isPregnant",
+      "hasCareNeeds",
+      "pensionEligible",
+      "citizenBenefitLast3Years",
+      "hasFinancialHardship",
+      "workAbility",
+    ],
+    insuranceBenefits: [
+      "healthInsurance",
+      "hasCareInsurance",
+      "receivesUnemploymentBenefit1",
+      "receivesUnemploymentBenefit2",
+      "receivesPension",
+      "receivesChildBenefit",
+      "receivesHousingBenefit",
+      "receivesStudentAid",
+    ],
+  };
+
   constructor() {
     // Register all eligibility checks here
-    this.registerCheck(new WohnGeldCheck());
-    this.registerCheck(new BaföGCheck());
-    this.registerCheck(new BürgergeldCheck());
-    this.registerCheck(new KindergeldCheck());
+    //this.registerCheck(new WohnGeldCheck());
+    this.registerCheck(new Test1());
+    this.registerCheck(new Test2());
+    //this.registerCheck(new BaföGCheck());
+    //this.registerCheck(new KindergeldCheck());
   }
 
   registerCheck(check: EligibilityCheckInterface): void {
     this.checks.push(check);
   }
 
-  evaluateAll(formData: FormData): EligibilityEvaluationResult {
-    const allResults: EligibilityResult[] = [];
-    const missingFieldsSet = new Set<FormDataField>();
+  getVisibleSections(formData: FormData): EligibilityEvaluationResult {
+    const allResults = [];
+    const allMissingFields = new Set<FormDataField>();
 
     for (const check of this.checks) {
       const result = check.evaluate(formData);
-      allResults.push(result);
 
       if (result.missingFields) {
-        result.missingFields.forEach(field => {
-          missingFieldsSet.add(field);
-          // Once a field is missing, mark it as permanently missing
-          this.permanentlyMissingFields.add(field);
+        result.missingFields.forEach((field) => {
+          allMissingFields.add(field);
         });
       }
+
+      allResults.push(result);
     }
 
-    // Merge current missing fields with permanently missing fields
-    this.permanentlyMissingFields.forEach(field => missingFieldsSet.add(field));
+    const eligible = allResults.filter((result) => result.eligible === true);
+    const ineligible = allResults.filter((result) => result.eligible === false);
 
-    // Separate eligible and ineligible results
-    const eligible = allResults.filter(result => result.eligible === true);
-    const ineligible = allResults.filter(result => result.eligible === false);
+    if (this.visibleSections.length === 0) {
+      const firstSection = this.nextSectionStrategy.getNextSection(
+        this.visibleSections,
+        formData,
+        allResults
+      );
+
+      if(firstSection === null){
+        throw new Error("alles kaputt");
+      }
+
+      const newFields = this.sectionFields[firstSection].filter((field) =>
+        allMissingFields.has(field)
+      );
+
+      this.visibleSections.push(firstSection);
+      for (const field of newFields) {
+        this.visibleFields.add(field);
+      }
+
+      return {
+        eligible,
+        ineligible,
+        all: allResults,
+        visibleSections: this.visibleSections,
+        visibleFields: Array.from(this.visibleFields),
+      };
+    }
+
+    for (const section of this.visibleSections) {
+      const fieldsInSection = this.sectionFields[section].filter((field) =>
+        allMissingFields.has(field) || this.visibleFields.has(field)
+      );
+
+      fieldsInSection.forEach(field => this.visibleFields.add(field));
+    }
+
+    const allCurrentSectionsFilled = Array.from(this.visibleFields).every(
+      (visibleField) => !allMissingFields.has(visibleField)
+    );
+    const skippedSections: FormSection[] = [];
+    while (
+      this.visibleSections.length + skippedSections.length <
+        Object.keys(this.sectionFields).length &&
+      allCurrentSectionsFilled
+    ) {
+      const nextSection = this.nextSectionStrategy.getNextSection(
+        [...this.visibleSections, ...skippedSections],
+        formData,
+        allResults
+      );
+
+      if(nextSection === null){
+        break;
+      }
+
+      const newFields = this.sectionFields[nextSection].filter((field) =>
+        allMissingFields.has(field)
+      );
+
+      if(newFields.length === 0){
+        skippedSections.push(nextSection);
+        continue;
+      }
+
+      this.visibleSections.push(nextSection);
+      for (const field of newFields) {
+        this.visibleFields.add(field);
+      }
+
+      return {
+        eligible,
+        ineligible,
+        all: allResults,
+        visibleSections: this.visibleSections,
+        visibleFields: Array.from(this.visibleFields),
+      };
+    }
 
     return {
       eligible,
       ineligible,
       all: allResults,
-      missingFields: Array.from(missingFieldsSet),
+      visibleSections: this.visibleSections,
+      visibleFields: Array.from(this.visibleFields),
     };
-  }
-
-  /**
-   * Reset the permanently missing fields tracking.
-   * Call this when you want to start fresh (e.g., user clears the form).
-   */
-  resetMissingFieldsTracking(): void {
-    this.permanentlyMissingFields.clear();
-  }
-
-  /**
-   * Get all fields that have been marked as missing at any point.
-   */
-  getPermanentlyMissingFields(): FormDataField[] {
-    return Array.from(this.permanentlyMissingFields);
   }
 }

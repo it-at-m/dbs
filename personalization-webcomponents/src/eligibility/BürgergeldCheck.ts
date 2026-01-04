@@ -1,9 +1,8 @@
-import type {
-  EligibilityCheckInterface,
-  EligibilityResult,
-  FormData,
-  FormDataField,
-} from "@/types/EligibilityCheckInterface";
+import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
+
+
+
+
 
 export class BürgergeldCheck implements EligibilityCheckInterface {
   getName(): string {
@@ -14,6 +13,17 @@ export class BürgergeldCheck implements EligibilityCheckInterface {
     // Start with empty missing fields and build it up
     const missingFields = new Set<FormDataField>();
 
+    if (formData.nationality === undefined) {
+      missingFields.add("nationality");
+    } else if (formData.nationality !== "Deutsch") {
+      return {
+        eligible: false,
+        subsidyName: this.getName(),
+        reason:
+          "Bei akuter finanzieller Notlage sind andere Leistungen vorrangig.",
+      };
+    }
+    
     // 1. Check financial difficulty (must be true)
     if (formData.hasFinancialHardship === undefined || formData.hasFinancialHardship === null) {
       missingFields.add('hasFinancialHardship');

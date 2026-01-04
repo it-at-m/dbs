@@ -1,9 +1,5 @@
 import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
 
-
-
-
-
 export class KindergeldCheck implements EligibilityCheckInterface {
   getName(): string {
     return "Kindergeld";

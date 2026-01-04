@@ -14,15 +14,6 @@
         >
           {{ message }}
         </muc-banner>
-
-        <muc-banner
-          v-if="missingFields.length > 0"
-          type="info"
-          class="message-banner"
-        >
-          Es werden nur die Felder angezeigt, die für die Berechnung Ihrer Berechtigung benötigt werden ({{ missingFields.length }} Feld{{ missingFields.length !== 1 ? 'er' : '' }}).
-        </muc-banner>
-
         <div class="two-column-layout">
           <!-- Left Column: Form -->
           <div class="left-column">
@@ -30,70 +21,79 @@
               @submit.prevent="saveData"
               class="form-content"
             >
-              <PersonalInformationForm
-                v-if="personalInfoRequiredFields"
-                v-model:firstName="firstName"
-                v-model:lastName="lastName"
-                v-model:dateOfBirth="dateOfBirth"
-                v-model:gender="gender"
-                v-model:maritalStatus="maritalStatus"
-                v-model:nationality="nationality"
-                v-model:residenceStatus="residenceStatus"
-                v-model:residenceInGermany="residenceInGermany"
-                :shouldShowField="shouldShowField"
-              />
+              <template
+                v-for="section in visibleSections.visibleSections"
+                :key="section"
+              >
+                <personal-information-form
+                  v-if="section === 'personalInfo'"
+                  v-model:firstName="firstName"
+                  v-model:lastName="lastName"
+                  v-model:dateOfBirth="dateOfBirth"
+                  v-model:gender="gender"
+                  v-model:maritalStatus="maritalStatus"
+                  v-model:nationality="nationality"
+                  v-model:residenceStatus="residenceStatus"
+                  v-model:residenceInGermany="residenceInGermany"
+                  :shouldShowField="shouldShowField"
+                />
 
-              <FinancialInformationForm
-                v-if="financialInfoRequiredFields"
-                v-model:grossMonthlyIncome="grossMonthlyIncome"
-                v-model:netMonthlyIncome="netMonthlyIncome"
-                v-model:assets="assets"
-                v-model:monthlyRent="monthlyRent"
-                :shouldShowField="shouldShowField"
-              />
+                <financial-information-form
+                  v-if="section === 'financialInfo'"
+                  v-model:grossMonthlyIncome="grossMonthlyIncome"
+                  v-model:netMonthlyIncome="netMonthlyIncome"
+                  v-model:assets="assets"
+                  v-model:monthlyRent="monthlyRent"
+                  :shouldShowField="shouldShowField"
+                />
 
-              <HouseholdInformationForm
-                v-if="householdInfoRequiredFields"
-                v-model:householdSize="householdSize"
-                v-model:numberOfChildren="numberOfChildren"
-                v-model:childrenAges="childrenAges"
-                v-model:isSingleParent="isSingleParent"
-                :shouldShowField="shouldShowField"
-              />
+                <household-information-form
+                  v-if="section === 'householdInfo'"
+                  v-model:householdSize="householdSize"
+                  v-model:numberOfChildren="numberOfChildren"
+                  v-model:childrenAges="childrenAges"
+                  v-model:isSingleParent="isSingleParent"
+                  :shouldShowField="shouldShowField"
+                />
 
-              <EducationEmploymentForm
-                v-if="educationEmploymentRequiredFields"
-                v-model:employmentStatus="employmentStatus"
-                v-model:educationLevel="educationLevel"
-                v-model:isStudent="isStudent"
-                :shouldShowField="shouldShowField"
-              />
+                <education-employment-form
+                  v-if="section === 'educationEmployment'"
+                  v-model:employmentStatus="employmentStatus"
+                  v-model:educationLevel="educationLevel"
+                  v-model:isStudent="isStudent"
+                  :shouldShowField="shouldShowField"
+                />
 
-              <SpecialCircumstancesForm
-                v-if="specialCircumstancesRequiredFields"
-                v-model:hasDisability="hasDisability"
-                v-model:disabilityDegree="disabilityDegree"
-                v-model:isPregnant="isPregnant"
-                v-model:hasCareNeeds="hasCareNeeds"
-                v-model:pensionEligible="pensionEligible"
-                v-model:citizenBenefitLast3Years="citizenBenefitLast3Years"
-                v-model:hasFinancialHardship="hasFinancialHardship"
-                v-model:workAbility="workAbility"
-                :shouldShowField="shouldShowField"
-              />
+                <special-circumstances-form
+                  v-if="section === 'specialCircumstances'"
+                  v-model:hasDisability="hasDisability"
+                  v-model:disabilityDegree="disabilityDegree"
+                  v-model:isPregnant="isPregnant"
+                  v-model:hasCareNeeds="hasCareNeeds"
+                  v-model:pensionEligible="pensionEligible"
+                  v-model:citizenBenefitLast3Years="citizenBenefitLast3Years"
+                  v-model:hasFinancialHardship="hasFinancialHardship"
+                  v-model:workAbility="workAbility"
+                  :shouldShowField="shouldShowField"
+                />
 
-              <InsuranceBenefitsForm
-                v-if="insuranceBenefitsRequiredFields"
-                v-model:healthInsurance="healthInsurance"
-                v-model:hasCareInsurance="hasCareInsurance"
-                v-model:receivesUnemploymentBenefit1="receivesUnemploymentBenefit1"
-                v-model:receivesUnemploymentBenefit2="receivesUnemploymentBenefit2"
-                v-model:receivesPension="receivesPension"
-                v-model:receivesChildBenefit="receivesChildBenefit"
-                v-model:receivesHousingBenefit="receivesHousingBenefit"
-                v-model:receivesStudentAid="receivesStudentAid"
-                :shouldShowField="shouldShowField"
-              />
+                <insurance-benefits-form
+                  v-if="section === 'insuranceBenefits'"
+                  v-model:healthInsurance="healthInsurance"
+                  v-model:hasCareInsurance="hasCareInsurance"
+                  v-model:receivesUnemploymentBenefit1="
+                    receivesUnemploymentBenefit1
+                  "
+                  v-model:receivesUnemploymentBenefit2="
+                    receivesUnemploymentBenefit2
+                  "
+                  v-model:receivesPension="receivesPension"
+                  v-model:receivesChildBenefit="receivesChildBenefit"
+                  v-model:receivesHousingBenefit="receivesHousingBenefit"
+                  v-model:receivesStudentAid="receivesStudentAid"
+                  :shouldShowField="shouldShowField"
+                />
+              </template>
 
               <div class="button-group">
                 <muc-button
@@ -124,45 +124,112 @@
 
           <!-- Right Column: Results -->
           <div class="right-column">
-            
             <!-- Solid Pod Integration Hub -->
-            <div class="solid-sidebar-section" style="margin-bottom: 24px; padding: 24px; background: var(--mde-color-neutral-beau-blue-x-light); border-radius: 4px;">
-                <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: var(--mde-color-neutral-grey-dark);">Solid Pod</h2>
-                
-                <div v-if="!isSolidConnected">
-                  <div class="m-form-group" style="margin-bottom: 16px;">
-                      <label class="m-label">Provider URL</label>
-                      <input v-model="solidIssuer" type="text" class="m-textfield" placeholder="https://solidcommunity.net" style="width: 100%;" />
+            <div
+              class="solid-sidebar-section"
+              style="
+                margin-bottom: 24px;
+                padding: 24px;
+                background: var(--mde-color-neutral-beau-blue-x-light);
+                border-radius: 4px;
+              "
+            >
+              <h2
+                style="
+                  font-size: 1.25rem;
+                  font-weight: 700;
+                  margin-bottom: 16px;
+                  color: var(--mde-color-neutral-grey-dark);
+                "
+              >
+                Solid Pod
+              </h2>
+
+              <div v-if="!isSolidConnected">
+                <div
+                  class="m-form-group"
+                  style="margin-bottom: 16px"
+                >
+                  <label class="m-label">Provider URL</label>
+                  <input
+                    v-model="solidIssuer"
+                    type="text"
+                    class="m-textfield"
+                    placeholder="https://solidcommunity.net"
+                    style="width: 100%"
+                  />
+                </div>
+                <muc-button
+                  @click="connectToSolid"
+                  :disabled="solidLoading"
+                  icon="login"
+                  style="width: 100%"
+                >
+                  Anmelden
+                </muc-button>
+              </div>
+
+              <div
+                v-else
+                style="display: flex; flex-direction: column; gap: 12px"
+              >
+                <div
+                  style="
+                    font-size: 0.85em;
+                    color: var(--mde-color-neutral-grey-dark);
+                    background: rgba(255, 255, 255, 0.5);
+                    padding: 8px;
+                    border-radius: 4px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 8px;
+                  "
+                >
+                  <div style="word-break: break-all">
+                    <span style="font-weight: 600">Verbunden als:</span><br />
+                    {{ solidWebId }}
                   </div>
-                  <muc-button @click="connectToSolid" :disabled="solidLoading" icon="login" style="width: 100%;">
-                      Anmelden
+                  <muc-button
+                    variant="ghost"
+                    @click="disconnectSolid"
+                    :loading="solidLoading"
+                    icon="logout"
+                    size="small"
+                    style="flex-shrink: 0"
+                  >
+                    Abmelden
                   </muc-button>
                 </div>
-                
-                <div v-else style="display: flex; flex-direction: column; gap: 12px;">
-                    <div style="font-size: 0.85em; color: var(--mde-color-neutral-grey-dark); background: rgba(255,255,255,0.5); padding: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-                         <div style="word-break: break-all;">
-                            <span style="font-weight: 600;">Verbunden als:</span><br/>
-                            {{ solidWebId }}
-                         </div>
-                         <muc-button variant="ghost" @click="disconnectSolid" :loading="solidLoading" icon="logout" size="small" style="flex-shrink: 0;">
-                            Abmelden
-                         </muc-button>
-                    </div>
-                    
-                    <div style="display: flex; gap: 8px;">
-                         <muc-button variant="secondary" @click="loadFromPod" :loading="solidLoading" icon="download" style="flex: 1;">
-                            Laden
-                         </muc-button>
-                         <muc-button variant="primary" @click="saveToPod" :loading="solidLoading" icon="upload" style="flex: 1;">
-                            Speichern
-                         </muc-button>
-                    </div>
+
+                <div style="display: flex; gap: 8px">
+                  <muc-button
+                    variant="secondary"
+                    @click="loadFromPod"
+                    :loading="solidLoading"
+                    icon="download"
+                    style="flex: 1"
+                  >
+                    Laden
+                  </muc-button>
+                  <muc-button
+                    variant="primary"
+                    @click="saveToPod"
+                    :loading="solidLoading"
+                    icon="upload"
+                    style="flex: 1"
+                  >
+                    Speichern
+                  </muc-button>
                 </div>
+              </div>
             </div>
 
             <div
-              v-if="eligibilityResults.length > 0 || allEligibilityResults.length > 0"
+              v-if="
+                eligibilityResults.length > 0 ||
+                allEligibilityResults.length > 0
+              "
               class="eligibility-results"
             >
               <div class="eligibility-header">
@@ -171,8 +238,8 @@
                     Mögliche Leistungen ({{ eligibilityResults.length }})
                   </h2>
                   <p class="eligibility-subtitle">
-                    Basierend auf Ihren Angaben könnten folgende Leistungen für Sie
-                    in Frage kommen:
+                    Basierend auf Ihren Angaben könnten folgende Leistungen für
+                    Sie in Frage kommen:
                   </p>
                 </div>
                 <muc-button
@@ -181,21 +248,35 @@
                   @click="showAllResults = !showAllResults"
                   class="toggle-all-button"
                 >
-                  {{ showAllResults ? 'Nur berechtigte anzeigen' : 'Alle Leistungen anzeigen' }}
+                  {{
+                    showAllResults
+                      ? "Nur berechtigte anzeigen"
+                      : "Alle Leistungen anzeigen"
+                  }}
                 </muc-button>
               </div>
-              
+
               <div
-                v-for="result in (showAllResults ? allEligibilityResults : eligibilityResults)"
+                v-for="result in showAllResults
+                  ? allEligibilityResults
+                  : eligibilityResults"
                 :key="result.subsidyName"
-                :class="['eligibility-card', { 'not-eligible': !result.eligible }]"
+                :class="[
+                  'eligibility-card',
+                  { 'not-eligible': !result.eligible },
+                ]"
               >
                 <div class="eligibility-card-header">
                   <h3 class="eligibility-card-title">
                     {{ result.subsidyName }}
                   </h3>
-                  <span :class="['eligibility-badge', result.eligible ? 'eligible' : 'not-eligible']">
-                    {{ result.eligible ? 'Berechtigt' : 'Nicht berechtigt' }}
+                  <span
+                    :class="[
+                      'eligibility-badge',
+                      result.eligible ? 'eligible' : 'not-eligible',
+                    ]"
+                  >
+                    {{ result.eligible ? "Berechtigt" : "Nicht berechtigt" }}
                   </span>
                 </div>
                 <p
@@ -231,8 +312,8 @@
                 <template #header> Keine Daten zur Prüfung vorhanden</template>
                 <template #content>
                   <p>
-                    Bitte füllen Sie das Formular aus und klicken Sie auf "Speichern",
-                    um Ihre Berechtigung zu prüfen.
+                    Bitte füllen Sie das Formular aus und klicken Sie auf
+                    "Speichern", um Ihre Berechtigung zu prüfen.
                   </p>
                 </template>
               </muc-callout>
@@ -245,6 +326,21 @@
 </template>
 
 <script setup lang="ts">
+import type {
+  EligibilityResult,
+  FormData,
+  FormDataField,
+} from "@/types/EligibilityCheckInterface";
+
+import { getFile, overwriteFile } from "@inrupt/solid-client";
+// Solid Imports
+import {
+  getDefaultSession,
+  handleIncomingRedirect,
+  login,
+  logout,
+  fetch as solidFetch,
+} from "@inrupt/solid-client-authn-browser";
 import {
   MucBanner,
   MucButton,
@@ -253,35 +349,17 @@ import {
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref, computed, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
-import { EligibilityCheckRegistry } from "@/eligibility/EligibilityCheckRegistry";
-import type {
-  EligibilityResult,
-  FormData,
-  FormDataField,
-} from "@/types/EligibilityCheckInterface";
-
-// Import form components
-import PersonalInformationForm from "@/components/forms/personal-information-form.vue";
+import EducationEmploymentForm from "@/components/forms/education-employment-form.vue";
 import FinancialInformationForm from "@/components/forms/financial-information-form.vue";
 import HouseholdInformationForm from "@/components/forms/household-information-form.vue";
-import EducationEmploymentForm from "@/components/forms/education-employment-form.vue";
-import SpecialCircumstancesForm from "@/components/forms/special-circumstances-form.vue";
 import InsuranceBenefitsForm from "@/components/forms/insurance-benefits-form.vue";
+// Import form components
+import PersonalInformationForm from "@/components/forms/personal-information-form.vue";
+import SpecialCircumstancesForm from "@/components/forms/special-circumstances-form.vue";
+import { EligibilityCheckRegistry } from "@/eligibility/EligibilityCheckRegistry";
 
-// Solid Imports
-import { 
-  login, 
-  handleIncomingRedirect, 
-  getDefaultSession,
-  fetch as solidFetch,
-  logout
-} from "@inrupt/solid-client-authn-browser";
-import { 
-  getFile, 
-  overwriteFile 
-} from "@inrupt/solid-client";
 const LOCALSTORAGE_KEY_FORMDATA = "user.formData";
 const SOLID_DATA_FILE = "private/personalization/eligibility-data.json";
 
@@ -298,7 +376,7 @@ async function connectToSolid() {
     await login({
       oidcIssuer: solidIssuer.value,
       redirectUrl: window.location.href,
-      clientName: "Solid Data Manager"
+      clientName: "Solid Data Manager",
     });
   } catch (err) {
     showMessage("Fehler bei der Solid-Anmeldung: " + err, "emergency");
@@ -329,10 +407,10 @@ function getPodRoot(webId: string): string {
 
 async function saveToPod() {
   if (!solidWebId.value) return;
-  
+
   solidLoading.value = true;
   try {
-     const formData: FormData = {
+    const formData: FormData = {
       // Personal Information
       firstName: firstName.value,
       lastName: lastName.value,
@@ -343,23 +421,23 @@ async function saveToPod() {
       nationality: nationality.value,
       residenceStatus: residenceStatus.value,
       residenceInGermany: residenceInGermany.value,
-      
+
       // Financial Information
       grossMonthlyIncome: grossMonthlyIncome.value,
       netMonthlyIncome: netMonthlyIncome.value,
       assets: assets.value,
       monthlyRent: monthlyRent.value,
-      
+
       // Household Information
       householdSize: householdSize.value,
       numberOfChildren: numberOfChildren.value,
       childrenAges: childrenAges.value,
-      
+
       // Education & Employment
       employmentStatus: employmentStatus.value,
       educationLevel: educationLevel.value,
       isStudent: isStudent.value,
-      
+
       // Special Circumstances
       hasDisability: hasDisability.value,
       disabilityDegree: disabilityDegree.value,
@@ -373,7 +451,7 @@ async function saveToPod() {
       citizenBenefitLast3Years: citizenBenefitLast3Years.value,
       hasFinancialHardship: hasFinancialHardship.value,
       workAbility: workAbility.value,
-      
+
       // Insurance & Benefits
       healthInsurance: healthInsurance.value,
       hasCareInsurance: hasCareInsurance.value,
@@ -384,14 +462,15 @@ async function saveToPod() {
 
     const podRoot = getPodRoot(solidWebId.value);
     const fileUrl = `${podRoot}${SOLID_DATA_FILE}`;
-    
-    const blob = new Blob([JSON.stringify(formData, null, 2)], { type: "application/json" });
-    
+
+    const blob = new Blob([JSON.stringify(formData, null, 2)], {
+      type: "application/json",
+    });
+
     await overwriteFile(fileUrl, blob, { fetch: solidFetch });
-    
+
     showMessage("Daten erfolgreich im Solid Pod gespeichert!", "success");
   } catch (err) {
-    console.error(err);
     showMessage("Fehler beim Speichern im Pod: " + err, "emergency");
   } finally {
     solidLoading.value = false;
@@ -410,75 +489,82 @@ async function loadFromPod() {
     const text = await file.text();
     const formData: FormData = JSON.parse(text);
 
-     // map to refs
-      // Personal Information
-      firstName.value = formData.firstName;
-      lastName.value = formData.lastName;
-      dateOfBirth.value = formData.dateOfBirth;
-      age.value = formData.age;
-      gender.value = formData.gender;
-      maritalStatus.value = formData.maritalStatus;
-      nationality.value = formData.nationality;
-      residenceStatus.value = formData.residenceStatus;
-      residenceInGermany.value = formData.residenceInGermany;
-      
-      // Financial Information
-      grossMonthlyIncome.value = formData.grossMonthlyIncome;
-      netMonthlyIncome.value = formData.netMonthlyIncome;
-      assets.value = formData.assets;
-      monthlyRent.value = formData.monthlyRent;
-      
-      // Household Information
-      householdSize.value = formData.householdSize;
-      numberOfChildren.value = formData.numberOfChildren;
-      childrenAges.value = formData.childrenAges;
-      
-      // Education & Employment
-      employmentStatus.value = formData.employmentStatus;
-      educationLevel.value = formData.educationLevel;
-      isStudent.value = formData.isStudent;
-      
-      // Special Circumstances
-      hasDisability.value = formData.hasDisability;
-      disabilityDegree.value = formData.disabilityDegree;
-      receivesUnemploymentBenefit1.value = formData.receivesUnemploymentBenefit1;
-      receivesUnemploymentBenefit2.value = formData.receivesUnemploymentBenefit2;
-      receivesPension.value = formData.receivesPension;
-      pensionEligible.value = formData.pensionEligible;
-      isPregnant.value = formData.isPregnant;
-      isSingleParent.value = formData.isSingleParent;
-      hasCareNeeds.value = formData.hasCareNeeds;
-      citizenBenefitLast3Years.value = formData.citizenBenefitLast3Years;
-      hasFinancialHardship.value = formData.hasFinancialHardship;
-      workAbility.value = formData.workAbility;
-      
-      // Insurance & Benefits
-      healthInsurance.value = formData.healthInsurance;
-      hasCareInsurance.value = formData.hasCareInsurance;
-      receivesChildBenefit.value = formData.receivesChildBenefit;
-      receivesHousingBenefit.value = formData.receivesHousingBenefit;
-      receivesStudentAid.value = formData.receivesStudentAid;
+    // map to refs
+    // Personal Information
+    firstName.value = formData.firstName;
+    lastName.value = formData.lastName;
+    dateOfBirth.value = formData.dateOfBirth;
+    age.value = formData.age;
+    gender.value = formData.gender;
+    maritalStatus.value = formData.maritalStatus;
+    nationality.value = formData.nationality;
+    residenceStatus.value = formData.residenceStatus;
+    residenceInGermany.value = formData.residenceInGermany;
+
+    // Financial Information
+    grossMonthlyIncome.value = formData.grossMonthlyIncome;
+    netMonthlyIncome.value = formData.netMonthlyIncome;
+    assets.value = formData.assets;
+    monthlyRent.value = formData.monthlyRent;
+
+    // Household Information
+    householdSize.value = formData.householdSize;
+    numberOfChildren.value = formData.numberOfChildren;
+    childrenAges.value = formData.childrenAges;
+
+    // Education & Employment
+    employmentStatus.value = formData.employmentStatus;
+    educationLevel.value = formData.educationLevel;
+    isStudent.value = formData.isStudent;
+
+    // Special Circumstances
+    hasDisability.value = formData.hasDisability;
+    disabilityDegree.value = formData.disabilityDegree;
+    receivesUnemploymentBenefit1.value = formData.receivesUnemploymentBenefit1;
+    receivesUnemploymentBenefit2.value = formData.receivesUnemploymentBenefit2;
+    receivesPension.value = formData.receivesPension;
+    pensionEligible.value = formData.pensionEligible;
+    isPregnant.value = formData.isPregnant;
+    isSingleParent.value = formData.isSingleParent;
+    hasCareNeeds.value = formData.hasCareNeeds;
+    citizenBenefitLast3Years.value = formData.citizenBenefitLast3Years;
+    hasFinancialHardship.value = formData.hasFinancialHardship;
+    workAbility.value = formData.workAbility;
+
+    // Insurance & Benefits
+    healthInsurance.value = formData.healthInsurance;
+    hasCareInsurance.value = formData.hasCareInsurance;
+    receivesChildBenefit.value = formData.receivesChildBenefit;
+    receivesHousingBenefit.value = formData.receivesHousingBenefit;
+    receivesStudentAid.value = formData.receivesStudentAid;
 
     showMessage("Daten erfolgreich aus dem Solid Pod geladen!", "success");
     checkEligibility();
-
   } catch (err) {
-    console.error(err);
-    showMessage("Fehler beim Laden aus dem Pod (Existiert die Datei?): " + err, "warning");
+    showMessage(
+      "Fehler beim Laden aus dem Pod (Existiert die Datei?): " + err,
+      "warning"
+    );
   } finally {
     solidLoading.value = false;
   }
 }
- 
+
 // Personal Information
 const firstName = ref<string | undefined>(undefined);
 const lastName = ref<string | undefined>(undefined);
 const dateOfBirth = ref<string | undefined>(undefined);
 const age = ref<number | undefined>(undefined);
-const gender = ref<'männlich' | 'weiblich' | 'divers' | 'keine Angabe' | undefined>(undefined);
-const maritalStatus = ref<'ledig' | 'verheiratet' | 'geschieden' | 'verwitwet' | 'getrennt' | undefined>(undefined);
-const nationality = ref<'Deutsch' | 'EU' | 'Nicht-EU' | undefined>(undefined);
-const residenceStatus = ref<'Aufenthaltserlaubnis' | 'Niederlassungserlaubnis' | 'Keine' | undefined>(undefined);
+const gender = ref<
+  "männlich" | "weiblich" | "divers" | "keine Angabe" | undefined
+>(undefined);
+const maritalStatus = ref<
+  "ledig" | "verheiratet" | "geschieden" | "verwitwet" | "getrennt" | undefined
+>(undefined);
+const nationality = ref<"Deutsch" | "EU" | "Nicht-EU" | undefined>(undefined);
+const residenceStatus = ref<
+  "Aufenthaltserlaubnis" | "Niederlassungserlaubnis" | "Keine" | undefined
+>(undefined);
 const residenceInGermany = ref<boolean | undefined>(undefined);
 
 // Financial Information
@@ -493,8 +579,24 @@ const numberOfChildren = ref<number | undefined>(undefined);
 const childrenAges = ref<number[] | undefined>(undefined);
 
 // Education & Employment
-const employmentStatus = ref<'angestellt' | 'selbststaendig' | 'arbeitslos' | 'student' | 'rentner' | 'sonstiges' | undefined>(undefined);
-const educationLevel = ref<'kein_abschluss' | 'hauptschule' | 'realschule' | 'abitur' | 'ausbildung' | 'studium' | undefined>(undefined);
+const employmentStatus = ref<
+  | "angestellt"
+  | "selbststaendig"
+  | "arbeitslos"
+  | "student"
+  | "rentner"
+  | "sonstiges"
+  | undefined
+>(undefined);
+const educationLevel = ref<
+  | "kein_abschluss"
+  | "hauptschule"
+  | "realschule"
+  | "abitur"
+  | "ausbildung"
+  | "studium"
+  | undefined
+>(undefined);
 const isStudent = ref<boolean | undefined>(undefined);
 
 // Special Circumstances
@@ -509,164 +611,127 @@ const isSingleParent = ref<boolean | undefined>(undefined);
 const hasCareNeeds = ref<boolean | undefined>(undefined);
 const citizenBenefitLast3Years = ref<boolean | undefined>(undefined);
 const hasFinancialHardship = ref<boolean | undefined>(undefined);
-const workAbility = ref<'voll' | 'eingeschraenkt' | 'keine' | undefined>(undefined);
+const workAbility = ref<"voll" | "eingeschraenkt" | "keine" | undefined>(
+  undefined
+);
 
 // Insurance & Benefits
-const healthInsurance = ref<'gesetzlich' | 'privat' | 'keine' | undefined>(undefined);
+const healthInsurance = ref<"gesetzlich" | "privat" | "keine" | undefined>(
+  undefined
+);
 const hasCareInsurance = ref<boolean | undefined>(undefined);
 const receivesChildBenefit = ref<boolean | undefined>(undefined);
 const receivesHousingBenefit = ref<boolean | undefined>(undefined);
 const receivesStudentAid = ref<boolean | undefined>(undefined);
 
 const message = ref("");
-const messageType = ref<"success" | "info" | "warning" | "emergency">("success");
+const messageType = ref<"success" | "info" | "warning" | "emergency">(
+  "success"
+);
 const eligibilityResults = ref<EligibilityResult[]>([]);
 const allEligibilityResults = ref<EligibilityResult[]>([]);
-const missingFields = ref<FormDataField[]>([]);
+const visibleFields = ref<FormDataField[]>([]);
 const showAllResults = ref(false);
 
 const eligibilityRegistry = new EligibilityCheckRegistry();
 
-// Define which fields belong to each form group
-const personalInfoFields: FormDataField[] = [
-  'firstName', 'lastName', 'age', 'dateOfBirth', 'gender', 'maritalStatus', 
-  'nationality', 'residenceStatus', 'residenceInGermany'
-];
+// Get current form data as a computed value
+const currentFormData = computed(
+  (): FormData => ({
+    // Personal Information
+    firstName: firstName.value,
+    lastName: lastName.value,
+    dateOfBirth: dateOfBirth.value,
+    age: calculatedAge.value,
+    gender: gender.value,
+    maritalStatus: maritalStatus.value,
+    nationality: nationality.value,
+    residenceStatus: residenceStatus.value,
+    residenceInGermany: residenceInGermany.value,
+    // Financial Information
+    grossMonthlyIncome: grossMonthlyIncome.value,
+    netMonthlyIncome: netMonthlyIncome.value,
+    assets: assets.value,
+    monthlyRent: monthlyRent.value,
+    // Household Information
+    householdSize: householdSize.value,
+    numberOfChildren: numberOfChildren.value,
+    childrenAges: childrenAges.value,
+    isSingleParent: isSingleParent.value,
+    // Education & Employment
+    employmentStatus: employmentStatus.value,
+    educationLevel: educationLevel.value,
+    isStudent: isStudent.value,
+    // Special Circumstances
+    hasDisability: hasDisability.value,
+    disabilityDegree: disabilityDegree.value,
+    receivesUnemploymentBenefit1: receivesUnemploymentBenefit1.value,
+    receivesUnemploymentBenefit2: receivesUnemploymentBenefit2.value,
+    receivesPension: receivesPension.value,
+    pensionEligible: pensionEligible.value,
+    isPregnant: isPregnant.value,
+    hasCareNeeds: hasCareNeeds.value,
+    citizenBenefitLast3Years: citizenBenefitLast3Years.value,
+    hasFinancialHardship: hasFinancialHardship.value,
+    workAbility: workAbility.value,
+    // Insurance & Benefits
+    healthInsurance: healthInsurance.value,
+    hasCareInsurance: hasCareInsurance.value,
+    receivesChildBenefit: receivesChildBenefit.value,
+    receivesHousingBenefit: receivesHousingBenefit.value,
+    receivesStudentAid: receivesStudentAid.value,
+  })
+);
 
-const financialInfoFields: FormDataField[] = [
-  'grossMonthlyIncome', 'netMonthlyIncome', 'assets', 'monthlyRent'
-];
-
-const householdInfoFields: FormDataField[] = [
-  'householdSize', 'numberOfChildren', 'childrenAges', 'isSingleParent'
-];
-
-const educationEmploymentFields: FormDataField[] = [
-  'employmentStatus', 'educationLevel', 'isStudent'
-];
-
-const specialCircumstancesFields: FormDataField[] = [
-  'hasDisability', 'disabilityDegree', 'isPregnant', 'hasCareNeeds', 
-  'pensionEligible', 'citizenBenefitLast3Years', 'hasFinancialHardship', 'workAbility'
-];
-
-const insuranceBenefitsFields: FormDataField[] = [
-  'healthInsurance', 'hasCareInsurance', 'receivesUnemploymentBenefit1', 
-  'receivesUnemploymentBenefit2', 'receivesPension', 'receivesChildBenefit', 
-  'receivesHousingBenefit', 'receivesStudentAid'
-];
-
-// Helper function to get the value of a field by name
-const getFieldValue = (fieldName: FormDataField): any => {
-  switch (fieldName) {
-    case 'firstName': return firstName.value;
-    case 'lastName': return lastName.value;
-    case 'dateOfBirth': return dateOfBirth.value;
-    case 'age': return calculatedAge.value;
-    case 'gender': return gender.value;
-    case 'maritalStatus': return maritalStatus.value;
-    case 'nationality': return nationality.value;
-    case 'residenceStatus': return residenceStatus.value;
-    case 'residenceInGermany': return residenceInGermany.value;
-    case 'grossMonthlyIncome': return grossMonthlyIncome.value;
-    case 'netMonthlyIncome': return netMonthlyIncome.value;
-    case 'assets': return assets.value;
-    case 'monthlyRent': return monthlyRent.value;
-    case 'householdSize': return householdSize.value;
-    case 'numberOfChildren': return numberOfChildren.value;
-    case 'childrenAges': return childrenAges.value;
-    case 'isSingleParent': return isSingleParent.value;
-    case 'employmentStatus': return employmentStatus.value;
-    case 'educationLevel': return educationLevel.value;
-    case 'isStudent': return isStudent.value;
-    case 'hasDisability': return hasDisability.value;
-    case 'disabilityDegree': return disabilityDegree.value;
-    case 'receivesUnemploymentBenefit1': return receivesUnemploymentBenefit1.value;
-    case 'receivesUnemploymentBenefit2': return receivesUnemploymentBenefit2.value;
-    case 'receivesPension': return receivesPension.value;
-    case 'pensionEligible': return pensionEligible.value;
-    case 'isPregnant': return isPregnant.value;
-    case 'hasCareNeeds': return hasCareNeeds.value;
-    case 'citizenBenefitLast3Years': return citizenBenefitLast3Years.value;
-    case 'hasFinancialHardship': return hasFinancialHardship.value;
-    case 'workAbility': return workAbility.value;
-    case 'healthInsurance': return healthInsurance.value;
-    case 'hasCareInsurance': return hasCareInsurance.value;
-    case 'receivesChildBenefit': return receivesChildBenefit.value;
-    case 'receivesHousingBenefit': return receivesHousingBenefit.value;
-    case 'receivesStudentAid': return receivesStudentAid.value;
-    default: return undefined;
-  }
-};
-
-// Helper function to check if all missing fields from a section are filled
-const areAllMissingFieldsFilled = (sectionFields: FormDataField[]): boolean => {
-  // Get only the fields from this section that are in missingFields
-  const missingFieldsInSection = sectionFields.filter(field => 
-    missingFields.value.includes(field)
-  );
-  
-  // If there are no missing fields in this section, consider it complete
-  if (missingFieldsInSection.length === 0) {
-    return true;
-  }
-  
-  // Check if ALL missing fields in this section are now filled (not undefined)
-  return missingFieldsInSection.every(field => getFieldValue(field) !== undefined);
-};
-
-// Define which fields are required to show each form group
-// Show the next section only if ALL missing fields from the previous section are filled
-const personalInfoRequiredFields = computed(() => {
-  // Always show personal information group first
-  return true;
-});
-
-const financialInfoRequiredFields = computed(() => {
-  // Show if all missing fields from personal info section are filled
-  return areAllMissingFieldsFilled(personalInfoFields);
-});
-
-const householdInfoRequiredFields = computed(() => {
-  // Show if all missing fields from financial info section are filled
-  return areAllMissingFieldsFilled(financialInfoFields);
-});
-
-const educationEmploymentRequiredFields = computed(() => {
-  // Show if all missing fields from household info section are filled
-  return areAllMissingFieldsFilled(householdInfoFields);
-});
-
-const specialCircumstancesRequiredFields = computed(() => {
-  // Show if all missing fields from education/employment section are filled
-  return areAllMissingFieldsFilled(educationEmploymentFields);
-});
-
-const insuranceBenefitsRequiredFields = computed(() => {
-  // Show if all missing fields from special circumstances section are filled
-  return areAllMissingFieldsFilled(specialCircumstancesFields);
-});
+// Get visible sections from the registry
+const visibleSections = computed(() =>
+  eligibilityRegistry.getVisibleSections(currentFormData.value)
+);
 
 // Watch all form fields and automatically check eligibility when they change
 watch(
   [
     // Personal Information
-    firstName, lastName, dateOfBirth, gender, maritalStatus, nationality, 
-    residenceStatus, residenceInGermany,
+    firstName,
+    lastName,
+    dateOfBirth,
+    gender,
+    maritalStatus,
+    nationality,
+    residenceStatus,
+    residenceInGermany,
     // Financial Information
-    grossMonthlyIncome, netMonthlyIncome, assets, monthlyRent,
+    grossMonthlyIncome,
+    netMonthlyIncome,
+    assets,
+    monthlyRent,
     // Household Information
-    householdSize, numberOfChildren, childrenAges,
+    householdSize,
+    numberOfChildren,
+    childrenAges,
     // Education & Employment
-    employmentStatus, educationLevel, isStudent,
+    employmentStatus,
+    educationLevel,
+    isStudent,
     // Special Circumstances
-    hasDisability, disabilityDegree, receivesUnemploymentBenefit1, 
-    receivesUnemploymentBenefit2, receivesPension, pensionEligible, 
-    isPregnant, isSingleParent, hasCareNeeds, citizenBenefitLast3Years, 
-    hasFinancialHardship, workAbility,
+    hasDisability,
+    disabilityDegree,
+    receivesUnemploymentBenefit1,
+    receivesUnemploymentBenefit2,
+    receivesPension,
+    pensionEligible,
+    isPregnant,
+    isSingleParent,
+    hasCareNeeds,
+    citizenBenefitLast3Years,
+    hasFinancialHardship,
+    workAbility,
     // Insurance & Benefits
-    healthInsurance, hasCareInsurance, receivesChildBenefit, 
-    receivesHousingBenefit, receivesStudentAid
+    healthInsurance,
+    hasCareInsurance,
+    receivesChildBenefit,
+    receivesHousingBenefit,
+    receivesStudentAid,
   ],
   () => {
     checkEligibility();
@@ -677,18 +742,21 @@ watch(
 // Helper function to calculate age from birth date
 function calculateAge(birthDateString: string | undefined): number | undefined {
   if (!birthDateString) return undefined;
-  
+
   const birthDate = new Date(birthDateString);
   const today = new Date();
-  
+
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
-  
+
   // If birthday hasn't occurred this year yet, subtract 1
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && today.getDate() < birthDate.getDate())
+  ) {
     age--;
   }
-  
+
   return age;
 }
 
@@ -697,21 +765,20 @@ const calculatedAge = computed(() => calculateAge(dateOfBirth.value));
 
 // Helper function to check if a field should be shown
 const shouldShowField = (fieldName: FormDataField): boolean => {
-  return missingFields.value.includes(fieldName);
+  return visibleFields.value.includes(fieldName);
 };
 
 onMounted(async () => {
   // Handle Solid Redirect
   try {
     await handleIncomingRedirect({
-      restorePreviousSession: true
+      restorePreviousSession: true,
     });
     isSolidConnected.value = solidSession.info.isLoggedIn;
     solidWebId.value = solidSession.info.webId;
   } catch (err) {
     console.error("Solid Redirect handling error:", err);
   }
-
 
   loadData();
 });
@@ -729,23 +796,23 @@ function saveData() {
       nationality: nationality.value,
       residenceStatus: residenceStatus.value,
       residenceInGermany: residenceInGermany.value,
-      
+
       // Financial Information
       grossMonthlyIncome: grossMonthlyIncome.value,
       netMonthlyIncome: netMonthlyIncome.value,
       assets: assets.value,
       monthlyRent: monthlyRent.value,
-      
+
       // Household Information
       householdSize: householdSize.value,
       numberOfChildren: numberOfChildren.value,
       childrenAges: childrenAges.value,
-      
+
       // Education & Employment
       employmentStatus: employmentStatus.value,
       educationLevel: educationLevel.value,
       isStudent: isStudent.value,
-      
+
       // Special Circumstances
       hasDisability: hasDisability.value,
       disabilityDegree: disabilityDegree.value,
@@ -759,7 +826,7 @@ function saveData() {
       citizenBenefitLast3Years: citizenBenefitLast3Years.value,
       hasFinancialHardship: hasFinancialHardship.value,
       workAbility: workAbility.value,
-      
+
       // Insurance & Benefits
       healthInsurance: healthInsurance.value,
       hasCareInsurance: hasCareInsurance.value,
@@ -767,7 +834,7 @@ function saveData() {
       receivesHousingBenefit: receivesHousingBenefit.value,
       receivesStudentAid: receivesStudentAid.value,
     };
-    
+
     localStorage.setItem(LOCALSTORAGE_KEY_FORMDATA, JSON.stringify(formData));
     showMessage("Daten wurden erfolgreich gespeichert!", "success");
     checkEligibility();
@@ -776,14 +843,13 @@ function saveData() {
   }
 }
 
-
 function loadData() {
   try {
     const savedData = localStorage.getItem(LOCALSTORAGE_KEY_FORMDATA);
-    
+
     if (savedData) {
       const formData: FormData = JSON.parse(savedData);
-      
+
       // Personal Information
       firstName.value = formData.firstName;
       lastName.value = formData.lastName;
@@ -794,28 +860,30 @@ function loadData() {
       nationality.value = formData.nationality;
       residenceStatus.value = formData.residenceStatus;
       residenceInGermany.value = formData.residenceInGermany;
-      
+
       // Financial Information
       grossMonthlyIncome.value = formData.grossMonthlyIncome;
       netMonthlyIncome.value = formData.netMonthlyIncome;
       assets.value = formData.assets;
       monthlyRent.value = formData.monthlyRent;
-      
+
       // Household Information
       householdSize.value = formData.householdSize;
       numberOfChildren.value = formData.numberOfChildren;
       childrenAges.value = formData.childrenAges;
-      
+
       // Education & Employment
       employmentStatus.value = formData.employmentStatus;
       educationLevel.value = formData.educationLevel;
       isStudent.value = formData.isStudent;
-      
+
       // Special Circumstances
       hasDisability.value = formData.hasDisability;
       disabilityDegree.value = formData.disabilityDegree;
-      receivesUnemploymentBenefit1.value = formData.receivesUnemploymentBenefit1;
-      receivesUnemploymentBenefit2.value = formData.receivesUnemploymentBenefit2;
+      receivesUnemploymentBenefit1.value =
+        formData.receivesUnemploymentBenefit1;
+      receivesUnemploymentBenefit2.value =
+        formData.receivesUnemploymentBenefit2;
       receivesPension.value = formData.receivesPension;
       pensionEligible.value = formData.pensionEligible;
       isPregnant.value = formData.isPregnant;
@@ -824,14 +892,14 @@ function loadData() {
       citizenBenefitLast3Years.value = formData.citizenBenefitLast3Years;
       hasFinancialHardship.value = formData.hasFinancialHardship;
       workAbility.value = formData.workAbility;
-      
+
       // Insurance & Benefits
       healthInsurance.value = formData.healthInsurance;
       hasCareInsurance.value = formData.hasCareInsurance;
       receivesChildBenefit.value = formData.receivesChildBenefit;
       receivesHousingBenefit.value = formData.receivesHousingBenefit;
       receivesStudentAid.value = formData.receivesStudentAid;
-      
+
       showMessage("Daten wurden aus dem localStorage geladen", "success");
       checkEligibility();
     } else {
@@ -845,10 +913,7 @@ function loadData() {
 function clearData() {
   try {
     localStorage.removeItem(LOCALSTORAGE_KEY_FORMDATA);
-    
-    // Reset the permanently missing fields tracking
-    eligibilityRegistry.resetMissingFieldsTracking();
-    
+
     // Personal Information
     firstName.value = undefined;
     lastName.value = undefined;
@@ -859,23 +924,23 @@ function clearData() {
     nationality.value = undefined;
     residenceStatus.value = undefined;
     residenceInGermany.value = undefined;
-    
+
     // Financial Information
     grossMonthlyIncome.value = undefined;
     netMonthlyIncome.value = undefined;
     assets.value = undefined;
     monthlyRent.value = undefined;
-    
+
     // Household Information
     householdSize.value = undefined;
     numberOfChildren.value = undefined;
     childrenAges.value = undefined;
-    
+
     // Education & Employment
     employmentStatus.value = undefined;
     educationLevel.value = undefined;
     isStudent.value = undefined;
-    
+
     // Special Circumstances
     hasDisability.value = undefined;
     disabilityDegree.value = undefined;
@@ -889,16 +954,16 @@ function clearData() {
     citizenBenefitLast3Years.value = undefined;
     hasFinancialHardship.value = undefined;
     workAbility.value = undefined;
-    
+
     // Insurance & Benefits
     healthInsurance.value = undefined;
     hasCareInsurance.value = undefined;
     receivesChildBenefit.value = undefined;
     receivesHousingBenefit.value = undefined;
     receivesStudentAid.value = undefined;
-    
+
     eligibilityResults.value = [];
-    missingFields.value = [];
+    visibleFields.value = [];
     showMessage("Daten wurden erfolgreich gelöscht!", "success");
   } catch (error) {
     showMessage("Fehler beim Löschen der Daten: " + error, "emergency");
@@ -917,23 +982,23 @@ function checkEligibility() {
     nationality: nationality.value,
     residenceStatus: residenceStatus.value,
     residenceInGermany: residenceInGermany.value,
-    
+
     // Financial Information
     grossMonthlyIncome: grossMonthlyIncome.value,
     netMonthlyIncome: netMonthlyIncome.value,
     assets: assets.value,
     monthlyRent: monthlyRent.value,
-    
+
     // Household Information
     householdSize: householdSize.value,
     numberOfChildren: numberOfChildren.value,
     childrenAges: childrenAges.value,
-    
+
     // Education & Employment
     employmentStatus: employmentStatus.value,
     educationLevel: educationLevel.value,
     isStudent: isStudent.value,
-    
+
     // Special Circumstances
     hasDisability: hasDisability.value,
     disabilityDegree: disabilityDegree.value,
@@ -947,7 +1012,7 @@ function checkEligibility() {
     citizenBenefitLast3Years: citizenBenefitLast3Years.value,
     hasFinancialHardship: hasFinancialHardship.value,
     workAbility: workAbility.value,
-    
+
     // Insurance & Benefits
     healthInsurance: healthInsurance.value,
     hasCareInsurance: hasCareInsurance.value,
@@ -957,16 +1022,19 @@ function checkEligibility() {
   };
 
   // Use the registry to evaluate all checks
-  const result = eligibilityRegistry.evaluateAll(formData);
-  
+  const result = eligibilityRegistry.getVisibleSections(formData);
+
+  console.log(result)
   allEligibilityResults.value = result.all;
   eligibilityResults.value = result.eligible;
-  missingFields.value = result.missingFields;
+  visibleFields.value = result.visibleFields;
 }
 checkEligibility();
 
-
-function showMessage(msg: string, type: "success" | "info" | "warning" | "emergency") {
+function showMessage(
+  msg: string,
+  type: "success" | "info" | "warning" | "emergency"
+) {
   message.value = msg;
   messageType.value = type;
   setTimeout(() => {
@@ -1240,11 +1308,11 @@ function showMessage(msg: string, type: "success" | "info" | "warning" | "emerge
   .button-group {
     flex-direction: column;
   }
-  
+
   .button-group button {
     width: 100%;
   }
-  
+
   .two-column-layout {
     gap: 32px;
   }
