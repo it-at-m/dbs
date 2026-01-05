@@ -1,6 +1,9 @@
-import type { EligibilityCheckInterface, EligibilityResult, FormData, FormDataField } from "@/types/EligibilityCheckInterface";
-
-
+import type {
+  EligibilityCheckInterface,
+  EligibilityResult,
+  FormData,
+  FormDataField,
+} from "@/types/EligibilityCheckInterface";
 
 import { ArbeitslosengeldCheck } from "@/eligibility/ArbeitslosengeldCheck.ts";
 import { BafoegCheck } from "@/eligibility/BafoegCheck.ts";
@@ -66,7 +69,7 @@ export class EligibilityCheckRegistry {
       "numberOfChildren",
       "childrenAges",
       "isSingleParent",
-      "livesWithParents"
+      "livesWithParents",
     ],
     educationEmployment: ["employmentStatus", "educationLevel", "isStudent"],
     specialCircumstances: [
@@ -93,16 +96,19 @@ export class EligibilityCheckRegistry {
 
   constructor() {
     // Register all eligibility checks here
+    // All checks now use the generator-based pattern for lazy evaluation
+    // of missing fields. This pattern provides better memory efficiency
+    // and early termination capabilities.
     this.registerCheck(new WohnGeldCheck());
-    this.registerCheck(new BuergergeldCheck());
+    this.registerCheck(new ArbeitslosengeldCheck());
     this.registerCheck(new BafoegCheck());
+    this.registerCheck(new BerufsausbildungsbeihilfeCheck());
+    this.registerCheck(new BildungUndTeilhabeCheck());
+    this.registerCheck(new BuergergeldCheck());
+    this.registerCheck(new GrundsicherungCheck());
+    this.registerCheck(new HilfeZumLebensunterhaltCheck());
     this.registerCheck(new KindergeldCheck());
     this.registerCheck(new KinderzuschlagCheck());
-    this.registerCheck(new ArbeitslosengeldCheck());
-    this.registerCheck(new GrundsicherungCheck());
-    this.registerCheck(new BildungUndTeilhabeCheck());
-    this.registerCheck(new HilfeZumLebensunterhaltCheck());
-    this.registerCheck(new BerufsausbildungsbeihilfeCheck());
   }
 
   registerCheck(check: EligibilityCheckInterface): void {
@@ -112,7 +118,7 @@ export class EligibilityCheckRegistry {
   addAndPrefillField(
     field: FormDataField,
     prefilledFields: PrefilledFields,
-    prefillFormData?: FormData,
+    prefillFormData?: FormData
   ): PrefilledFields {
     if (!this.visibleFields.has(field)) {
       this.visibleFields.add(field);
@@ -122,7 +128,7 @@ export class EligibilityCheckRegistry {
         return prefilledFields;
       }
 
-      console.log("prefill")
+      console.log("prefill", field);
       return {
         ...prefilledFields,
         [field]: prefillFormData[field],
@@ -134,7 +140,10 @@ export class EligibilityCheckRegistry {
     };
   }
 
-  refreshEligibilityForm(formData: FormData, prefillFormData?: FormData): PrefilledEligibilityEvaluationResult {
+  refreshEligibilityForm(
+    formData: FormData,
+    prefillFormData?: FormData
+  ): PrefilledEligibilityEvaluationResult {
     const allResults = [];
     const allMissingFields = new Set<FormDataField>();
 
@@ -142,6 +151,8 @@ export class EligibilityCheckRegistry {
 
     for (const check of this.checks) {
       const result = check.evaluate(formData);
+
+      console.log("result", result);
 
       if (result.missingFields) {
         result.missingFields.forEach((field) => {
@@ -160,12 +171,13 @@ export class EligibilityCheckRegistry {
         (field) => allMissingFields.has(field) || this.visibleFields.has(field)
       );
 
-      fieldsInSection.forEach((field) =>
-        prefilledFields = this.addAndPrefillField(
-          field,
-          prefilledFields,
-          prefillFormData
-        )
+      fieldsInSection.forEach(
+        (field) =>
+          (prefilledFields = this.addAndPrefillField(
+            field,
+            prefilledFields,
+            prefillFormData
+          ))
       );
     }
 
@@ -195,7 +207,7 @@ export class EligibilityCheckRegistry {
         allMissingFields.has(field)
       );
 
-      console.log("newFields", newFields)
+      console.log("newFields", newFields);
       if (newFields.length === 0) {
         skippedSections.push(nextSection);
         continue;
@@ -210,19 +222,25 @@ export class EligibilityCheckRegistry {
           prefillFormData
         );
       }
-      if (Object.values(newPrefilledFields).filter(value => value !== undefined).length === newFields.length) {
-        prefilledFields = {...prefilledFields, ...newPrefilledFields};
+
+      prefilledFields = { ...prefilledFields, ...newPrefilledFields };
+
+      // if we could prefill all fields from new section, we can add the next section already
+      if (
+        Object.values(newPrefilledFields).filter((value) => value !== undefined)
+          .length === newFields.length
+      ) {
         continue;
       }
 
-        return {
-          eligible,
-          ineligible,
-          all: allResults,
-          visibleSections: this.visibleSections,
-          visibleFields: Array.from(this.visibleFields),
-          prefilledFields,
-        };
+      return {
+        eligible,
+        ineligible,
+        all: allResults,
+        visibleSections: this.visibleSections,
+        visibleFields: Array.from(this.visibleFields),
+        prefilledFields,
+      };
     }
 
     return {

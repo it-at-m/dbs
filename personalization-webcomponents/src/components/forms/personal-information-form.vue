@@ -79,7 +79,7 @@
       </select>
     </div>
     
-    <div v-if="shouldShowField('residenceStatus') && nationality !== 'German'" class="m-form-group">
+    <div v-if="shouldShowField('residenceStatus')" class="m-form-group">
       <label for="residenceStatus" class="m-label">Aufenthaltsstatus</label>
       <select 
         id="residenceStatus" 

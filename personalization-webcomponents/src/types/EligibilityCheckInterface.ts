@@ -60,7 +60,14 @@ export interface EligibilityResult {
   url?: string;
 }
 
+export interface EligibilityCheckResult {
+  eligible: boolean;
+  reason?: string;
+  url?: string;
+}
+
 export interface EligibilityCheckInterface {
-  getName(): string;
-  evaluate(formData: FormData): EligibilityResult;
+  evaluate(
+    formData: FormData
+  ): EligibilityResult;
 }

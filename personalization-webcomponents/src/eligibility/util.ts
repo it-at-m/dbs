@@ -1,7 +1,5 @@
 // Helper function to calculate age from birth date
-export function calculateAge(birthDateString: string | undefined): number | undefined {
-  if (!birthDateString) return undefined;
-
+export function calculateAge(birthDateString: string): number {
   const birthDate = new Date(birthDateString);
   const today = new Date();
 

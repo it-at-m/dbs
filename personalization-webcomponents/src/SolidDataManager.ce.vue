@@ -482,7 +482,7 @@ function checkEligibility() {
   );
 
   const prefillData = result.prefilledFields;
-  console.log("prefill", result.prefilledFields);
+  console.log("result", result);
 
   formFields.value = { ...formFields.value, ...prefillData };
   console.log("form", formFields.value);
