@@ -345,8 +345,17 @@ const solidPodData = ref<FormData | undefined>(undefined);
 async function connectToSolid() {
   solidLoading.value = true;
   try {
+    // Ensure we strictly use the origin (provider URL)
+    let issuer = solidIssuer.value;
+    try {
+      const url = new URL(issuer);
+      issuer = url.origin;
+    } catch (e) {
+      // ignore invalid urls, let login handle it
+    }
+
     await login({
-      oidcIssuer: solidIssuer.value,
+      oidcIssuer: issuer,
       redirectUrl: window.location.href,
       clientName: "Solid Data Manager",
     });
@@ -405,7 +414,13 @@ async function loadFromPod() {
   solidLoading.value = true;
   try {
     const podRoot = getPodRoot(solidWebId.value);
-    const fileUrl = `${podRoot}${SOLID_DATA_FILE}`;
+    
+    // Ensure we strictly use the origin (provider URL)
+    const url = new URL(podRoot);
+    const baseUrl = url.origin;
+    
+    // SOLID_DATA_FILE does not have a leading slash, so we must add one
+    const fileUrl = `${baseUrl}/${SOLID_DATA_FILE}`;
 
     const file = await getFile(fileUrl, { fetch: solidFetch });
     const text = await file.text();
