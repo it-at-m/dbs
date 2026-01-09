@@ -14,12 +14,13 @@ type CheckedOnly<T, K extends readonly (keyof T)[]> = {
 
 export class RuleBuilder<TChecked extends readonly FormDataField[] = []> {
   private missingFields: Set<FormDataField> = new Set<FormDataField>();
+  private checkedFields: Set<FormDataField> = new Set<FormDataField>();
   private result?: EligibilityCheckResult;
 
   constructor(
     private readonly formData: FormData,
     private readonly subsidyName: string
-  ) {}
+  ) { }
 
   private hasFailed(): boolean {
     return this.result?.eligible === false;
@@ -34,6 +35,7 @@ export class RuleBuilder<TChecked extends readonly FormDataField[] = []> {
       return this as RuleBuilder<[...TChecked, K]>;
     }
 
+    this.checkedFields.add(field);
     const value = this.formData[field];
 
     if (value === undefined) {
@@ -58,6 +60,8 @@ export class RuleBuilder<TChecked extends readonly FormDataField[] = []> {
     if (this.hasFailed()) {
       return this as RuleBuilder<[...TChecked, ...K]>;
     }
+
+    fields.forEach(f => this.checkedFields.add(f));
 
     let missing = false;
 
@@ -93,6 +97,7 @@ export class RuleBuilder<TChecked extends readonly FormDataField[] = []> {
         subsidyName: this.subsidyName,
         reason: this.result.reason,
         url: this.result.url,
+        checkedFields: this.checkedFields,
       };
     }
 
@@ -101,6 +106,7 @@ export class RuleBuilder<TChecked extends readonly FormDataField[] = []> {
         subsidyName: this.subsidyName,
         reason: "Bitte geben Sie alle erforderlichen Informationen an.",
         missingFields: this.missingFields,
+        checkedFields: this.checkedFields,
       };
     }
 
@@ -113,6 +119,7 @@ export class RuleBuilder<TChecked extends readonly FormDataField[] = []> {
       subsidyName: this.subsidyName,
       reason,
       url,
+      checkedFields: this.checkedFields,
     };
   }
 }

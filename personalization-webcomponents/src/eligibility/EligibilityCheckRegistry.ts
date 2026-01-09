@@ -123,8 +123,6 @@ export class EligibilityCheckRegistry {
     if (!this.visibleFields.has(field)) {
       this.visibleFields.add(field);
       if (prefillFormData === undefined) {
-        console.log("prefill undefined");
-
         return prefilledFields;
       }
 
@@ -135,9 +133,7 @@ export class EligibilityCheckRegistry {
       };
     }
 
-    return {
-      ...prefilledFields,
-    };
+    return prefilledFields;
   }
 
   refreshEligibilityForm(
@@ -146,6 +142,7 @@ export class EligibilityCheckRegistry {
   ): PrefilledEligibilityEvaluationResult {
     const allResults = [];
     const allMissingFields = new Set<FormDataField>();
+    const allCheckedFields = new Set<FormDataField>();
 
     let prefilledFields: PrefilledFields = {};
 
@@ -160,24 +157,42 @@ export class EligibilityCheckRegistry {
         });
       }
 
+      if (result.checkedFields) {
+        result.checkedFields.forEach((field) => {
+          allCheckedFields.add(field);
+        });
+      }
+
       allResults.push(result);
     }
 
     const eligible = allResults.filter((result) => result.eligible === true);
     const ineligible = allResults.filter((result) => result.eligible === false);
 
+    // Prune invisible fields:
+    // Only keep fields that are still being checked by at least one rule.
+    // This allows fields to disappear if they become irrelevant (e.g. residenceStatus when German)
+    const newVisibleFields = new Set<FormDataField>();
+    this.visibleFields.forEach(f => {
+      if (allCheckedFields.has(f)) {
+        newVisibleFields.add(f);
+      }
+    });
+    this.visibleFields = newVisibleFields;
+
     for (const section of this.visibleSections) {
+      // We check for Missing fields here to re-add them if they become relevant again in an active section
       const fieldsInSection = this.sectionFields[section].filter(
         (field) => allMissingFields.has(field) || this.visibleFields.has(field)
       );
 
       fieldsInSection.forEach(
         (field) =>
-          (prefilledFields = this.addAndPrefillField(
-            field,
-            prefilledFields,
-            prefillFormData
-          ))
+        (prefilledFields = this.addAndPrefillField(
+          field,
+          prefilledFields,
+          prefillFormData
+        ))
       );
     }
 
@@ -190,7 +205,7 @@ export class EligibilityCheckRegistry {
 
     while (
       this.visibleSections.length + skippedSections.length <
-        Object.keys(this.sectionFields).length &&
+      Object.keys(this.sectionFields).length &&
       allCurrentSectionsFilled
     ) {
       const nextSection = this.nextSectionStrategy.getNextSection(

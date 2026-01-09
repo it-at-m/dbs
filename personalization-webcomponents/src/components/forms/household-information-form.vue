@@ -22,7 +22,7 @@
     </div>
 
     <div
-      v-if="shouldShowField('numberOfChildren')"
+      v-if="shouldShowField('numberOfChildren') && (householdSizeModel === undefined || householdSizeModel > 1)"
       class="m-form-group"
     >
       <label
@@ -41,7 +41,7 @@
     </div>
 
     <div
-      v-if="shouldShowField('childrenAges')"
+      v-if="shouldShowField('childrenAges') && (householdSizeModel === undefined || householdSizeModel > 1)"
       class="m-form-group"
     >
       <label
@@ -66,7 +66,7 @@
       />
     </div>
 
-    <div v-if="shouldShowField('isSingleParent')">
+    <div v-if="shouldShowField('isSingleParent') && (householdSizeModel === undefined || householdSizeModel > 1)">
       <yes-no-input
         v-model="isSingleParentModel"
         label="Sind sie Alleinerziehend?"

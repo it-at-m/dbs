@@ -9,17 +9,30 @@ export class ArbeitslosengeldCheck extends AbstractEligibilityCheck {
   evaluate(
     formData: FormData
   ): EligibilityResult {
-    return this.rules(formData, "Arbeitslosengeld")
+    const builder = this.rules(formData, "Arbeitslosengeld")
       .failIfField(
         "pensionEligible",
         ({ pensionEligible }) => pensionEligible,
         "Personen, die die Altersgrenze für ihre Rente erreicht haben, sind nicht berechtigt."
-      )
-      .failIfField(
+      );
+
+    // Conditionally check residence status only if not German
+    // We must ensure nationality is asked for so we can make this decision
+    builder.failIfField(
+      "nationality",
+      () => false, // Nationality itself is never a failure reason here, but we need the input
+      ""
+    );
+
+    if (formData.nationality !== 'German') {
+      builder.failIfField(
         "residenceStatus",
         ({ residenceStatus }) => residenceStatus === 'none',
         "Sie benötigen die deutsche Staatsbürgerschaft oder eine gültige Aufenthaltserlaubnis/Niederlassungserlaubnis."
-      )
+      );
+    }
+
+    return builder
       .failIfField(
         "residenceInGermany",
         ({ residenceInGermany }) => !residenceInGermany,
