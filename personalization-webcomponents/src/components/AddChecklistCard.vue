@@ -1,8 +1,6 @@
 <template>
   <div class="add-card">
-    <a
-      :href="newChecklistUrl"
-    >
+    <a :href="newChecklistUrl">
       <div class="add-card-content">
         <div class="add-card-header">
           <h3>{{ title }}</h3>
@@ -47,7 +45,7 @@ defineSlots<{
   background-color: var(--mde-color-neutral-beau-blue-x-light);
 }
 
-.add-card  a {
+.add-card a {
   text-decoration: none !important;
   color: var(--mde-color-neutral-grey) !important;
   display: block;
