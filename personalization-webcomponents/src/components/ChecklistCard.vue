@@ -2,7 +2,7 @@
   <muc-card
     :title="checklist.title"
     tagline="Checkliste"
-    @click="gotoChecklist(checklist.id!)"
+    :href="getChecklistLink(checklist.id!)"
   >
     <template #headerPrefix>
       <div class="card-header-icon">
@@ -109,8 +109,8 @@ const firstThreeItemsSortedByChecked = computed(() => {
   return sortedItems.slice(0, 3);
 });
 
-function gotoChecklist(checklistId: string) {
-  location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${checklistId}`;
+function getChecklistLink(checklistId: string) {
+  return `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${checklistId}`;
 }
 </script>
 

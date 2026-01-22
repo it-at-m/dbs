@@ -27,7 +27,6 @@
           :checklist-detail-url="checklistDetailUrl"
           :class="{ 'card-color': displayedOnDetailScreen }"
           class="mobile-card-height"
-          tabindex="0"
         />
       </muc-slider-item>
       <muc-slider-item v-if="!displayedOnDetailScreen">
@@ -55,7 +54,6 @@
           :checklist-detail-url="checklistDetailUrl"
           :class="{ 'card-color': displayedOnDetailScreen }"
           class="mobile-card-height"
-          tabindex="0"
         />
       </muc-slider-item>
     </muc-slider>
@@ -72,7 +70,6 @@
         :checklist-detail-url="checklistDetailUrl"
         :class="{ 'card-color': displayedOnDetailScreen }"
         class="mobile-card-height"
-        tabindex="0"
       />
       <add-checklist-card
         v-if="!displayedOnDetailScreen"
@@ -96,7 +93,6 @@
         :checklist-detail-url="checklistDetailUrl"
         :class="{ 'card-color': displayedOnDetailScreen }"
         class="mobile-card-height"
-        tabindex="0"
       />
     </muc-card-container>
   </div>

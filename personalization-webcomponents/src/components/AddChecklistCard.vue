@@ -1,7 +1,6 @@
 <template>
   <div class="add-card">
     <a
-      class="no-link-style"
       :href="newChecklistUrl"
     >
       <div class="add-card-content">
@@ -14,6 +13,7 @@
             class="add-card-muc-button"
             icon="arrow-right"
             variant="primary"
+            tabindex="-1"
             >Checkliste erstellen</muc-button
           >
         </div>
@@ -39,17 +39,19 @@ defineSlots<{
 </script>
 
 <style scoped>
-.no-link-style {
-  text-decoration: none !important;
-  color: var(--mde-color-neutral-grey) !important;
-}
-
 .add-card {
   cursor: pointer;
   border: solid 1px var(--mde-color-neutral-beau-blue);
   border-bottom: solid 5px var(--mde-color-brand-mde-blue);
   transition: background-color ease-in 150ms;
   background-color: var(--mde-color-neutral-beau-blue-x-light);
+}
+
+.add-card  a {
+  text-decoration: none !important;
+  color: var(--mde-color-neutral-grey) !important;
+  display: block;
+  height: 100%;
 }
 
 .add-card:hover {
