@@ -48,7 +48,7 @@ The project is built with technologies we use in our projects ([reference archit
 ### personalization-service
 
 1. Build it with `mvn clean install`
-2. Run the stack using `docker-compose` in the stack folder
+2. Run the stack using `podman compose up` or `docker compose up` in the stack folder
 3. Run the PersonalizationServiceApplication
 
 ### personalization-webcomponents
