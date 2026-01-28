@@ -6,7 +6,9 @@
 
 ```bash
 cd stack
-docker-compose up
+podman compose up
+# or
+# docker compose up
 cd ../personalization-service
 ./runLocal.sh
 cd ../personalization-webcomponents
