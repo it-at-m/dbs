@@ -42,7 +42,7 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
 
         <!-- Core Frameworks -->
-        <spring-cloud-dependencies.version>2025.0.1</spring-cloud-dependencies.version> <!-- Must match the chosen Spring Boot version -->
+        <spring-cloud-dependencies.version>2025.1.1</spring-cloud-dependencies.version> <!-- Must match the chosen Spring Boot version -->
         <dbs-handler-core.version>0.3.0</dbs-handler-core.version>
 
         <!-- Logging -->
