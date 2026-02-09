@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="/favicon.ico"
+      rel="icon"
+    />
+    <meta
+      content="width=device-width, initial-scale=1.0"
+      name="viewport"
+    />
+    <title>DBS Login-Webcomponent</title>
+
+    <!-- Muenchen.de-Styles -->
+    <link
+      rel="stylesheet"
+      href="https://assets.muenchen.de/mde/1.1.15/css/fonts.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://assets.muenchen.de/mde/1.1.15/css/style.css"
+    />
+
+    <!-- built files will be auto injected -->
+    <script
+      src="src/dbs-login-webcomponent.ts"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <noscript>
+      <strong
+        >Damit PoC korrekt funktioniert, muss Javascript aktiviert
+        werden.</strong
+      >
+    </noscript>
+
+    <div style="display: flex; padding: 50px">
+      <div style="flex-grow: 3"></div>
+      <dbs-login
+        kc-url="http://keycloak:8100/auth"
+        kc-realm="local_realm"
+        kc-client-id="local"
+        overview-link="http://localhost:5173/"
+        ticket-link="http://localhost:5173/"
+        appointment-link="http://localhost:5173/"
+        checklist-link="http://localhost:5173/"
+      ></dbs-login>
+    </div>
+
+    <div>
+      <h1>Login Request Event Tester</h1>
+      <br /><br />
+      <button onclick="requestLoginEvent(undefined, undefined)">
+        Request Login no options</button
+      ><br /><br />
+      <button onclick="requestLoginEvent('bundid', undefined)">
+        Request Login BundID no authlevel</button
+      ><br /><br />
+      <button onclick="requestLoginEvent('bundid', 'level3')">
+        Request Login BundID Level 3
+      </button>
+    </div>
+
+    <script>
+      function requestLoginEvent(provider, authlevel) {
+        document.dispatchEvent(
+          new CustomEvent("authorization-request", {
+            detail: {
+              loginProvider: provider,
+              authLevel: authlevel,
+            },
+          })
+        );
+      }
+    </script>
+  </body>
+</html>

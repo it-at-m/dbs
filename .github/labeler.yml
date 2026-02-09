@@ -2,6 +2,9 @@
   - head-branch: [ '^feat', '-feature-' ]
 "Type: Bug":
   - head-branch: [ '^bug', '-bug-' ]
+"Component: login-webcomponent":
+  - changed-files:
+      - any-glob-to-any-file: [ 'login-webcomponent/**' ]
 "Component: personalization-service":
   - changed-files:
       - any-glob-to-any-file: [ 'personalization-service/**' ]
