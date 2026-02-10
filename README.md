@@ -40,10 +40,16 @@ The project is built with technologies we use in our projects ([reference archit
 
 ## Components
 
+- [login-webcomponent](./login-webcomponent): Webcomponent for logging in as a citizen.
 - [personalization service](./personalization-service) and it's corresponding [webcomponents](./personalization-webcomponents)
-- [ticketing-eventing](./ticketing-eventing): Event notification via Zammad webhooks and Apache Kafka
+- [ticketing-eventing](./ticketing-eventing): Event notification via Zammad webhooks and Apache Kafka.
 
 ## Getting Started
+
+### login
+
+1. Install dependencies with `npm i`
+2. Run local dev server with `npm run dev`
 
 ### personalization-service
 

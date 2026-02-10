@@ -16,6 +16,6 @@ npm i
 npm run dev
 ```
 
-2. ⚠️ Currently only possible for internal colleagues. Will be published here soon. Follow <https://git.muenchen.de/digitalisierung/dbs-login-webcomponent#dev-setup>
+2. Follow <https://github.com/it-at-m/dbs/blob/main/login-webcomponent/README.md#dev-setup>
 3. Open browser <http://localhost:8082/>
 4. Login with `writer:writer` or `reader:reader`
