@@ -31,7 +31,7 @@
           v-if="idpConfig"
           :idp="idpConfig.queryParameter"
           style="margin-bottom: 24px"
-          @click="login"
+          @login="login"
         />
         <login-button
           v-else

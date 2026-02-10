@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import { onMounted, onUnmounted, watch } from "vue";
 import { useCookies } from "vue3-cookies";
 
 const props = defineProps({
@@ -9,7 +9,7 @@ const props = defineProps({
   },
   //Für ein Auslaufen der Session müssen wir uns den Zeitstempel der letzten Aktivität merken (in Millis)
   lastActive: {
-    type: Number,
+    type: Date,
     default: new Date(0),
   },
 });
@@ -33,27 +33,33 @@ watch(
 const { cookies } = useCookies();
 const INACTIVITY_TIMEOUT_IN_SECONDS = 3600;
 
-let intervalID = cookies.get("intervalID") as unknown as number;
+let intervalID = parseInt(cookies.get("intervalID"));
 
-//--- Letzte Aktivität tracken ---
-window.addEventListener("load", resetLastActive, true);
 // 'mousemove' und 'scroll' werden nicht getrackt
 const events = ["mousedown", "keypress", "touchstart"];
-events.forEach(function (name) {
-  console.debug("Registering: " + name);
-  document.addEventListener(name, resetLastActive, true);
-});
 
 window.onbeforeunload = () => {
   cookies.remove("intervalID");
 };
+
+onMounted(() => {
+  // register event listeners at mount time
+  events.forEach((ev) => window.addEventListener(ev, resetLastActive));
+  window.addEventListener("load", resetLastActive);
+});
+
+onUnmounted(() => {
+  events.forEach((ev) => window.removeEventListener(ev, resetLastActive));
+  window.removeEventListener("load", resetLastActive);
+});
 
 function setRefreshInterval() {
   if (props.loggedin) {
     resetLastActive();
     if (!intervalID) {
       intervalID = window.setInterval(() => {
-        const millisSinceLastActive = Date.now() - props.lastActive;
+        const millisSinceLastActive =
+          Date.now() - props.lastActive.getMilliseconds();
         if (millisSinceLastActive / 1000 > INACTIVITY_TIMEOUT_IN_SECONDS) {
           setTimeout(inactivityDetected, 2000);
         } else {

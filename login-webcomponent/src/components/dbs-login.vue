@@ -47,7 +47,7 @@ import type { Ref } from "vue";
 
 import { onClickOutside, useElementBounding } from "@vueuse/core";
 import Keycloak from "keycloak-js";
-import { onMounted, ref, useTemplateRef } from "vue";
+import { onBeforeUnmount, onMounted, ref, useTemplateRef } from "vue";
 import { useCookies } from "vue3-cookies";
 
 import InactivityTracker from "@/components/inactivity-tracker.vue";
@@ -107,7 +107,7 @@ const { idpConfig } = useIdpHint();
 const isLoggedIn = ref(false);
 const userProperties = ref<UserProperties>({} as UserProperties);
 
-const lastActive = ref(0);
+const lastActive = ref(new Date());
 const isMobile = ref(false);
 //@ts-expect-error useTemplateRef doesn't allow different handling
 const loginBtn: Ref<HTMLElement | undefined> = useTemplateRef("loginBtn");
@@ -117,6 +117,9 @@ const isDropdownOpen = ref(false);
 
 const AUTHORIZATION_EVENT_NAME = "authorization-event";
 const AUTHORIZATION_REQUEST_NAME = "authorization-request";
+
+// store interval id so we can clear it later
+let authResendInterval: number | undefined;
 
 onClickOutside(dropdownDiv, () => (isDropdownOpen.value = false), {
   ignore: [loginBtn],
@@ -191,7 +194,7 @@ const afterAuthentication = (authenticated: boolean) => {
     }, 4000);
 
     // Resend event every 5 seconds for webcomponents that came late to the party
-    setInterval(() => {
+    authResendInterval = window.setInterval(() => {
       document.dispatchEvent(createAuthorizationEvent(getAuthEventDetails()));
     }, 5000);
   }
@@ -349,6 +352,21 @@ onMounted(() => {
         console.debug(parseTime(tokenExpiration, false));
       }
     }
+  }
+});
+
+onBeforeUnmount(() => {
+  // cleanup listeners added in onMounted
+  window.removeEventListener("resize", checksMobile);
+  document.removeEventListener(
+    AUTHORIZATION_REQUEST_NAME,
+    loginWithAuthorizationRequest
+  );
+
+  // clear the interval if still active
+  if (authResendInterval != null) {
+    clearInterval(authResendInterval);
+    authResendInterval = undefined;
   }
 });
 
