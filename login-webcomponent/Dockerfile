@@ -8,6 +8,7 @@ COPY dist .
 COPY docker/nginx/compression.conf "${NGINX_DEFAULT_CONF_PATH}"
 COPY docker/nginx/files.conf "${NGINX_DEFAULT_CONF_PATH}"
 COPY docker/nginx/health.conf "${NGINX_DEFAULT_CONF_PATH}"
+COPY docker/nginx/nginxhttp.conf "${NGINX_DEFAULT_CONF_PATH}"
 COPY docker/nginx/sbom.conf "${NGINX_DEFAULT_CONF_PATH}"
 
 # Start the web server
