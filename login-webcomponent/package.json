@@ -29,7 +29,7 @@
   "devDependencies": {
     "@cyclonedx/cyclonedx-npm": "3.0.0",
     "@muenchen/prettier-codeformat": "1.0.2",
-    "@tsconfig/node-lts": "22.0.1",
+    "@tsconfig/node-lts": "22.0.4",
     "@rushstack/eslint-patch": "1.15.0",
     "@types/node": "22.19.10",
     "@vitejs/plugin-vue": "6.0.4",
