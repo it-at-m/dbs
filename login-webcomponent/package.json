@@ -27,7 +27,7 @@
     "webfontloader": "1.6.28"
   },
   "devDependencies": {
-    "@cyclonedx/cyclonedx-npm": "3.0.0",
+    "@cyclonedx/cyclonedx-npm": "3.1.0",
     "@muenchen/prettier-codeformat": "1.0.2",
     "@tsconfig/node-lts": "22.0.1",
     "@rushstack/eslint-patch": "1.15.0",
