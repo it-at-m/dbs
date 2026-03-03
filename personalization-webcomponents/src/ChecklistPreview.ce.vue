@@ -169,7 +169,7 @@
             </h2>
             <ul class="snServiceList">
               <li
-                class="snServiceElement"
+                class="snServiceElement mde-b2 mde-bold"
                 v-for="service in snServices"
                 :key="service.serviceID"
                 @click="openService(service)"
@@ -183,7 +183,7 @@
               >
                 {{ service.title }}
                 <span
-                  class="required-label"
+                  class="required-label mde-b2"
                   v-if="service.required"
                   >– verpflichtend</span
                 >
@@ -492,10 +492,7 @@ async function copyUrl() {
   cursor: pointer;
   padding: 16px 0;
   border-top: 1px solid var(--mde-color-neutral-beau-blue-x-light);
-  font-size: 1rem;
   color: var(--mde-color-brand-mde-blue);
-  font-weight: 700;
-  line-height: 150%;
 }
 
 .snServiceElement:hover,
@@ -505,11 +502,6 @@ async function copyUrl() {
 
 .snServiceElement .required-label {
   color: var(--mde-color-neutral-grey);
-  font-family: "Open Sans", sans-serif;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
 }
 
 .snServiceElement:hover .required-label,
