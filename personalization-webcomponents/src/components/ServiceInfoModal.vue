@@ -8,7 +8,7 @@
       {{ service?.title }}
       <span
         v-if="service?.required"
-        class="required-label"
+        class="required-label mde-b1"
       >
         – verpflichtend
       </span>
@@ -113,16 +113,5 @@ const emit = defineEmits(["close", "cancel", "task-delete", "task-toggle"]);
 <style>
 .required-label {
   color: var(--mde-color-neutral-grey-light);
-  font-family: "Open Sans", sans-serif;
-  font-size: 1.125rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-}
-
-@media (max-width: 767px) {
-  .required-label {
-    font-size: 1rem;
-  }
 }
 </style>
