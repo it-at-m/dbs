@@ -58,7 +58,7 @@
       </ul>
     </nav>
     <div class="muc-dropdown-footer muc-dropdown-border-top">
-      <p class="muc-dropdown-footer-text">
+      <p class="mde-b3">
         Angemeldet mit {{ userProperties.accountSource }}
         <span v-if="userProperties.authLevel">
           <br />
@@ -159,10 +159,6 @@ const emit = defineEmits(["click-sign-in", "click-sign-out"]);
   justify-content: space-between;
 }
 
-.muc-dropdown-footer-text {
-  font-size: 0.85rem;
-}
-
 /* Padding mobile */
 .muc-dropdown-header,
 .muc-dropdown-first-link {
@@ -210,10 +206,6 @@ const emit = defineEmits(["click-sign-in", "click-sign-out"]);
 
   .muc-dropdown-header-headline {
     font-size: 1.5rem;
-  }
-
-  .muc-dropdown-footer-text {
-    font-size: 1rem;
   }
 }
 

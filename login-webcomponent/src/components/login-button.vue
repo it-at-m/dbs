@@ -49,8 +49,8 @@ const buttonLabel = computed(() =>
   isLoggedIn
     ? "Mein Bereich"
     : idpConfig.value
-    ? `Mit ${idpConfig.value.displayName} anmelden`
-    : "Anmelden"
+      ? `Mit ${idpConfig.value.displayName} anmelden`
+      : "Anmelden"
 );
 
 const buttonIcon = computed(() =>

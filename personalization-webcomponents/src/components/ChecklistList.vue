@@ -40,7 +40,7 @@
           />
           <span
             tabindex="0"
-            class="label-text"
+            class="label-text mde-b1 mde-bold"
             :class="{
               muted: element.checked !== null,
             }"
@@ -51,7 +51,7 @@
           >
             <strong>{{ element.title }}</strong>
             <span
-              class="required-label"
+              class="required-label mde-b2"
               v-if="element.required"
             >
               – verpflichtend
@@ -279,12 +279,6 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 .label-text {
   cursor: pointer;
   color: var(--mde-color-brand-mde-blue);
-  /* Body/Body 1 Bold */
-  font-family: "Open Sans", sans-serif;
-  font-size: 1.125rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 150%; /* 27px */
 
   padding: 16px 8px;
   flex-grow: 1;
@@ -346,12 +340,6 @@ function handleArrowKeyDown(event: KeyboardEvent) {
 
 .required-label {
   color: var(--mde-color-neutral-grey);
-  /* Body/Body 2 */
-  font-family: "Open Sans", sans-serif;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
 }
 
 .muted .required-label {

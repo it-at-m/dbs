@@ -68,7 +68,6 @@ const props = defineProps({
   },
 });
 
-//@ts-expect-error cant return a computed ref - only an object
 const getLinkProperties: ComputedRef<LinkProperties> = computed(() => {
   return {
     overviewLink: props.overviewLink,

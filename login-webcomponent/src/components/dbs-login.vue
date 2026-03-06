@@ -322,7 +322,6 @@ onMounted(() => {
 
   //Keycloak-js initialisieren
   keycloak
-    // @ts-expect-error we dont need the full object here
     .init({
       onLoad: "check-sso",
       silentCheckSsoRedirectUri: `${location.origin}/buergerservice/anliegen/login.html`,

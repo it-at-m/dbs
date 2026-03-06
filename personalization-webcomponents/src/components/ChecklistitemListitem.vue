@@ -6,7 +6,7 @@
     >
     </checklist-checked-circle>
     <div
-      class="item-title"
+      class="mde-b2"
       :class="{ 'item-title-checked': checklistItem.checked }"
     >
       {{ checklistItem.title }}
@@ -33,11 +33,6 @@ defineProps<{
 .checklist-check-circle {
   margin-top: 3px;
   margin-right: 12px;
-}
-
-.item-title {
-  font-family: "Open Sans", sans-serif;
-  font-size: 1rem;
 }
 
 .item-title-checked {
