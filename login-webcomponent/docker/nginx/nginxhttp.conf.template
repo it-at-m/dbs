@@ -1,0 +1,7 @@
+map $http_origin $allowed_origin {
+
+    ${ALLOW_ORIGIN}
+
+    default "";
+
+}

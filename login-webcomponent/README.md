@@ -2,6 +2,16 @@
 
 Shows a Login-Button and/or tries to log in a user visiting a site with this webcomponent attached.
 
+## Docker
+
+The Docker-Image consists of a nginx web server which hosts the built version of this component.
+
+### Configuration
+
+| Env          | Desc                                                                                                                                                                                        | Default |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| ALLOW_ORIGIN | The allowed origins formatted for the nginx map directive. E.g. `~^https?://(.*\.)?muenchen.de(:\d+)?$ $http_origin;` to allow all subdomains of muenchen.de. Can contain multiple entries. | -       |
+
 ## Usage
 
 1. Add Import to page:
@@ -154,7 +164,8 @@ It gets sent when
 ### IN: `authorization-request`
 
 This event can be sent by a webcomponent requiring the user to log in. Further more it allows to define
-with which provider and authorization level the user should login. Both these options are optional though and can be left out.
+with which provider and authorization level the user should login. Both these options are optional though and can be
+left out.
 
 The event details are structured as follows:
 
