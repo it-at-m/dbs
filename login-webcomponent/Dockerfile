@@ -6,17 +6,18 @@ COPY dist .
 
 # Copy custom nginx configurations
 COPY docker/nginx/compression.conf "${NGINX_DEFAULT_CONF_PATH}"
+COPY docker/nginx/files.conf "${NGINX_DEFAULT_CONF_PATH}"
 COPY docker/nginx/health.conf "${NGINX_DEFAULT_CONF_PATH}"
 COPY docker/nginx/sbom.conf "${NGINX_DEFAULT_CONF_PATH}"
 
 # Copy custom nginx config templates
-COPY docker/nginx/files.conf.template "${NGINX_DEFAULT_CONF_PATH}"
+COPY docker/nginx/nginxhttp.conf.template "/opt/app-root/etc/nginx.d"
 
 # Start the web server
-ENV DOCKER_ENV_NGINX_DEFAULT_CONF_PATH ${NGINX_DEFAULT_CONF_PATH}
 COPY docker/entrypoint.sh ./entrypoint.sh
 USER 0
 RUN chown -R 1001:0 /opt/app-root/src/entrypoint.sh
+RUN chown -R 1001:0 /usr/share/nginx/modules
 RUN chmod +x /opt/app-root/src/entrypoint.sh
 USER 1001
 
