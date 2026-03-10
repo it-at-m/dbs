@@ -197,8 +197,10 @@
                 Die Checkliste kann nicht geladen werden.
               </template>
               <template #content>
-                Es gibt aktuell leider ein technisches Problem mit dieser
-                Funktion. Bitte versuchen Sie es später noch einmal.
+                <p>
+                  Es gibt aktuell leider ein technisches Problem mit dieser
+                  Funktion. Bitte versuchen Sie es später noch einmal.
+                </p>
               </template>
             </muc-callout>
           </div>
@@ -472,7 +474,7 @@ async function copyUrl() {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.15/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.19/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 </style>
