@@ -104,8 +104,10 @@
                 Ihre Checkliste konnte nicht geladen werden.
               </template>
               <template #content>
-                Bitte überprüfen Sie, ob Sie den korrekten Link sowie das
-                richtige Konto für die Anmeldung genutzt haben.
+                <p>
+                  Bitte überprüfen Sie, ob Sie den korrekten Link sowie das
+                  richtige Konto für die Anmeldung genutzt haben.
+                </p>
               </template>
               <template #buttons>
                 <a :href="myChecklistsUrl">
@@ -436,7 +438,7 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.15/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.19/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 @import "../public/checklist-styles.css";
