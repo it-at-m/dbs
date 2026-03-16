@@ -17,7 +17,7 @@
     "fix": "prettier . --write && eslint . --fix"
   },
   "dependencies": {
-    "@coreui/coreui": "5.6.0",
+    "@coreui/coreui": "5.6.1",
     "@coreui/vue": "5.7.0",
     "@muenchen/muc-patternlab-vue": "8.0.0",
     "@vueuse/core": "14.2.1",
