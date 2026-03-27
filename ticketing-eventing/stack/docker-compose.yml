@@ -23,7 +23,7 @@ services:
       - no-new-privileges:true
 
   kafka:
-    image: confluentinc/cp-kafka:7.8.7@sha256:2b5c4a369c1b8d1a3257d7415bbbfd320ce522448725282373051981f4bae56c
+    image: confluentinc/cp-kafka:7.9.6@sha256:9e178783dba8cf44cd8b1d260f548a587a21235921957edd4ed7aa7d060b0852
     depends_on:
       zookeeper:
         condition: service_healthy
