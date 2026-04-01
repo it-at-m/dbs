@@ -3,6 +3,7 @@
     :title="checklist.title"
     tagline="Checkliste"
     :href="getChecklistLink(checklist.id!)"
+    :disabled="false"
   >
     <template #headerPrefix>
       <div class="card-header-icon">

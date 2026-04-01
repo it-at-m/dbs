@@ -3,7 +3,10 @@ import { MucCard } from "@muenchen/muc-patternlab-vue";
 </script>
 
 <template>
-  <muc-card title="">
+  <muc-card
+    title=""
+    :disabled="false"
+  >
     <template #headerPrefix>
       <div class="skeleton-wrapper">
         <div class="skeleton-col skeleton-details">
