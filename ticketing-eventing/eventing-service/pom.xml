@@ -361,7 +361,10 @@
                         <endWithNewline />
                         <importOrder />
                         <removeUnusedImports />
+                        <!--
+                        not available with spotless 3.4.0
                         <removeWildcardImports />
+                        -->
                         <formatAnnotations />
                     </java>
                 </configuration>
