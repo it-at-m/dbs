@@ -11,7 +11,7 @@
 
     <groupId>de.muenchen.oss.dbs.ticketing.eventing</groupId>
     <artifactId>mail-handler-service</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>mail-handler-service</name>
     <description>DBS ticketing eventing service which handles events from eventing-service by sending mails</description>
     <url>https://github.com/it-at-m/dbs</url>
@@ -19,7 +19,7 @@
         <url>https://github.com/it-at-m/dbs.git</url>
         <connection>scm:git:https://github.com/it-at-m/dbs.git</connection>
         <developerConnection>scm:git:https://github.com/it-at-m/dbs.git</developerConnection>
-        <tag>mail-handler-service-0.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
     <licenses>
         <license>
