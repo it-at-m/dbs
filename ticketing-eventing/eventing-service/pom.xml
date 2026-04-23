@@ -11,7 +11,7 @@
 
     <groupId>de.muenchen.oss.dbs.ticketing.eventing</groupId>
     <artifactId>eventing-service</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <name>eventing-service</name>
     <description>Service for sending DBS ticketing webhook notifications to Apache Kafka</description>
@@ -27,7 +27,7 @@
         <url>https://github.com/it-at-m/dbs.git</url>
         <connection>scm:git:https://github.com/it-at-m/dbs.git</connection>
         <developerConnection>scm:git:https://github.com/it-at-m/dbs.git</developerConnection>
-        <tag>eventing-service-0.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>
