@@ -103,7 +103,7 @@
       :divider="false"
       variant="detail"
     >
-      <div v-if="!localStorageError">
+      <div v-if="!localStorageError && !noResultsError">
         <p>
           Vielen Dank für Ihre Angaben! Basierend auf Ihren Antworten könnten
           folgende Leistungen für Sie passen.
@@ -163,6 +163,25 @@
             </a>
           </div>
 
+          <muc-callout
+            v-else-if="noResultsError"
+            type="warning"
+          >
+            <template #header> Keine Leistungen gefunden. </template>
+            <template #content>
+              <p>
+                Für die eingegeben Angaben haben wir keine passenden Leistungen
+                gefunden. Wir beraten Sie gerne zu Ihrem speziellen Fall über
+                unseren Chatbot oder unsere anderen
+                <muc-link
+                  href="https://stadt.muenchen.de/rathaus/kontakt.html"
+                  label="Kontaktkanäle"
+                  noUnderline
+                />.
+              </p>
+            </template>
+          </muc-callout>
+
           <div v-else-if="!localStorageError && !loadingError && snServices">
             <h2 style="padding-bottom: 32px">
               Vorgeschlagene Leistungen ({{ snServices.length }})
@@ -220,6 +239,7 @@ import {
   MucButton,
   MucCallout,
   MucIntro,
+  MucLink,
   MucModal,
   MucPercentageSpinner,
 } from "@muenchen/muc-patternlab-vue";
@@ -246,6 +266,7 @@ import {
 const loading = ref(false);
 const localStorageError = ref("");
 const loadingError = ref("");
+const noResultsError = ref("");
 
 const LOCALSTORAGE_KEY_LOGGED_IN = "logged.in";
 
@@ -419,6 +440,9 @@ function getSnResults(): ServiceNavigatorResult | null {
     const snResult = JSON.parse(
       serviceNavigatorResultString
     ) as ServiceNavigatorResult;
+    if (snResult.services.length === 0) {
+      noResultsError.value = "No results for this query";
+    }
     setUrlParams(snResult);
     localStorage.removeItem(LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT);
     return snResult;
@@ -451,6 +475,13 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
         id: snResultId,
         name: snResultName,
         services: snResultServices.split(",").map((value) => parseInt(value)),
+      } as ServiceNavigatorResult;
+    } else if (snResultName && snResultId) {
+      noResultsError.value = "No results for this query";
+      return {
+        id: snResultId,
+        name: snResultName,
+        services: [],
       } as ServiceNavigatorResult;
     } else {
       return undefined;
