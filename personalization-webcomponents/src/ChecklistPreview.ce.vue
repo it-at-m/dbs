@@ -299,38 +299,42 @@ onMounted(() => {
     lebenslageTitle.value = snResult.name;
     lebenslageId.value = snResult.id;
 
-    //todo replace with openapi generated client when backend is finished
-    const url =
-      getAPIBaseURL() +
-      "/public/api/p13n-backend/servicenavigator?ids=" +
-      snResult.services.join(",");
-    fetch(url, {
-      mode: "cors",
-      headers: {
-        Accept: "application/json",
-      },
-    })
-      .then((resp) => {
-        if (resp.ok) {
-          resp
-            .json()
-            .then((snServicesBody: ChecklistItemServiceNavigator[]) => {
-              snServices.value = snServicesBody.sort((a, b) => {
-                return a.required === b.required ? 0 : a.required ? -1 : 1;
+    if (snResult.services.length > 0) {
+      //todo replace with openapi generated client when backend is finished
+      const url =
+        getAPIBaseURL() +
+        "/public/api/p13n-backend/servicenavigator?ids=" +
+        snResult.services.join(",");
+      fetch(url, {
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((resp) => {
+          if (resp.ok) {
+            resp
+              .json()
+              .then((snServicesBody: ChecklistItemServiceNavigator[]) => {
+                snServices.value = snServicesBody.sort((a, b) => {
+                  return a.required === b.required ? 0 : a.required ? -1 : 1;
+                });
               });
+          } else {
+            resp.text().then((errorText) => {
+              console.debug("Error loading checklist: ", errorText);
+              loadingError.value = errorText;
             });
-        } else {
-          resp.text().then((errorText) => {
-            console.debug("Error loading checklist: ", errorText);
-            loadingError.value = errorText;
-          });
-        }
-      })
-      .catch((error) => {
-        console.debug("Error loading checklist: ", error);
-        loadingError.value = error;
-      })
-      .finally(() => (loading.value = false));
+          }
+        })
+        .catch((error) => {
+          console.debug("Error loading checklist: ", error);
+          loadingError.value = error;
+        })
+        .finally(() => (loading.value = false));
+    } else {
+      loading.value = false;
+    }
   } else {
     localStorageError.value =
       "No Data found in LocalStorage with key " +
