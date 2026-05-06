@@ -25,9 +25,9 @@ The DBS (Digitaler Bürgerservice / Digital Citizen Service) is a digital servic
 
 This process generates a personalized checklist of services tailored to the user's inputs, enhancing the user experience through an intuitive interface optimized for mobile devices. The system is built on modern web technologies and follows an Open Source model, enabling other municipalities to leverage the source code and foster interoperability.
 
-It currently consists of these modules:
+It currently consists of these architecture modules:
 
 - [DBS-Ticketing](/architecture#ticketing)
 - [DBS-P13N](/architecture#p13n)
 - [DBS-Login](/architecture#login)
-- Terminvereinbarung (<https://github.com/it-at-m/eappointment>)
+- [E-Appointment](https://github.com/it-at-m/eappointment) (Terminvereinbarung)
