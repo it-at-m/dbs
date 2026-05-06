@@ -2,11 +2,11 @@
 
 [![system overview Digitaler Bürgerservice DBS](./assets/systemueberblick_dbs.drawio.png)](https://github.com/it-at-m/dbs/blob/main/docs/assets/systemueberblick_dbs.drawio.png)
 
-## DBS-Ticketing with [Zammad](https://opensource.muenchen.de/de/software/zammad.html) {#ticketing}
+## DBS-Ticketing with Zammad {#ticketing}
 
 Citizens submit requests to the form server
 (e.g [Meldung von Insektennestern](https://service.muenchen.de/intelliform/forms/01/09/09/meldung_insektennest/index)),
-which sends the request to Zammad via the [dbs-ticketing-eai](https://github.com/it-at-m/dbs/tree/main/ticketing-eai).
+which sends the request to a off-the-shelf [Zammad](https://opensource.muenchen.de/software/zammad.html) via the [dbs-ticketing-eai](https://github.com/it-at-m/dbs/tree/main/ticketing-eai).
 Zammad serves as the backend of the DBS,
 where the clerks process the requests and communicate with the citizen
 via our own frontend `dbs-ticketing-webcomponents`.
