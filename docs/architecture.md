@@ -52,6 +52,7 @@ Keycloak uses two realms for this purpose:
 ## Distribution view
 
 The following picture (DRAFT) shows a more technical distribution view of the architecture, also including
+
 - the namespaces in the container infrastructure
 - the communication protocols
 
