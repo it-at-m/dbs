@@ -31,7 +31,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     public static final String ACCOUNT_SOURCE = "accountSource";
 
     public static final String TO_POSTBOX_DEFAULT = "send";
-    public static final String TO_POSTBOX_HIGH = "send_high_authLevel";
+    public static final String TO_POSTBOX_HIGH = "send_high_authlevel";
 
     private final XmlMapper xmlMapper = new XmlMapper();
     private final ZammadMapper zammadMapper;

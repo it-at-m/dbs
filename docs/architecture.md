@@ -48,3 +48,12 @@ Keycloak uses two realms for this purpose:
   (department, team, etc) with the [zammad-ldap-sync](https://github.com/it-at-m/zammad-ldap-sync),
   changed or removed if necessary. This ensures that only authorized persons
   have access to the pending requests from citizens.
+
+## Distribution view
+
+The following picture (DRAFT) shows a more technical distribution view of the architecture, also including
+
+- the namespaces in the container infrastructure
+- the communication protocols
+
+[![system overview Digitaler Bürgerservice DBS](./assets/verteilungssicht_dbs.drawio.png)](https://github.com/it-at-m/dbs/blob/main/docs/assets/verteilungssicht_dbs.drawio.png)

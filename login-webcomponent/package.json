@@ -21,7 +21,7 @@
     "@coreui/vue": "5.8.0",
     "@muenchen/muc-patternlab-vue": "8.1.0",
     "@vueuse/core": "14.2.1",
-    "keycloak-js": "26.2.3",
+    "keycloak-js": "26.2.4",
     "vue": "3.5.32",
     "vue3-cookies": "1.0.6",
     "webfontloader": "1.6.28"
@@ -35,7 +35,7 @@
     "@vitejs/plugin-vue": "6.0.6",
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-typescript": "14.7.0",
-    "@vue/test-utils": "2.4.6",
+    "@vue/test-utils": "2.4.10",
     "@vue/tsconfig": "0.9.1",
     "eslint": "9.39.4",
     "eslint-plugin-vue": "10.8.0",
@@ -43,7 +43,7 @@
     "typescript": "5.9.3",
     "vite": "7.3.2",
     "vite-plugin-vue-devtools": "8.1.1",
-    "vitest": "4.1.4",
-    "vue-tsc": "3.2.6"
+    "vitest": "4.1.5",
+    "vue-tsc": "3.2.7"
   }
 }
