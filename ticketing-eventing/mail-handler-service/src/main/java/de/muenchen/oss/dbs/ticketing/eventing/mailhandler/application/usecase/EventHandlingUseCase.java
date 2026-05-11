@@ -131,7 +131,8 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             return "";
         }
 
-        if (articleBody.trim().toLowerCase(Locale.GERMAN).startsWith("<html")) {
+        final String trimmedLowercaseArticleBody = articleBody.trim().toLowerCase(Locale.GERMAN);
+        if (trimmedLowercaseArticleBody.startsWith("<html") || trimmedLowercaseArticleBody.startsWith("<!doctype")) {
             return articleBody;
         }
 
