@@ -125,7 +125,22 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private String buildBody(final ArticleInternal article) {
-        return article.getBody();
+        String articleBody = article.getBody();
+        if (articleBody == null || articleBody.isEmpty()) {
+            return "";
+        }
+
+        if (articleBody.trim().toLowerCase().startsWith("<html")) {
+            return articleBody;
+        }
+
+        return buildCompleteHtml(article.getBody());
+    }
+
+    public String buildCompleteHtml(String htmlFragment) {
+        return "<html lang=\"de\"><head><meta charset=\"UTF-8\"></head><body>\n" +
+                htmlFragment +
+                "\n</body>\n</html>";
     }
 
     private List<MailMessage.Attachment> buildAttachments(final ArticleInternal article) {
