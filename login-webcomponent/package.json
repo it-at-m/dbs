@@ -20,7 +20,7 @@
     "@coreui/coreui": "5.6.1",
     "@coreui/vue": "5.8.0",
     "@muenchen/muc-patternlab-vue": "8.1.0",
-    "@vueuse/core": "14.2.1",
+    "@vueuse/core": "14.3.0",
     "keycloak-js": "26.2.4",
     "vue": "3.5.33",
     "vue3-cookies": "1.0.6",
