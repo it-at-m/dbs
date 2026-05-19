@@ -15,6 +15,7 @@ import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.model.MailMessa
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -125,7 +126,23 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private String buildBody(final ArticleInternal article) {
-        return article.getBody();
+        final String articleBody = article.getBody();
+        if (articleBody == null || articleBody.isEmpty()) {
+            return "";
+        }
+
+        final String trimmedLowercaseArticleBody = articleBody.trim().toLowerCase(Locale.GERMAN);
+        if (trimmedLowercaseArticleBody.startsWith("<html") || trimmedLowercaseArticleBody.startsWith("<!doctype")) {
+            return articleBody;
+        }
+
+        return buildCompleteHtml(article.getBody());
+    }
+
+    public String buildCompleteHtml(final String htmlFragment) {
+        return "<html lang=\"de\"><head><meta charset=\"UTF-8\"></head><body>\n" +
+                htmlFragment +
+                "\n</body>\n</html>";
     }
 
     private List<MailMessage.Attachment> buildAttachments(final ArticleInternal article) {

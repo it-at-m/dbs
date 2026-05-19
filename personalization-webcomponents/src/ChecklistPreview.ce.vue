@@ -172,8 +172,10 @@
               <p>
                 Für die eingegeben Angaben haben wir keine passenden Leistungen
                 gefunden. Wir beraten Sie gerne zu Ihrem speziellen Fall über
-                unseren Chatbot oder unsere anderen
+                unseren Chatbot <span class="mde-bold">Muckl</span> oder unsere
+                anderen
                 <muc-link
+                  class="mde-bold"
                   href="https://stadt.muenchen.de/rathaus/kontakt.html"
                   label="Kontaktkanäle"
                   noUnderline
