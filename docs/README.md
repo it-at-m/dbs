@@ -9,6 +9,7 @@ npm run dev
 ```
 
 Prettify before commit:
+
 ```
 npm run fix
 ```
