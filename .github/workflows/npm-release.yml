@@ -37,13 +37,13 @@ jobs:
       ARTIFACT_VERSION: ${{ steps.npm_release.outputs.ARTIFACT_VERSION }}
     steps:
       - id: npm_release
-        uses: it-at-m/lhm_actions/action-templates/actions/action-npm-release@1a673d9c3be4a4f59cf29f425bc2b00fc42751fd # v1.0.32
+        uses: it-at-m/lhm_actions/action-templates/actions/action-npm-release@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
         with:
           use-pr: true
           app-path: ${{ inputs.app-path }}
           releaseVersion: ${{ inputs.release-version }}
       - id: node
-        uses: it-at-m/lhm_actions/action-templates/actions/action-npm-build@1a673d9c3be4a4f59cf29f425bc2b00fc42751fd # v1.0.32
+        uses: it-at-m/lhm_actions/action-templates/actions/action-npm-build@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
         with:
           app-path: ${{ inputs.app-path }}
       - if: ${{ !inputs.skip-deployment }}
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: release
     steps:
-      - uses: it-at-m/lhm_actions/action-templates/actions/action-build-image@1a673d9c3be4a4f59cf29f425bc2b00fc42751fd # v1.0.32
+      - uses: it-at-m/lhm_actions/action-templates/actions/action-build-image@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
         with:
           path: ${{ inputs.app-path }}
           image-name: ${{ inputs.app-path }}
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create GitHub Release
-        uses: it-at-m/lhm_actions/action-templates/actions/action-create-github-release@1a673d9c3be4a4f59cf29f425bc2b00fc42751fd # v1.0.32
+        uses: it-at-m/lhm_actions/action-templates/actions/action-create-github-release@877aafa9f0732cbc91819b60d237c351ea88f95c # v1.0.34
         with:
           artifact-name: ${{ needs.release.outputs.ARTIFACT_NAME }}
           tag-name: ${{ inputs.app-path }}-${{ needs.release.outputs.ARTIFACT_VERSION }}
