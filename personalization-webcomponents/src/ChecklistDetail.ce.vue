@@ -49,15 +49,15 @@
       tagline="Checkliste"
       variant="detail"
     >
-      <p style="padding-bottom: 8px">
+      <p style="margin-bottom: 8px">
         <strong>Sie sind nicht angemeldet.</strong>
       </p>
-      <p style="padding-bottom: 32px">
+      <p style="margin-bottom: 32px">
         Um Ihre Checkliste einzusehen, melden Sie sich bei dem Konto an, das Sie
         für das Speichern der Liste genutzt haben.
       </p>
       <muc-button
-        icon="sing-in"
+        icon="sign-in"
         icon-animated
         @click="login"
       >
@@ -438,7 +438,7 @@ function _updateChecklist(checklist: ChecklistServiceNavigator) {
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.19/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.23/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 @import "../public/checklist-styles.css";

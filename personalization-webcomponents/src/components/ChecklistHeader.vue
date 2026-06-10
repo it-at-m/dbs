@@ -5,21 +5,21 @@
     :img="getChecklistIconBySituationId(checklist.situationId)"
     variant="detail"
   >
-    <div
+    <p
       v-if="checklist.lastUpdate"
       style="padding-bottom: 16px; padding-left: 3px"
     >
       <strong>Erstellungsdatum: </strong>
       {{ getDateInGermanDateFormat(new Date(checklist.lastUpdate)) }}
-    </div>
-    <div class="task-container">
-      <div
+    </p>
+    <p class="task-container">
+      <span
         class="task"
         aria-hidden="true"
       >
         Aufgaben:
-      </div>
-      <div class="chips-container">
+      </span>
+      <span class="chips-container">
         <muc-chip
           v-if="todoCount"
           background-color="var(--checklist-color-status-open)"
@@ -49,8 +49,8 @@
             <use href="#icon-check" />
           </svg>
         </muc-chip>
-      </div>
-    </div>
+      </span>
+    </p>
     <div style="padding-top: 32px">
       <muc-button
         icon="trash"

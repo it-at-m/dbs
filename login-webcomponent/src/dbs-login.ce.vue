@@ -1,6 +1,6 @@
 <template>
   <link
-    href="https://assets.muenchen.de/mde/1.1.19/css/style.css"
+    href="https://assets.muenchen.de/mde/1.1.23/css/style.css"
     rel="stylesheet"
     @load="stylesLoaded = true"
   />
