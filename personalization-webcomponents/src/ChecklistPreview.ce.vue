@@ -24,7 +24,7 @@
       </template>
       <template #buttons>
         <muc-button
-          icon="sing-in"
+          icon="sign-in"
           @click="_requestLogin"
         >
           Anmelden
@@ -124,6 +124,12 @@
           >
             Link kopieren
           </muc-button>
+          <p
+            class="visually-hidden"
+            role="status"
+          >
+            {{ linkStateMessage }}
+          </p>
         </div>
       </div>
     </muc-intro>
@@ -283,6 +289,7 @@ const lebenslageTitle = ref("Meine Lebenslage");
 const lebenslageId = ref("");
 const snServices = ref<ChecklistItemServiceNavigator[] | null>(null);
 const selectedService = ref<ChecklistItemServiceNavigator | null>(null);
+const linkStateMessage = ref("");
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 
@@ -506,12 +513,17 @@ async function copyUrl() {
     [type]: window.location.href,
   };
   const clipboardItem = new ClipboardItem(clipboardItemData);
-  await navigator.clipboard.write([clipboardItem]);
+  await navigator.clipboard.write([clipboardItem]).then(() => {
+    linkStateMessage.value = "Link wurde kopiert";
+    setTimeout(() => {
+      linkStateMessage.value = "";
+    }, 5000);
+  });
 }
 </script>
 
 <style>
-@import url("https://assets.muenchen.de/mde/1.1.19/css/style.css");
+@import url("https://assets.muenchen.de/mde/1.1.23/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
 </style>

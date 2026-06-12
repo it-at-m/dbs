@@ -81,7 +81,7 @@
     <div class="muc-dropdown-login-element">
       <muc-button
         class="muc-dropdown-login-button"
-        icon="sing-in"
+        icon="sign-in"
         variant="primary"
         @click="emit('click-sign-in')"
       >
