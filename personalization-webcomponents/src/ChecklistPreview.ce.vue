@@ -105,8 +105,7 @@
     >
       <div v-if="!localStorageError && !noResultsError">
         <p>
-          Vielen Dank für Ihre Angaben! Basierend auf Ihren Antworten könnten
-          folgende Leistungen für Sie passen.
+          {{ t("preview.introText") }}
         </p>
         <div style="padding-top: 32px">
           <muc-button
@@ -122,7 +121,7 @@
             icon="copy-link"
             spin-icon-on-click
           >
-            Link kopieren
+            {{ t("preview.copyLink") }}
           </muc-button>
           <p
             class="visually-hidden"
@@ -192,7 +191,7 @@
 
           <div v-else-if="!localStorageError && !loadingError && snServices">
             <h2 style="padding-bottom: 32px">
-              Vorgeschlagene Leistungen ({{ snServices.length }})
+              {{ t("preview.suggestedServices") }} ({{ snServices.length }})
             </h2>
             <ul class="snServiceList">
               <li
@@ -254,6 +253,7 @@ import {
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
@@ -292,6 +292,7 @@ const selectedService = ref<ChecklistItemServiceNavigator | null>(null);
 const linkStateMessage = ref("");
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
+const { t } = useI18n();
 
 const props = defineProps<{
   checklistDetailUrl: string;
