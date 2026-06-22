@@ -2,12 +2,11 @@ package de.muenchen.dbs.personalization.checklist.domain;
 
 import de.muenchen.dbs.personalization.servicenavigator.OnlineService;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorResponse;
+import java.util.List;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueMappingStrategy;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ChecklistMapper {

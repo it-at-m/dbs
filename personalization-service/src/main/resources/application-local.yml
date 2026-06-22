@@ -2,6 +2,9 @@ server:
   port: 39146
 spring:
   # Spring JPA
+  profiles:
+    # load local local-secure profile for protected test-environments
+    active: local-secure
   jpa:
     # Logging for database operation
     show-sql: true
@@ -48,3 +51,4 @@ p13n:
   service-navigator-url: "https://stadt.muenchen.de/service/rs/befi/navigator/"
   proxy-host: "internet-proxy-client.muenchen.de"
   proxy-port: 80
+  service-navigator-basic-auth: # set in application-local-secure.yml if needed

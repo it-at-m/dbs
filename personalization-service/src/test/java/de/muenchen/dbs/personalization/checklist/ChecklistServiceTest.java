@@ -123,7 +123,7 @@ public class ChecklistServiceTest {
             final Checklist checklist = createTestChecklist(id, USER_LHM_EXT_ID, null);
 
             when(checklistRepository.findById(id)).thenReturn(Optional.of(checklist));
-            when(serviceNavigatorService.getServiceNavigatorService(anyString())).thenReturn(Optional.empty());
+            when(serviceNavigatorService.getServiceNavigatorService(anyString(), anyString())).thenReturn(Optional.empty());
 
             final ChecklistServiceNavigatorReadDTO expectedChecklistServiceNavigatorReadDTO = new ChecklistServiceNavigatorReadDTO();
             expectedChecklistServiceNavigatorReadDTO.setId(checklist.getId());
@@ -176,7 +176,7 @@ public class ChecklistServiceTest {
             // Mock-Verhalten
             when(checklistRepository.findById(checklistToUpdateId)).thenReturn(Optional.of(checklistToUpdate));
             when(checklistRepository.save(checklistToUpdate)).thenReturn(expectedChecklist);
-            when(serviceNavigatorService.getServiceNavigatorService(anyString())).thenReturn(Optional.empty());
+            when(serviceNavigatorService.getServiceNavigatorService(anyString(), anyString())).thenReturn(Optional.empty());
 
             // When
             final ChecklistServiceNavigatorReadDTO result = checklistService.updateChecklist(checklistToUpdate, checklistToUpdateId);

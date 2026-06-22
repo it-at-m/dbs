@@ -185,3 +185,5 @@ nbdist/
 *.njsproj
 *.sln
 *.sw?
+
+application-local-secure.yml
