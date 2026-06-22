@@ -52,7 +52,7 @@ public class ServiceNavigatorService {
         try {
             log.debug("#getServiceNavigatorService: Loading {}", url);
             HttpHeaders headers = new HttpHeaders();
-            if(!p13nConfiguration.getServiceNavigatorBasicAuth().isBlank()) {
+            if (p13nConfiguration.getServiceNavigatorBasicAuth() != null && !p13nConfiguration.getServiceNavigatorBasicAuth().isBlank()) {
                 headers.add("Authorization", "Basic " + p13nConfiguration.getServiceNavigatorBasicAuth());
             }
             HttpEntity<String> request = new HttpEntity<String>(headers);
@@ -60,8 +60,7 @@ public class ServiceNavigatorService {
                     url,
                     HttpMethod.GET,
                     request,
-                    ServiceNavigatorResponse.class
-            );
+                    ServiceNavigatorResponse.class);
 
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 return Optional.ofNullable(response.getBody());
