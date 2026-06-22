@@ -66,7 +66,9 @@ public class ServiceNavigatorService {
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 return Optional.ofNullable(response.getBody());
             } else {
-                log.warn("Searching Service with Service-ID {} and lang {} returned a !2xx HTTP Response of {}. Returning empty.", serviceId, lang,
+                log.warn("Searching Service with Service-ID {} and lang {} returned a !2xx HTTP Response of {}. Returning empty.",
+                        URLEncoder.encode(serviceId, StandardCharsets.UTF_8),
+                        URLEncoder.encode(lang, StandardCharsets.UTF_8),
                         response.getStatusCode());
                 return Optional.empty();
             }
@@ -76,8 +78,9 @@ public class ServiceNavigatorService {
                 return getServiceNavigatorService(serviceId, SERVICENAVIGATOR_FALLBACK_LANGUAGE);
             }
             log.error("HTTP Client-Error {} when trying to fetch Service with Service-ID {} and lang {}: {}. Returning empty response.", e.getStatusCode(),
-                    serviceId,
-                    lang, e.getMessage());
+                    URLEncoder.encode(serviceId, StandardCharsets.UTF_8),
+                    URLEncoder.encode(lang, StandardCharsets.UTF_8),
+                    e.getMessage());
             return Optional.empty();
         } catch (Exception e) {
             log.error("Network Error when trying to fetch Service with Service-ID {} and lang {}. Throwing Service Unavailable.", serviceId, lang, e);
