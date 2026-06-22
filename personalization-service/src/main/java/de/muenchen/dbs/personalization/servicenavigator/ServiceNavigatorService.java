@@ -52,7 +52,7 @@ public class ServiceNavigatorService {
                 + "&lang=" + URLEncoder.encode(lang, StandardCharsets.UTF_8);
 
         try {
-            log.debug("#getServiceNavigatorService: Loading {}", url);
+            log.debug("#getServiceNavigatorService: Loading {}", P13nUtils.sanitizeForLog(url));
             final MultiValueMap<String, String> headers = new HttpHeaders();
             if (p13nConfiguration.getServiceNavigatorBasicAuth() != null && !p13nConfiguration.getServiceNavigatorBasicAuth().isBlank()) {
                 headers.add("Authorization", "Basic " + p13nConfiguration.getServiceNavigatorBasicAuth());
