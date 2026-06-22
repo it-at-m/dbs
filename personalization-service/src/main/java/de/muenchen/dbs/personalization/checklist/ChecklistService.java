@@ -124,7 +124,7 @@ public class ChecklistService {
                 .map(checklistItem -> serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID()))
                 .flatMap(Optional::stream)
                 .map(snResponse -> {
-                    final ChecklistItemServiceNavigatorDTO newDto = serviceNavigatorService.toDto(snResponse);
+                    final ChecklistItemServiceNavigatorDTO newDto = checklistMapper.toChecklistItemServiceNavigatorDTO(snResponse);
                     newDto.setChecked(
                             checklist.getChecklistItems().stream()
                                     .filter(checklistItem -> snResponse.id().equals(checklistItem.getServiceID()))

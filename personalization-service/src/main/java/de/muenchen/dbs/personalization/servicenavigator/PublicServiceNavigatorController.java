@@ -1,6 +1,7 @@
 package de.muenchen.dbs.personalization.servicenavigator;
 
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,11 +33,13 @@ public class PublicServiceNavigatorController {
 
     private final RestTemplate restTemplate;
     private final P13nConfiguration p13nConfiguration;
+    private final ChecklistMapper checklistMapper;
     private final ServiceNavigatorService snService;
 
     @Autowired
-    public PublicServiceNavigatorController(final P13nConfiguration p13nConfiguration, final ServiceNavigatorService snService) {
+    public PublicServiceNavigatorController(final P13nConfiguration p13nConfiguration, ChecklistMapper checklistMapper, final ServiceNavigatorService snService) {
         this.p13nConfiguration = p13nConfiguration;
+        this.checklistMapper = checklistMapper;
         this.snService = snService;
 
         if (StringUtils.isBlank(p13nConfiguration.getProxyHost())) {
@@ -55,7 +58,7 @@ public class PublicServiceNavigatorController {
         return Arrays.stream(serviceIds.split(SERVICE_IDS_SEPARATOR))
                 .map(snService::getServiceNavigatorService)
                 .flatMap(Optional::stream)
-                .map(snService::toDto)
+                .map(checklistMapper::toChecklistItemServiceNavigatorDTO)
                 .toList();
     }
 

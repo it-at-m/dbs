@@ -1,7 +1,7 @@
 package de.muenchen.dbs.personalization.servicenavigator;
 
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
-import de.muenchen.dbs.personalization.checklist.domain.OnlineServiceDTO;
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.configuration.CacheConfiguration;
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import java.net.InetSocketAddress;
@@ -63,25 +63,4 @@ public class ServiceNavigatorService {
         }
     }
 
-    public ChecklistItemServiceNavigatorDTO toDto(final ServiceNavigatorResponse snResponse) {
-        //todo make nice with mapstruct
-        final ChecklistItemServiceNavigatorDTO mappedDto = new ChecklistItemServiceNavigatorDTO();
-        mappedDto.setServiceID(snResponse.id());
-        mappedDto.setTitle(snResponse.serviceName());
-        mappedDto.setNote(snResponse.summary());
-        mappedDto.setPublicUrl(snResponse.publicUrl());
-        mappedDto.setRequired(snResponse.mandatory());
-        mappedDto.setIsExternal(snResponse.isExternal());
-        mappedDto.setAppointmentService(snResponse.appointmentService());
-        mappedDto.setAppointmentServiceUrl(snResponse.appointmentServiceUrl());
-        if (snResponse.onlineServices() != null) {
-            mappedDto.setOnlineServices(snResponse.onlineServices().stream().map(onlineService -> {
-                final OnlineServiceDTO mappedOSDTO = new OnlineServiceDTO();
-                mappedOSDTO.setUri(onlineService.uri());
-                mappedOSDTO.setLabel(onlineService.label());
-                return mappedOSDTO;
-            }).toList());
-        }
-        return mappedDto;
-    }
 }
