@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,11 +52,11 @@ public class ServiceNavigatorService {
 
         try {
             log.debug("#getServiceNavigatorService: Loading {}", url);
-            HttpHeaders headers = new HttpHeaders();
+            final MultiValueMap<String, String> headers = new HttpHeaders();
             if (p13nConfiguration.getServiceNavigatorBasicAuth() != null && !p13nConfiguration.getServiceNavigatorBasicAuth().isBlank()) {
                 headers.add("Authorization", "Basic " + p13nConfiguration.getServiceNavigatorBasicAuth());
             }
-            HttpEntity<String> request = new HttpEntity<String>(headers);
+            final HttpEntity<String> request = new HttpEntity<>(headers);
             final ResponseEntity<ServiceNavigatorResponse> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
