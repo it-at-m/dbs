@@ -1,6 +1,9 @@
 package de.muenchen.dbs.personalization.common;
 
-public class Util {
+public final class P13nUtils {
+
+    private P13nUtils() {
+    }
 
     public static String sanitizeForLog(final String value) {
         if (value == null) {

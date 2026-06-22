@@ -1,6 +1,6 @@
 package de.muenchen.dbs.personalization.servicenavigator;
 
-import de.muenchen.dbs.personalization.common.Util;
+import de.muenchen.dbs.personalization.common.P13nUtils;
 import de.muenchen.dbs.personalization.configuration.CacheConfiguration;
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import java.net.InetSocketAddress;
@@ -68,8 +68,8 @@ public class ServiceNavigatorService {
                 return Optional.ofNullable(response.getBody());
             } else {
                 log.warn("Searching Service with Service-ID {} and lang {} returned a !2xx HTTP Response of {}. Returning empty.",
-                        Util.sanitizeForLog(serviceId),
-                        Util.sanitizeForLog(lang),
+                        P13nUtils.sanitizeForLog(serviceId),
+                        P13nUtils.sanitizeForLog(lang),
                         response.getStatusCode());
                 return Optional.empty();
             }
@@ -79,12 +79,15 @@ public class ServiceNavigatorService {
                 return getServiceNavigatorService(serviceId, SERVICENAVIGATOR_FALLBACK_LANGUAGE);
             }
             log.error("HTTP Client-Error {} when trying to fetch Service with Service-ID {} and lang {}: {}. Returning empty response.", e.getStatusCode(),
-                    Util.sanitizeForLog(serviceId),
-                    Util.sanitizeForLog(lang),
+                    P13nUtils.sanitizeForLog(serviceId),
+                    P13nUtils.sanitizeForLog(lang),
                     e.getMessage());
             return Optional.empty();
         } catch (Exception e) {
-            log.error("Network Error when trying to fetch Service with Service-ID {} and lang {}. Throwing Service Unavailable.", serviceId, lang, e);
+            log.error("Network Error when trying to fetch Service with Service-ID {} and lang {}. Throwing Service Unavailable.",
+                    P13nUtils.sanitizeForLog(serviceId),
+                    P13nUtils.sanitizeForLog(lang),
+                    e);
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "ServiceNavigator was unreachable", e);
         }
     }
