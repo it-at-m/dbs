@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DbsTicketingEventingService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <option name="ACTIVE_PROFILES" value="local" />
-    <module name="eventing-service" />
+    <module name="eventing-service.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="de.muenchen.oss.dbs.ticketing.eventing.service.DbsTicketingEventingService" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
