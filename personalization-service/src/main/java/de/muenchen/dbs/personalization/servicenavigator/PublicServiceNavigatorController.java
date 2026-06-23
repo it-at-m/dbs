@@ -80,6 +80,8 @@ public class PublicServiceNavigatorController {
         }
 
         return Arrays.stream(serviceIds.split(SERVICE_IDS_SEPARATOR))
+                .map(String::trim)
+                .filter(StringUtils::isNotBlank)
                 .map(id -> snService.getServiceNavigatorService(id, normalizedLang))
                 .flatMap(Optional::stream)
                 .map(checklistMapper::toChecklistItemServiceNavigatorDTO)

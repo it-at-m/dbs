@@ -2,9 +2,6 @@ server:
   port: 39146
 spring:
   # Spring JPA
-  profiles:
-    # load local local-secure profile for protected test-environments
-    active: local-secure
   jpa:
     # Logging for database operation
     show-sql: true
