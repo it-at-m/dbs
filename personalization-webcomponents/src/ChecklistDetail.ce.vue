@@ -411,7 +411,7 @@ async function _updateChecklist(checklist: ChecklistServiceNavigatorReadDTO) {
   }
   const checklistApi = useChecklistsApi();
   try {
-    checklist = await checklistApi.updateChecklist({
+    await checklistApi.updateChecklist({
       checklistID: checklistUpdateDTO.id,
       checklistUpdateDTO: checklistUpdateDTO,
     });

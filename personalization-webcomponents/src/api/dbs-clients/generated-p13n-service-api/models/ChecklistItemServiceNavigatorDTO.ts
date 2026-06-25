@@ -11,15 +11,8 @@
  * Do not edit the class manually.
  */
 
-import type { OnlineServiceDTO } from "./OnlineServiceDTO";
-
-import { mapValues } from "../runtime";
-import {
-  OnlineServiceDTOFromJSON,
-  OnlineServiceDTOFromJSONTyped,
-  OnlineServiceDTOToJSON,
-  OnlineServiceDTOToJSONTyped,
-} from "./OnlineServiceDTO";
+import type {OnlineServiceDTO} from "./OnlineServiceDTO";
+import {OnlineServiceDTOFromJSON, OnlineServiceDTOToJSON,} from "./OnlineServiceDTO";
 
 /**
  *

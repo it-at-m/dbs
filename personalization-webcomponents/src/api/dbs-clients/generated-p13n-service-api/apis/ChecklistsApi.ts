@@ -10,27 +10,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { ChecklistCreateDTO } from "../models/ChecklistCreateDTO";
-import type { ChecklistReadDTO } from "../models/ChecklistReadDTO";
-import type { ChecklistServiceNavigatorReadDTO } from "../models/ChecklistServiceNavigatorReadDTO";
-import type { ChecklistUpdateDTO } from "../models/ChecklistUpdateDTO";
-
-import {
-  ChecklistCreateDTOFromJSON,
-  ChecklistCreateDTOToJSON,
-} from "../models/ChecklistCreateDTO";
-import {
-  ChecklistReadDTOFromJSON,
-  ChecklistReadDTOToJSON,
-} from "../models/ChecklistReadDTO";
-import {
-  ChecklistServiceNavigatorReadDTOFromJSON,
-  ChecklistServiceNavigatorReadDTOToJSON,
-} from "../models/ChecklistServiceNavigatorReadDTO";
-import {
-  ChecklistUpdateDTOFromJSON,
-  ChecklistUpdateDTOToJSON,
-} from "../models/ChecklistUpdateDTO";
+import type {ChecklistCreateDTO} from "../models/ChecklistCreateDTO";
+import {ChecklistCreateDTOToJSON,} from "../models/ChecklistCreateDTO";
+import type {ChecklistReadDTO} from "../models/ChecklistReadDTO";
+import {ChecklistReadDTOFromJSON,} from "../models/ChecklistReadDTO";
+import type {ChecklistServiceNavigatorReadDTO} from "../models/ChecklistServiceNavigatorReadDTO";
+import {ChecklistServiceNavigatorReadDTOFromJSON,} from "../models/ChecklistServiceNavigatorReadDTO";
+import type {ChecklistUpdateDTO} from "../models/ChecklistUpdateDTO";
+import {ChecklistUpdateDTOToJSON,} from "../models/ChecklistUpdateDTO";
 import * as runtime from "../runtime";
 
 export interface CheckChecklistEntryRequest {

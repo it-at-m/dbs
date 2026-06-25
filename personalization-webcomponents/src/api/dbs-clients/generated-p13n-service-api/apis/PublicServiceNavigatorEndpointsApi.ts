@@ -10,12 +10,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type { ChecklistItemServiceNavigatorDTO } from "../models/ChecklistItemServiceNavigatorDTO";
-
-import {
-  ChecklistItemServiceNavigatorDTOFromJSON,
-  ChecklistItemServiceNavigatorDTOToJSON,
-} from "../models/ChecklistItemServiceNavigatorDTO";
+import type {ChecklistItemServiceNavigatorDTO} from "../models/ChecklistItemServiceNavigatorDTO";
+import {ChecklistItemServiceNavigatorDTOFromJSON,} from "../models/ChecklistItemServiceNavigatorDTO";
 import * as runtime from "../runtime";
 
 export interface GetServicesByIdsRequest {

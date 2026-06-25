@@ -11,15 +11,8 @@
  * Do not edit the class manually.
  */
 
-import type { ChecklistItemDTO } from "./ChecklistItemDTO";
-
-import { mapValues } from "../runtime";
-import {
-  ChecklistItemDTOFromJSON,
-  ChecklistItemDTOFromJSONTyped,
-  ChecklistItemDTOToJSON,
-  ChecklistItemDTOToJSONTyped,
-} from "./ChecklistItemDTO";
+import type {ChecklistItemDTO} from "./ChecklistItemDTO";
+import {ChecklistItemDTOFromJSON, ChecklistItemDTOToJSON,} from "./ChecklistItemDTO";
 
 /**
  *

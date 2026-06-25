@@ -11,14 +11,10 @@
  * Do not edit the class manually.
  */
 
-import type { ChecklistItemServiceNavigatorDTO } from "./ChecklistItemServiceNavigatorDTO";
-
-import { mapValues } from "../runtime";
+import type {ChecklistItemServiceNavigatorDTO} from "./ChecklistItemServiceNavigatorDTO";
 import {
-  ChecklistItemServiceNavigatorDTOFromJSON,
-  ChecklistItemServiceNavigatorDTOFromJSONTyped,
-  ChecklistItemServiceNavigatorDTOToJSON,
-  ChecklistItemServiceNavigatorDTOToJSONTyped,
+    ChecklistItemServiceNavigatorDTOFromJSON,
+    ChecklistItemServiceNavigatorDTOToJSON,
 } from "./ChecklistItemServiceNavigatorDTO";
 
 /**
