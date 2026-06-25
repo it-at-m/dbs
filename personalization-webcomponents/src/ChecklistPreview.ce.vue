@@ -1,31 +1,31 @@
 <template>
   <div>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="mucIconsSprite" />
+    <div v-html="mucIconsSprite"/>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="customIconsSprite" />
+    <div v-html="customIconsSprite"/>
 
     <service-info-modal
-      :open="serviceInfoModalOpen"
-      :service="selectedService!"
-      @close="serviceInfoModalOpen = false"
-      @cancel="serviceInfoModalOpen = false"
+        :open="serviceInfoModalOpen"
+        :service="selectedService!"
+        @close="serviceInfoModalOpen = false"
+        @cancel="serviceInfoModalOpen = false"
     />
 
     <muc-modal
-      :open="requestLoginModalOpen"
-      @close="requestLoginModalOpen = false"
-      @cancel="requestLoginModalOpen = false"
+        :open="requestLoginModalOpen"
+        @close="requestLoginModalOpen = false"
+        @cancel="requestLoginModalOpen = false"
     >
       <template #title>Bürgerservice-Anmeldung</template>
       <template #body
-        >Melden Sie sich an, um die für Sie ermittelten Leistungen als
+      >Melden Sie sich an, um die für Sie ermittelten Leistungen als
         Checkliste in Ihrem Bereich zu speichern.
       </template>
       <template #buttons>
         <muc-button
-          icon="sign-in"
-          @click="_requestLogin"
+            icon="sign-in"
+            @click="_requestLogin"
         >
           Anmelden
         </muc-button>
@@ -33,9 +33,9 @@
     </muc-modal>
 
     <muc-modal
-      :open="saveChecklistModalOpen"
-      @close="saveChecklistModalOpen = false"
-      @cancel="saveChecklistModalOpen = false"
+        :open="saveChecklistModalOpen"
+        @close="saveChecklistModalOpen = false"
+        @cancel="saveChecklistModalOpen = false"
     >
       <template #title>Speichern als Checkliste</template>
       <template #body>
@@ -43,30 +43,30 @@
           <div class="m-checkboxes">
             <div class="m-checkboxes__item">
               <input
-                id="checkbox-privacy-policy"
-                class="m-checkboxes__input"
-                name="checkbox-privacy-policy"
-                type="checkbox"
-                aria-required="true"
-                v-model="dseAccepted"
+                  id="checkbox-privacy-policy"
+                  class="m-checkboxes__input"
+                  name="checkbox-privacy-policy"
+                  type="checkbox"
+                  aria-required="true"
+                  v-model="dseAccepted"
               />
               <label
-                class="m-label m-checkboxes__label"
-                for="checkbox-privacy-policy"
+                  class="m-label m-checkboxes__label"
+                  for="checkbox-privacy-policy"
               >
                 Ich stimme der Speicherung der Checkliste
                 <strong>„{{ lebenslageTitle }}”</strong>
                 gemäß der
                 <a
-                  href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf"
-                  target="_blank"
-                  >Datenschutzerklärung</a
+                    href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf"
+                    target="_blank"
+                >Datenschutzerklärung</a
                 >
                 und der
                 <a
-                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
-                  target="_blank"
-                  >Hinweise zur elektronischen Kommunikation</a
+                    href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
+                    target="_blank"
+                >Hinweise zur elektronischen Kommunikation</a
                 >
                 zu. Meine Zustimmung kann ich jederzeit widerrufen.
               </label>
@@ -74,9 +74,9 @@
           </div>
         </div>
         <muc-banner
-          v-if="loadingError"
-          type="emergency"
-          variant="content"
+            v-if="loadingError"
+            type="emergency"
+            variant="content"
         >
           Es ist ein Fehler beim Speichern der Checkliste aufgetreten. Bitte
           versuchen Sie es zu einem späteren Zeitpunkt noch einmal.
@@ -84,24 +84,24 @@
       </template>
       <template #buttons>
         <muc-button
-          :disabled="!dseAccepted"
-          :icon="loading ? '' : 'order-bool-ascending'"
-          @click="_saveChecklistAcceptedDSE"
+            :disabled="!dseAccepted"
+            :icon="loading ? '' : 'order-bool-ascending'"
+            @click="_saveChecklistAcceptedDSE"
         >
           Checkliste speichern
           <muc-percentage-spinner
-            v-if="loading"
-            style="color: white"
-            size="24px"
+              v-if="loading"
+              style="color: white"
+              size="24px"
           />
         </muc-button>
       </template>
     </muc-modal>
 
     <muc-intro
-      :title="lebenslageTitle"
-      :divider="false"
-      variant="detail"
+        :title="lebenslageTitle"
+        :divider="false"
+        variant="detail"
     >
       <div v-if="!localStorageError && !noResultsError">
         <p>
@@ -109,23 +109,23 @@
         </p>
         <div style="padding-top: 32px">
           <muc-button
-            icon="order-bool-ascending"
-            style="margin-right: 16px; margin-bottom: 16px"
-            @click="saveChecklistClicked"
+              icon="order-bool-ascending"
+              style="margin-right: 16px; margin-bottom: 16px"
+              @click="saveChecklistClicked"
           >
             Als Checkliste speichern
           </muc-button>
           <muc-button
-            @click="copyUrl"
-            variant="secondary"
-            icon="copy-link"
-            spin-icon-on-click
+              @click="copyUrl"
+              variant="secondary"
+              icon="copy-link"
+              spin-icon-on-click
           >
             {{ t("preview.copyLink") }}
           </muc-button>
           <p
-            class="visually-hidden"
-            role="status"
+              class="visually-hidden"
+              role="status"
           >
             {{ linkStateMessage }}
           </p>
@@ -134,13 +134,13 @@
     </muc-intro>
 
     <div
-      class="container"
-      style="padding-top: 2rem"
+        class="container"
+        style="padding-top: 2rem"
     >
       <div class="m-intro-vertical__grid">
         <div class="m-intro-vertical__grid-inner">
           <div v-if="loading">
-            <skeleton-loader />
+            <skeleton-loader/>
           </div>
 
           <div v-else-if="localStorageError">
@@ -160,8 +160,8 @@
             </p>
             <a :href="newChecklistUrl">
               <muc-button
-                icon="arrow-right"
-                iconAnimated
+                  icon="arrow-right"
+                  iconAnimated
               >
                 Abfrage neu starten
               </muc-button>
@@ -169,10 +169,10 @@
           </div>
 
           <muc-callout
-            v-else-if="noResultsError"
-            type="warning"
+              v-else-if="noResultsError"
+              type="warning"
           >
-            <template #header> Keine Leistungen gefunden. </template>
+            <template #header> Keine Leistungen gefunden.</template>
             <template #content>
               <p>
                 Für die eingegeben Angaben haben wir keine passenden Leistungen
@@ -180,11 +180,12 @@
                 unseren Chatbot <span class="mde-bold">Muckl</span> oder unsere
                 anderen
                 <muc-link
-                  class="mde-bold"
-                  href="https://stadt.muenchen.de/rathaus/kontakt.html"
-                  label="Kontaktkanäle"
-                  noUnderline
-                />.
+                    class="mde-bold"
+                    href="https://stadt.muenchen.de/rathaus/kontakt.html"
+                    label="Kontaktkanäle"
+                    noUnderline
+                />
+                .
               </p>
             </template>
           </muc-callout>
@@ -195,13 +196,13 @@
             </h2>
             <ul class="snServiceList">
               <li
-                class="snServiceElement mde-b2 mde-bold"
-                v-for="service in snServices"
-                :key="service.serviceID"
-                @click="openService(service)"
-                tabindex="0"
-                @keydown.enter="openService(service)"
-                :aria-label="
+                  class="snServiceElement mde-b2 mde-bold"
+                  v-for="service in snServices"
+                  :key="service.serviceID"
+                  @click="openService(service)"
+                  tabindex="0"
+                  @keydown.enter="openService(service)"
+                  :aria-label="
                   service.required
                     ? service.title + ' – verpflichtend'
                     : service.title
@@ -209,9 +210,9 @@
               >
                 {{ service.title }}
                 <span
-                  class="required-label mde-b2"
-                  v-if="service.required"
-                  >– verpflichtend</span
+                    class="required-label mde-b2"
+                    v-if="service.required"
+                >– verpflichtend</span
                 >
               </li>
             </ul>
@@ -237,8 +238,7 @@
 </template>
 
 <script setup lang="ts">
-import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
-import type { ServiceNavigatorResult } from "@/api/servicenavigator/ServiceNavigatorResult.ts";
+import type {ServiceNavigatorResult} from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import {
@@ -252,12 +252,12 @@ import {
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import { onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import {onMounted, ref} from "vue";
+import {useI18n} from "vue-i18n";
 
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
-import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import {
   getAccessToken,
   getAPIBaseURL,
@@ -269,6 +269,8 @@ import {
   QUERY_PARAM_SN_RESULT_SERVICES,
   setAccessToken,
 } from "@/util/Constants.ts";
+import {useChecklistsApi, usePublicServiceNavigatorEndpoints} from "@/api/compositions/UseChecklistsApi.ts";
+import type {ChecklistItemDTO, ChecklistItemServiceNavigatorDTO} from "@/api/dbs-clients/generated-p13n-service-api";
 
 // Network activity and results
 const loading = ref(false);
@@ -287,19 +289,19 @@ const saveChecklistModalOpen = ref(false);
 const dseAccepted = ref(false);
 const lebenslageTitle = ref("Meine Lebenslage");
 const lebenslageId = ref("");
-const snServices = ref<ChecklistItemServiceNavigator[] | null>(null);
-const selectedService = ref<ChecklistItemServiceNavigator | null>(null);
+const snServices = ref<ChecklistItemServiceNavigatorDTO[] | null>(null);
+const selectedService = ref<ChecklistItemServiceNavigatorDTO | null>(null);
 const linkStateMessage = ref("");
 
-const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
-const { t } = useI18n();
+const {loggedIn} = useDBSLoginWebcomponentPlugin(_authChangedCallback);
+const {t} = useI18n();
 
 const props = defineProps<{
   checklistDetailUrl: string;
   newChecklistUrl: string;
 }>();
 
-onMounted(() => {
+onMounted(async () => {
   loading.value = true;
   loadingError.value = "";
 
@@ -310,45 +312,29 @@ onMounted(() => {
     lebenslageId.value = snResult.id;
 
     if (snResult.services.length > 0) {
-      //todo replace with openapi generated client when backend is finished
-      const url =
-        getAPIBaseURL() +
-        "/public/api/p13n-backend/servicenavigator?ids=" +
-        snResult.services.join(",");
-      fetch(url, {
-        mode: "cors",
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((resp) => {
-          if (resp.ok) {
-            resp
-              .json()
-              .then((snServicesBody: ChecklistItemServiceNavigator[]) => {
-                snServices.value = snServicesBody.sort((a, b) => {
-                  return a.required === b.required ? 0 : a.required ? -1 : 1;
-                });
-              });
-          } else {
-            resp.text().then((errorText) => {
-              console.debug("Error loading checklist: ", errorText);
-              loadingError.value = errorText;
-            });
-          }
-        })
-        .catch((error) => {
-          console.debug("Error loading checklist: ", error);
-          loadingError.value = error;
-        })
-        .finally(() => (loading.value = false));
+
+      const snApi = usePublicServiceNavigatorEndpoints();
+      try {
+        const snServicesBody = await snApi.getServicesByIds({
+          ids: snResult.services.join(",")
+        });
+        snServices.value = snServicesBody.sort((a, b) => {
+          return a.required === b.required ? 0 : a.required ? -1 : 1;
+        });
+      } catch (error) {
+        console.debug("Error loading checklist: ", error);
+        loadingError.value = error as string;
+      } finally {
+        loading.value = false
+      }
+
     } else {
       loading.value = false;
     }
   } else {
     localStorageError.value =
-      "No Data found in LocalStorage with key " +
-      LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT;
+        "No Data found in LocalStorage with key " +
+        LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT;
     loading.value = false;
   }
 
@@ -358,14 +344,14 @@ onMounted(() => {
   }
 
   const updateLebenslage = document.querySelector(
-    ".m-breadcrumb__list-item-current"
+      ".m-breadcrumb__list-item-current"
   );
   if (updateLebenslage) {
     updateLebenslage.textContent = "Lebenslage: " + lebenslageTitle.value;
   }
 
   document.title =
-    "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
+      "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
@@ -376,62 +362,45 @@ function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
 function _requestLogin() {
   requestLoginModalOpen.value = false;
   document.dispatchEvent(
-    new CustomEvent("authorization-request", {
-      detail: {
-        loginProvider: undefined,
-        authLevel: undefined,
-      },
-    })
+      new CustomEvent("authorization-request", {
+        detail: {
+          loginProvider: undefined,
+          authLevel: undefined,
+        },
+      })
   );
   localStorage.setItem(LOCALSTORAGE_KEY_LOGGED_IN, "true");
 }
 
-function _saveChecklistAcceptedDSE() {
-  //todo replace with openapi generated client when backend is finished
+async function _saveChecklistAcceptedDSE() {
   loading.value = true;
   loadingError.value = "";
-  const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
-  const checklistItemsDtos = snServices.value?.map((service) => {
+
+  const checklistsApi = useChecklistsApi();
+  const checklistItemsDtos: ChecklistItemDTO[] | undefined = snServices.value?.map((service) => {
     return {
       serviceID: service.serviceID,
       checked: undefined,
       title: service.title,
       note: service.note,
       required: service.required,
-    };
+    } as ChecklistItemDTO;
   });
-  const body = JSON.stringify({
-    title: lebenslageTitle.value,
-    situationId: lebenslageId.value,
-    checklistItems: checklistItemsDtos,
-  });
-  fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + getAccessToken(),
-      "Content-Type": "application/json",
-      "x-xsrf-token": getXSRFToken(),
-    },
-    body: body,
-    mode: "cors",
-    credentials: "include",
-  })
-    .then((resp) => {
-      if (resp.ok) {
-        resp.json().then((createResponse: { id: string }) => {
-          location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${createResponse.id}`;
-        });
-      } else {
-        resp.text().then((errBody) => {
-          throw Error(errBody);
-        });
+  try {
+    const createResponse = await checklistsApi.createChecklist({
+      checklistCreateDTO: {
+        title: lebenslageTitle.value,
+        situationId: lebenslageId.value,
+        checklistItems: checklistItemsDtos!,
       }
     })
-    .catch((error) => {
-      console.debug(error);
-      loadingError.value = error;
-    })
-    .finally(() => (loading.value = false));
+    location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${createResponse.id}`;
+  } catch (error) {
+    console.debug(error);
+    loadingError.value = error as string;
+  } finally {
+    loading.value = false;
+  }
 }
 
 function saveChecklistClicked() {
@@ -448,11 +417,11 @@ function getSnResults(): ServiceNavigatorResult | null {
     return snResultsFromUrl;
   }
   const serviceNavigatorResultString = localStorage.getItem(
-    LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT
+      LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT
   );
   if (serviceNavigatorResultString) {
     const snResult = JSON.parse(
-      serviceNavigatorResultString
+        serviceNavigatorResultString
     ) as ServiceNavigatorResult;
     if (snResult.services.length === 0) {
       noResultsError.value = "No results for this query";
@@ -471,8 +440,8 @@ function setUrlParams(snResult: ServiceNavigatorResult) {
     url.searchParams.set(QUERY_PARAM_SN_RESULT_ID, snResult.id);
     url.searchParams.set(QUERY_PARAM_SN_RESULT_NAME, snResult.name);
     url.searchParams.set(
-      QUERY_PARAM_SN_RESULT_SERVICES,
-      snResult.services.join(",")
+        QUERY_PARAM_SN_RESULT_SERVICES,
+        snResult.services.join(",")
     );
     history.pushState(null, "", url);
   }
@@ -503,7 +472,7 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
   }
 }
 
-function openService(service: ChecklistItemServiceNavigator) {
+function openService(service: ChecklistItemServiceNavigatorDTO) {
   selectedService.value = service;
   serviceInfoModalOpen.value = true;
 }

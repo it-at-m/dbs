@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import type ChecklistItem from "@/api/persservice/ChecklistItem.ts";
 
 import ChecklistCheckedCircle from "@/components/ChecklistCheckedCircle.vue";
+import type {ChecklistItemDTO} from "@/api/dbs-clients/generated-p13n-service-api";
 
 defineProps<{
-  checklistItem: ChecklistItem;
+  checklistItem: ChecklistItemDTO;
 }>();
 </script>
 
