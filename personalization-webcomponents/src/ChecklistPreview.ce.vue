@@ -317,19 +317,22 @@ onMounted(async () => {
     if (snResult.services.length > 0) {
       const snApi = usePublicServiceNavigatorEndpoints();
       try {
-        var requestedLang;
+        let requestedLang;
         try {
           const requestedLocale = new Intl.Locale(locale.value);
-          if(requestedLocale) {
+          if (requestedLocale) {
             requestedLang = requestedLocale.language;
           }
-        } catch (error) {
-          console.debug("couldn't instantiate language with locale", locale.value)
+        } catch {
+          console.debug(
+            "couldn't instantiate language with locale",
+            locale.value
+          );
         }
 
         const snServicesBody = await snApi.getServicesByIds({
           ids: snResult.services.join(","),
-          lang: requestedLang ? requestedLang : undefined
+          lang: requestedLang ? requestedLang : undefined,
         });
         snServices.value = snServicesBody.sort((a, b) => {
           return a.required === b.required ? 0 : a.required ? -1 : 1;
