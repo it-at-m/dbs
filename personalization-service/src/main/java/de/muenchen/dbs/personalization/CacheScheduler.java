@@ -24,6 +24,6 @@ public class CacheScheduler {
         if (cache != null) {
             cache.clear();
         }
-        log.info("Evicted {}-Cache.", CacheConfiguration.SERVICE_NAVIGATOR_SERVICES_CACHE_NAME);
+        log.debug("Evicted {}-Cache.", CacheConfiguration.SERVICE_NAVIGATOR_SERVICES_CACHE_NAME);
     }
 }
