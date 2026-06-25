@@ -31,6 +31,9 @@ import org.springframework.web.server.ResponseStatusException;
 public class ChecklistService {
 
     private static final String JWT_CLAIM_LHM_EXT_ID = "lhmExtID";
+    // As we currently only allow checklists in German, we set the default.
+    // If we were to support saving checklists of all languages, the preferred language must be saved with the checklist.
+    public static final String DEFAULT_LANGUAGE = "de";
     private final ChecklistRepository checklistRepository;
     private final ServiceNavigatorService serviceNavigatorService;
     private final ChecklistMapper checklistMapper;
@@ -121,10 +124,10 @@ public class ChecklistService {
 
     private ChecklistServiceNavigatorReadDTO populateWithServiceNavigator(final Checklist checklist) {
         final List<ChecklistItemServiceNavigatorDTO> checklistItemDtos = checklist.getChecklistItems().stream()
-                .map(checklistItem -> serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID()))
+                .map(checklistItem -> serviceNavigatorService.getServiceNavigatorService(checklistItem.getServiceID(), DEFAULT_LANGUAGE))
                 .flatMap(Optional::stream)
                 .map(snResponse -> {
-                    final ChecklistItemServiceNavigatorDTO newDto = serviceNavigatorService.toDto(snResponse);
+                    final ChecklistItemServiceNavigatorDTO newDto = checklistMapper.toChecklistItemServiceNavigatorDTO(snResponse);
                     newDto.setChecked(
                             checklist.getChecklistItems().stream()
                                     .filter(checklistItem -> snResponse.id().equals(checklistItem.getServiceID()))

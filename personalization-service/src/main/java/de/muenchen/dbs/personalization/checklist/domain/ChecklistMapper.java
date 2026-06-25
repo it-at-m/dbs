@@ -1,8 +1,12 @@
 package de.muenchen.dbs.personalization.checklist.domain;
 
+import de.muenchen.dbs.personalization.servicenavigator.OnlineService;
+import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorResponse;
 import java.util.List;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface ChecklistMapper {
@@ -25,4 +29,17 @@ public interface ChecklistMapper {
 
     List<ChecklistItem> toChecklistItemList(List<ChecklistItemDTO> checklistItemDTO);
 
+    // Element mapping for ServiceNavigator OnlineService -> DTO
+    OnlineServiceDTO toOnlineServiceDTO(OnlineService source);
+
+    // Ensure null list maps to empty list for online services
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
+    List<OnlineServiceDTO> toOnlineServiceDTOs(List<OnlineService> source);
+
+    // Mapping from ServiceNavigatorResponse -> ChecklistItemServiceNavigatorDTO
+    @Mapping(source = "serviceName", target = "title")
+    @Mapping(source = "summary", target = "note")
+    @Mapping(source = "id", target = "serviceID")
+    @Mapping(source = "mandatory", target = "required")
+    ChecklistItemServiceNavigatorDTO toChecklistItemServiceNavigatorDTO(ServiceNavigatorResponse source);
 }

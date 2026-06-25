@@ -18,6 +18,11 @@ public class P13nConfiguration {
     private String serviceNavigatorUrl = "https://stadt.muenchen.de/service/rs/befi/navigator";
 
     /**
+     * (optional) Basic Auth credentials for calling ServiceNavigator.
+     */
+    private String serviceNavigatorBasicAuth;
+
+    /**
      * (optional) Proxy Host used to call ServiceNavigator.
      */
     private String proxyHost = null;
