@@ -1,0 +1,673 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "personalization-service",
+    "description": "Personalization service for the digital citizen service of the City of Munich",
+    "version": "1.0.2-SNAPSHOT"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:39146",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Checklists",
+      "description": "Creating, reading and deleting Checklists."
+    },
+    {
+      "name": "Actuator",
+      "description": "Monitor and interact",
+      "externalDocs": {
+        "description": "Spring Boot Actuator Web API Documentation",
+        "url": "https://docs.spring.io/spring-boot/docs/current/actuator-api/html/"
+      }
+    },
+    {
+      "name": "Public ServiceNavigator Endpoints",
+      "description": "Endpoints not requiring authentication"
+    }
+  ],
+  "paths": {
+    "/checklist/{checklistID}": {
+      "get": {
+        "tags": [
+          "Checklists"
+        ],
+        "summary": "Get specific checklist by checklist-id.",
+        "description": "Returns a checklist by checklistId",
+        "operationId": "getChecklist",
+        "parameters": [
+          {
+            "name": "checklistID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChecklistServiceNavigatorReadDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Checklists"
+        ],
+        "summary": "Update a checklist",
+        "description": "Updates a checklist using the provided checklist details.",
+        "operationId": "updateChecklist",
+        "parameters": [
+          {
+            "name": "checklistID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChecklistUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChecklistServiceNavigatorReadDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Checklists"
+        ],
+        "summary": "Delete a checklist",
+        "description": "Deletes a checklist by checklistId.",
+        "operationId": "deleteChecklist",
+        "parameters": [
+          {
+            "name": "checklistID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/checklist": {
+      "get": {
+        "tags": [
+          "Checklists"
+        ],
+        "summary": "Get all checklists by user.",
+        "description": "Returns all checklists of an user (identified by JWT-Token)",
+        "operationId": "getChecklists",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChecklistReadDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Checklists"
+        ],
+        "summary": "Create a new checklist",
+        "description": "Creates a new checklist using the provided checklist details.",
+        "operationId": "createChecklist",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChecklistCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChecklistReadDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checklist/{checklistID}/{serviceID}/uncheck": {
+      "post": {
+        "tags": [
+          "Checklists"
+        ],
+        "summary": "Uncheck a Checklist-Entry",
+        "description": "Unchecks a checklist-entry.",
+        "operationId": "uncheckChecklistEntry",
+        "parameters": [
+          {
+            "name": "checklistID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "serviceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChecklistServiceNavigatorReadDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checklist/{checklistID}/{serviceID}/check": {
+      "post": {
+        "tags": [
+          "Checklists"
+        ],
+        "summary": "Check a Checklist-Entry",
+        "description": "Checks a checklist-entry.",
+        "operationId": "checkChecklistEntry",
+        "parameters": [
+          {
+            "name": "checklistID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "serviceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChecklistServiceNavigatorReadDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public/servicenavigator": {
+      "get": {
+        "tags": [
+          "Public ServiceNavigator Endpoints"
+        ],
+        "summary": "Lookup ServiceNavigator Services by ServiceID. Returns a list of services for the given service IDs.",
+        "operationId": "getServicesByIds",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "Language for translated service content. Falls back to 'de' if not provided.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "de"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChecklistItemServiceNavigatorDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actuator": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator root web endpoint",
+        "operationId": "links",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/Link"
+                    }
+                  }
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/Link"
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/Link"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actuator/metrics": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'prometheus'",
+        "operationId": "scrape",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CONTENT_TYPE_004",
+                "CONTENT_TYPE_OPENMETRICS_100",
+                "CONTENT_TYPE_PROTOBUF"
+              ]
+            }
+          },
+          {
+            "name": "includedNames",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain;version=0.0.4;charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/openmetrics-text;version=1.0.0;charset=utf-8": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actuator/info": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'info'",
+        "operationId": "info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actuator/health": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'health'",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ChecklistItemDTO": {
+        "type": "object",
+        "properties": {
+          "serviceID": {
+            "type": "string"
+          },
+          "checked": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ChecklistUpdateDTO": {
+        "required": [
+          "checklistItems",
+          "id",
+          "lhmExtId",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lhmExtId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "checklistItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChecklistItemDTO"
+            }
+          }
+        }
+      },
+      "ChecklistItemServiceNavigatorDTO": {
+        "type": "object",
+        "properties": {
+          "serviceID": {
+            "type": "string"
+          },
+          "checked": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "isExternal": {
+            "type": "boolean"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "appointmentServiceUrl": {
+            "type": "string"
+          },
+          "appointmentService": {
+            "type": "boolean"
+          },
+          "onlineServices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OnlineServiceDTO"
+            }
+          }
+        }
+      },
+      "ChecklistServiceNavigatorReadDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lhmExtId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "lastUpdate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "situationId": {
+            "type": "string"
+          },
+          "checklistItemServiceNavigatorDtos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChecklistItemServiceNavigatorDTO"
+            }
+          }
+        }
+      },
+      "OnlineServiceDTO": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "ChecklistCreateDTO": {
+        "required": [
+          "checklistItems",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "situationId": {
+            "type": "string"
+          },
+          "checklistItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChecklistItemDTO"
+            }
+          }
+        }
+      },
+      "ChecklistReadDTO": {
+        "required": [
+          "checklistItems",
+          "id",
+          "lastUpdate",
+          "lhmExtId",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lhmExtId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "situationId": {
+            "type": "string"
+          },
+          "lastUpdate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "checklistItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChecklistItemDTO"
+            }
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string"
+          },
+          "templated": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
