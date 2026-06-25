@@ -14,7 +14,8 @@
     "post-build": "node ./processes/PostBuild.js && cyclonedx-npm --omit dev --omit optional --output-reproducible -o dist/application.cdx.json  --validate",
     "preview": "vite preview",
     "lint": "prettier . --check && eslint . && vue-tsc --build --noEmit",
-    "fix": "prettier . --write && eslint . --fix"
+    "fix": "prettier . --write && eslint . --fix",
+    "api-gen:generate": "openapi-generator-cli generate -i ../personalization-service/api-docs.json -g typescript-fetch -o src/api/dbs-clients/generated-p13n-service-api --type-mappings=set=Array"
   },
   "dependencies": {
     "@muenchen/muc-patternlab-vue": "10.0.0",
