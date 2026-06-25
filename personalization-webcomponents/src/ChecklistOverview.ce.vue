@@ -125,6 +125,7 @@ function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
 async function loadChecklists() {
   if (loggedIn.value) {
     loading.value = true;
+    loadingError.value = false;
     const checklistApi = useChecklistsApi();
     try {
       checklists.value = await checklistApi.getChecklists();
@@ -137,6 +138,7 @@ async function loadChecklists() {
       }
     } catch (error) {
       console.debug(error);
+      loadingError.value = true;
     } finally {
       loading.value = false;
     }

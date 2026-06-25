@@ -395,21 +395,24 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
 }
 
 async function _updateChecklist(checklist: ChecklistServiceNavigatorReadDTO) {
-  const checklistUpdateDTO = {} as ChecklistUpdateDTO;
-
   if (
-    checklist.id &&
-    checklist.title &&
-    checklist.lhmExtId &&
-    checklist.checklistItemServiceNavigatorDtos
+    !checklist.id ||
+    !checklist.title ||
+    !checklist.lhmExtId ||
+    !checklist.checklistItemServiceNavigatorDtos
   ) {
-    checklistUpdateDTO.id = checklist.id;
-    checklistUpdateDTO.title = checklist.title;
-    checklistUpdateDTO.lhmExtId = checklist.lhmExtId;
-    checklistUpdateDTO.checklistItems =
-      checklist.checklistItemServiceNavigatorDtos;
+    loadingUpdate.value = false;
+    return;
   }
+
   const checklistApi = useChecklistsApi();
+  const checklistUpdateDTO = {
+    id: checklist.id,
+    title: checklist.title,
+    lhmExtId: checklist.lhmExtId,
+    checklistItems: checklist.checklistItemServiceNavigatorDtos
+  } as ChecklistUpdateDTO;
+
   try {
     await checklistApi.updateChecklist({
       checklistID: checklistUpdateDTO.id,

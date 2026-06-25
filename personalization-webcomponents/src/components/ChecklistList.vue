@@ -36,7 +36,7 @@
             :checked="!!element.checked"
             :disabled="disabled"
             style="margin-left: 8px"
-            @check="() => onSelectChange(element.serviceID!)"
+            @check="() => element.serviceID && onSelectChange(element.serviceID)"
           />
           <span
             tabindex="0"
@@ -82,7 +82,7 @@
       @cancel="closeDialog"
       @task-delete="onDeleteItem(dialogItem)"
       @task-toggle="
-        () => (dialogItem ? onSelectChange(dialogItem.serviceID!) : null)
+        () => (dialogItem?.serviceID ? onSelectChange(dialogItem.serviceID) : null)
       "
     />
   </div>

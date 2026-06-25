@@ -166,11 +166,15 @@ const doneCount = computed(() => {
   }
 });
 
-function deleteChecklist() {
+async function deleteChecklist() {
   if (props.checklist.id) {
     const checklistsApi = useChecklistsApi();
-    checklistsApi.deleteChecklist({ checklistID: props.checklist.id });
-    location.href = props.checklistOverviewUrl;
+    try {
+      await checklistsApi.deleteChecklist({ checklistID: props.checklist.id });
+      location.href = props.checklistOverviewUrl;
+    } catch (error) {
+      console.debug("Error deleting checklist:", error);
+    }
   }
 }
 </script>

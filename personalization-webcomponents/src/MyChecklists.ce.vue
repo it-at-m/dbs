@@ -22,6 +22,7 @@
         >
         </skeleton-loader>
       </muc-card-container>
+      <!-- todo add error state when loading fails -->
       <muc-card-container
         v-else
         class="checklist-card-container"
