@@ -1,10 +1,18 @@
-import type {FetchParams, Middleware,} from "@/api/dbs-clients/generated-p13n-service-api";
+import type {
+  FetchParams,
+  Middleware,
+} from "@/api/dbs-clients/generated-p13n-service-api";
+
 import {
   ChecklistsApi,
   Configuration,
   PublicServiceNavigatorEndpointsApi,
 } from "@/api/dbs-clients/generated-p13n-service-api";
-import {getAccessToken, getAPIBaseURL, getXSRFToken,} from "@/util/Constants.ts";
+import {
+  getAccessToken,
+  getAPIBaseURL,
+  getXSRFToken,
+} from "@/util/Constants.ts";
 
 const PATHNAME_P13N_BACKEND_CLIENT_ROUTES = "/clients/api/p13n-backend";
 const PATHNAME_P13N_BACKEND_PUBLIC_ROUTES = "/public/api/p13n-backend";

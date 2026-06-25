@@ -11,10 +11,11 @@
  * Do not edit the class manually.
  */
 
-import type {ChecklistItemServiceNavigatorDTO} from "./ChecklistItemServiceNavigatorDTO";
+import type { ChecklistItemServiceNavigatorDTO } from "./ChecklistItemServiceNavigatorDTO";
+
 import {
-    ChecklistItemServiceNavigatorDTOFromJSON,
-    ChecklistItemServiceNavigatorDTOToJSON,
+  ChecklistItemServiceNavigatorDTOFromJSON,
+  ChecklistItemServiceNavigatorDTOToJSON,
 } from "./ChecklistItemServiceNavigatorDTO";
 
 /**

@@ -11,8 +11,12 @@
  * Do not edit the class manually.
  */
 
-import type {OnlineServiceDTO} from "./OnlineServiceDTO";
-import {OnlineServiceDTOFromJSON, OnlineServiceDTOToJSON,} from "./OnlineServiceDTO";
+import type { OnlineServiceDTO } from "./OnlineServiceDTO";
+
+import {
+  OnlineServiceDTOFromJSON,
+  OnlineServiceDTOToJSON,
+} from "./OnlineServiceDTO";
 
 /**
  *

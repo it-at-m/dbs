@@ -10,7 +10,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import type {Link} from "../models/Link";
+import type { Link } from "../models/Link";
+
 import * as runtime from "../runtime";
 
 export interface ScrapeRequest {

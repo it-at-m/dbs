@@ -11,8 +11,12 @@
  * Do not edit the class manually.
  */
 
-import type {ChecklistItemDTO} from "./ChecklistItemDTO";
-import {ChecklistItemDTOFromJSON, ChecklistItemDTOToJSON,} from "./ChecklistItemDTO";
+import type { ChecklistItemDTO } from "./ChecklistItemDTO";
+
+import {
+  ChecklistItemDTOFromJSON,
+  ChecklistItemDTOToJSON,
+} from "./ChecklistItemDTO";
 
 /**
  *
