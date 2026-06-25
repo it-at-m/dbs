@@ -410,7 +410,7 @@ async function _updateChecklist(checklist: ChecklistServiceNavigatorReadDTO) {
     id: checklist.id,
     title: checklist.title,
     lhmExtId: checklist.lhmExtId,
-    checklistItems: checklist.checklistItemServiceNavigatorDtos
+    checklistItems: checklist.checklistItemServiceNavigatorDtos,
   } as ChecklistUpdateDTO;
 
   try {
