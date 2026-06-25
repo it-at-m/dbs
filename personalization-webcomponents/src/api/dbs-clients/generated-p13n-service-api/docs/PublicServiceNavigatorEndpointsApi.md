@@ -1,12 +1,10 @@
 # PublicServiceNavigatorEndpointsApi
 
-All URIs are relative to *http://localhost:39146*
+All URIs are relative to _http://localhost:39146_
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
+| Method                                                                         | HTTP request                     | Description                                                                                          |
+| ------------------------------------------------------------------------------ | -------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | [**getServicesByIds**](PublicServiceNavigatorEndpointsApi.md#getservicesbyids) | **GET** /public/servicenavigator | Lookup ServiceNavigator Services by ServiceID. Returns a list of services for the given service IDs. |
-
-
 
 ## getServicesByIds
 
@@ -17,11 +15,9 @@ Lookup ServiceNavigator Services by ServiceID. Returns a list of services for th
 ### Example
 
 ```ts
-import {
-  Configuration,
-  PublicServiceNavigatorEndpointsApi,
-} from '';
-import type { GetServicesByIdsRequest } from '';
+import type { GetServicesByIdsRequest } from "";
+
+import { Configuration, PublicServiceNavigatorEndpointsApi } from "";
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -48,10 +44,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **ids** | `string` |  | [Defaults to `undefined`] |
+| Name     | Type     | Description                                                                            | Notes                                |
+| -------- | -------- | -------------------------------------------------------------------------------------- | ------------------------------------ |
+| **ids**  | `string` |                                                                                        | [Defaults to `undefined`]            |
 | **lang** | `string` | Language for translated service content. Falls back to \&#39;de\&#39; if not provided. | [Optional] [Defaults to `undefined`] |
 
 ### Return type
@@ -67,11 +62,10 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `*/*`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-

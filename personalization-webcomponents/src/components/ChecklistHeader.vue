@@ -98,6 +98,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ChecklistServiceNavigatorReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import {
   MucBanner,
@@ -107,19 +108,12 @@ import {
 } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted, ref } from "vue";
 
+import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import MucChip from "@/components/common/MucChip.vue";
 import {
-  getAccessToken,
-  getAPIBaseURL,
   getChecklistIconBySituationId,
   getDateInGermanDateFormat,
 } from "@/util/Constants.ts";
-import {
-  ChecklistsApi,
-  type ChecklistServiceNavigatorReadDTO,
-  Configuration
-} from "@/api/dbs-clients/generated-p13n-service-api";
-import {useChecklistsApi} from "@/api/compositions/UseChecklistsApi.ts";
 
 const openAcceptDeleteDialog = ref(false);
 
@@ -173,9 +167,11 @@ const doneCount = computed(() => {
 });
 
 function deleteChecklist() {
-  const checklistsApi = useChecklistsApi();
-  checklistsApi.deleteChecklist({ checklistID: props.checklist.id! })
-  location.href = props.checklistOverviewUrl;
+  if (props.checklist.id) {
+    const checklistsApi = useChecklistsApi();
+    checklistsApi.deleteChecklist({ checklistID: props.checklist.id });
+    location.href = props.checklistOverviewUrl;
+  }
 }
 </script>
 <style>

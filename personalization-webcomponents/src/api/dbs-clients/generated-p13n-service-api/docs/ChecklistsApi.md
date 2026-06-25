@@ -1,18 +1,16 @@
 # ChecklistsApi
 
-All URIs are relative to *http://localhost:39146*
+All URIs are relative to _http://localhost:39146_
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
-| [**checkChecklistEntry**](ChecklistsApi.md#checkchecklistentry) | **POST** /checklist/{checklistID}/{serviceID}/check | Check a Checklist-Entry |
-| [**createChecklist**](ChecklistsApi.md#createchecklist) | **POST** /checklist | Create a new checklist |
-| [**deleteChecklist**](ChecklistsApi.md#deletechecklist) | **DELETE** /checklist/{checklistID} | Delete a checklist |
-| [**getChecklist**](ChecklistsApi.md#getchecklist) | **GET** /checklist/{checklistID} | Get specific checklist by checklist-id. |
-| [**getChecklists**](ChecklistsApi.md#getchecklists) | **GET** /checklist | Get all checklists by user. |
-| [**uncheckChecklistEntry**](ChecklistsApi.md#uncheckchecklistentry) | **POST** /checklist/{checklistID}/{serviceID}/uncheck | Uncheck a Checklist-Entry |
-| [**updateChecklist**](ChecklistsApi.md#updatechecklist) | **PUT** /checklist/{checklistID} | Update a checklist |
-
-
+| Method                                                              | HTTP request                                          | Description                             |
+| ------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- |
+| [**checkChecklistEntry**](ChecklistsApi.md#checkchecklistentry)     | **POST** /checklist/{checklistID}/{serviceID}/check   | Check a Checklist-Entry                 |
+| [**createChecklist**](ChecklistsApi.md#createchecklist)             | **POST** /checklist                                   | Create a new checklist                  |
+| [**deleteChecklist**](ChecklistsApi.md#deletechecklist)             | **DELETE** /checklist/{checklistID}                   | Delete a checklist                      |
+| [**getChecklist**](ChecklistsApi.md#getchecklist)                   | **GET** /checklist/{checklistID}                      | Get specific checklist by checklist-id. |
+| [**getChecklists**](ChecklistsApi.md#getchecklists)                 | **GET** /checklist                                    | Get all checklists by user.             |
+| [**uncheckChecklistEntry**](ChecklistsApi.md#uncheckchecklistentry) | **POST** /checklist/{checklistID}/{serviceID}/uncheck | Uncheck a Checklist-Entry               |
+| [**updateChecklist**](ChecklistsApi.md#updatechecklist)             | **PUT** /checklist/{checklistID}                      | Update a checklist                      |
 
 ## checkChecklistEntry
 
@@ -56,11 +54,10 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **checklistID** | `string` |  | [Defaults to `undefined`] |
-| **serviceID** | `string` |  | [Defaults to `undefined`] |
+| Name            | Type     | Description | Notes                     |
+| --------------- | -------- | ----------- | ------------------------- |
+| **checklistID** | `string` |             | [Defaults to `undefined`] |
+| **serviceID**   | `string` |             | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -75,14 +72,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `*/*`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## createChecklist
 
@@ -124,10 +120,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **checklistCreateDTO** | [ChecklistCreateDTO](ChecklistCreateDTO.md) |  | |
+| Name                   | Type                                        | Description | Notes |
+| ---------------------- | ------------------------------------------- | ----------- | ----- |
+| **checklistCreateDTO** | [ChecklistCreateDTO](ChecklistCreateDTO.md) |             |       |
 
 ### Return type
 
@@ -142,14 +137,13 @@ No authorization required
 - **Content-Type**: `application/json`
 - **Accept**: `*/*`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **201** | Created |  -  |
+| ----------- | ----------- | ---------------- |
+| **201**     | Created     | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## deleteChecklist
 
@@ -191,10 +185,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **checklistID** | `string` |  | [Defaults to `undefined`] |
+| Name            | Type     | Description | Notes                     |
+| --------------- | -------- | ----------- | ------------------------- |
+| **checklistID** | `string` |             | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -209,14 +202,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: Not defined
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## getChecklist
 
@@ -258,10 +250,9 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **checklistID** | `string` |  | [Defaults to `undefined`] |
+| Name            | Type     | Description | Notes                     |
+| --------------- | -------- | ----------- | ------------------------- |
+| **checklistID** | `string` |             | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -276,14 +267,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `*/*`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## getChecklists
 
@@ -296,11 +286,9 @@ Returns all checklists of an user (identified by JWT-Token)
 ### Example
 
 ```ts
-import {
-  Configuration,
-  ChecklistsApi,
-} from '';
-import type { GetChecklistsRequest } from '';
+import type { GetChecklistsRequest } from "";
+
+import { ChecklistsApi, Configuration } from "";
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -335,14 +323,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `*/*`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## uncheckChecklistEntry
 
@@ -386,11 +373,10 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **checklistID** | `string` |  | [Defaults to `undefined`] |
-| **serviceID** | `string` |  | [Defaults to `undefined`] |
+| Name            | Type     | Description | Notes                     |
+| --------------- | -------- | ----------- | ------------------------- |
+| **checklistID** | `string` |             | [Defaults to `undefined`] |
+| **serviceID**   | `string` |             | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -405,14 +391,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `*/*`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## updateChecklist
 
@@ -456,11 +441,10 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **checklistID** | `string` |  | [Defaults to `undefined`] |
-| **checklistUpdateDTO** | [ChecklistUpdateDTO](ChecklistUpdateDTO.md) |  | |
+| Name                   | Type                                        | Description | Notes                     |
+| ---------------------- | ------------------------------------------- | ----------- | ------------------------- |
+| **checklistID**        | `string`                                    |             | [Defaults to `undefined`] |
+| **checklistUpdateDTO** | [ChecklistUpdateDTO](ChecklistUpdateDTO.md) |             |                           |
 
 ### Return type
 
@@ -475,11 +459,10 @@ No authorization required
 - **Content-Type**: `application/json`
 - **Accept**: `*/*`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-

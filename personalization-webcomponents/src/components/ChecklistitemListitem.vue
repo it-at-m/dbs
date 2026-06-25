@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
+import type { ChecklistItemDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import ChecklistCheckedCircle from "@/components/ChecklistCheckedCircle.vue";
-import type {ChecklistItemDTO} from "@/api/dbs-clients/generated-p13n-service-api";
 
 defineProps<{
   checklistItem: ChecklistItemDTO;

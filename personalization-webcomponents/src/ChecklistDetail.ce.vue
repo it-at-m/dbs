@@ -182,6 +182,11 @@
 </template>
 
 <script setup lang="ts">
+import type {
+  ChecklistItemServiceNavigatorDTO,
+  ChecklistServiceNavigatorReadDTO,
+  ChecklistUpdateDTO,
+} from "@/api/dbs-clients/generated-p13n-service-api";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import {
@@ -195,17 +200,12 @@ import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { computed, ref } from "vue";
 
+import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
 import ChecklistList from "@/components/ChecklistList.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { QUERY_PARAM_CHECKLIST_ID, setAccessToken } from "@/util/Constants.ts";
-import type {
-  ChecklistItemServiceNavigatorDTO,
-  ChecklistServiceNavigatorReadDTO,
-  ChecklistUpdateDTO
-} from "@/api/dbs-clients/generated-p13n-service-api";
-import {useChecklistsApi} from "@/api/compositions/UseChecklistsApi.ts";
 
 defineProps<{
   myChecklistsUrl: string;
@@ -240,9 +240,10 @@ async function loadChecklists() {
     const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
 
     if (checklistId) {
-
       try {
-        const checklistResponse = await checklistsApi.getChecklist({checklistID: checklistId});
+        const checklistResponse = await checklistsApi.getChecklist({
+          checklistID: checklistId,
+        });
         checklist.value = checklistResponse;
       } catch (error) {
         loadingError.value = error as string;
@@ -302,17 +303,15 @@ function login() {
 }
 
 async function onCheckedOpen(serviceID: string) {
-  if (checklist.value) {
+  if (checklist.value && checklist.value.id) {
     loadingCheck.value = true;
     const checklistsApi = useChecklistsApi();
 
     try {
-      checklist.value = await checklistsApi.checkChecklistEntry(
-          {
-            checklistID: checklist.value.id!,
-            serviceID: serviceID
-          }
-      );
+      checklist.value = await checklistsApi.checkChecklistEntry({
+        checklistID: checklist.value.id,
+        serviceID: serviceID,
+      });
     } catch (error) {
       console.debug(error);
     } finally {
@@ -322,18 +321,16 @@ async function onCheckedOpen(serviceID: string) {
 }
 
 async function onCheckedClosed(serviceID: string) {
-  if (checklist.value) {
+  if (checklist.value && checklist.value.id) {
     loadingCheck.value = true;
 
     const checklistsApi = useChecklistsApi();
 
     try {
-      checklist.value = await checklistsApi.uncheckChecklistEntry(
-          {
-            checklistID: checklist.value.id!,
-            serviceID: serviceID
-          }
-      );
+      checklist.value = await checklistsApi.uncheckChecklistEntry({
+        checklistID: checklist.value.id,
+        serviceID: serviceID,
+      });
     } catch (error) {
       console.debug(error);
     } finally {
@@ -368,16 +365,18 @@ function deleteItem(checklistItem: ChecklistItemServiceNavigatorDTO) {
  * @param evt Sort-Event which contains the old and new index of the checklist-item.
  */
 function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
-  console.log("#onSortOpen", evt)
   const elementToSort = openCheckList.value[
     evt.oldIndex
   ] as ChecklistItemServiceNavigatorDTO;
-  const oldIndex = checklist.value?.checklistItemServiceNavigatorDtos?.findIndex(
-    (item) => {
+  const oldIndex =
+    checklist.value?.checklistItemServiceNavigatorDtos?.findIndex((item) => {
       return item.serviceID === elementToSort.serviceID;
-    }
-  ) as number;
-  if (oldIndex >= 0 && checklist.value && checklist.value.checklistItemServiceNavigatorDtos) {
+    }) as number;
+  if (
+    oldIndex >= 0 &&
+    checklist.value &&
+    checklist.value.checklistItemServiceNavigatorDtos
+  ) {
     loadingUpdate.value = true;
 
     const newIndex = oldIndex + (evt.newIndex - evt.oldIndex);
@@ -397,16 +396,24 @@ function onSortOpen(evt: { oldIndex: number; newIndex: number }) {
 
 async function _updateChecklist(checklist: ChecklistServiceNavigatorReadDTO) {
   const checklistUpdateDTO = {} as ChecklistUpdateDTO;
-  checklistUpdateDTO.id = checklist.id!;
-  checklistUpdateDTO.title = checklist.title!;
-  checklistUpdateDTO.lhmExtId = checklist.lhmExtId!;
-  checklistUpdateDTO.checklistItems = checklist.checklistItemServiceNavigatorDtos!;
 
+  if (
+    checklist.id &&
+    checklist.title &&
+    checklist.lhmExtId &&
+    checklist.checklistItemServiceNavigatorDtos
+  ) {
+    checklistUpdateDTO.id = checklist.id;
+    checklistUpdateDTO.title = checklist.title;
+    checklistUpdateDTO.lhmExtId = checklist.lhmExtId;
+    checklistUpdateDTO.checklistItems =
+      checklist.checklistItemServiceNavigatorDtos;
+  }
   const checklistApi = useChecklistsApi();
   try {
     checklist = await checklistApi.updateChecklist({
-      checklistID: checklist.id!,
-      checklistUpdateDTO: checklistUpdateDTO
+      checklistID: checklistUpdateDTO.id,
+      checklistUpdateDTO: checklistUpdateDTO,
     });
   } catch (error) {
     console.debug(error);

@@ -99,6 +99,8 @@
 </template>
 
 <script setup lang="ts">
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
+
 import {
   MucCardContainer,
   MucSlider,
@@ -110,7 +112,6 @@ import AddChecklistCard from "@/components/AddChecklistCard.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
 import { IS_RESIZE_SLIDER_CONTENT_MEDIA_QUERY } from "@/util/Constants.ts";
-import type {ChecklistReadDTO} from "@/api/dbs-clients/generated-p13n-service-api";
 
 defineProps<{
   allChecklists: ChecklistReadDTO[];

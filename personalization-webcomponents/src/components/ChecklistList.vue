@@ -89,6 +89,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { ChecklistItemServiceNavigatorDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
@@ -96,7 +97,6 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import P13nCheckbox from "@/components/P13nCheckbox.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
-import type {ChecklistItemServiceNavigatorDTO} from "@/api/dbs-clients/generated-p13n-service-api";
 
 const props = withDefaults(
   defineProps<{

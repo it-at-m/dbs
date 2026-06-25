@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import { MucCardContainer, MucIcon } from "@muenchen/muc-patternlab-vue";
@@ -54,14 +55,13 @@ import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { ref } from "vue";
 
+import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import AddChecklistCard from "@/components/AddChecklistCard.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import {setAccessToken} from "@/util/Constants.ts";
-import {useChecklistsApi} from "@/api/compositions/UseChecklistsApi.ts";
-import type {ChecklistReadDTO} from "@/api/dbs-clients/generated-p13n-service-api";
+import { setAccessToken } from "@/util/Constants.ts";
 
 defineProps<{
   checklistDetailUrl: string;
@@ -89,7 +89,7 @@ async function loadChecklists() {
     } catch (error) {
       console.debug(error);
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   }
 }

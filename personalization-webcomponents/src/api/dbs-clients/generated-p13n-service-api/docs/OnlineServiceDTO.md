@@ -1,36 +1,32 @@
-
 # OnlineServiceDTO
-
 
 ## Properties
 
-Name | Type
------------- | -------------
-`uri` | string
-`label` | string
+| Name    | Type   |
+| ------- | ------ |
+| `uri`   | string |
+| `label` | string |
 
 ## Example
 
 ```typescript
-import type { OnlineServiceDTO } from ''
+import type { OnlineServiceDTO } from "";
 
 // TODO: Update the object below with actual values
 const example = {
-  "uri": null,
-  "label": null,
-} satisfies OnlineServiceDTO
+  uri: null,
+  label: null,
+} satisfies OnlineServiceDTO;
 
-console.log(example)
+console.log(example);
 
 // Convert the instance to a JSON string
-const exampleJSON: string = JSON.stringify(example)
-console.log(exampleJSON)
+const exampleJSON: string = JSON.stringify(example);
+console.log(exampleJSON);
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as OnlineServiceDTO
-console.log(exampleParsed)
+const exampleParsed = JSON.parse(exampleJSON) as OnlineServiceDTO;
+console.log(exampleParsed);
 ```
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-

@@ -67,6 +67,8 @@
 </template>
 
 <script setup lang="ts">
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
+
 import { MucCard } from "@muenchen/muc-patternlab-vue";
 import { computed } from "vue";
 
@@ -77,7 +79,6 @@ import {
   getDateInGermanDateFormat,
   QUERY_PARAM_CHECKLIST_ID,
 } from "@/util/Constants.ts";
-import type {ChecklistReadDTO} from "@/api/dbs-clients/generated-p13n-service-api";
 
 const props = defineProps<{
   checklist: ChecklistReadDTO;

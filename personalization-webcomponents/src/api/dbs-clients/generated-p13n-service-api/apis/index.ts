@@ -1,5 +1,3 @@
-/* tslint:disable */
-/* eslint-disable */
-export * from './ActuatorApi';
-export * from './ChecklistsApi';
-export * from './PublicServiceNavigatorEndpointsApi';
+export * from "./ActuatorApi";
+export * from "./ChecklistsApi";
+export * from "./PublicServiceNavigatorEndpointsApi";

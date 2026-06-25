@@ -1,15 +1,13 @@
 # ActuatorApi
 
-All URIs are relative to *http://localhost:39146*
+All URIs are relative to _http://localhost:39146_
 
-| Method | HTTP request | Description |
-|------------- | ------------- | -------------|
-| [**health**](ActuatorApi.md#health) | **GET** /actuator/health | Actuator web endpoint \&#39;health\&#39; |
-| [**info**](ActuatorApi.md#info) | **GET** /actuator/info | Actuator web endpoint \&#39;info\&#39; |
-| [**links**](ActuatorApi.md#links) | **GET** /actuator | Actuator root web endpoint |
+| Method                              | HTTP request              | Description                                  |
+| ----------------------------------- | ------------------------- | -------------------------------------------- |
+| [**health**](ActuatorApi.md#health) | **GET** /actuator/health  | Actuator web endpoint \&#39;health\&#39;     |
+| [**info**](ActuatorApi.md#info)     | **GET** /actuator/info    | Actuator web endpoint \&#39;info\&#39;       |
+| [**links**](ActuatorApi.md#links)   | **GET** /actuator         | Actuator root web endpoint                   |
 | [**scrape**](ActuatorApi.md#scrape) | **GET** /actuator/metrics | Actuator web endpoint \&#39;prometheus\&#39; |
-
-
 
 ## health
 
@@ -20,11 +18,9 @@ Actuator web endpoint \&#39;health\&#39;
 ### Example
 
 ```ts
-import {
-  Configuration,
-  ActuatorApi,
-} from '';
-import type { HealthRequest } from '';
+import type { HealthRequest } from "";
+
+import { ActuatorApi, Configuration } from "";
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -59,14 +55,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `application/vnd.spring-boot.actuator.v3+json`, `application/vnd.spring-boot.actuator.v2+json`, `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## info
 
@@ -77,11 +72,9 @@ Actuator web endpoint \&#39;info\&#39;
 ### Example
 
 ```ts
-import {
-  Configuration,
-  ActuatorApi,
-} from '';
-import type { InfoRequest } from '';
+import type { InfoRequest } from "";
+
+import { ActuatorApi, Configuration } from "";
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -116,14 +109,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `application/vnd.spring-boot.actuator.v3+json`, `application/vnd.spring-boot.actuator.v2+json`, `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## links
 
@@ -134,11 +126,9 @@ Actuator root web endpoint
 ### Example
 
 ```ts
-import {
-  Configuration,
-  ActuatorApi,
-} from '';
-import type { LinksRequest } from '';
+import type { LinksRequest } from "";
+
+import { ActuatorApi, Configuration } from "";
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -173,14 +163,13 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `application/vnd.spring-boot.actuator.v3+json`, `application/vnd.spring-boot.actuator.v2+json`, `application/json`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
 
 ## scrape
 
@@ -191,11 +180,9 @@ Actuator web endpoint \&#39;prometheus\&#39;
 ### Example
 
 ```ts
-import {
-  Configuration,
-  ActuatorApi,
-} from '';
-import type { ScrapeRequest } from '';
+import type { ScrapeRequest } from "";
+
+import { ActuatorApi, Configuration } from "";
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -222,11 +209,10 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **format** | `CONTENT_TYPE_004`, `CONTENT_TYPE_OPENMETRICS_100`, `CONTENT_TYPE_PROTOBUF` |  | [Optional] [Defaults to `undefined`] [Enum: CONTENT_TYPE_004, CONTENT_TYPE_OPENMETRICS_100, CONTENT_TYPE_PROTOBUF] |
-| **includedNames** | `string` |  | [Optional] [Defaults to `undefined`] |
+| Name              | Type                                                                        | Description | Notes                                                                                                              |
+| ----------------- | --------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------ |
+| **format**        | `CONTENT_TYPE_004`, `CONTENT_TYPE_OPENMETRICS_100`, `CONTENT_TYPE_PROTOBUF` |             | [Optional] [Defaults to `undefined`] [Enum: CONTENT_TYPE_004, CONTENT_TYPE_OPENMETRICS_100, CONTENT_TYPE_PROTOBUF] |
+| **includedNames** | `string`                                                                    |             | [Optional] [Defaults to `undefined`]                                                                               |
 
 ### Return type
 
@@ -241,11 +227,10 @@ No authorization required
 - **Content-Type**: Not defined
 - **Accept**: `text/plain;version=0.0.4;charset=utf-8`, `application/openmetrics-text;version=1.0.0;charset=utf-8`, `application/vnd.google.protobuf;proto=io.prometheus.client.MetricFamily;encoding=delimited`
 
-
 ### HTTP response details
+
 | Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
+| ----------- | ----------- | ---------------- |
+| **200**     | OK          | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-

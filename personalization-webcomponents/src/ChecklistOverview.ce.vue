@@ -75,21 +75,29 @@
 </template>
 
 <script setup lang="ts">
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
-import {MucButton, MucCardContainer, MucIcon,} from "@muenchen/muc-patternlab-vue";
+import {
+  MucButton,
+  MucCardContainer,
+  MucIcon,
+} from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import {useMediaQuery} from "@vueuse/core";
-import {ref} from "vue";
+import { useMediaQuery } from "@vueuse/core";
+import { ref } from "vue";
 
+import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
-import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import {IS_MOBILE_SLIDER_MEDIA_QUERY, QUERY_PARAM_CHECKLIST_ID, setAccessToken,} from "@/util/Constants.ts";
-import type {ChecklistReadDTO} from "@/api/dbs-clients/generated-p13n-service-api";
-import {useChecklistsApi} from "@/api/compositions/UseChecklistsApi.ts";
+import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import {
+  IS_MOBILE_SLIDER_MEDIA_QUERY,
+  QUERY_PARAM_CHECKLIST_ID,
+  setAccessToken,
+} from "@/util/Constants.ts";
 
 const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   checklistDetailUrl: string;
@@ -124,13 +132,13 @@ async function loadChecklists() {
         const urlParams = new URLSearchParams(window.location.search);
         const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
         checklists.value = checklists.value.filter(
-            (checklist) => checklist.id != checklistId
+          (checklist) => checklist.id != checklistId
         );
       }
     } catch (error) {
       console.debug(error);
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   }
 }
