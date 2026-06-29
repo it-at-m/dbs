@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import type Checklist from "@/api/persservice/Checklist.ts";
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import {
@@ -88,7 +88,7 @@ import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.
 import { useMediaQuery } from "@vueuse/core";
 import { ref } from "vue";
 
-import ChecklistService from "@/api/persservice/ChecklistService.ts";
+import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import ChecklistCardViewer from "@/components/ChecklistCardViewer.vue";
 import ErrorAlert from "@/components/common/ErrorAlert.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
@@ -106,7 +106,7 @@ const { checklistOverviewUrl, displayedOnDetailScreen } = defineProps<{
   displayedOnDetailScreen: string;
 }>();
 
-const checklists = ref<Checklist[]>([]);
+const checklists = ref<ChecklistReadDTO[]>([]);
 const loading = ref(true);
 const loadingError = ref(false);
 const isMobile = useMediaQuery(IS_MOBILE_SLIDER_MEDIA_QUERY);
@@ -122,34 +122,26 @@ function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
   }
 }
 
-function loadChecklists() {
+async function loadChecklists() {
   if (loggedIn.value) {
     loading.value = true;
-    const service = new ChecklistService();
-    service
-      .getChecklists()
-      .then((resp) => {
-        if (resp.ok) {
-          resp.json().then((checklistResponse: Checklist[]) => {
-            checklists.value = checklistResponse;
-            if (displayOptionDetailScreen) {
-              const urlParams = new URLSearchParams(window.location.search);
-              const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
-              checklists.value = checklists.value.filter(
-                (checklist) => checklist.id != checklistId
-              );
-            }
-          });
-        } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
-          });
-        }
-      })
-      .catch((error) => {
-        console.debug(error);
-      })
-      .finally(() => (loading.value = false));
+    loadingError.value = false;
+    const checklistApi = useChecklistsApi();
+    try {
+      checklists.value = await checklistApi.getChecklists();
+      if (displayOptionDetailScreen) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const checklistId = urlParams.get(QUERY_PARAM_CHECKLIST_ID);
+        checklists.value = checklists.value.filter(
+          (checklist) => checklist.id != checklistId
+        );
+      }
+    } catch (error) {
+      console.debug(error);
+      loadingError.value = true;
+    } finally {
+      loading.value = false;
+    }
   }
 }
 

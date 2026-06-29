@@ -99,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import type Checklist from "@/api/persservice/Checklist.ts";
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import {
   MucCardContainer,
@@ -114,7 +114,7 @@ import IconAddChecklist from "@/components/icons/IconAddChecklist.vue";
 import { IS_RESIZE_SLIDER_CONTENT_MEDIA_QUERY } from "@/util/Constants.ts";
 
 defineProps<{
-  allChecklists: Checklist[];
+  allChecklists: ChecklistReadDTO[];
   isMobile: boolean;
   newChecklistUrl: string;
   checklistDetailUrl: string;

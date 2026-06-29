@@ -1,7 +1,7 @@
 <template>
   <muc-intro
     tagline="Checkliste"
-    :title="checklist.title"
+    :title="checklist.title!"
     :img="getChecklistIconBySituationId(checklist.situationId)"
     variant="detail"
   >
@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import type ChecklistServiceNavigator from "@/api/persservice/ChecklistServiceNavigator.ts";
+import type { ChecklistServiceNavigatorReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import {
   MucBanner,
@@ -108,7 +108,7 @@ import {
 } from "@muenchen/muc-patternlab-vue";
 import { computed, onMounted, ref } from "vue";
 
-import ChecklistService from "@/api/persservice/ChecklistService.ts";
+import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import MucChip from "@/components/common/MucChip.vue";
 import {
   getChecklistIconBySituationId,
@@ -118,7 +118,7 @@ import {
 const openAcceptDeleteDialog = ref(false);
 
 const props = defineProps<{
-  checklist: ChecklistServiceNavigator;
+  checklist: ChecklistServiceNavigatorReadDTO;
   checklistOverviewUrl: string;
 }>();
 
@@ -166,17 +166,16 @@ const doneCount = computed(() => {
   }
 });
 
-function deleteChecklist() {
-  const service = new ChecklistService();
-  service.deleteChecklist(props.checklist.id).then((resp) => {
-    if (resp.ok) {
+async function deleteChecklist() {
+  if (props.checklist.id) {
+    const checklistsApi = useChecklistsApi();
+    try {
+      await checklistsApi.deleteChecklist({ checklistID: props.checklist.id });
       location.href = props.checklistOverviewUrl;
-    } else {
-      resp.text().then((errBody) => {
-        throw Error(errBody);
-      });
+    } catch (error) {
+      console.debug("Error deleting checklist:", error);
     }
-  });
+  }
 }
 </script>
 <style>

@@ -172,7 +172,7 @@
             v-else-if="noResultsError"
             type="warning"
           >
-            <template #header> Keine Leistungen gefunden. </template>
+            <template #header> Keine Leistungen gefunden.</template>
             <template #content>
               <p>
                 Für die eingegeben Angaben haben wir keine passenden Leistungen
@@ -184,7 +184,8 @@
                   href="https://stadt.muenchen.de/rathaus/kontakt.html"
                   label="Kontaktkanäle"
                   noUnderline
-                />.
+                />
+                .
               </p>
             </template>
           </muc-callout>
@@ -237,7 +238,10 @@
 </template>
 
 <script setup lang="ts">
-import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
+import type {
+  ChecklistItemDTO,
+  ChecklistItemServiceNavigatorDTO,
+} from "@/api/dbs-clients/generated-p13n-service-api";
 import type { ServiceNavigatorResult } from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
@@ -255,13 +259,14 @@ import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+import {
+  useChecklistsApi,
+  usePublicServiceNavigatorEndpoints,
+} from "@/api/compositions/UseChecklistsApi.ts";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import {
-  getAccessToken,
-  getAPIBaseURL,
-  getXSRFToken,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,
@@ -287,19 +292,19 @@ const saveChecklistModalOpen = ref(false);
 const dseAccepted = ref(false);
 const lebenslageTitle = ref("Meine Lebenslage");
 const lebenslageId = ref("");
-const snServices = ref<ChecklistItemServiceNavigator[] | null>(null);
-const selectedService = ref<ChecklistItemServiceNavigator | null>(null);
+const snServices = ref<ChecklistItemServiceNavigatorDTO[] | null>(null);
+const selectedService = ref<ChecklistItemServiceNavigatorDTO | null>(null);
 const linkStateMessage = ref("");
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const props = defineProps<{
   checklistDetailUrl: string;
   newChecklistUrl: string;
 }>();
 
-onMounted(() => {
+onMounted(async () => {
   loading.value = true;
   loadingError.value = "";
 
@@ -310,38 +315,34 @@ onMounted(() => {
     lebenslageId.value = snResult.id;
 
     if (snResult.services.length > 0) {
-      //todo replace with openapi generated client when backend is finished
-      const url =
-        getAPIBaseURL() +
-        "/public/api/p13n-backend/servicenavigator?ids=" +
-        snResult.services.join(",");
-      fetch(url, {
-        mode: "cors",
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((resp) => {
-          if (resp.ok) {
-            resp
-              .json()
-              .then((snServicesBody: ChecklistItemServiceNavigator[]) => {
-                snServices.value = snServicesBody.sort((a, b) => {
-                  return a.required === b.required ? 0 : a.required ? -1 : 1;
-                });
-              });
-          } else {
-            resp.text().then((errorText) => {
-              console.debug("Error loading checklist: ", errorText);
-              loadingError.value = errorText;
-            });
+      const snApi = usePublicServiceNavigatorEndpoints();
+      try {
+        let requestedLang;
+        try {
+          const requestedLocale = new Intl.Locale(locale.value);
+          if (requestedLocale) {
+            requestedLang = requestedLocale.language;
           }
-        })
-        .catch((error) => {
-          console.debug("Error loading checklist: ", error);
-          loadingError.value = error;
-        })
-        .finally(() => (loading.value = false));
+        } catch {
+          console.debug(
+            "couldn't instantiate language with locale",
+            locale.value
+          );
+        }
+
+        const snServicesBody = await snApi.getServicesByIds({
+          ids: snResult.services.join(","),
+          lang: requestedLang ? requestedLang : undefined,
+        });
+        snServices.value = snServicesBody.sort((a, b) => {
+          return a.required === b.required ? 0 : a.required ? -1 : 1;
+        });
+      } catch (error) {
+        console.debug("Error loading checklist: ", error);
+        loadingError.value = error as string;
+      } finally {
+        loading.value = false;
+      }
     } else {
       loading.value = false;
     }
@@ -386,52 +387,38 @@ function _requestLogin() {
   localStorage.setItem(LOCALSTORAGE_KEY_LOGGED_IN, "true");
 }
 
-function _saveChecklistAcceptedDSE() {
-  //todo replace with openapi generated client when backend is finished
+async function _saveChecklistAcceptedDSE() {
   loading.value = true;
   loadingError.value = "";
-  const url = getAPIBaseURL() + "/clients/api/p13n-backend/checklist";
-  const checklistItemsDtos = snServices.value?.map((service) => {
-    return {
-      serviceID: service.serviceID,
-      checked: undefined,
-      title: service.title,
-      note: service.note,
-      required: service.required,
-    };
-  });
-  const body = JSON.stringify({
-    title: lebenslageTitle.value,
-    situationId: lebenslageId.value,
-    checklistItems: checklistItemsDtos,
-  });
-  fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + getAccessToken(),
-      "Content-Type": "application/json",
-      "x-xsrf-token": getXSRFToken(),
-    },
-    body: body,
-    mode: "cors",
-    credentials: "include",
-  })
-    .then((resp) => {
-      if (resp.ok) {
-        resp.json().then((createResponse: { id: string }) => {
-          location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${createResponse.id}`;
-        });
-      } else {
-        resp.text().then((errBody) => {
-          throw Error(errBody);
-        });
-      }
-    })
-    .catch((error) => {
-      console.debug(error);
-      loadingError.value = error;
-    })
-    .finally(() => (loading.value = false));
+
+  const checklistsApi = useChecklistsApi();
+  const checklistItemsDtos: ChecklistItemDTO[] | undefined =
+    snServices.value?.map((service) => {
+      return {
+        serviceID: service.serviceID,
+        checked: undefined,
+        title: service.title,
+        note: service.note,
+        required: service.required,
+      } as ChecklistItemDTO;
+    });
+  try {
+    if (checklistItemsDtos) {
+      const createResponse = await checklistsApi.createChecklist({
+        checklistCreateDTO: {
+          title: lebenslageTitle.value,
+          situationId: lebenslageId.value,
+          checklistItems: checklistItemsDtos,
+        },
+      });
+      location.href = `${props.checklistDetailUrl}?${QUERY_PARAM_CHECKLIST_ID}=${createResponse.id}`;
+    }
+  } catch (error) {
+    console.debug(error);
+    loadingError.value = error as string;
+  } finally {
+    loading.value = false;
+  }
 }
 
 function saveChecklistClicked() {
@@ -503,7 +490,7 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
   }
 }
 
-function openService(service: ChecklistItemServiceNavigator) {
+function openService(service: ChecklistItemServiceNavigatorDTO) {
   selectedService.value = service;
   serviceInfoModalOpen.value = true;
 }

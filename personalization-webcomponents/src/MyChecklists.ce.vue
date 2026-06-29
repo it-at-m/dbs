@@ -22,6 +22,7 @@
         >
         </skeleton-loader>
       </muc-card-container>
+      <!-- todo add error state when loading fails -->
       <muc-card-container
         v-else
         class="checklist-card-container"
@@ -47,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import type Checklist from "@/api/persservice/Checklist.ts";
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import { MucCardContainer, MucIcon } from "@muenchen/muc-patternlab-vue";
@@ -55,7 +56,7 @@ import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { ref } from "vue";
 
-import ChecklistService from "@/api/persservice/ChecklistService.ts";
+import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import AddChecklistCard from "@/components/AddChecklistCard.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
@@ -68,7 +69,7 @@ defineProps<{
   newChecklistUrl: string;
 }>();
 
-const checklists = ref<Checklist[]>([]);
+const checklists = ref<ChecklistReadDTO[]>([]);
 const loading = ref(true);
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
@@ -80,27 +81,17 @@ function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
   }
 }
 
-function loadChecklists() {
+async function loadChecklists() {
   if (loggedIn.value) {
     loading.value = true;
-    const service = new ChecklistService();
-    service
-      .getChecklists()
-      .then((resp) => {
-        if (resp.ok) {
-          resp.json().then((checklistResponse: Checklist[]) => {
-            checklists.value = checklistResponse;
-          });
-        } else {
-          resp.text().then((errBody) => {
-            throw Error(errBody);
-          });
-        }
-      })
-      .catch((error) => {
-        console.debug(error);
-      })
-      .finally(() => (loading.value = false));
+    const checklistApi = useChecklistsApi();
+    try {
+      checklists.value = await checklistApi.getChecklists();
+    } catch (error) {
+      console.debug(error);
+    } finally {
+      loading.value = false;
+    }
   }
 }
 </script>

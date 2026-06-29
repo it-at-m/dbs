@@ -15,7 +15,7 @@ export const IS_RESIZE_SLIDER_CONTENT_MEDIA_QUERY = "(min-width: 1200px)";
 
 let ACCESS_TOKEN: string | undefined = undefined;
 
-export function getChecklistIconBySituationId(situationId: string) {
+export function getChecklistIconBySituationId(situationId: string | undefined) {
   return `https://stadt.muenchen.de/dam/Home/lhm_common/service-navigator/${situationId}.svg`;
 }
 

@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import type Checklist from "@/api/persservice/Checklist.ts";
+import type { ChecklistReadDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import { MucCard } from "@muenchen/muc-patternlab-vue";
 import { computed } from "vue";
@@ -81,7 +81,7 @@ import {
 } from "@/util/Constants.ts";
 
 const props = defineProps<{
-  checklist: Checklist;
+  checklist: ChecklistReadDTO;
   checklistDetailUrl: string;
 }>();
 

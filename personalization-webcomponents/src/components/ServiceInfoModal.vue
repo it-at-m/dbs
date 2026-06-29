@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
+import type { ChecklistItemServiceNavigatorDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import { MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
 import { useMediaQuery } from "@vueuse/core";
@@ -101,7 +101,7 @@ import { IS_MOBILE_MEDIA_QUERY } from "@/util/Constants.ts";
 
 const { open = false, showActions = false } = defineProps<{
   open?: boolean;
-  service: ChecklistItemServiceNavigator;
+  service: ChecklistItemServiceNavigatorDTO;
   showActions?: boolean;
 }>();
 

@@ -36,13 +36,15 @@
             :checked="!!element.checked"
             :disabled="disabled"
             style="margin-left: 8px"
-            @check="() => onSelectChange(element.serviceID)"
+            @check="
+              () => element.serviceID && onSelectChange(element.serviceID)
+            "
           />
           <span
             tabindex="0"
             class="label-text mde-b1 mde-bold"
             :class="{
-              muted: element.checked !== null,
+              muted: !!element.checked,
             }"
             @click="(evt) => openDialog(element, evt)"
             @keydown="
@@ -82,14 +84,15 @@
       @cancel="closeDialog"
       @task-delete="onDeleteItem(dialogItem)"
       @task-toggle="
-        () => (dialogItem ? onSelectChange(dialogItem.serviceID) : null)
+        () =>
+          dialogItem?.serviceID ? onSelectChange(dialogItem.serviceID) : null
       "
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import type ChecklistItemServiceNavigator from "@/api/persservice/ChecklistItemServiceNavigator.ts";
+import type { ChecklistItemServiceNavigatorDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
@@ -100,7 +103,7 @@ import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 
 const props = withDefaults(
   defineProps<{
-    checklistItems: ChecklistItemServiceNavigator[];
+    checklistItems: ChecklistItemServiceNavigatorDTO[];
     isDraggable?: boolean;
     disabled?: boolean;
   }>(),
@@ -123,7 +126,7 @@ const sortableOptions = computed(() => ({
 }));
 
 const dialogVisible = ref(false);
-const dialogItem = ref<ChecklistItemServiceNavigator | null>(null);
+const dialogItem = ref<ChecklistItemServiceNavigatorDTO | null>(null);
 
 onMounted(() => {
   window.addEventListener("keydown", handleArrowKeyDown);
@@ -140,12 +143,12 @@ function onSelectChange(serviceID: string) {
   closeDialog();
 }
 
-function onDeleteItem(checklistItem: ChecklistItemServiceNavigator) {
+function onDeleteItem(checklistItem: ChecklistItemServiceNavigatorDTO) {
   emit("delete", checklistItem);
   closeDialog();
 }
 
-function openDialog(item: ChecklistItemServiceNavigator, evt: Event) {
+function openDialog(item: ChecklistItemServiceNavigatorDTO, evt: Event) {
   evt.preventDefault();
   dialogItem.value = item;
   dialogVisible.value = true;
