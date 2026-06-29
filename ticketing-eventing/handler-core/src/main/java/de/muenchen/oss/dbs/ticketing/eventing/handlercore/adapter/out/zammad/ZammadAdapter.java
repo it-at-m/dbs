@@ -39,12 +39,12 @@ public class ZammadAdapter implements TicketingOutPort {
         }
     }
 
+    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     @Override
     public TicketInternal updateTicket(final UpdateTicketDTOV2 updateTicketDTO, final Collection<AbstractResource> attachments) {
         assert updateTicketDTO != null && updateTicketDTO.getId() != null;
         log.debug("Updating ticket {}: {}, attachments: {}", updateTicketDTO.getId(), updateTicketDTO, attachments);
         try {
-            @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
             final ResponseEntity<TicketInternal> response = ticketsApi
                     .updateTicketWithHttpInfo(updateTicketDTO.getId(), updateTicketDTO, null, null, attachments).block();
             log.info("Updated ticket {}", updateTicketDTO.getId());
