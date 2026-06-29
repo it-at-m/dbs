@@ -5,6 +5,7 @@ import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -43,6 +44,7 @@ public class ZammadAdapter implements TicketingOutPort {
         assert updateTicketDTO != null && updateTicketDTO.getId() != null;
         log.debug("Updating ticket {}: {}, attachments: {}", updateTicketDTO.getId(), updateTicketDTO, attachments);
         try {
+            @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
             final ResponseEntity<TicketInternal> response = ticketsApi
                     .updateTicketWithHttpInfo(updateTicketDTO.getId(), updateTicketDTO, null, null, attachments).block();
             log.info("Updated ticket {}", updateTicketDTO.getId());
