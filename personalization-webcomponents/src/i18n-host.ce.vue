@@ -19,19 +19,19 @@ import viVN from "./util/vi-VN.json";
 import zhCN from "./util/zh-CN.json";
 
 const i18n = createI18n({
-  locale: "de-DE",
+  locale: "de",
   messages: {
-    "de-DE": deDE,
-    "en-GB": enGB,
-    "fr-FR": frFR,
-    "tr-TR": trTR,
-    "es-ES": esES,
-    "uk-UA": ukUA,
-    "ru-RU": ruRU,
-    ar: ar,
-    "pt-PT": ptPT,
-    "vi-VN": viVN,
-    "zh-CN": zhCN,
+    "de": deDE,
+    "en": enGB,
+    "fr": frFR,
+    "tr": trTR,
+    "es": esES,
+    "uk": ukUA,
+    "ru": ruRU,
+    "ar": ar,
+    "pt": ptPT,
+    "vi": viVN,
+    "zh-hans": zhCN,
   },
 });
 
