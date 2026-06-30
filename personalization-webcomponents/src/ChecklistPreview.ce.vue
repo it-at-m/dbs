@@ -109,6 +109,7 @@
         </p>
         <div style="padding-top: 32px">
           <muc-button
+            v-if="currentLang == DEFAULT_LANGUAGE"
             icon="order-bool-ascending"
             style="margin-right: 16px; margin-bottom: 16px"
             @click="saveChecklistClicked"
@@ -268,6 +269,7 @@ import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { useLanguageObserver } from "@/composables/LanguageObserver.ts";
 import {
+  DEFAULT_LANGUAGE,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,

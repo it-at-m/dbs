@@ -13,6 +13,8 @@ export const IS_MOBILE_MEDIA_QUERY = "(max-width: 767px)";
 export const IS_MOBILE_SLIDER_MEDIA_QUERY = "(max-width: 1399px)";
 export const IS_RESIZE_SLIDER_CONTENT_MEDIA_QUERY = "(min-width: 1200px)";
 
+export const DEFAULT_LANGUAGE = "de";
+
 let ACCESS_TOKEN: string | undefined = undefined;
 
 export function getChecklistIconBySituationId(situationId: string | undefined) {
