@@ -6,8 +6,7 @@
 import { provide } from "vue";
 import { createI18n, I18nInjectionKey } from "vue-i18n";
 
-import {DEFAULT_LANGUAGE} from "@/util/Constants.ts";
-
+import { DEFAULT_LANGUAGE } from "@/util/Constants.ts";
 import ar from "./util/ar.json";
 import deDE from "./util/de-DE.json";
 import enGB from "./util/en-GB.json";
@@ -23,16 +22,16 @@ import zhCN from "./util/zh-CN.json";
 const i18n = createI18n({
   locale: DEFAULT_LANGUAGE,
   messages: {
-    "de": deDE,
-    "en": enGB,
-    "fr": frFR,
-    "tr": trTR,
-    "es": esES,
-    "uk": ukUA,
-    "ru": ruRU,
-    "ar": ar,
-    "pt": ptPT,
-    "vi": viVN,
+    de: deDE,
+    en: enGB,
+    fr: frFR,
+    tr: trTR,
+    es: esES,
+    uk: ukUA,
+    ru: ruRU,
+    ar: ar,
+    pt: ptPT,
+    vi: viVN,
     "zh-hans": zhCN,
   },
 });
