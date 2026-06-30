@@ -12,6 +12,7 @@ import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.config.MailHandlerProp
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.exception.NoValidArticleException;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.mapper.ZammadMapper;
 import de.muenchen.oss.dbs.ticketing.eventing.mailhandler.domain.model.MailMessage;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -87,6 +88,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         return TO_POSTBOX_DEFAULT.equals(ticket.getSendeNachrichtNachExtern()) || TO_POSTBOX_HIGH.equals(ticket.getSendeNachrichtNachExtern());
     }
 
+    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     private ArticleInternal findRelevantArticle(final TicketInternal ticket) throws NoValidArticleException {
         assert ticket.getArticles() != null;
         return ticket.getArticles().stream()
@@ -145,6 +147,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                 "\n</body>\n</html>";
     }
 
+    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     private List<MailMessage.Attachment> buildAttachments(final ArticleInternal article) {
         if (article.getAttachments() == null) {
             return List.of();
@@ -156,6 +159,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                 }).toList();
     }
 
+    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     private Map<String, Object> getParsedForm(final TicketInternal ticket) {
         // find article with internal attachments
         assert ticket.getArticles() != null;
