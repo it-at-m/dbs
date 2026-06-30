@@ -7,9 +7,9 @@ public record ServiceNavigatorResponse(
         String publicUrl,
         String summary,
         String id,
-        boolean isExternal,
-        boolean appointmentService,
+        Boolean isExternal,
+        Boolean appointmentService,
         String appointmentServiceUrl,
-        boolean mandatory,
+        Boolean mandatory,
         List<OnlineService> onlineServices) {
 }

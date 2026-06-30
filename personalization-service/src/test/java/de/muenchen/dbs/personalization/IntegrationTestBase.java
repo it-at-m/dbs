@@ -3,7 +3,6 @@ package de.muenchen.dbs.personalization;
 import static de.muenchen.dbs.personalization.TestConstants.SPRING_NO_SECURITY_PROFILE;
 import static de.muenchen.dbs.personalization.TestConstants.SPRING_TEST_PROFILE;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.dbs.personalization.configuration.P13nConfiguration;
 import de.muenchen.dbs.personalization.mock.KaptaraMocker;
 import java.time.Instant;
@@ -11,13 +10,14 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.wiremock.spring.EnableWireMock;
+import tools.jackson.databind.ObjectMapper;
 
 @Testcontainers
 @SpringBootTest(
@@ -27,7 +27,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @EnableConfigurationProperties(P13nConfiguration.class)
 @ActiveProfiles(profiles = { SPRING_TEST_PROFILE, SPRING_NO_SECURITY_PROFILE })
 @AutoConfigureMockMvc
-@AutoConfigureWireMock(port = 0)
+@EnableWireMock
 public class IntegrationTestBase {
 
     @Autowired

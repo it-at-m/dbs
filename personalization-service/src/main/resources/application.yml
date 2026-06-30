@@ -13,11 +13,6 @@ spring:
     locations:
       - classpath:db/migration/schema
 
-server:
-  error:
-    whitelabel:
-      enabled: false
-
 # Config for spring actuator endpoints
 management:
   endpoints:
@@ -63,3 +58,5 @@ info:
   build:
     java.version: @java.version@
     spring-cloud.version: @spring-cloud-dependencies.version@
+
+spring.web.error.whitelabel.enabled: false
