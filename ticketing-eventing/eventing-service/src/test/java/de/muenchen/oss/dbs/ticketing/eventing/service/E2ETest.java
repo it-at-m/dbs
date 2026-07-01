@@ -4,7 +4,6 @@ import static de.muenchen.oss.dbs.ticketing.eventing.service.TestConstants.SPRIN
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.oss.dbs.ticketing.eventing.service.adapter.in.rest.EventDTO;
 import de.muenchen.oss.dbs.ticketing.eventing.service.adapter.in.rest.EventMapperImpl;
 import de.muenchen.oss.dbs.ticketing.eventing.service.domain.model.Event;
@@ -16,11 +15,11 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -31,13 +30,13 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(classes = DbsTicketingEventingService.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { EventMapperImpl.class, ObjectMapper.class })
+@SpringJUnitConfig(classes = { EventMapperImpl.class, ObjectMapper.class })
 @ActiveProfiles(SPRING_TEST_PROFILE)
+@AutoConfigureTestRestTemplate
 @EmbeddedKafka(partitions = 1, topics = { "event-out" })
 @ExtendWith(MockitoExtension.class)
 class E2ETest {
@@ -69,7 +68,6 @@ class E2ETest {
         // setup call
         final EventDTO eventDTO = new EventDTO("123", "open", "1", "test-anliegen", "test-lhm-1");
         final String basicAuth = "Basic %s".formatted(Base64.getEncoder().encodeToString("test-user:test-password".getBytes(StandardCharsets.UTF_8)));
-        @SuppressWarnings("PMD.LooseCoupling")
         final HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", basicAuth);
         headers.set("X-Zammad-Trigger", "test-trigger");
