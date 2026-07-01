@@ -109,6 +109,7 @@
         </p>
         <div style="padding-top: 32px">
           <muc-button
+            v-if="currentLang == DEFAULT_LANGUAGE"
             icon="order-bool-ascending"
             style="margin-right: 16px; margin-bottom: 16px"
             @click="saveChecklistClicked"
@@ -266,7 +267,9 @@ import {
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import { useLanguageObserver } from "@/composables/LanguageObserver.ts";
 import {
+  DEFAULT_LANGUAGE,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,
@@ -297,7 +300,8 @@ const selectedService = ref<ChecklistItemServiceNavigatorDTO | null>(null);
 const linkStateMessage = ref("");
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
-const { t, locale } = useI18n();
+const { currentLang } = useLanguageObserver();
+const { t, locale, availableLocales } = useI18n();
 
 const props = defineProps<{
   checklistDetailUrl: string;
@@ -307,6 +311,10 @@ const props = defineProps<{
 onMounted(async () => {
   loading.value = true;
   loadingError.value = "";
+
+  if (availableLocales.includes(currentLang.value)) {
+    locale.value = currentLang.value;
+  }
 
   const snResult = getSnResults();
 
