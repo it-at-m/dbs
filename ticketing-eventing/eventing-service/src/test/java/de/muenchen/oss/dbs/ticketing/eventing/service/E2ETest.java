@@ -59,7 +59,7 @@ class E2ETest {
     @Test
     void testEventSuccessful() throws Exception {
         // setup Kafka consumer
-        final Map<String, Object> consumerProps = KafkaTestUtils.consumerProps("testGroup", "true", embeddedKafkaBroker);
+        final Map<String, Object> consumerProps = KafkaTestUtils.consumerProps(embeddedKafkaBroker, "testGroup", true);
         final DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
         @SuppressWarnings("PMD.CloseResource")
         final Consumer<String, String> consumer = consumerFactory.createConsumer();
