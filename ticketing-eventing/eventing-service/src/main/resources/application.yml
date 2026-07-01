@@ -21,12 +21,6 @@ spring:
             auto.offset.reset: latest
       output-bindings: event-out
 
-server:
-  error:
-    whitelabel:
-      enabled: false
-    include-message: always
-
 # Config for spring actuator endpoints
 management:
   endpoints:
@@ -95,3 +89,7 @@ info:
   build:
     java.version: "@java.version@"
     spring-cloud.version: "@spring-cloud-dependencies.version@"
+
+spring.web.error.include-message: always
+
+spring.web.error.whitelabel.enabled: false
