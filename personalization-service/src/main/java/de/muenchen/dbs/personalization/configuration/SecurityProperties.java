@@ -4,6 +4,7 @@ import de.muenchen.dbs.personalization.security.RequestResponseLoggingFilter;
 import de.muenchen.dbs.personalization.security.RequestResponseLoggingFilter.LoggingMode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import edu.umd.cs.findbugs.annotations.SuppressMatchType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -26,6 +27,7 @@ public class SecurityProperties {
      * Logging mode for incoming HTTP requests, see also {@link RequestResponseLoggingFilter}
      */
     @NotNull
+    @Valid
     private LoggingMode loggingMode = LoggingMode.NONE;
 
     /**

@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.caffeine.CaffeineCache;
@@ -71,7 +71,6 @@ public class UserInfoAuthoritiesService {
         }
 
         log.debug("Fetching user-info for token subject: {}", jwt.getSubject());
-        @SuppressWarnings("PMD.LooseCoupling")
         final HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue());
         final HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -100,8 +99,7 @@ public class UserInfoAuthoritiesService {
     private static List<SimpleGrantedAuthority> asAuthorities(final Object object) {
         final List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         Object authoritiesObject = object;
-        if (authoritiesObject instanceof Collection) {
-            final Collection<?> collection = (Collection<?>) authoritiesObject;
+        if (authoritiesObject instanceof Collection<?> collection) {
             authoritiesObject = collection.toArray(new Object[0]);
         }
         if (ObjectUtils.isArray(authoritiesObject)) {

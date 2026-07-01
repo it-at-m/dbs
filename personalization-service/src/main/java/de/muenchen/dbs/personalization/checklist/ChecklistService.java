@@ -9,6 +9,7 @@ import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistServiceNavigatorReadDTO;
 import de.muenchen.dbs.personalization.common.NotFoundException;
 import de.muenchen.dbs.personalization.servicenavigator.ServiceNavigatorService;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,6 +150,7 @@ public class ChecklistService {
                 .orElseThrow(() -> new NotFoundException(String.format(MSG_NOT_FOUND, checklistId)));
     }
 
+    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     private String getLhmExtIdFromAuthenticationOrThrow() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof Jwt jwt) {
