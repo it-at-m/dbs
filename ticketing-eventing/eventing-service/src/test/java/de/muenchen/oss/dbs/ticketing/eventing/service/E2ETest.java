@@ -29,7 +29,11 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
 import tools.jackson.databind.ObjectMapper;
 
-@SpringBootTest(classes = DbsTicketingEventingService.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        classes = DbsTicketingEventingService.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "spring.cloud.function.autodetect=false"
+)
 @ActiveProfiles(SPRING_TEST_PROFILE)
 @AutoConfigureTestRestTemplate
 @EmbeddedKafka(partitions = 1, topics = { "event-out" })
