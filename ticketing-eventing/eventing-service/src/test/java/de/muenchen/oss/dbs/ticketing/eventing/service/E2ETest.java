@@ -5,7 +5,6 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.muenchen.oss.dbs.ticketing.eventing.service.adapter.in.rest.EventDTO;
-import de.muenchen.oss.dbs.ticketing.eventing.service.adapter.in.rest.EventMapperImpl;
 import de.muenchen.oss.dbs.ticketing.eventing.service.domain.model.Event;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -14,8 +13,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
@@ -30,15 +27,12 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(classes = DbsTicketingEventingService.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@SpringJUnitConfig(classes = { EventMapperImpl.class, ObjectMapper.class })
 @ActiveProfiles(SPRING_TEST_PROFILE)
 @AutoConfigureTestRestTemplate
 @EmbeddedKafka(partitions = 1, topics = { "event-out" })
-@ExtendWith(MockitoExtension.class)
 class E2ETest {
 
     @Autowired
