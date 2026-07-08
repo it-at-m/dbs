@@ -51,7 +51,7 @@
     </template>
     <template #buttons>
       <muc-button
-        :disabled="!dseAccepted"
+        :disabled="!dseAccepted || loading"
         :icon="loading ? '' : 'order-bool-ascending'"
         @click="$emit('save')"
       >
@@ -74,12 +74,12 @@ import {
   MucModal,
   MucSpinner,
 } from "@muenchen/muc-patternlab-vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 // State
 const dseAccepted = ref(false);
 
-defineProps<{
+const props = defineProps<{
   open: boolean;
   title: string;
   loading: boolean;
@@ -87,4 +87,16 @@ defineProps<{
 }>();
 
 defineEmits(["close", "save"]);
+
+/**
+ * Reset dseAccepted when dialog was closed
+ */
+watch(
+  () => props.open,
+  (newOpen) => {
+    if (!newOpen) {
+      dseAccepted.value = false;
+    }
+  }
+);
 </script>
