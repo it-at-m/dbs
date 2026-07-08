@@ -2,6 +2,8 @@
   "preview": {
     "copyLink": "复制链接",
     "introText": "非常感谢您提供的信息！根据您的回答，以下服务可能适合您。",
-    "suggestedServices": "推荐服务"
+    "introTextLoading": "请回答以下几个问题，以便我们根据您的具体情况为您量身定制合适的服务方案。",
+    "suggestedServices": "推荐服务",
+    "loadingSpinnerText": "我们正在寻找合适的服务……"
   }
 }

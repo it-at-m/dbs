@@ -2,6 +2,8 @@
   "preview": {
     "copyLink": "Bağlantıyı kopyala",
     "introText": "Girdiğiniz bilgiler için teşekkür ederiz! Verdiğiniz yanıtlara göre, aşağıdaki hizmetler size uygun olabilir.",
-    "suggestedServices": "Önerilen hizmetler"
+    "introTextLoading": "Durumunuza uygun hizmetleri belirleyebilmemiz için lütfen bize birkaç soruyu yanıtlayın.",
+    "suggestedServices": "Önerilen hizmetler",
+    "loadingSpinnerText": "Uygun hizmetleri arıyoruz..."
   }
 }

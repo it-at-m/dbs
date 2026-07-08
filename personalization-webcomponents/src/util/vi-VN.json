@@ -2,6 +2,8 @@
   "preview": {
     "copyLink": "Sao chép liên kết",
     "introText": "Cảm ơn bạn đã cung cấp thông tin! Dựa trên các câu trả lời của bạn, các dịch vụ sau đây có thể phù hợp với bạn.",
-    "suggestedServices": "Các dịch vụ được đề xuất"
+    "introTextLoading": "Hãy trả lời một số câu hỏi của chúng tôi để chúng tôi có thể đề xuất các dịch vụ phù hợp với hoàn cảnh của quý khách.",
+    "suggestedServices": "Các dịch vụ được đề xuất",
+    "loadingSpinnerText": "Chúng tôi đang tìm kiếm các dịch vụ phù hợp..."
   }
 }
