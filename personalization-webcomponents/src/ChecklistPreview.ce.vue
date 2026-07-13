@@ -183,7 +183,7 @@
             </ul>
           </div>
 
-          <div v-else>
+          <div v-else-if="loadingError">
             <muc-callout type="error">
               <template #header>
                 Die Checkliste kann nicht geladen werden.
