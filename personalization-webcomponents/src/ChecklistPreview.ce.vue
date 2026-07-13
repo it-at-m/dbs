@@ -32,71 +32,14 @@
       </template>
     </muc-modal>
 
-    <muc-modal
+    <save-as-checklist-modal
+      :title="lebenslageTitle"
       :open="saveChecklistModalOpen"
+      :loading="loadingSave"
+      :loading-error="loadingError"
+      @save="_saveChecklistAcceptedDSE"
       @close="saveChecklistModalOpen = false"
-      @cancel="saveChecklistModalOpen = false"
-    >
-      <template #title>Speichern als Checkliste</template>
-      <template #body>
-        <div class="m-content">
-          <div class="m-checkboxes">
-            <div class="m-checkboxes__item">
-              <input
-                id="checkbox-privacy-policy"
-                class="m-checkboxes__input"
-                name="checkbox-privacy-policy"
-                type="checkbox"
-                aria-required="true"
-                v-model="dseAccepted"
-              />
-              <label
-                class="m-label m-checkboxes__label"
-                for="checkbox-privacy-policy"
-              >
-                Ich stimme der Speicherung der Checkliste
-                <strong>„{{ lebenslageTitle }}”</strong>
-                gemäß der
-                <a
-                  href="https://stadt.muenchen.de/dam/DSGVO/Datenschutzhinweise-Checklisten.pdf"
-                  target="_blank"
-                  >Datenschutzerklärung</a
-                >
-                und der
-                <a
-                  href="https://stadt.muenchen.de/infos/elektronische-kommunikation.html"
-                  target="_blank"
-                  >Hinweise zur elektronischen Kommunikation</a
-                >
-                zu. Meine Zustimmung kann ich jederzeit widerrufen.
-              </label>
-            </div>
-          </div>
-        </div>
-        <muc-banner
-          v-if="loadingError"
-          type="emergency"
-          variant="content"
-        >
-          Es ist ein Fehler beim Speichern der Checkliste aufgetreten. Bitte
-          versuchen Sie es zu einem späteren Zeitpunkt noch einmal.
-        </muc-banner>
-      </template>
-      <template #buttons>
-        <muc-button
-          :disabled="!dseAccepted"
-          :icon="loading ? '' : 'order-bool-ascending'"
-          @click="_saveChecklistAcceptedDSE"
-        >
-          Checkliste speichern
-          <muc-percentage-spinner
-            v-if="loading"
-            style="color: white"
-            size="24px"
-          />
-        </muc-button>
-      </template>
-    </muc-modal>
+    />
 
     <muc-intro
       :title="lebenslageTitle"
@@ -104,10 +47,16 @@
       variant="detail"
     >
       <div v-if="!localStorageError && !noResultsError">
-        <p>
+        <p v-if="loadingServices && showLoader">
+          {{ t("preview.introTextLoading") }}
+        </p>
+        <p v-else>
           {{ t("preview.introText") }}
         </p>
-        <div style="padding-top: 32px">
+        <div
+          v-if="!loadingServices"
+          style="padding-top: 32px"
+        >
           <muc-button
             v-if="currentLang == DEFAULT_LANGUAGE"
             icon="order-bool-ascending"
@@ -140,8 +89,23 @@
     >
       <div class="m-intro-vertical__grid">
         <div class="m-intro-vertical__grid-inner">
-          <div v-if="loading">
+          <div v-if="loadingServices && !showLoader">
             <skeleton-loader />
+          </div>
+
+          <div
+            v-if="loadingServices && showLoader"
+            class="bluebox"
+          >
+            <div class="center-container">
+              <div>
+                <muc-spinner
+                  size="265px"
+                  :text="t('preview.loadingSpinnerText')"
+                >
+                </muc-spinner>
+              </div>
+            </div>
           </div>
 
           <div v-else-if="localStorageError">
@@ -247,13 +211,12 @@ import type { ServiceNavigatorResult } from "@/api/servicenavigator/ServiceNavig
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
 import {
-  MucBanner,
   MucButton,
   MucCallout,
   MucIntro,
   MucLink,
   MucModal,
-  MucPercentageSpinner,
+  MucSpinner,
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
@@ -279,7 +242,8 @@ import {
 } from "@/util/Constants.ts";
 
 // Network activity and results
-const loading = ref(false);
+const loadingServices = ref(false);
+const loadingSave = ref(false);
 const localStorageError = ref("");
 const loadingError = ref("");
 const noResultsError = ref("");
@@ -292,12 +256,17 @@ const requestLoginModalOpen = ref(false);
 const saveChecklistModalOpen = ref(false);
 
 // State
-const dseAccepted = ref(false);
 const lebenslageTitle = ref("Meine Lebenslage");
 const lebenslageId = ref("");
 const snServices = ref<ChecklistItemServiceNavigatorDTO[] | null>(null);
 const selectedService = ref<ChecklistItemServiceNavigatorDTO | null>(null);
 const linkStateMessage = ref("");
+
+/**
+ * Minimum time the loader is shown in milliseconds
+ * even if the request to load the services is faster
+ */
+const minLoaderTimeInMs = 1500;
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 const { currentLang } = useLanguageObserver();
@@ -306,10 +275,11 @@ const { t, locale, availableLocales } = useI18n();
 const props = defineProps<{
   checklistDetailUrl: string;
   newChecklistUrl: string;
+  showLoader: boolean;
 }>();
 
 onMounted(async () => {
-  loading.value = true;
+  loadingServices.value = true;
   loadingError.value = "";
 
   if (availableLocales.includes(currentLang.value)) {
@@ -338,10 +308,18 @@ onMounted(async () => {
           );
         }
 
-        const snServicesBody = await snApi.getServicesByIds({
+        const delayPromise = new Promise<void>((resolve) =>
+          setTimeout(resolve, minLoaderTimeInMs)
+        );
+        const snResponsePromise = snApi.getServicesByIds({
           ids: snResult.services.join(","),
           lang: requestedLang ? requestedLang : undefined,
         });
+
+        const snServicesBody = (
+          await Promise.all([delayPromise, snResponsePromise])
+        )[1];
+
         snServices.value = snServicesBody.sort((a, b) => {
           return a.required === b.required ? 0 : a.required ? -1 : 1;
         });
@@ -349,16 +327,16 @@ onMounted(async () => {
         console.debug("Error loading checklist: ", error);
         loadingError.value = error as string;
       } finally {
-        loading.value = false;
+        loadingServices.value = false;
       }
     } else {
-      loading.value = false;
+      loadingServices.value = false;
     }
   } else {
     localStorageError.value =
       "No Data found in LocalStorage with key " +
       LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT;
-    loading.value = false;
+    loadingServices.value = false;
   }
 
   if (localStorage.getItem(LOCALSTORAGE_KEY_LOGGED_IN)) {
@@ -396,7 +374,7 @@ function _requestLogin() {
 }
 
 async function _saveChecklistAcceptedDSE() {
-  loading.value = true;
+  loadingSave.value = true;
   loadingError.value = "";
 
   const checklistsApi = useChecklistsApi();
@@ -425,7 +403,7 @@ async function _saveChecklistAcceptedDSE() {
     console.debug(error);
     loadingError.value = error as string;
   } finally {
-    loading.value = false;
+    loadingSave.value = false;
   }
 }
 
@@ -529,6 +507,19 @@ async function copyUrl() {
   margin-bottom: 40px;
 }
 
+.bluebox {
+  padding: 16px;
+  margin-bottom: 48px;
+  background-color: var(--color-neutrals-blue-xlight);
+}
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .snServiceList {
   list-style-type: none;
   padding-left: 0;
@@ -554,5 +545,17 @@ async function copyUrl() {
 .snServiceElement:hover .required-label,
 .snServiceElement:focus .required-label {
   color: var(--mde-color-neutral-grey-light);
+}
+
+/* CSS for desktop */
+@media (min-width: 768px) {
+  .bluebox {
+    margin-bottom: 72px;
+  }
+
+  .center-container {
+    margin-top: 124px;
+    margin-bottom: 124px;
+  }
 }
 </style>

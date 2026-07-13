@@ -2,6 +2,8 @@
   "preview": {
     "copyLink": "Copier le lien",
     "introText": "Merci beaucoup pour vos informations ! D'après vos réponses, les services suivants pourraient vous convenir.",
-    "suggestedServices": "Services proposés"
+    "introTextLoading": "Répondez à quelques questions afin que nous puissions vous proposer des prestations adaptées à votre situation.",
+    "suggestedServices": "Services proposés",
+    "loadingSpinnerText": "Nous recherchons des prestations adaptées..."
   }
 }
