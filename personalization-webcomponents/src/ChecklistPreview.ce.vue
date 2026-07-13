@@ -47,7 +47,7 @@
       variant="detail"
     >
       <div v-if="!localStorageError && !noResultsError">
-        <p v-if="loadingServices">
+        <p v-if="loadingServices && showLoader">
           {{ t("preview.introTextLoading") }}
         </p>
         <p v-else>
