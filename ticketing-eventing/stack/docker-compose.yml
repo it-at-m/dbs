@@ -4,17 +4,32 @@ services:
   #
   # ============= Kafka =============
   #
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.9.8@sha256:48ca7843cdf2e9d35f96b86efd290e81fcedd595cd5d7df8fde3a6724c3c5869
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: apache/kafka:4.1.2
     ports:
-      - '22181:2181'
+      - '29092:29092'
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: CONTROLLER://:9093,PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_SHARE_COORDINATOR_STATE_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_SHARE_COORDINATOR_STATE_TOPIC_MIN_ISR: 1
+      CLUSTER_ID: 4L6g3nShT-eMCtK--X86sw
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
     networks:
       - internal
+
     healthcheck: &healthcheck
-      test: nc -z localhost 2181 || exit -1
+      test: [ "CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list > /dev/null 2>&1 || exit 1" ]
       start_period: 15s
       interval: 5s
       timeout: 10s
@@ -22,70 +37,19 @@ services:
     security_opt: &security_settings
       - no-new-privileges:true
 
-  kafka:
-    image: confluentinc/cp-kafka:7.9.8@sha256:b38b43301027c5a8990f778e478d2b7384d3fd62cc1aeff6768b89fbd898172a
-    depends_on:
-      zookeeper:
-        condition: service_healthy
-    ports:
-      - '9092:9092'
-      - '29092:29092'
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks:
-      - internal
-    healthcheck:
-      <<: *healthcheck
-      test: nc -z localhost 9092 || exit -1
-    security_opt: *security_settings
-
   kafka-ui:
-    image: provectuslabs/kafka-ui@sha256:8f2ff02d64b0a7a2b71b6b3b3148b85f66d00ec20ad40c30bdcd415d46d31818
+    image: ghcr.io/kafbat/kafka-ui:v1.5.0
     ports:
       - '8089:8080'
     depends_on:
-      - kafka
-      - zookeeper
+      kafka:
+        condition: service_healthy
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
       DYNAMIC_CONFIG_ENABLED: 'true'
     networks:
       - internal
-    healthcheck:
-      <<: *healthcheck
-      test: [ "CMD-SHELL", "wget --spider --timeout=1 http://localhost:8080/actuator/health" ]
-    security_opt: *security_settings
-
-  init-kafka:
-    image: confluentinc/cp-kafka:latest@sha256:acbbf674f2ed40e5d0a8ca51beb0f00692c866fc22b5ce06f8cadbdc54cd4436
-    depends_on:
-      kafka:
-        condition: service_healthy
-    entrypoint: [ '/bin/bash', '-c' ]
-    networks:
-      - internal
-    command: |
-      "
-      # blocks until kafka is reachable
-      echo -e 'Currently available topics:'
-      kafka-topics --bootstrap-server kafka:9092 --list
-      
-      echo -e 'Creating kafka topics...'
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic swim-finished-local --replication-factor 1 --partitions 1
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic swim-dispatch-dlq-local --replication-factor 1 --partitions 1
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic swim-dms-local --replication-factor 1 --partitions 1
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic swim-invoice-local --replication-factor 1 --partitions 1
-
-      echo -e 'Resulting topics:'
-      kafka-topics --bootstrap-server kafka:9092 --list
-      "
     security_opt: *security_settings
 
   #
