@@ -4,6 +4,7 @@
     "introText": "Thank you very much for your input! Based on your answers, the following services might match your situation.",
     "introTextLoading": "Please answer a few questions so that we can put together a package of services tailored to your situation.",
     "suggestedServices": "Suggested services",
-    "loadingSpinnerText": "We're looking for suitable services..."
+    "loadingSpinnerText": "We're looking for suitable services...",
+    "pageTitleLifeSituation": "Life situation:"
   }
 }

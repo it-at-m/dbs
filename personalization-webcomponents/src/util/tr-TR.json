@@ -4,6 +4,7 @@
     "introText": "Girdiğiniz bilgiler için teşekkür ederiz! Verdiğiniz yanıtlara göre, aşağıdaki hizmetler size uygun olabilir.",
     "introTextLoading": "Durumunuza uygun hizmetleri belirleyebilmemiz için lütfen bize birkaç soruyu yanıtlayın.",
     "suggestedServices": "Önerilen hizmetler",
-    "loadingSpinnerText": "Uygun hizmetleri arıyoruz..."
+    "loadingSpinnerText": "Uygun hizmetleri arıyoruz...",
+    "pageTitleLifeSituation": "Yaşam durumu:"
   }
 }

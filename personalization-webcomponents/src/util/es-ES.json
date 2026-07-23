@@ -4,6 +4,7 @@
     "introText": "¡Muchas gracias por sus datos! Según sus respuestas, los siguientes servicios podrían ser adecuados para usted.",
     "introTextLoading": "Responda a algunas preguntas para que podamos ofrecerle los servicios más adecuados a su situación.",
     "suggestedServices": "Servicios recomendados",
-    "loadingSpinnerText": "Buscamos servicios adecuados..."
+    "loadingSpinnerText": "Buscamos servicios adecuados...",
+    "pageTitleLifeSituation": "Situación de vida:"
   }
 }

@@ -348,11 +348,15 @@ onMounted(async () => {
     ".m-breadcrumb__list-item-current"
   );
   if (updateLebenslage) {
-    updateLebenslage.textContent = "Lebenslage: " + lebenslageTitle.value;
+    updateLebenslage.textContent =
+      t("preview.pageTitleLifeSituation") + " " + lebenslageTitle.value;
   }
 
   document.title =
-    "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
+    t("preview.pageTitleLifeSituation") +
+    " " +
+    lebenslageTitle.value +
+    " - Landeshauptstadt München";
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
