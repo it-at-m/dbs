@@ -1,4 +1,5 @@
 package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.config;
+
 import io.micrometer.core.instrument.config.MeterFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
