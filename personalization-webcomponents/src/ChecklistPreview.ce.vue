@@ -228,6 +228,7 @@ import {
   usePublicServiceNavigatorEndpoints,
 } from "@/api/compositions/UseChecklistsApi.ts";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
+import SaveAsChecklistModal from "@/components/SaveAsChecklistModal.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import { useLanguageObserver } from "@/composables/LanguageObserver.ts";
