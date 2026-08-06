@@ -1,10 +1,21 @@
 {
   "preview": {
     "copyLink": "复制链接",
+    "errorEmptyLocalStorageHeader": "我们找不到您的搜索结果。",
+    "errorEmptyLocalStorageContent": "您是否清除了浏览器数据（浏览历史记录）或阻止了Cookie的存储？为了获取搜索结果，请调整浏览器设置并重新进行查询。",
+    "errorNoServicesFoundHeader": "未找到相关服务。",
+    "errorNoServicesFoundContentBeforeLink": "根据您的回答，我们未能找到相应的服务。我们很乐意在我们的",
+    "errorNoServicesFoundLink": "欢迎中心",
+    "errorNoServicesFoundContentAfterLink": "就您的具体情况为您提供咨询。",
+    "errorTechnicalIssueHeader": "无法加载该列表。",
+    "errorTechnicalIssueContent": "该功能目前出现技术故障。请稍后再试。",
     "introText": "非常感谢您提供的信息！根据您的回答，以下服务可能适合您。",
     "introTextLoading": "请回答以下几个问题，以便我们根据您的具体情况为您量身定制合适的服务方案。",
-    "suggestedServices": "推荐服务",
+    "learnMore": "了解更多",
     "loadingSpinnerText": "我们正在寻找合适的服务……",
-    "pageTitleLifeSituation": "情况"
+    "mandatory": "强制性的",
+    "pageTitleLifeSituation": "情况",
+    "restartQuestionnaire": "重新启动查询",
+    "suggestedServices": "推荐服务"
   }
 }

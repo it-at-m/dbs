@@ -10,7 +10,7 @@
         v-if="service?.required"
         class="required-label mde-b1"
       >
-        – verpflichtend
+        – {{ t ? t("preview.mandatory") : "verpflichtend" }}
       </span>
     </template>
 
@@ -103,6 +103,7 @@ const { open = false, showActions = false } = defineProps<{
   open?: boolean;
   service: ChecklistItemServiceNavigatorDTO;
   showActions?: boolean;
+  t?: (key: string) => string;
 }>();
 
 const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);

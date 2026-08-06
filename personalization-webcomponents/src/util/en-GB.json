@@ -1,10 +1,21 @@
 {
   "preview": {
     "copyLink": "Copy link",
+    "errorEmptyLocalStorageHeader": "We were unable to find your results.",
+    "errorEmptyLocalStorageContent": "Perhaps you have cleared your browser history or blocked cookies? To view your results, please adjust your browser settings and answer our questions again.",
+    "errorNoServicesFoundHeader": "No services found.",
+    "errorNoServicesFoundContentBeforeLink": "We haven’t found any services that match your answers. We’d be happy to advise you on your specific situation at our ",
+    "errorNoServicesFoundLink": "Welcome Center",
+    "errorNoServicesFoundContentAfterLink": ".",
+    "errorTechnicalIssueHeader": "The list can’t be loaded.",
+    "errorTechnicalIssueContent": "There is currently a technical issue with this function. Please try again later.",
     "introText": "Thank you very much for your input! Based on your answers, the following services might match your situation.",
     "introTextLoading": "Please answer a few questions so that we can put together a package of services tailored to your situation.",
-    "suggestedServices": "Suggested services",
+    "learnMore": "Learn more",
     "loadingSpinnerText": "We're looking for suitable services...",
-    "pageTitleLifeSituation": "Life situation:"
+    "mandatory": "mandatory",
+    "pageTitleLifeSituation": "Life situation:",
+    "restartQuestionnaire": "Restart questionnaire",
+    "suggestedServices": "Suggested services"
   }
 }
