@@ -17,9 +17,9 @@
     "fix": "prettier . --write && eslint . --fix"
   },
   "dependencies": {
-    "@coreui/coreui": "5.8.0",
-    "@coreui/vue": "5.9.0",
-    "@muenchen/muc-patternlab-vue": "10.0.1",
+    "@coreui/coreui": "5.9.0",
+    "@coreui/vue": "5.10.0",
+    "@muenchen/muc-patternlab-vue": "10.0.2",
     "@vueuse/core": "14.3.0",
     "keycloak-js": "26.2.4",
     "vue": "3.5.39",
@@ -32,18 +32,18 @@
     "@tsconfig/node-lts": "24.0.0",
     "@rushstack/eslint-patch": "1.16.1",
     "@types/node": "24.11.2",
-    "@vitejs/plugin-vue": "6.0.7",
+    "@vitejs/plugin-vue": "6.0.8",
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-typescript": "14.9.0",
     "@vue/test-utils": "2.4.11",
     "@vue/tsconfig": "0.9.1",
-    "eslint": "9.39.4",
-    "eslint-plugin-vue": "10.9.2",
-    "prettier": "3.9.4",
+    "eslint": "9.39.5",
+    "eslint-plugin-vue": "10.10.0",
+    "prettier": "3.9.6",
     "typescript": "5.9.3",
     "vite": "7.3.6",
     "vite-plugin-vue-devtools": "8.1.5",
-    "vitest": "4.1.9",
-    "vue-tsc": "3.3.6"
+    "vitest": "4.1.10",
+    "vue-tsc": "3.3.8"
   }
 }

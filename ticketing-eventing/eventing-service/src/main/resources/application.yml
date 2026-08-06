@@ -19,7 +19,9 @@ spring:
           consumer-properties:
             max.poll.records: 20
             auto.offset.reset: latest
-      output-bindings: event-out
+# Disabled for now due to known bug: https://github.com/spring-cloud/spring-cloud-stream/issues/3203
+# Wait for new spring cloud stream version 5.0.3 release
+#      output-bindings: event-out
 
 # Config for spring actuator endpoints
 management:
