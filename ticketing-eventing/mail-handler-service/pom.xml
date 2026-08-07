@@ -43,7 +43,7 @@
 
         <!-- Core Frameworks -->
         <spring-cloud-dependencies.version>2025.1.2</spring-cloud-dependencies.version> <!-- Must match the chosen Spring Boot version -->
-        <dbs-handler-core.version>0.4.0</dbs-handler-core.version>
+        <dbs-handler-core.version>0.5.0-SNAPSHOT</dbs-handler-core.version>
 
         <!-- Logging -->
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
@@ -115,9 +115,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-oauth2-client</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-oauth2-client</artifactId>
         </dependency>
 
         <!-- DBS -->
