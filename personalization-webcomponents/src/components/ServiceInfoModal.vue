@@ -56,7 +56,7 @@
           icon-animated
           variant="secondary"
         >
-          Mehr erfahren
+          {{ t ? t("preview.learnMore") : "Mehr erfahren" }}
         </muc-button>
       </a>
     </template>
