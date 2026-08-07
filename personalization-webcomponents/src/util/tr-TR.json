@@ -1,9 +1,21 @@
 {
   "preview": {
     "copyLink": "Bağlantıyı kopyala",
+    "errorEmptyLocalStorageHeader": "Arama sonuçlarınızı bulamadık.",
+    "errorEmptyLocalStorageContent": "Belki de tarayıcınızın verilerini (geçmiş) silmiş ya da çerezlerin kaydedilmesini engellemiş olabilirsiniz? Sonuçlarınızı alabilmek için lütfen tarayıcı ayarlarınızı düzenleyin ve aramayı yeniden başlatın.",
+    "errorNoServicesFoundHeader": "Hiçbir hizmet bulunamadı.",
+    "errorNoServicesFoundContentBeforeLink": "Cevaplarınıza uygun bir hizmet bulamadık.",
+    "errorNoServicesFoundLink": "Welcome Center",
+    "errorNoServicesFoundContentAfterLink": "’ımızda özel durumunuzla ilgili size memnuniyetle danışmanlık hizmeti sunarız",
+    "errorTechnicalIssueHeader": "Liste yüklenemiyor.",
+    "errorTechnicalIssueContent": "Şu anda bu işlevle ilgili teknik bir sorun yaşanmaktadır. Lütfen daha sonra tekrar deneyin.",
     "introText": "Girdiğiniz bilgiler için teşekkür ederiz! Verdiğiniz yanıtlara göre, aşağıdaki hizmetler size uygun olabilir.",
     "introTextLoading": "Durumunuza uygun hizmetleri belirleyebilmemiz için lütfen bize birkaç soruyu yanıtlayın.",
+    "learnMore": "Devamını oku",
+    "mandatory": "zorunlu",
     "suggestedServices": "Önerilen hizmetler",
-    "loadingSpinnerText": "Uygun hizmetleri arıyoruz..."
+    "loadingSpinnerText": "Uygun hizmetleri arıyoruz...",
+    "pageTitleLifeSituation": "Yaşam durumu:",
+    "restartQuestionnaire": "Sorguyu yeniden başlat"
   }
 }

@@ -1,9 +1,21 @@
 {
   "preview": {
     "copyLink": "Copier le lien",
+    "errorEmptyLocalStorageHeader": "Nous n'avons pas trouvé vos résultats.",
+    "errorEmptyLocalStorageContent": "Peut-être avez-vous supprimé l'historique de votre navigateur ou bloqué l'enregistrement des cookies ? Pour obtenir vos résultats, modifiez les paramètres de votre navigateur et relancez la questionnaire.",
+    "errorNoServicesFoundHeader": "Aucun résultat trouvé.",
+    "errorNoServicesFoundContentBeforeLink": "Nous n'avons trouvé aucune service correspondant à vos réponses. Nous serons ravis de vous conseiller sur votre cas particulier dans notre ",
+    "errorNoServicesFoundLink": "Welcome Center",
+    "errorNoServicesFoundContentAfterLink": ".",
+    "errorTechnicalIssueHeader": "La list ne peut pas être chargée.",
+    "errorTechnicalIssueContent": "Cette fonctionnalité rencontre actuellement un problème technique. Veuillez réessayer plus tard.",
     "introText": "Merci beaucoup pour vos informations ! D'après vos réponses, les services suivants pourraient vous convenir.",
     "introTextLoading": "Répondez à quelques questions afin que nous puissions vous proposer des prestations adaptées à votre situation.",
-    "suggestedServices": "Services proposés",
-    "loadingSpinnerText": "Nous recherchons des prestations adaptées..."
+    "learnMore": "En savoir plus",
+    "loadingSpinnerText": "Nous recherchons des prestations adaptées...",
+    "mandatory": "obligatoire",
+    "pageTitleLifeSituation": "Situation de vie:",
+    "restartQuestionnaire": "Relancer les questions",
+    "suggestedServices": "Services proposés"
   }
 }

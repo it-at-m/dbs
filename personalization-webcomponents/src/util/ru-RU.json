@@ -1,9 +1,21 @@
 {
   "preview": {
     "copyLink": "Скопировать ссылку",
+    "errorEmptyLocalStorageHeader": "Нам не удалось найти ваши результаты.",
+    "errorEmptyLocalStorageContent": "Возможно, вы удалили данные браузера (историю) или заблокировали сохранение файлов cookie? Чтобы получить результаты, пожалуйста, настройте параметры браузера и запустите запрос заново.",
+    "errorNoServicesFoundHeader": "Результаты не найдены.",
+    "errorNoServicesFoundContentBeforeLink": "Мы не нашли подходящих услуг, соответствующих вашим ответам.  Мы с удовольствием проконсультируем вас по вашему конкретному случаю в нашем ",
+    "errorNoServicesFoundLink": "Welcome Center",
+    "errorNoServicesFoundContentAfterLink": ".",
+    "errorTechnicalIssueHeader": "Список не удается загрузить.",
+    "errorTechnicalIssueContent": "В настоящее время с этой функцией возникла техническая проблема. Пожалуйста, попробуйте позже.",
     "introText": "Спасибо за предоставленную информацию! Исходя из ваших ответов, вам могут подойти следующие услуги.",
     "introTextLoading": "Ответьте на несколько вопросов, чтобы мы могли подобрать услуги, подходящие именно для вашей ситуации.",
-    "suggestedServices": "Рекомендуемые услуги",
-    "loadingSpinnerText": "Мы ищем подходящие услуги..."
+    "learnMore": "Узнать больше",
+    "loadingSpinnerText": "Мы ищем подходящие услуги...",
+    "mandatory": "обязательно",
+    "pageTitleLifeSituation": "жизненная ситуация:",
+    "restartQuestionnaire": "Перезапустить запрос",
+    "suggestedServices": "Рекомендуемые услуги"
   }
 }
