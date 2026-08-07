@@ -138,7 +138,11 @@
                 {{ t("preview.errorNoServicesFoundContentBeforeLink") }}
                 <muc-link
                   class="mde-bold"
-                  href="https://stadt.muenchen.de/rathaus/kontakt.html"
+                  :href="
+                    currentLang == DEFAULT_LANGUAGE
+                      ? 'https://stadt.muenchen.de/rathaus/kontakt.html'
+                      : 'https://stadt.muenchen.de/infos/welcome-center.html?lang=de'
+                  "
                   :label="t('preview.errorNoServicesFoundLink')"
                   noUnderline
                 />
