@@ -1,9 +1,21 @@
 {
   "preview": {
     "copyLink": "Sao chép liên kết",
+    "errorEmptyLocalStorageHeader": "Chúng tôi không tìm thấy kết quả của bạn.",
+    "errorEmptyLocalStorageContent": "Có thể quý vị đã xóa dữ liệu trình duyệt (lịch sử duyệt web) hoặc chặn việc lưu trữ cookie? Để nhận được kết quả, vui lòng điều chỉnh cài đặt trình duyệt và thực hiện lại truy vấn.",
+    "errorNoServicesFoundHeader": "Không tìm thấy kết quả nào.",
+    "errorNoServicesFoundContentBeforeLink": "Chúng tôi chưa tìm thấy dịch vụ phù hợp với các câu trả lời của quý khách.  Chúng tôi sẵn lòng tư vấn cho quý khách về trường hợp cụ thể của quý khách tại ",
+    "errorNoServicesFoundLink": "Trung tâm Tiếp đón",
+    "errorNoServicesFoundContentAfterLink": " của chúng tôi.",
+    "errorTechnicalIssueHeader": "Không thể tải danh sách này.",
+    "errorTechnicalIssueContent": "Hiện tại, tính năng này đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.",
     "introText": "Cảm ơn bạn đã cung cấp thông tin! Dựa trên các câu trả lời của bạn, các dịch vụ sau đây có thể phù hợp với bạn.",
     "introTextLoading": "Hãy trả lời một số câu hỏi của chúng tôi để chúng tôi có thể đề xuất các dịch vụ phù hợp với hoàn cảnh của quý khách.",
-    "suggestedServices": "Các dịch vụ được đề xuất",
-    "loadingSpinnerText": "Chúng tôi đang tìm kiếm các dịch vụ phù hợp..."
+    "learnMore": "Tìm hiểu thêm",
+    "loadingSpinnerText": "Chúng tôi đang tìm kiếm các dịch vụ phù hợp...",
+    "mandatory": "bắt buộc",
+    "pageTitleLifeSituation": "Tình hình:",
+    "restartQuestionnaire": "Khởi động lại truy vấn",
+    "suggestedServices": "Các dịch vụ được đề xuất"
   }
 }

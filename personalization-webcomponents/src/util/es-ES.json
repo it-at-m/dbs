@@ -1,9 +1,21 @@
 {
   "preview": {
     "copyLink": "Copiar enlace",
+    "errorEmptyLocalStorageHeader": "No hemos podido encontrar sus resultados.",
+    "errorEmptyLocalStorageContent": "¿Es posible que haya borrado los datos de su navegador (historial) o que haya bloqueado el almacenamiento de cookies? Para obtener los resultados, ajuste la configuración de su navegador y vuelva a realizar la búsqueda.",
+    "errorNoServicesFoundHeader": "No se han encontrado servicios.",
+    "errorNoServicesFoundContentBeforeLink": "No hemos encontrado ningún servicio que se ajuste a sus respuestas. Estaremos encantados de asesorarle sobre su caso concreto en nuestro ",
+    "errorNoServicesFoundLink": "Welcome Center",
+    "errorNoServicesFoundContentAfterLink": ".",
+    "errorTechnicalIssueHeader": "No se puede cargar la lista.",
+    "errorTechnicalIssueContent": "Actualmente hay un problema técnico con esta función. Inténtalo de nuevo más tarde.",
     "introText": "¡Muchas gracias por sus datos! Según sus respuestas, los siguientes servicios podrían ser adecuados para usted.",
     "introTextLoading": "Responda a algunas preguntas para que podamos ofrecerle los servicios más adecuados a su situación.",
-    "suggestedServices": "Servicios recomendados",
-    "loadingSpinnerText": "Buscamos servicios adecuados..."
+    "learnMore": "Más información",
+    "loadingSpinnerText": "Buscamos servicios adecuados...",
+    "mandatory": "obligatorio",
+    "pageTitleLifeSituation": "Situación de vida:",
+    "restartQuestionnaire": "Reiniciar la consulta",
+    "suggestedServices": "Servicios recomendados"
   }
 }
