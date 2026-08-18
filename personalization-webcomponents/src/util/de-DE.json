@@ -1,9 +1,21 @@
 {
   "preview": {
     "copyLink": "Link kopieren",
+    "errorEmptyLocalStorageHeader": "Wir konnten Ihre Abfrage-Ergebnisse nicht finden.",
+    "errorEmptyLocalStorageContent": "Vielleicht haben Sie Ihre Browser-Daten (Chronik) gelöscht oder die Speicherung von Cookies blockiert? Um Ihre Ergebnisse zu erhalten, passen Sie bitte Ihre Browser-Einstellungen an und starten Sie die Abfrage erneut.",
+    "errorNoServicesFoundHeader": "Keine Leistungen gefunden.",
+    "errorNoServicesFoundContentBeforeLink": "Für Ihre Antworten haben wir keine passenden Leistungen gefunden. Wir beraten Sie gerne zu Ihrem speziellen Fall über unseren Chatbot Muckl oder unsere anderen ",
+    "errorNoServicesFoundLink": "Kontaktkanäle",
+    "errorNoServicesFoundContentAfterLink": ".",
+    "errorTechnicalIssueHeader": "Die Liste kann nicht geladen werden.",
+    "errorTechnicalIssueContent": "Es gibt aktuell leider ein technisches Problem mit dieser Funktion. Bitte versuchen Sie es später nochmal.",
     "introText": "Vielen Dank für Ihre Angaben! Basierend auf Ihren Antworten könnten folgende Leistungen für Sie passen.",
     "introTextLoading": "Beantworten Sie uns einige Fragen, damit wir passende Leistungen für Ihre Situation zusammenstellen können.",
-    "suggestedServices": "Vorgeschlagene Leistungen",
-    "loadingSpinnerText": "Wir suchen nach passenden Leistungen..."
+    "learnMore": "Mehr erfahren",
+    "loadingSpinnerText": "Wir suchen nach passenden Leistungen...",
+    "mandatory": "verpflichtend",
+    "pageTitleLifeSituation": "Lebenslage:",
+    "restartQuestionnaire": "Abfrage neu starten",
+    "suggestedServices": "Vorgeschlagene Leistungen"
   }
 }
