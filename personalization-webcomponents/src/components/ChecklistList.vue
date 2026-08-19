@@ -98,17 +98,16 @@ import type { ChecklistItemServiceNavigatorDTO } from "@/api/dbs-clients/generat
 import { MucIcon } from "@muenchen/muc-patternlab-vue";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 import P13nCheckbox from "@/components/P13nCheckbox.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
-import { useLanguageObserver } from "@/composables/LanguageObserver.ts";
 
 const props = withDefaults(
   defineProps<{
     checklistItems: ChecklistItemServiceNavigatorDTO[];
     isDraggable?: boolean;
     disabled?: boolean;
+    t: (key: string) => string;
   }>(),
   {
     isDraggable: true,
@@ -116,8 +115,6 @@ const props = withDefaults(
   }
 );
 const emit = defineEmits(["checked", "delete", "label-click", "sort"]);
-const { currentLang } = useLanguageObserver();
-const { t, locale, availableLocales } = useI18n();
 
 const focusedIndex = ref<number | null>(null);
 const draggedIndex = ref<number | null>(null);
@@ -136,10 +133,6 @@ const dialogItem = ref<ChecklistItemServiceNavigatorDTO | null>(null);
 onMounted(() => {
   window.addEventListener("keydown", handleArrowKeyDown);
   window.addEventListener("keydown", handleEnterKeyDown);
-
-  if (availableLocales.includes(currentLang.value)) {
-    locale.value = currentLang.value;
-  }
 });
 
 onBeforeUnmount(() => {
