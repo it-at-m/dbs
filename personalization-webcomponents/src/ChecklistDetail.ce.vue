@@ -129,6 +129,7 @@
                 <checklist-list
                   :checklist-items="openCheckList"
                   :disabled="loadingUpdate || loadingCheck"
+                  :t="t"
                   @checked="onCheckedOpen"
                   @delete="onRequestDeleteItem"
                   @sort="onSortOpen"
@@ -155,6 +156,7 @@
                 <checklist-list
                   :disabled="loadingUpdate || loadingCheck"
                   :checklist-items="closedCheckList"
+                  :t="t"
                   @checked="onCheckedClosed"
                   @delete="onRequestDeleteItem"
                   :is-draggable="false"
@@ -199,6 +201,7 @@ import {
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { useChecklistsApi } from "@/api/compositions/UseChecklistsApi.ts";
 import ChecklistHeader from "@/components/ChecklistHeader.vue";
@@ -222,6 +225,7 @@ const requestToDeleteItem = ref<ChecklistItemServiceNavigatorDTO | null>(null);
 const openAcceptDeleteDialog = ref(false);
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
+const { t } = useI18n();
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
   if (authEventDetails && authEventDetails.accessToken) {
