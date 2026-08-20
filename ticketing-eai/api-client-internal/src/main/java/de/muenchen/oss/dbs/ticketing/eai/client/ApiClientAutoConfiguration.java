@@ -9,10 +9,12 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @AutoConfiguration
@@ -21,18 +23,30 @@ public class ApiClientAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ApiClient apiClient(final ApiClientProperties apiClientProperties,
-                               final ClientRegistrationRepository clientRegistrationRepository,
-                               final OAuth2AuthorizedClientService authorizedClientService) {
-        final ServletOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
-                new AuthorizedClientServiceOAuth2AuthorizedClientManager(
-                        clientRegistrationRepository, authorizedClientService));
-        oauth.setDefaultClientRegistrationId(apiClientProperties.getOauthClientRegistration());
+                               final ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
+        final ServerOAuth2AuthorizedClientExchangeFilterFunction oauthFilter = new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+        oauthFilter.setDefaultClientRegistrationId(apiClientProperties.getOauthClientRegistration());
+
         final WebClient webClient = ApiClient.buildWebClientBuilder()
-                .apply(oauth.oauth2Configuration())
+                .filter(oauthFilter)
                 .build();
+
         final ApiClient apiClient = new ApiClient(webClient);
         apiClient.setBasePath(apiClientProperties.getEaiBaseUrl());
         return apiClient;
+    }
+
+    @Bean
+    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(ReactiveClientRegistrationRepository clientRegistrationRepository,
+                                                                         ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+        var authorizedClientProvider = ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
+                .clientCredentials()
+                .refreshToken()
+                .build();
+        var authorizedClientManager = new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+                clientRegistrationRepository, authorizedClientService);
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+        return authorizedClientManager;
     }
 
     @Bean
