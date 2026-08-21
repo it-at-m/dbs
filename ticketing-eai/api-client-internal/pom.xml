@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.16</version>
+        <version>4.1.0</version>
         <relativePath />
     </parent>
 
@@ -37,7 +37,7 @@
 
     <properties>
         <openapi-generator-maven-plugin.version>7.24.0</openapi-generator-maven-plugin.version>
-        <jackson-databind-nullable.version>0.2.11</jackson-databind-nullable.version>
+        <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
 
         <!-- Release -->
         <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
@@ -60,13 +60,18 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-oauth2-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <!-- needed for generated tests -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
 
         <!-- openApi -->
@@ -76,8 +81,9 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-bom.version}</version>
         </dependency>
     </dependencies>
 
@@ -106,6 +112,8 @@
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
                                 <useAbstractionForFiles>true</useAbstractionForFiles>
+                                <useSpringBoot4>true</useSpringBoot4>
+                                <useJackson3>true</useJackson3>
                             </configOptions>
                         </configuration>
                     </execution>
