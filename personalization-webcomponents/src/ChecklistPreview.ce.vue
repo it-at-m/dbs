@@ -8,6 +8,7 @@
     <service-info-modal
       :open="serviceInfoModalOpen"
       :service="selectedService!"
+      :t="t"
       @close="serviceInfoModalOpen = false"
       @cancel="serviceInfoModalOpen = false"
     />
@@ -110,25 +111,17 @@
 
           <div v-else-if="localStorageError">
             <h2 style="padding-bottom: 16px">
-              Wir konnten Ihre Abfrage-Ergebnisse nicht finden.
+              {{ t("preview.errorEmptyLocalStorageHeader") }}
             </h2>
-            <p style="padding-bottom: 16px">
-              Wenn Sie eine Abfrage zu Ihrer Lebenslage durchgeführt haben,
-              sollten hier für Sie passende Leistungen gelistet sein. Wir
-              konnten aber Ihre Ergebnisse nicht finden.
-            </p>
             <p style="padding-bottom: 32px">
-              Vielleicht haben Sie Ihre Browserdaten (Chronik) gelöscht oder die
-              Speicherung von Cookies blockiert? Um Ihre Ergebnisse zu erhalten,
-              passen Sie bitte Ihre Browser-Einstellungen an und starten Sie
-              dann die Abfrage erneut.
+              {{ t("preview.errorEmptyLocalStorageContent") }}
             </p>
             <a :href="newChecklistUrl">
               <muc-button
                 icon="arrow-right"
                 iconAnimated
               >
-                Abfrage neu starten
+                {{ t("preview.restartQuestionnaire") }}
               </muc-button>
             </a>
           </div>
@@ -137,20 +130,23 @@
             v-else-if="noResultsError"
             type="warning"
           >
-            <template #header> Keine Leistungen gefunden.</template>
+            <template #header>
+              {{ t("preview.errorNoServicesFoundHeader") }}
+            </template>
             <template #content>
               <p>
-                Für die eingegeben Angaben haben wir keine passenden Leistungen
-                gefunden. Wir beraten Sie gerne zu Ihrem speziellen Fall über
-                unseren Chatbot <span class="mde-bold">Muckl</span> oder unsere
-                anderen
+                {{ t("preview.errorNoServicesFoundContentBeforeLink") }}
                 <muc-link
                   class="mde-bold"
-                  href="https://stadt.muenchen.de/rathaus/kontakt.html"
-                  label="Kontaktkanäle"
+                  :href="
+                    currentLang == DEFAULT_LANGUAGE
+                      ? 'https://stadt.muenchen.de/rathaus/kontakt.html'
+                      : 'https://stadt.muenchen.de/infos/welcome-center.html?lang=de'
+                  "
+                  :label="t('preview.errorNoServicesFoundLink')"
                   noUnderline
                 />
-                .
+                {{ t("preview.errorNoServicesFoundContentAfterLink") }}
               </p>
             </template>
           </muc-callout>
@@ -169,7 +165,7 @@
                 @keydown.enter="openService(service)"
                 :aria-label="
                   service.required
-                    ? service.title + ' – verpflichtend'
+                    ? service.title + ' – ' + t('preview.mandatory')
                     : service.title
                 "
               >
@@ -177,7 +173,7 @@
                 <span
                   class="required-label mde-b2"
                   v-if="service.required"
-                  >– verpflichtend</span
+                  >– {{ t("preview.mandatory") }}</span
                 >
               </li>
             </ul>
@@ -186,12 +182,11 @@
           <div v-else-if="loadingError">
             <muc-callout type="error">
               <template #header>
-                Die Checkliste kann nicht geladen werden.
+                {{ t("preview.errorTechnicalIssueHeader") }}
               </template>
               <template #content>
                 <p>
-                  Es gibt aktuell leider ein technisches Problem mit dieser
-                  Funktion. Bitte versuchen Sie es später noch einmal.
+                  {{ t("preview.errorTechnicalIssueContent") }}
                 </p>
               </template>
             </muc-callout>
@@ -349,11 +344,15 @@ onMounted(async () => {
     ".m-breadcrumb__list-item-current"
   );
   if (updateLebenslage) {
-    updateLebenslage.textContent = "Lebenslage: " + lebenslageTitle.value;
+    updateLebenslage.textContent =
+      t("preview.pageTitleLifeSituation") + " " + lebenslageTitle.value;
   }
 
   document.title =
-    "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
+    t("preview.pageTitleLifeSituation") +
+    " " +
+    lebenslageTitle.value +
+    " - Landeshauptstadt München";
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {

@@ -20,7 +20,7 @@
     "@coreui/coreui": "5.9.0",
     "@coreui/vue": "5.10.0",
     "@muenchen/muc-patternlab-vue": "10.0.2",
-    "@vueuse/core": "14.3.0",
+    "@vueuse/core": "14.4.0",
     "keycloak-js": "26.2.4",
     "vue": "3.5.39",
     "vue3-cookies": "1.0.6",
@@ -42,8 +42,8 @@
     "prettier": "3.9.6",
     "typescript": "5.9.3",
     "vite": "7.3.6",
-    "vite-plugin-vue-devtools": "8.1.5",
+    "vite-plugin-vue-devtools": "8.2.1",
     "vitest": "4.1.10",
-    "vue-tsc": "3.3.8"
+    "vue-tsc": "3.3.9"
   }
 }

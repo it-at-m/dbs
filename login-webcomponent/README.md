@@ -12,6 +12,8 @@ The Docker-Image consists of a nginx web server which hosts the built version of
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | ALLOW_ORIGIN | The allowed origins formatted for the nginx map directive. E.g. `~^https?://(.*\.)?muenchen.de(:\d+)?$ $http_origin;` to allow all subdomains of muenchen.de. Can contain multiple entries. | -       |
 
+Static assets under `/src/` send `Access-Control-Allow-Origin` based on the request `Origin` (via `ALLOW_ORIGIN`). Nginx also sends `Vary: Origin` so browsers/CDNs do not reuse a cached module (and its ACAO) from one embedder host on another.
+
 ## Usage
 
 1. Add Import to page:

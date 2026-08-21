@@ -1,9 +1,21 @@
 {
   "preview": {
     "copyLink": "نسخ الرابط",
+    "errorEmptyLocalStorageHeader": "لم نتمكن من العثور على نتائجك.",
+    "errorEmptyLocalStorageContent": "ربما قمت بمسح بيانات المتصفح (السجل) أو حظرت تخزين ملفات تعريف الارتباط؟ للحصول على نتائجك، يرجى تعديل إعدادات المتصفح وإعادة إجراء البحث.",
+    "errorNoServicesFoundHeader": "لم يتم العثور على أي خدمات.",
+    "errorNoServicesFoundContentBeforeLink": "لم نتمكن من العثور على خدمات مناسبة تستجيب لردودك.  يسعدنا تقديم المشورة لك بشأن حالتك الخاصة في",
+    "errorNoServicesFoundLink": "مركز الترحيب",
+    "errorNoServicesFoundContentAfterLink": "لدينا.",
+    "errorTechnicalIssueHeader": "يتعذر تحميل القائمة.",
+    "errorTechnicalIssueContent": "توجد حاليًا مشكلة فنية في هذه الوظيفة. يرجى إعادة المحاولة لاحقًا.",
     "introText": "شكرًا جزيلاً على المعلومات التي قدمتها! استنادًا إلى إجاباتك، قد تكون الخدمات التالية مناسبة لك.",
     "introTextLoading": "يرجى الإجابة على بعض الأسئلة حتى نتمكن من تجميع الخدمات المناسبة لحالتك.",
-    "suggestedServices": "الخدمات المقترحة",
-    "loadingSpinnerText": "نحن نبحث عن الخدمات المناسبة..."
+    "learnMore": "معرفة المزيد",
+    "loadingSpinnerText": "نحن نبحث عن الخدمات المناسبة...",
+    "mandatory": "إلزامي",
+    "pageTitleLifeSituation": "الوضع المعيشي",
+    "restartQuestionnaire": "إعادة تشغيل الاستعلام",
+    "suggestedServices": "الخدمات المقترحة"
   }
 }

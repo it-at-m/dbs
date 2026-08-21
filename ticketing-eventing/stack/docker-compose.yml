@@ -5,7 +5,7 @@ services:
   # ============= Kafka =============
   #
   kafka:
-    image: apache/kafka:4.1.2
+    image: apache/kafka:4.1.2@sha256:5cc2a2fd93fa2687b44015eee04fb2c3edd9e526bd64bf8bec5ff1e268772e0e
     ports:
       - '29092:29092'
     environment:
@@ -38,7 +38,7 @@ services:
       - no-new-privileges:true
 
   kafka-ui:
-    image: ghcr.io/kafbat/kafka-ui:v1.5.0
+    image: ghcr.io/kafbat/kafka-ui:v1.5.0@sha256:7cda86a33344160309fdb65146332e4da65db81a945614f2fe32e210803f6fd1
     ports:
       - '8089:8080'
     depends_on:
@@ -56,7 +56,7 @@ services:
   # ============= Mail =============
   #
   mailpit:
-    image: axllent/mailpit:v1.30.6@sha256:7f33095f80e901f6ad08028f06ca284aa58fe84942be5496008d041d3b9f4d4d
+    image: axllent/mailpit:v1.30.7@sha256:d5ecbb067db3705fa953d79e1b7f81ef84038df67aba6c52825d8c02a1ea748a
     ports:
       - '1025:1025' # SMTP Server
       - '8025:8025' # UI
