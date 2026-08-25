@@ -1,6 +1,7 @@
 {
   "preview": {
-    "copyLink": "نسخ الرابط",
+    "copyLink": "نسخ",
+    "print": "طباعة",
     "errorEmptyLocalStorageHeader": "لم نتمكن من العثور على نتائجك.",
     "errorEmptyLocalStorageContent": "ربما قمت بمسح بيانات المتصفح (السجل) أو حظرت تخزين ملفات تعريف الارتباط؟ للحصول على نتائجك، يرجى تعديل إعدادات المتصفح وإعادة إجراء البحث.",
     "errorNoServicesFoundHeader": "لم يتم العثور على أي خدمات.",

@@ -9,6 +9,7 @@ export const QUERY_PARAM_SN_RESULT_SERVICES = "p13n-services";
 export const QUERY_PARAM_CHECKLIST_ID = "cl-id";
 
 export const IS_MOBILE_MEDIA_QUERY = "(max-width: 767px)";
+export const IS_WIDE_MOBILE_MEDIA_QUERY = "(max-width: 990px)";
 
 export const IS_MOBILE_SLIDER_MEDIA_QUERY = "(max-width: 1399px)";
 export const IS_RESIZE_SLIDER_CONTENT_MEDIA_QUERY = "(min-width: 1200px)";

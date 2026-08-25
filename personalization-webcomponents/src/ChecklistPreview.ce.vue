@@ -18,10 +18,10 @@
       @close="requestLoginModalOpen = false"
       @cancel="requestLoginModalOpen = false"
     >
-      <template #title>Bürgerservice-Anmeldung</template>
-      <template #body
-        >Melden Sie sich an, um die für Sie ermittelten Leistungen als
-        Checkliste in Ihrem Bereich zu speichern.
+      <template #title>Speichern als Checkliste</template>
+      <template #body>
+        Melden Sie sich beim Bürgerservice an, um Ihre Leistungen als Checkliste
+        in Ihrem Bereich zu speichern.
       </template>
       <template #buttons>
         <muc-button
@@ -55,24 +55,28 @@
           {{ t("preview.introText") }}
         </p>
         <div
+          class="m-button-group hide-in-print"
           v-if="!loadingServices"
           style="padding-top: 32px"
         >
           <muc-button
             v-if="currentLang == DEFAULT_LANGUAGE"
             icon="order-bool-ascending"
-            style="margin-right: 16px; margin-bottom: 16px"
             @click="saveChecklistClicked"
           >
-            Als Checkliste speichern
+            Speichern
           </muc-button>
           <muc-button
             @click="copyUrl"
             variant="secondary"
             icon="copy-link"
+            :icon-only="isMobile"
+            :aria-label="t('preview.copyLink')"
             spin-icon-on-click
           >
-            {{ t("preview.copyLink") }}
+            <template v-if="!isMobile">
+              {{ t("preview.copyLink") }}
+            </template>
           </muc-button>
           <p
             class="visually-hidden"
@@ -80,6 +84,17 @@
           >
             {{ linkStateMessage }}
           </p>
+          <muc-button
+            @click="print"
+            variant="secondary"
+            icon="printer"
+            :icon-only="isMobile"
+            :aria-label="t('preview.print')"
+          >
+            <template v-if="!isMobile">
+              {{ t("preview.print") }}
+            </template>
+          </muc-button>
         </div>
       </div>
     </muc-intro>
@@ -175,6 +190,19 @@
                   v-if="service.required"
                   >– {{ t("preview.mandatory") }}</span
                 >
+
+                <div class="print-only mde-b1">
+                  <p>
+                    {{ service.note }}
+                    <br />
+                    <strong>Mehr lesen</strong>:
+                    {{
+                      service.isExternal
+                        ? service.publicUrl
+                        : getShortLink(service.publicUrl!)
+                    }}
+                  </p>
+                </div>
               </li>
             </ul>
           </div>
@@ -215,6 +243,7 @@ import {
 } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
+import { useMediaQuery } from "@vueuse/core";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -229,6 +258,7 @@ import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponen
 import { useLanguageObserver } from "@/composables/LanguageObserver.ts";
 import {
   DEFAULT_LANGUAGE,
+  IS_WIDE_MOBILE_MEDIA_QUERY,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,
@@ -267,6 +297,7 @@ const minLoaderTimeInMs = 1500;
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 const { currentLang } = useLanguageObserver();
 const { t, locale, availableLocales } = useI18n();
+const isMobile = useMediaQuery(IS_WIDE_MOBILE_MEDIA_QUERY);
 
 const props = defineProps<{
   checklistDetailUrl: string;
@@ -481,6 +512,35 @@ function openService(service: ChecklistItemServiceNavigatorDTO) {
   serviceInfoModalOpen.value = true;
 }
 
+async function print() {
+  window.print();
+}
+
+function getShortLink(serviceUrl: string) {
+  try {
+    const urlObj = new URL(serviceUrl);
+    const pathSegments = urlObj.pathname
+      .split("/")
+      .filter((segment) => segment !== "");
+
+    if (pathSegments.length < 2) {
+      // Not enough segments to remove the second last part
+      return serviceUrl;
+    }
+
+    // Remove the second last segment
+    pathSegments.splice(pathSegments.length - 2, 1);
+
+    // Reconstruct the pathname
+    urlObj.pathname = "/" + pathSegments.join("/");
+
+    return urlObj.toString();
+  } catch {
+    // If the URL is invalid, return it as is
+    return serviceUrl;
+  }
+}
+
 async function copyUrl() {
   const type = "text/plain";
   const clipboardItemData = {
@@ -556,6 +616,41 @@ async function copyUrl() {
   .center-container {
     margin-top: 124px;
     margin-bottom: 124px;
+  }
+}
+
+.print-only {
+  color: unset;
+  text-decoration: none;
+  padding: 12px;
+
+  display: none;
+}
+
+@media print {
+  .print-only {
+    display: block;
+    font-size: 14px;
+  }
+
+  .hide-in-print {
+    display: none;
+  }
+
+  .snServiceElement {
+    border-top: 1px solid var(--mde-color-neutral-grey);
+  }
+
+  /* Ensure the list allows page breaks inside it */
+  ul {
+    break-inside: auto !important;
+    page-break-inside: auto !important; /* For legacy browser compatibility */
+  }
+
+  /* Allow individual list items to split across pages */
+  li {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }
 </style>
