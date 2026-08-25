@@ -1,6 +1,6 @@
 {
   "preview": {
-    "copyLink": "Link kopieren",
+    "copyLink": "Kopieren",
     "errorEmptyLocalStorageHeader": "Wir konnten Ihre Abfrage-Ergebnisse nicht finden.",
     "errorEmptyLocalStorageContent": "Vielleicht haben Sie Ihre Browser-Daten (Chronik) gelöscht oder die Speicherung von Cookies blockiert? Um Ihre Ergebnisse zu erhalten, passen Sie bitte Ihre Browser-Einstellungen an und starten Sie die Abfrage erneut.",
     "errorNoServicesFoundHeader": "Keine Leistungen gefunden.",
