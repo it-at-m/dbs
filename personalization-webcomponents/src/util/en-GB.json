@@ -1,7 +1,7 @@
 {
   "preview": {
     "copyLink": "Copy",
-    "print": "Drucken",
+    "print": "Print",
     "errorEmptyLocalStorageHeader": "We were unable to find your results.",
     "errorEmptyLocalStorageContent": "Perhaps you have cleared your browser history or blocked cookies? To view your results, please adjust your browser settings and answer our questions again.",
     "errorNoServicesFoundHeader": "No services found.",
