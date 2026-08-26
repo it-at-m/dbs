@@ -1,6 +1,7 @@
 {
   "preview": {
-    "copyLink": "Copiar enlace",
+    "copyLink": "Copiar",
+    "print": "Imprimir",
     "errorEmptyLocalStorageHeader": "No hemos podido encontrar sus resultados.",
     "errorEmptyLocalStorageContent": "¿Es posible que haya borrado los datos de su navegador (historial) o que haya bloqueado el almacenamiento de cookies? Para obtener los resultados, ajuste la configuración de su navegador y vuelva a realizar la búsqueda.",
     "errorNoServicesFoundHeader": "No se han encontrado servicios.",

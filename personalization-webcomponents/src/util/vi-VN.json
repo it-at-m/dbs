@@ -1,6 +1,7 @@
 {
   "preview": {
-    "copyLink": "Sao chép liên kết",
+    "copyLink": "Sao chép",
+    "print": "In ra",
     "errorEmptyLocalStorageHeader": "Chúng tôi không tìm thấy kết quả của bạn.",
     "errorEmptyLocalStorageContent": "Có thể quý vị đã xóa dữ liệu trình duyệt (lịch sử duyệt web) hoặc chặn việc lưu trữ cookie? Để nhận được kết quả, vui lòng điều chỉnh cài đặt trình duyệt và thực hiện lại truy vấn.",
     "errorNoServicesFoundHeader": "Không tìm thấy kết quả nào.",
