@@ -1,5 +1,5 @@
 # For documentation see https://github.com/sclorg/nginx-container
-FROM registry.access.redhat.com/ubi10/nginx-126:10.2-1786484864@sha256:738d0b7e1d26d0abad4025298e75c855927a19031133b5e458373fcebac6119e
+FROM registry.access.redhat.com/ubi10/nginx-126:10.2-1787665570@sha256:670bc955a5edbb566cc566f5aca5584bc4d956c17577f25daa5dd9a570529d86
 
 # Copy built web components and SBOM result
 COPY dist .
