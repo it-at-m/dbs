@@ -18,6 +18,11 @@
     "mandatory": "verpflichtend",
     "pageTitleLifeSituation": "Lebenslage:",
     "restartQuestionnaire": "Abfrage neu starten",
-    "suggestedServices": "Vorgeschlagene Leistungen"
+    "suggestedServices": "Vorgeschlagene Leistungen",
+    "saveAsChecklist": {
+      "header": "X - unused",
+      "body": "X - unused",
+      "switchLanguageButton": "X - unused"
+    }
   }
 }

@@ -42,9 +42,10 @@
         </p>
 
         <checklist-preview-action-buttons
-            v-if="!loadingServices"
-            :currentLang="currentLang"
-            :t="t"
+          v-if="!loadingServices"
+          :currentLang="currentLang"
+          :t="t"
+          @save="saveChecklistClicked"
         />
       </div>
     </muc-intro>
@@ -75,35 +76,39 @@
           </div>
 
           <local-storage-callout
-              v-else-if="localStorageError"
-              :newChecklistUrl="newChecklistUrl"
-              :t="t"
+            v-else-if="localStorageError"
+            :newChecklistUrl="newChecklistUrl"
+            :t="t"
           />
 
           <no-results-callout
-              v-else-if="noResultsError"
-              :currentLang="currentLang"
-              :t="t"
+            v-else-if="noResultsError"
+            :currentLang="currentLang"
+            :t="t"
           />
 
           <checklist-preview-list
-              v-else-if="!localStorageError && !loadingError && snServices"
-              :snServices="snServices"
-              :t="t"
-              @openService="openService($event)"
-              style="padding-bottom: 40px"
+            v-else-if="!localStorageError && !loadingError && snServices"
+            :snServices="snServices"
+            :t="t"
+            @openService="openService($event)"
+            style="padding-bottom: 40px"
           />
 
           <technical-issues-callout
-              v-else-if="loadingError"
-              :t="t"
+            v-else-if="loadingError"
+            :t="t"
           />
 
           <save-as-checklist-callout
-              v-if="!localStorageError && !loadingError && snServices && currentLang !== DEFAULT_LANGUAGE"
-              :t="t"
+            v-if="
+              !localStorageError &&
+              !loadingError &&
+              snServices &&
+              currentLang !== DEFAULT_LANGUAGE
+            "
+            :t="t"
           />
-
         </div>
       </div>
     </div>
@@ -111,22 +116,35 @@
 </template>
 
 <script setup lang="ts">
-import type {ChecklistItemDTO, ChecklistItemServiceNavigatorDTO,} from "@/api/dbs-clients/generated-p13n-service-api";
-import type {ServiceNavigatorResult} from "@/api/servicenavigator/ServiceNavigatorResult.ts";
+import type {
+  ChecklistItemDTO,
+  ChecklistItemServiceNavigatorDTO,
+} from "@/api/dbs-clients/generated-p13n-service-api";
+import type { ServiceNavigatorResult } from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
-import {MucIntro, MucSpinner,} from "@muenchen/muc-patternlab-vue";
+import { MucIntro, MucSpinner } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
-import {onMounted, ref} from "vue";
-import {useI18n} from "vue-i18n";
+import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-import {useChecklistsApi, usePublicServiceNavigatorEndpoints,} from "@/api/compositions/UseChecklistsApi.ts";
+import {
+  useChecklistsApi,
+  usePublicServiceNavigatorEndpoints,
+} from "@/api/compositions/UseChecklistsApi.ts";
+import ChecklistPreviewActionButtons from "@/components/checklistPreview/ChecklistPreviewActionButtons.vue";
+import ChecklistPreviewList from "@/components/checklistPreview/ChecklistPreviewList.vue";
+import LocalStorageCallout from "@/components/checklistPreview/LocalStorageCallout.vue";
+import NoResultsCallout from "@/components/checklistPreview/NoResultsCallout.vue";
+import RequestLoginModal from "@/components/checklistPreview/RequestLoginModal.vue";
+import SaveAsChecklistCallout from "@/components/checklistPreview/SaveAsChecklistCallout.vue";
+import TechnicalIssuesCallout from "@/components/checklistPreview/TechnicalIssuesCallout.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import SaveAsChecklistModal from "@/components/SaveAsChecklistModal.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
-import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentPlugin.ts";
-import {useLanguageObserver} from "@/composables/LanguageObserver.ts";
+import { useDBSLoginWebcomponentPlugin } from "@/composables/DBSLoginWebcomponentPlugin.ts";
+import { useLanguageObserver } from "@/composables/LanguageObserver.ts";
 import {
   DEFAULT_LANGUAGE,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
@@ -136,13 +154,6 @@ import {
   QUERY_PARAM_SN_RESULT_SERVICES,
   setAccessToken,
 } from "@/util/Constants.ts";
-import RequestLoginModal from "@/components/checklistPreview/RequestLoginModal.vue";
-import NoResultsCallout from "@/components/checklistPreview/NoResultsCallout.vue";
-import TechnicalIssuesCallout from "@/components/checklistPreview/TechnicalIssuesCallout.vue";
-import LocalStorageCallout from "@/components/checklistPreview/LocalStorageCallout.vue";
-import ChecklistPreviewList from "@/components/checklistPreview/ChecklistPreviewList.vue";
-import ChecklistPreviewActionButtons from "@/components/checklistPreview/ChecklistPreviewActionButtons.vue";
-import SaveAsChecklistCallout from "@/components/checklistPreview/SaveAsChecklistCallout.vue";
 
 // Network activity and results
 const loadingServices = ref(false);
@@ -386,7 +397,6 @@ function openService(service: ChecklistItemServiceNavigatorDTO) {
   selectedService.value = service;
   serviceInfoModalOpen.value = true;
 }
-
 </script>
 
 <style>
@@ -412,7 +422,6 @@ function openService(service: ChecklistItemServiceNavigatorDTO) {
   align-items: center;
   flex-direction: column;
 }
-
 
 /* CSS for desktop */
 @media (min-width: 768px) {

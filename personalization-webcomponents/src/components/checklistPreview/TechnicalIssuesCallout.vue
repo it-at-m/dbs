@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import {MucCallout} from "@muenchen/muc-patternlab-vue";
+import { MucCallout } from "@muenchen/muc-patternlab-vue";
 
 defineProps<{
   t: (key: string) => string;

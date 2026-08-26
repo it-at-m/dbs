@@ -8,8 +8,8 @@
     </p>
     <a :href="newChecklistUrl">
       <muc-button
-          icon="arrow-right"
-          iconAnimated
+        icon="arrow-right"
+        iconAnimated
       >
         {{ t("preview.restartQuestionnaire") }}
       </muc-button>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import {MucButton} from "@muenchen/muc-patternlab-vue";
+import { MucButton } from "@muenchen/muc-patternlab-vue";
 
 defineProps<{
   newChecklistUrl: string;

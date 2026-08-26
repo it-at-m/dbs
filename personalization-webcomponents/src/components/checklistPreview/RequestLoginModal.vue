@@ -1,8 +1,8 @@
 <template>
   <muc-modal
-      :open="open"
-      @close="emit('close')"
-      @cancel="emit('close')"
+    :open="open"
+    @close="emit('close')"
+    @cancel="emit('close')"
   >
     <template #title>Speichern als Checkliste</template>
     <template #body>
@@ -11,8 +11,8 @@
     </template>
     <template #buttons>
       <muc-button
-          icon="sign-in"
-          @click="emit('sign-in')"
+        icon="sign-in"
+        @click="emit('sign-in')"
       >
         Anmelden
       </muc-button>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import {MucButton, MucModal} from "@muenchen/muc-patternlab-vue";
+import { MucButton, MucModal } from "@muenchen/muc-patternlab-vue";
 
 const { open = false } = defineProps<{
   open?: boolean;

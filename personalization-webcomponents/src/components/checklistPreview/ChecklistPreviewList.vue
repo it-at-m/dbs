@@ -5,23 +5,23 @@
     </h2>
     <ul class="snServiceList">
       <li
-          class="snServiceElement mde-b2 mde-bold"
-          v-for="service in snServices"
-          :key="service.serviceID"
-          @click="emit('openService', service)"
-          tabindex="0"
-          @keydown.enter="emit('openService', service)"
-          :aria-label="
-                  service.required
-                    ? service.title + ' – ' + t('preview.mandatory')
-                    : service.title
-                "
+        class="snServiceElement mde-b2 mde-bold"
+        v-for="service in snServices"
+        :key="service.serviceID"
+        @click="emit('openService', service)"
+        tabindex="0"
+        @keydown.enter="emit('openService', service)"
+        :aria-label="
+          service.required
+            ? service.title + ' – ' + t('preview.mandatory')
+            : service.title
+        "
       >
         {{ service.title }}
         <span
-            class="required-label mde-b2"
-            v-if="service.required"
-        >– {{ t("preview.mandatory") }}</span
+          class="required-label mde-b2"
+          v-if="service.required"
+          >– {{ t("preview.mandatory") }}</span
         >
 
         <div class="print-only mde-b1">
@@ -31,8 +31,8 @@
             <strong> {{ t("preview.learnMore") }}: </strong>
             {{
               service.isExternal
-                  ? service.publicUrl
-                  : getShortLink(service.publicUrl!)
+                ? service.publicUrl
+                : getShortLink(service.publicUrl!)
             }}
           </p>
         </div>
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import type {ChecklistItemServiceNavigatorDTO} from "@/api/dbs-clients/generated-p13n-service-api";
+import type { ChecklistItemServiceNavigatorDTO } from "@/api/dbs-clients/generated-p13n-service-api";
 
 defineProps<{
   snServices: ChecklistItemServiceNavigatorDTO[];
@@ -50,15 +50,15 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  openService: [service: ChecklistItemServiceNavigatorDTO]
-}>()
+  openService: [service: ChecklistItemServiceNavigatorDTO];
+}>();
 
 function getShortLink(serviceUrl: string) {
   try {
     const urlObj = new URL(serviceUrl);
     const pathSegments = urlObj.pathname
-        .split("/")
-        .filter((segment) => segment !== "");
+      .split("/")
+      .filter((segment) => segment !== "");
 
     if (pathSegments.length < 2) {
       // Not enough segments to remove the second last part
@@ -80,7 +80,6 @@ function getShortLink(serviceUrl: string) {
 </script>
 
 <style scoped>
-
 .snServiceList {
   list-style-type: none;
   padding-left: 0;
@@ -115,7 +114,6 @@ function getShortLink(serviceUrl: string) {
 
   display: none;
 }
-
 
 @media print {
   .print-only {

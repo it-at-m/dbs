@@ -1,39 +1,39 @@
 <template>
   <div
-      class="m-button-group hide-in-print"
-      style="padding-top: 32px"
+    class="m-button-group hide-in-print"
+    style="padding-top: 32px"
   >
     <muc-button
-        v-if="currentLang == DEFAULT_LANGUAGE"
-        icon="order-bool-ascending"
-        @click="emit('save')"
+      v-if="currentLang == DEFAULT_LANGUAGE"
+      icon="order-bool-ascending"
+      @click="emit('save')"
     >
       Speichern
     </muc-button>
     <muc-button
-        @click="copyUrl"
-        variant="secondary"
-        icon="copy-link"
-        :icon-only="isMobile"
-        :aria-label="t('preview.copyLink')"
-        spin-icon-on-click
+      @click="copyUrl"
+      variant="secondary"
+      icon="copy-link"
+      :icon-only="isMobile"
+      :aria-label="t('preview.copyLink')"
+      spin-icon-on-click
     >
       <template v-if="!isMobile">
         {{ t("preview.copyLink") }}
       </template>
     </muc-button>
     <p
-        class="visually-hidden"
-        role="status"
+      class="visually-hidden"
+      role="status"
     >
       {{ linkStateMessage }}
     </p>
     <muc-button
-        @click="print"
-        variant="secondary"
-        icon="printer"
-        :icon-only="isMobile"
-        :aria-label="t('preview.print')"
+      @click="print"
+      variant="secondary"
+      icon="printer"
+      :icon-only="isMobile"
+      :aria-label="t('preview.print')"
     >
       <template v-if="!isMobile">
         {{ t("preview.print") }}
@@ -43,10 +43,14 @@
 </template>
 
 <script setup lang="ts">
-import {MucButton} from "@muenchen/muc-patternlab-vue";
-import {DEFAULT_LANGUAGE, IS_WIDE_MOBILE_MEDIA_QUERY} from "@/util/Constants.ts";
-import {useMediaQuery} from "@vueuse/core";
-import {ref} from "vue";
+import { MucButton } from "@muenchen/muc-patternlab-vue";
+import { useMediaQuery } from "@vueuse/core";
+import { ref } from "vue";
+
+import {
+  DEFAULT_LANGUAGE,
+  IS_WIDE_MOBILE_MEDIA_QUERY,
+} from "@/util/Constants.ts";
 
 const props = defineProps<{
   currentLang: string;
