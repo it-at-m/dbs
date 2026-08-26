@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Kopyala",
+    "copyLinkSuccess": "Bağlantı kopyalandı.",
     "print": "Yazdır",
     "errorEmptyLocalStorageHeader": "Arama sonuçlarınızı bulamadık.",
     "errorEmptyLocalStorageContent": "Belki de tarayıcınızın verilerini (geçmiş) silmiş ya da çerezlerin kaydedilmesini engellemiş olabilirsiniz? Sonuçlarınızı alabilmek için lütfen tarayıcı ayarlarınızı düzenleyin ve aramayı yeniden başlatın.",

@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Copier",
+    "copyLinkSuccess": "Le lien a été copié.",
     "print": "Imprimer",
     "errorEmptyLocalStorageHeader": "Nous n'avons pas trouvé vos résultats.",
     "errorEmptyLocalStorageContent": "Peut-être avez-vous supprimé l'historique de votre navigateur ou bloqué l'enregistrement des cookies ? Pour obtenir vos résultats, modifiez les paramètres de votre navigateur et relancez la questionnaire.",

@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "复制",
+    "copyLinkSuccess": "链接已复制",
     "print": "打印",
     "errorEmptyLocalStorageHeader": "我们找不到您的搜索结果。",
     "errorEmptyLocalStorageContent": "您是否清除了浏览器数据（浏览历史记录）或阻止了Cookie的存储？为了获取搜索结果，请调整浏览器设置并重新进行查询。",
