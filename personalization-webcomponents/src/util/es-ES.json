@@ -18,6 +18,11 @@
     "mandatory": "obligatorio",
     "pageTitleLifeSituation": "Situación de vida:",
     "restartQuestionnaire": "Reiniciar la consulta",
-    "suggestedServices": "Servicios recomendados"
+    "suggestedServices": "Servicios recomendados",
+    "saveAsChecklist": {
+      "header": "Guardar como lista de comprobación",
+      "body": "En la versión alemana de esta página web puede iniciar sesión y guardar sus resultados en una lista de verificación interactiva. Acceda a la versión alemana para utilizar esta función.",
+      "switchLanguageButton": "Cambiar a alemán"
+    }
   }
 }

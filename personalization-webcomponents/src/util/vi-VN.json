@@ -18,6 +18,11 @@
     "mandatory": "bắt buộc",
     "pageTitleLifeSituation": "Tình hình:",
     "restartQuestionnaire": "Khởi động lại truy vấn",
-    "suggestedServices": "Các dịch vụ được đề xuất"
+    "suggestedServices": "Các dịch vụ được đề xuất",
+    "saveAsChecklist": {
+      "header": "Lưu dưới dạng danh sách kiểm tra",
+      "body": "Trong phiên bản tiếng Đức của trang web này, bạn có thể đăng nhập và lưu kết quả của mình dưới dạng danh sách kiểm tra tương tác. Hãy chuyển sang phiên bản tiếng Đức để sử dụng tính năng này.",
+      "switchLanguageButton": "Chuyển sang tiếng Đức"
+    }
   }
 }

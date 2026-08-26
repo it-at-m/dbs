@@ -18,6 +18,11 @@
     "mandatory": "mandatory",
     "pageTitleLifeSituation": "Life situation:",
     "restartQuestionnaire": "Restart questionnaire",
-    "suggestedServices": "Suggested services"
+    "suggestedServices": "Suggested services",
+    "saveAsChecklist": {
+      "header": "Save as a checklist",
+      "body": "On the German version of this website, you can log in and save your results as an interactive checklist. Please switch to the German version to use this feature.",
+      "switchLanguageButton": "Switch to German"
+    }
   }
 }

@@ -91,10 +91,16 @@
               :snServices="snServices"
               :t="t"
               @openService="openService($event)"
+              style="padding-bottom: 40px"
           />
 
           <technical-issues-callout
               v-else-if="loadingError"
+              :t="t"
+          />
+
+          <save-as-checklist-callout
+              v-if="!localStorageError && !loadingError && snServices && currentLang !== DEFAULT_LANGUAGE"
               :t="t"
           />
 
@@ -122,6 +128,7 @@ import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
 import {useDBSLoginWebcomponentPlugin} from "@/composables/DBSLoginWebcomponentPlugin.ts";
 import {useLanguageObserver} from "@/composables/LanguageObserver.ts";
 import {
+  DEFAULT_LANGUAGE,
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,
@@ -135,6 +142,7 @@ import TechnicalIssuesCallout from "@/components/checklistPreview/TechnicalIssue
 import LocalStorageCallout from "@/components/checklistPreview/LocalStorageCallout.vue";
 import ChecklistPreviewList from "@/components/checklistPreview/ChecklistPreviewList.vue";
 import ChecklistPreviewActionButtons from "@/components/checklistPreview/ChecklistPreviewActionButtons.vue";
+import SaveAsChecklistCallout from "@/components/checklistPreview/SaveAsChecklistCallout.vue";
 
 // Network activity and results
 const loadingServices = ref(false);

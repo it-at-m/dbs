@@ -18,6 +18,11 @@
     "mandatory": "强制性的",
     "pageTitleLifeSituation": "情况",
     "restartQuestionnaire": "重新启动查询",
-    "suggestedServices": "推荐服务"
+    "suggestedServices": "推荐服务",
+    "saveAsChecklist": {
+      "header": "保存为检查清单",
+      "body": "在网站的德语版本中，您可以登录并将您的结果保存为交互式检查清单。请切换至德语版本以使用此功能。",
+      "switchLanguageButton": "切换至德语"
+    }
   }
 }
