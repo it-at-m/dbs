@@ -195,7 +195,7 @@
                   <p>
                     {{ service.note }}
                     <br />
-                    <strong>{{ t("preview.learnMore") }}</strong>:
+                    <strong> {{ t("preview.learnMore") }}: </strong>
                     {{
                       service.isExternal
                         ? service.publicUrl
