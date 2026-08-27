@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Kopyala",
+    "copyLinkSuccess": "Bağlantı kopyalandı.",
     "print": "Yazdır",
     "errorEmptyLocalStorageHeader": "Arama sonuçlarınızı bulamadık.",
     "errorEmptyLocalStorageContent": "Belki de tarayıcınızın verilerini (geçmiş) silmiş ya da çerezlerin kaydedilmesini engellemiş olabilirsiniz? Sonuçlarınızı alabilmek için lütfen tarayıcı ayarlarınızı düzenleyin ve aramayı yeniden başlatın.",
@@ -17,6 +18,11 @@
     "mandatory": "zorunlu",
     "pageTitleLifeSituation": "Yaşam durumu:",
     "restartQuestionnaire": "Sorguyu yeniden başlat",
-    "suggestedServices": "Önerilen hizmetler"
+    "suggestedServices": "Önerilen hizmetler",
+    "saveAsChecklist": {
+      "header": "Kontrol listesi olarak kaydet",
+      "body": "Bu web sitesinin Almanca sürümünde oturum açabilir ve sonuçlarınızı etkileşimli bir kontrol listesi olarak kaydedebilirsiniz. Bu özelliği kullanmak için Almanca sürüme geçin.",
+      "switchLanguageButton": "Almanca sürüme geç"
+    }
   }
 }

@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Copier",
+    "copyLinkSuccess": "Le lien a été copié.",
     "print": "Imprimer",
     "errorEmptyLocalStorageHeader": "Nous n'avons pas trouvé vos résultats.",
     "errorEmptyLocalStorageContent": "Peut-être avez-vous supprimé l'historique de votre navigateur ou bloqué l'enregistrement des cookies ? Pour obtenir vos résultats, modifiez les paramètres de votre navigateur et relancez la questionnaire.",
@@ -17,6 +18,11 @@
     "mandatory": "obligatoire",
     "pageTitleLifeSituation": "Situation de vie:",
     "restartQuestionnaire": "Relancer les questions",
-    "suggestedServices": "Services proposés"
+    "suggestedServices": "Services proposés",
+    "saveAsChecklist": {
+      "header": "Enregistrer sous forme de liste de contrôle",
+      "body": "Dans la version allemande de ce site web, vous pouvez vous connecter et enregistrer vos résultats sous forme de liste de contrôle interactive. Passez à la version allemande pour utiliser cette fonctionnalité.",
+      "switchLanguageButton": "Passer à la version allemande"
+    }
   }
 }

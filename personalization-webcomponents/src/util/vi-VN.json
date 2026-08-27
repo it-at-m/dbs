@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Sao chép",
+    "copyLinkSuccess": "Liên kết đã được sao chép.",
     "print": "In ra",
     "errorEmptyLocalStorageHeader": "Chúng tôi không tìm thấy kết quả của bạn.",
     "errorEmptyLocalStorageContent": "Có thể quý vị đã xóa dữ liệu trình duyệt (lịch sử duyệt web) hoặc chặn việc lưu trữ cookie? Để nhận được kết quả, vui lòng điều chỉnh cài đặt trình duyệt và thực hiện lại truy vấn.",
@@ -17,6 +18,11 @@
     "mandatory": "bắt buộc",
     "pageTitleLifeSituation": "Tình hình:",
     "restartQuestionnaire": "Khởi động lại truy vấn",
-    "suggestedServices": "Các dịch vụ được đề xuất"
+    "suggestedServices": "Các dịch vụ được đề xuất",
+    "saveAsChecklist": {
+      "header": "Lưu dưới dạng danh sách kiểm tra",
+      "body": "Trong phiên bản tiếng Đức của trang web này, bạn có thể đăng nhập và lưu kết quả của mình dưới dạng danh sách kiểm tra tương tác. Hãy chuyển sang phiên bản tiếng Đức để sử dụng tính năng này.",
+      "switchLanguageButton": "Chuyển sang tiếng Đức"
+    }
   }
 }

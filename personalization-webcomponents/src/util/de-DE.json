@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Kopieren",
+    "copyLinkSuccess": "Link wurde kopiert.",
     "print": "Drucken",
     "errorEmptyLocalStorageHeader": "Wir konnten Ihre Abfrage-Ergebnisse nicht finden.",
     "errorEmptyLocalStorageContent": "Vielleicht haben Sie Ihre Browser-Daten (Chronik) gelöscht oder die Speicherung von Cookies blockiert? Um Ihre Ergebnisse zu erhalten, passen Sie bitte Ihre Browser-Einstellungen an und starten Sie die Abfrage erneut.",
@@ -17,6 +18,11 @@
     "mandatory": "verpflichtend",
     "pageTitleLifeSituation": "Lebenslage:",
     "restartQuestionnaire": "Abfrage neu starten",
-    "suggestedServices": "Vorgeschlagene Leistungen"
+    "suggestedServices": "Vorgeschlagene Leistungen",
+    "saveAsChecklist": {
+      "header": "X - unused",
+      "body": "X - unused",
+      "switchLanguageButton": "X - unused"
+    }
   }
 }
