@@ -56,12 +56,12 @@
     >
       <div class="m-intro-vertical__grid">
         <div class="m-intro-vertical__grid-inner">
-          <div v-if="loadingServices && !showLoader">
+          <div v-if="loadingServices && (!firstLoad || !showLoader)">
             <skeleton-loader />
           </div>
 
           <div
-            v-if="loadingServices && showLoader"
+            v-if="loadingServices && firstLoad && showLoader"
             class="bluebox"
           >
             <div class="center-container">
@@ -174,12 +174,13 @@ const lebenslageTitle = ref("Meine Lebenslage");
 const lebenslageId = ref("");
 const snServices = ref<ChecklistItemServiceNavigatorDTO[] | null>(null);
 const selectedService = ref<ChecklistItemServiceNavigatorDTO | null>(null);
+const firstLoad = ref(true);
 
 /**
  * Minimum time the loader is shown in milliseconds
  * even if the request to load the services is faster
  */
-const minLoaderTimeInMs = 1500;
+const minLoaderTimeInMs = 3000;
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 const { currentLang } = useLanguageObserver();
@@ -222,7 +223,7 @@ onMounted(async () => {
         }
 
         const delayPromise = new Promise<void>((resolve) =>
-          setTimeout(resolve, minLoaderTimeInMs)
+          setTimeout(resolve, firstLoad.value ? minLoaderTimeInMs : 0)
         );
         const snResponsePromise = snApi.getServicesByIds({
           ids: snResult.services.join(","),
@@ -335,6 +336,7 @@ function saveChecklistClicked() {
 function getSnResults(): ServiceNavigatorResult | null {
   const snResultsFromUrl = getSnResultFromUrl();
   if (snResultsFromUrl) {
+    firstLoad.value = false;
     return snResultsFromUrl;
   }
   const serviceNavigatorResultString = localStorage.getItem(
