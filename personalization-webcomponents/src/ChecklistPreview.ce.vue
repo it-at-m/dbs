@@ -223,10 +223,7 @@ onMounted(async () => {
         }
 
         const delayPromise = new Promise<void>((resolve) =>
-          setTimeout(
-              resolve,
-              firstLoad.value ? minLoaderTimeInMs : 0
-          )
+          setTimeout(resolve, firstLoad.value ? minLoaderTimeInMs : 0)
         );
         const snResponsePromise = snApi.getServicesByIds({
           ids: snResult.services.join(","),
