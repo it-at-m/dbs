@@ -37,10 +37,10 @@ function getGermanLebenslagenLink() {
       .split("/")
       .filter((segment) => segment.length > 0);
 
-    // Entferne den ersten Pfadabschnitt
+    // Remove the first path segment
     pathSegments.shift();
 
-    // Setze den neuen Pfad zusammen
+    // Assemble the new path
     urlObj.pathname = "/" + pathSegments.join("/");
 
     return urlObj.toString();
