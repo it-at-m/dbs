@@ -14,14 +14,14 @@
     "introText": "Merci beaucoup pour vos informations ! D'après vos réponses, les services suivants pourraient vous convenir.",
     "introTextLoading": "Répondez à quelques questions afin que nous puissions vous proposer des prestations adaptées à votre situation.",
     "learnMore": "En savoir plus",
-    "loadingSpinnerText": "Nous recherchons des prestations adaptées...",
+    "loadingSpinnerText": "Recherchons vos services…",
     "mandatory": "obligatoire",
     "pageTitleLifeSituation": "Situation de vie:",
     "restartQuestionnaire": "Relancer les questions",
     "suggestedServices": "Services proposés",
     "saveAsChecklist": {
       "header": "Enregistrer sous forme de liste de contrôle",
-      "body": "Dans la version allemande de ce site web, vous pouvez vous connecter et enregistrer vos résultats sous forme de liste de contrôle interactive. Passez à la version allemande pour utiliser cette fonctionnalité.",
+      "body": "Dans la version allemande de ce site web, vous pouvez vous connecter et enregistrer vos résultats sous forme de liste de contrôle interactive.",
       "switchLanguageButton": "Passer à la version allemande"
     }
   }

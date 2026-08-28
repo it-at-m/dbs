@@ -14,14 +14,14 @@
     "introText": "¡Muchas gracias por sus datos! Según sus respuestas, los siguientes servicios podrían ser adecuados para usted.",
     "introTextLoading": "Responda a algunas preguntas para que podamos ofrecerle los servicios más adecuados a su situación.",
     "learnMore": "Más información",
-    "loadingSpinnerText": "Buscamos servicios adecuados...",
+    "loadingSpinnerText": "Buscamos sus servicios…",
     "mandatory": "obligatorio",
     "pageTitleLifeSituation": "Situación de vida:",
     "restartQuestionnaire": "Reiniciar la consulta",
     "suggestedServices": "Servicios recomendados",
     "saveAsChecklist": {
       "header": "Guardar como lista de comprobación",
-      "body": "En la versión alemana de esta página web puede iniciar sesión y guardar sus resultados en una lista de verificación interactiva. Acceda a la versión alemana para utilizar esta función.",
+      "body": "En la versión alemana de esta página web puede iniciar sesión y guardar sus resultados en una lista de verificación interactiva.",
       "switchLanguageButton": "Cambiar a alemán"
     }
   }

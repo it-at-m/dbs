@@ -14,14 +14,14 @@
     "introText": "Girdiğiniz bilgiler için teşekkür ederiz! Verdiğiniz yanıtlara göre, aşağıdaki hizmetler size uygun olabilir.",
     "introTextLoading": "Durumunuza uygun hizmetleri belirleyebilmemiz için lütfen bize birkaç soruyu yanıtlayın.",
     "learnMore": "Devamını oku",
-    "loadingSpinnerText": "Uygun hizmetleri arıyoruz...",
+    "loadingSpinnerText": "Size uygun hizmetleri arıyoruz…",
     "mandatory": "zorunlu",
     "pageTitleLifeSituation": "Yaşam durumu:",
     "restartQuestionnaire": "Sorguyu yeniden başlat",
     "suggestedServices": "Önerilen hizmetler",
     "saveAsChecklist": {
       "header": "Kontrol listesi olarak kaydet",
-      "body": "Bu web sitesinin Almanca sürümünde oturum açabilir ve sonuçlarınızı etkileşimli bir kontrol listesi olarak kaydedebilirsiniz. Bu özelliği kullanmak için Almanca sürüme geçin.",
+      "body": "Bu web sitesinin Almanca sürümünde oturum açabilir ve sonuçlarınızı etkileşimli bir kontrol listesi olarak kaydedebilirsiniz.",
       "switchLanguageButton": "Almanca sürüme geç"
     }
   }

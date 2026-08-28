@@ -10,18 +10,18 @@
     "errorNoServicesFoundLink": "Welcome Center",
     "errorNoServicesFoundContentAfterLink": ".",
     "errorTechnicalIssueHeader": "The list can’t be loaded.",
-    "errorTechnicalIssueContent": "There is currently a technical issue with this function. Please try again later.",
+    "errorTechnicalIssueContent": "There is currently a technical issue with this feature. Please try again later.",
     "introText": "Thank you very much for your input! Based on your answers, the following services might match your situation.",
     "introTextLoading": "Please answer a few questions so that we can put together a package of services tailored to your situation.",
     "learnMore": "Learn more",
-    "loadingSpinnerText": "We're looking for suitable services...",
+    "loadingSpinnerText": "Looking for your services…",
     "mandatory": "mandatory",
     "pageTitleLifeSituation": "Life situation:",
     "restartQuestionnaire": "Restart questionnaire",
     "suggestedServices": "Suggested services",
     "saveAsChecklist": {
       "header": "Save as a checklist",
-      "body": "On the German version of this website, you can log in and save your results as an interactive checklist. Please switch to the German version to use this feature.",
+      "body": "On the German version of this website, you can log in and save your results as an interactive checklist.",
       "switchLanguageButton": "Switch to German"
     }
   }
