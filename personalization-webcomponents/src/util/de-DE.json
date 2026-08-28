@@ -6,7 +6,7 @@
     "errorEmptyLocalStorageHeader": "Wir konnten Ihre Abfrage-Ergebnisse nicht finden.",
     "errorEmptyLocalStorageContent": "Vielleicht haben Sie Ihre Browser-Daten (Chronik) gelöscht oder die Speicherung von Cookies blockiert? Um Ihre Ergebnisse zu erhalten, passen Sie bitte Ihre Browser-Einstellungen an und starten Sie die Abfrage erneut.",
     "errorNoServicesFoundHeader": "Keine Leistungen gefunden.",
-    "errorNoServicesFoundContentBeforeLink": "Für Ihre Antworten haben wir keine passenden Leistungen gefunden. Wir beraten Sie gerne zu Ihrem speziellen Fall über unseren Chatbot Muckl oder unsere anderen ",
+    "errorNoServicesFoundContentBeforeLink": "Für Ihre Antworten haben wir keine passenden Leistungen gefunden. Wir beraten Sie gerne zu Ihrem speziellen Fall über unsere anderen ",
     "errorNoServicesFoundLink": "Kontaktkanäle",
     "errorNoServicesFoundContentAfterLink": ".",
     "errorTechnicalIssueHeader": "Die Liste kann nicht geladen werden.",

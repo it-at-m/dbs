@@ -14,14 +14,14 @@
     "introText": "Cảm ơn bạn đã cung cấp thông tin! Dựa trên các câu trả lời của bạn, các dịch vụ sau đây có thể phù hợp với bạn.",
     "introTextLoading": "Hãy trả lời một số câu hỏi của chúng tôi để chúng tôi có thể đề xuất các dịch vụ phù hợp với hoàn cảnh của quý khách.",
     "learnMore": "Tìm hiểu thêm",
-    "loadingSpinnerText": "Chúng tôi đang tìm kiếm các dịch vụ phù hợp...",
+    "loadingSpinnerText": "Tìm kiếm các dịch vụ…",
     "mandatory": "bắt buộc",
     "pageTitleLifeSituation": "Tình hình:",
     "restartQuestionnaire": "Khởi động lại truy vấn",
     "suggestedServices": "Các dịch vụ được đề xuất",
     "saveAsChecklist": {
       "header": "Lưu dưới dạng danh sách kiểm tra",
-      "body": "Trong phiên bản tiếng Đức của trang web này, bạn có thể đăng nhập và lưu kết quả của mình dưới dạng danh sách kiểm tra tương tác. Hãy chuyển sang phiên bản tiếng Đức để sử dụng tính năng này.",
+      "body": "Trên phiên bản tiếng Đức của trang web này, bạn có thể đăng nhập và lưu kết quả của mình dưới dạng danh sách kiểm tra tương tác.",
       "switchLanguageButton": "Chuyển sang tiếng Đức"
     }
   }
