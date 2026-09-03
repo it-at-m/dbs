@@ -58,7 +58,7 @@ const linkStateMessage = ref("");
 
 const isMobile = useMediaQuery(IS_WIDE_MOBILE_MEDIA_QUERY);
 
-async function copyUrl(e: Event) {
+async function copyUrl() {
   const type = "text/plain";
   const clipboardItemData = {
     [type]: window.location.href,
@@ -75,6 +75,5 @@ async function copyUrl(e: Event) {
 async function print(e: Event) {
   (e.target as HTMLElement).blur();
   window.print();
-
 }
 </script>
