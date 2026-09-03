@@ -1,6 +1,6 @@
 <template>
   <div
-    class="m-button-group hide-in-print"
+    class="m-button-group p13n-hide-in-print"
     style="padding-top: 32px"
   >
     <muc-button
@@ -15,12 +15,10 @@
       variant="secondary"
       icon="copy-link"
       :icon-only="isMobile"
-      :aria-label="t('preview.copyLink')"
+      :aria-label="t('preview.copyLinkAria')"
       spin-icon-on-click
     >
-      <template v-if="!isMobile">
-        {{ t("preview.copyLink") }}
-      </template>
+      {{ t("preview.copyLink") }}
     </muc-button>
     <p
       class="visually-hidden"
@@ -33,11 +31,8 @@
       variant="secondary"
       icon="printer"
       :icon-only="isMobile"
-      :aria-label="t('preview.print')"
     >
-      <template v-if="!isMobile">
-        {{ t("preview.print") }}
-      </template>
+      {{ t("preview.print") }}
     </muc-button>
   </div>
 </template>
@@ -63,7 +58,7 @@ const linkStateMessage = ref("");
 
 const isMobile = useMediaQuery(IS_WIDE_MOBILE_MEDIA_QUERY);
 
-async function copyUrl() {
+async function copyUrl(e: Event) {
   const type = "text/plain";
   const clipboardItemData = {
     [type]: window.location.href,
@@ -77,15 +72,9 @@ async function copyUrl() {
   });
 }
 
-async function print() {
+async function print(e: Event) {
+  (e.target as HTMLElement).blur();
   window.print();
+
 }
 </script>
-
-<style scoped>
-@media print {
-  .hide-in-print {
-    display: none;
-  }
-}
-</style>

@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Kopyala",
+    "copyLinkAria": "Bağlantıyı kopyala",
     "copyLinkSuccess": "Bağlantı kopyalandı.",
     "print": "Yazdır",
     "errorEmptyLocalStorageHeader": "Arama sonuçlarınızı bulamadık.",

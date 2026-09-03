@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Kopieren",
+    "copyLinkAria": "Link kopieren",
     "copyLinkSuccess": "Link wurde kopiert.",
     "print": "Drucken",
     "errorEmptyLocalStorageHeader": "Wir konnten Ihre Abfrage-Ergebnisse nicht finden.",
