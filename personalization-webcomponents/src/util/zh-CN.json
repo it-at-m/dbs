@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "复制",
+    "copyLinkAria": "复制链接",
     "copyLinkSuccess": "链接已复制",
     "print": "打印",
     "errorEmptyLocalStorageHeader": "我们找不到您的搜索结果。",
