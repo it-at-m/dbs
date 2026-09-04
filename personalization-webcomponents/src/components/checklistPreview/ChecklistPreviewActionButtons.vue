@@ -73,7 +73,11 @@ async function copyUrl() {
 }
 
 async function print(e: Event) {
-  (e.target as HTMLElement).blur();
+  // Use currentTarget to ensure we blur the component root (MucButton)
+  const target = e.currentTarget;
+  if (target instanceof HTMLElement) {
+    target.blur();
+  }
   window.print();
 }
 </script>
