@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Sao chép",
+    "copyLinkAria": "Sao chép liên kết",
     "copyLinkSuccess": "Liên kết đã được sao chép.",
     "print": "In ra",
     "errorEmptyLocalStorageHeader": "Chúng tôi không tìm thấy kết quả của bạn.",

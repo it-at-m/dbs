@@ -1,6 +1,7 @@
 {
   "preview": {
     "copyLink": "Копировать",
+    "copyLinkAria": "Скопировать ссылку",
     "copyLinkSuccess": "Ссылка скопирована.",
     "print": "Печать",
     "errorEmptyLocalStorageHeader": "Нам не удалось найти ваши результаты.",

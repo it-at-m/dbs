@@ -101,6 +101,7 @@
           />
 
           <save-as-checklist-callout
+            class="p13n-hide-in-print"
             v-if="
               !localStorageError &&
               !loadingError &&
@@ -405,6 +406,12 @@ function openService(service: ChecklistItemServiceNavigatorDTO) {
 @import url("https://assets.muenchen.de/mde/1.1.23/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+
+@media print {
+  .p13n-hide-in-print {
+    display: none;
+  }
+}
 </style>
 
 <style scoped>
