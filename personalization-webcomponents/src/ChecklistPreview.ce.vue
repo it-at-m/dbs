@@ -231,13 +231,9 @@ onMounted(async () => {
           lang: requestedLang ? requestedLang : undefined,
         });
 
-        const snServicesBody = (
+        snServices.value = (
           await Promise.all([delayPromise, snResponsePromise])
         )[1];
-
-        snServices.value = snServicesBody.sort((a, b) => {
-          return a.required === b.required ? 0 : a.required ? -1 : 1;
-        });
       } catch (error) {
         console.debug("Error loading checklist: ", error);
         loadingError.value = error as string;
