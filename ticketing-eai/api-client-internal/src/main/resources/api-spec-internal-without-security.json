@@ -1580,6 +1580,12 @@
           "title": {
             "type": "string"
           },
+          "dbs_title": {
+            "type": "string"
+          },
+          "mail_title": {
+            "type": "string"
+          },
           "group": {
             "type": "string"
           },
@@ -1596,6 +1602,21 @@
             "type": "string"
           },
           "direktkennwort": {
+            "type": "string"
+          },
+          "eakte_userlogin": {
+            "type": "string"
+          },
+          "eakte_joboe": {
+            "type": "string"
+          },
+          "eakte_jobposition": {
+            "type": "string"
+          },
+          "eakte_wiederaufsetzpunkt": {
+            "type": "string"
+          },
+          "eakte_coo_target": {
             "type": "string"
           },
           "article": {
@@ -1759,6 +1780,12 @@
           "title": {
             "type": "string"
           },
+          "dbs_title": {
+            "type": "string"
+          },
+          "mail_title": {
+            "type": "string"
+          },
           "organization_id": {
             "type": "string"
           },
@@ -1902,6 +1929,21 @@
             "type": "string"
           },
           "direktkennwort": {
+            "type": "string"
+          },
+          "eakte_userlogin": {
+            "type": "string"
+          },
+          "eakte_joboe": {
+            "type": "string"
+          },
+          "eakte_jobposition": {
+            "type": "string"
+          },
+          "eakte_wiederaufsetzpunkt": {
+            "type": "string"
+          },
+          "eakte_coo_target": {
             "type": "string"
           },
           "sende_nachricht_nach_extern": {
@@ -2212,6 +2254,21 @@
             "type": "string"
           },
           "direktkennwort": {
+            "type": "string"
+          },
+          "eakte_userlogin": {
+            "type": "string"
+          },
+          "eakte_joboe": {
+            "type": "string"
+          },
+          "eakte_jobposition": {
+            "type": "string"
+          },
+          "eakte_wiederaufsetzpunkt": {
+            "type": "string"
+          },
+          "eakte_coo_target": {
             "type": "string"
           },
           "sende_nachricht_nach_extern": {
