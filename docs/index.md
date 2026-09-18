@@ -3,7 +3,7 @@
 The **Digitaler Bürgerservice** _Digital Citizen Service_ (DBS) is a digital service provided by the municipality of the
 City of Munich, designed to facilitate access to municipal services for citizens.
 
-![](./assets/screenshots/screenshot_overview_desktop.png)
+![Screenshot of the overview view of the DBS](./assets/screenshots/screenshot_overview_desktop.png)
 
 The platform employs a user-centered approach, allowing a citizen to
 

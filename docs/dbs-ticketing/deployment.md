@@ -8,24 +8,22 @@ not yet published
 
 ## dbs-direc-pass-retrieval-service
 
-Spec (internal): https://confluence.muenchen.de/pages/viewpage.action?pageId=431662952
+Spec (internal): <https://confluence.muenchen.de/pages/viewpage.action?pageId=431662952>
 
 ### Usage
 
 1. Add Import to page:
 
-| Environment | Import                                                                                                                          |
-|-------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Environment | Import                                                                                                   |
+| ----------- | -------------------------------------------------------------------------------------------------------- |
 | Dev         | `<script src="https://password-reset-service-integration.muenchen.de/loader.js" type="module"></script>` |
-| Test        | `<script src="https://password-reset-service-test.muenchen.de/loader.js" type="module"></script>`                              |
-| Prod        | `<script src="https://password-reset-service.muenchen.de/loader.js" type="module"></script>`                                   |
+| Test        | `<script src="https://password-reset-service-test.muenchen.de/loader.js" type="module"></script>`        |
+| Prod        | `<script src="https://password-reset-service.muenchen.de/loader.js" type="module"></script>`             |
 
 2. Add Element to page
 
 ```html
-
 <password-reset-element></password-reset-element>
-
 ```
 
 ### Webcomponent `password-reset-element`

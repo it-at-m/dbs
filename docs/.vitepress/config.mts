@@ -20,21 +20,39 @@ const vitepressConfig = defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     sidebar: [
-      { text: "Overview", collapsed: false, items: [
-          {text: "Home", link: "/"},
-          {text: "Architecture", link: "/architecture"},
-      ]},
-      { text: "Components", collapsed: false, items: [
-          {text: "dbs-ticketing", link: "/dbs-ticketing", collapsed: true, items: [
-              {text: "Development", link: "/dbs-ticketing/development"},
-              {text: "Deployment", link: "/dbs-ticketing/deployment"},
-          ]},
-          {text: "dbs-p13n", link: "/dbs-p13n", collapsed: true, items: [
-              {text: "Development", link: "/dbs-p13n/development"},
-              {text: "Deployment", link: "/dbs-p13n/deployment"},
-          ]},
-          {text: "dbs-login", link: "/dbs-login"},
-      ]}
+      {
+        text: "Overview",
+        collapsed: false,
+        items: [
+          { text: "Home", link: "/" },
+          { text: "Architecture", link: "/architecture" },
+        ],
+      },
+      {
+        text: "Components",
+        collapsed: false,
+        items: [
+          {
+            text: "dbs-ticketing",
+            link: "/dbs-ticketing",
+            collapsed: true,
+            items: [
+              { text: "Development", link: "/dbs-ticketing/development" },
+              { text: "Deployment", link: "/dbs-ticketing/deployment" },
+            ],
+          },
+          {
+            text: "dbs-p13n",
+            link: "/dbs-p13n",
+            collapsed: true,
+            items: [
+              { text: "Development", link: "/dbs-p13n/development" },
+              { text: "Deployment", link: "/dbs-p13n/deployment" },
+            ],
+          },
+          { text: "dbs-login", link: "/dbs-login" },
+        ],
+      },
     ],
     socialLinks: [{ icon: "github", link: "https://github.com/it-at-m/dbs" }],
     search: {

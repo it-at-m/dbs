@@ -1,4 +1,8 @@
-# ticketing-eai 🚧
+# dbs-ticketing
+
+🚧 WIP
+
+## ticketing-eai
 
 EAI (enterprise application integration) for Zammad API with different endpoints for internal and external clients.
 
@@ -9,13 +13,12 @@ flowchart LR
     ec[External Clients] -->|External REST API| EAI
 ```
 
-## components
+### components
 
 - eai-service: TBD
 - [api-client](./api-client): Spring Java Client for making request against EAI based on eai OpenAPI spec
 
-
-# ticketing-eventing
+## ticketing-eventing
 
 Event notification via Zammad webhooks and Apache Kafka
 
@@ -26,6 +29,6 @@ flowchart LR
     k --> c2[other Service]
 ```
 
-## Components
+### Components
 
 - [eventing-service]: Takes Zammad webhook event via REST and forwards it to Apache Kafka
