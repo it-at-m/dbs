@@ -1,22 +1,23 @@
-# ticketing-eventing
+🚧 WIP
 
-Event notification via Zammad webhooks and Apache Kafka
+# dbs-ticketing-eai
 
-```mermaid
-flowchart LR
-    z[Zammad] -->|REST Webhook| e[eventing-service] --> k([Apache Kafka])
-    k --> c1[other Service]
-    k --> c2[other Service]
-```
+not yet published
 
-## Components
+# dbs-direct-pass-retrieval-service
 
-- [eventing-service]: Takes Zammad webhook event via REST and forwards it to Apache Kafka
+1. `cd /direct-pass-retrieval-service`
+1. run `apigateway/runLocalNoSecurity.sh`
+1. `cd frontend && npm run dev`
+1. Run `src/test/java/de/muenchen/dbs/ticketing/prs/util/ResetKeyGeneratorTest.java` to generate a valid link for testing the component locally
 
-## Local development
+To test your setup go to http://localhost:3000/?q=generated-key .
+
+# dbs-ticketing-eventing
 
 For local testing:
 
+- Run stack with `/ticketing-eventing/stack/docker-compose.yml`
 - Run DbsTicketingEventingService
 - Run DbsTicketingEventingMailHandlerService
 
@@ -39,7 +40,7 @@ Open **Event-Service** via Swagger (http://localhost:8080/swagger-ui/index.html)
 
 Open **Kafka** (http://localhost:8089/):\
 - Inspect: `Topics --> dbs-ticketing-event --> Messages`
-- Should see a new corresponding event 
+- Should see a new corresponding event
 
 
 Open **Mailpit** (http://localhost:8025/):

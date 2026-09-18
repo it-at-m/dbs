@@ -1,6 +1,8 @@
-# DBS-Login Webcomponent
+# DBS-Login Webcomponent 🚧
 
 Shows a Login-Button and/or tries to log in a user visiting a site with this webcomponent attached.
+
+![](../assets/screenshots/screenshot_profile.png)
 
 ## Docker
 
