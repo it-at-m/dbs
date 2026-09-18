@@ -16,7 +16,7 @@ flowchart LR
 ### components
 
 - eai-service: TBD
-- [api-client](./api-client): Spring Java Client for making request against EAI based on eai OpenAPI spec
+- [api-client](https://github.com/it-at-m/dbs/tree/main/ticketing-eai/api-client-internal): Spring Java Client for making request against EAI based on eai OpenAPI spec
 
 ## ticketing-eventing
 
