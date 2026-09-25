@@ -43,6 +43,7 @@ The project is built with technologies we use in our projects ([reference archit
 - [login-webcomponent](./login-webcomponent): Webcomponent for logging in as a citizen.
 - [personalization service](./personalization-service) and it's corresponding [webcomponents](./personalization-webcomponents)
 - [ticketing-eventing](./ticketing-eventing): Event notification via Zammad webhooks and Apache Kafka.
+- [direct-pass-retrieval-service](./direct-pass-retrieval-service): Time-limited retrieval of a ticket direct password.
 
 ## Getting Started
 
