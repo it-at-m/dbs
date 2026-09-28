@@ -6,7 +6,11 @@ import de.muenchen.oss.dbs.ticketing.eventing.service.domain.model.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +24,13 @@ public class StreamingAdapter implements SendEventOutPort {
     public void sendEvent(final Event event) {
         final boolean successful;
         try {
-            successful = streamBridge.send(BINDING_NAME, event);
+            Integer key = event.hashCode();
+            successful = streamBridge.send(
+                    BINDING_NAME,
+                    MessageBuilder.withPayload(event)
+                            .setHeader(KafkaHeaders.KEY, key)
+                            .build()
+            );
         } catch (final RuntimeException e) {
             throw new MessageOutException("Exception while sending event %s".formatted(event), e);
         }
