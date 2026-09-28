@@ -16,4 +16,7 @@ import org.springframework.validation.annotation.Validated;
 public class DmsProperties {
     @NotNull
     private List<String> relevantActions;
+
+    @NotNull
+    private List<String> articleActions;
 }
