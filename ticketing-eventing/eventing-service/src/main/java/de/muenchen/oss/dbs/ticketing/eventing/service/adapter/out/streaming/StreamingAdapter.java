@@ -10,8 +10,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,8 +27,7 @@ public class StreamingAdapter implements SendEventOutPort {
                     BINDING_NAME,
                     MessageBuilder.withPayload(event)
                             .setHeader(KafkaHeaders.KEY, key)
-                            .build()
-            );
+                            .build());
         } catch (final RuntimeException e) {
             throw new MessageOutException("Exception while sending event %s".formatted(event), e);
         }
