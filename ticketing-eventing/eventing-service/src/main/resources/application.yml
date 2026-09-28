@@ -5,6 +5,9 @@ spring:
     name: "@project.artifactId@"
     group: "@project.groupId@"
     version: "@project.version@"
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
   cloud:
     stream:
       default:
