@@ -1046,6 +1046,43 @@
         ]
       }
     },
+    "/v2/tickets/history/{ticketId}": {
+      "get": {
+        "tags": [
+          "Tickets"
+        ],
+        "summary": "Get ticket history of a ticket.",
+        "description": "Authorization: READ_TICKETS",
+        "operationId": "getTicketHistory",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "dbs-ticketing-eai-secscheme": []
+          }
+        ]
+      }
+    },
     "/users/{userID}": {
       "get": {
         "tags": [
