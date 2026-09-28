@@ -22,7 +22,7 @@ public class StreamingAdapter implements SendEventOutPort {
     public void sendEvent(final Event event) {
         final boolean successful;
         try {
-            Integer key = event.hashCode();
+            final Integer key = event.hashCode();
             successful = streamBridge.send(
                     BINDING_NAME,
                     MessageBuilder.withPayload(event)
