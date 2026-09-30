@@ -6,6 +6,8 @@ In the future further personalization features of the DBS may be added, like not
 
 ## Impressions
 
-![Screenshot of a checklist overview](../assets/screenshots/screenshot_checklist.png){float=left, width=30%}
-![Screenshot of a detailed view of a checklist](../assets/screenshots/screenshot_checklist_detail.png){float=left, width=30%}
-![Screenshot of a detailed view of a checklist element](../assets/screenshots/screenshot_checklist_detail_2.png){float=left, width=30%}
+<div style="display: flex; gap: 16px;">
+  <img src="../assets/screenshots/screenshot_checklist.png" alt="Screenshot of a checklist overview" style="width: 30%;">
+  <img src="../assets/screenshots/screenshot_checklist_detail.png" alt="Screenshot of a detailed view of a checklist" style="width: 30%;">
+  <img src="../assets/screenshots/screenshot_checklist_detail_2.png" alt="Screenshot of a detailed view of a checklist element" style="width: 30%;">
+</div>
