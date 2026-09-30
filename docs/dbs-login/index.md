@@ -1,6 +1,8 @@
-# DBS-Login Webcomponent
+# DBS-Login Webcomponent 🚧
 
 Shows a Login-Button and/or tries to log in a user visiting a site with this webcomponent attached.
+
+![Screenshot of a user profile](../assets/screenshots/screenshot_profile.png)
 
 ## Docker
 
@@ -24,7 +26,7 @@ Static assets under `/src/` send `Access-Control-Allow-Origin` based on the requ
 | Test        | `<script src="https://dbs-login-webcomponent-test.muenchen.de/loader.js" type="module"></script>`                            |
 | Prod        | `<script src="https://dbs-login-webcomponent.muenchen.de/loader.js" type="module"></script>`                                 |
 
-2. Add Element to page with appropriate [config](#fragment-properties)
+2. Add Element to page with appropriate [config](#webcomponent-properties)
 
 ```html
 <dbs-login
@@ -97,7 +99,7 @@ ID of your client in the given realm on the given keycloak instance.
 | Default  | undefined |
 
 The domain to set for the cookies containing the users token. Further
-info: https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#write_a_new_cookie
+info: <https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#write_a_new_cookie>
 
 ### `overview-link`
 
