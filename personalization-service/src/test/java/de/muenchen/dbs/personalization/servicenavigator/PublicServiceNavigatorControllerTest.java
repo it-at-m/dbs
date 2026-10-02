@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistItemServiceNavigatorDTO;
 import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
 import java.util.List;
 import java.util.Optional;
@@ -19,38 +20,46 @@ class PublicServiceNavigatorControllerTest {
 
     private static final String SN_SERVICE_ID = "10483346";
 
+    private ChecklistMapper checklistMapper;
     private ServiceNavigatorService serviceNavigatorService;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
+        checklistMapper = mock(ChecklistMapper.class);
         serviceNavigatorService = mock(ServiceNavigatorService.class);
         final PublicServiceNavigatorController controller = new PublicServiceNavigatorController(
-                mock(ChecklistMapper.class), serviceNavigatorService);
+                checklistMapper, serviceNavigatorService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     void givenLifeSituationIdAndLanguage_thenReturnLifeSituation() throws Exception {
+        final ServiceNavigatorResponse serviceNavigatorResponse = new ServiceNavigatorResponse(
+                "I'm coming here from abroad.",
+                "https://example.com",
+                "I'm coming here from abroad.",
+                "10483467",
+                "en",
+                true,
+                null,
+                null,
+                null,
+                List.of());
         when(serviceNavigatorService.getServiceNavigatorService(SN_SERVICE_ID, "en"))
-                .thenReturn(Optional.of(new ServiceNavigatorResponse(
-                        "I'm coming here from abroad.",
-                        "https://example.com",
-                        "I'm coming here from abroad.",
-                        "10483467",
-                        "en",
-                        true,
-                        null,
-                        null,
-                        null,
-                        List.of())));
+                .thenReturn(Optional.of(serviceNavigatorResponse));
+
+        final ChecklistItemServiceNavigatorDTO checklistItem = new ChecklistItemServiceNavigatorDTO();
+        checklistItem.setTitle("I'm coming here from abroad.");
+        checklistItem.setServiceID("10483467");
+        when(checklistMapper.toChecklistItemServiceNavigatorDTO(serviceNavigatorResponse)).thenReturn(checklistItem);
 
         mockMvc.perform(get("/public/servicenavigator")
                 .queryParam("ids", SN_SERVICE_ID)
                 .queryParam("lang", "en"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.serviceName", is("I'm coming here from abroad.")))
-                .andExpect(jsonPath("$.lang", is("en")));
+                .andExpect(jsonPath("$.[0].title", is("I'm coming here from abroad.")))
+                .andExpect(jsonPath("$.[0].serviceID", is("10483467")));
     }
 
     @Test
