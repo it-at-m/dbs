@@ -1,0 +1,63 @@
+package de.muenchen.dbs.personalization.servicenavigator;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import de.muenchen.dbs.personalization.checklist.domain.ChecklistMapper;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+class PublicServiceNavigatorControllerTest {
+
+    private static final String SN_SERVICE_ID = "10483346";
+
+    private ServiceNavigatorService serviceNavigatorService;
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        serviceNavigatorService = mock(ServiceNavigatorService.class);
+        final PublicServiceNavigatorController controller = new PublicServiceNavigatorController(
+                mock(ChecklistMapper.class), serviceNavigatorService);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    }
+
+    @Test
+    void givenLifeSituationIdAndLanguage_thenReturnLifeSituation() throws Exception {
+        when(serviceNavigatorService.getServiceNavigatorService(SN_SERVICE_ID, "en"))
+                .thenReturn(Optional.of(new ServiceNavigatorResponse(
+                        "I'm coming here from abroad.",
+                        "https://example.com",
+                        "I'm coming here from abroad.",
+                        "10483467",
+                        "en",
+                        true,
+                        null,
+                        null,
+                        null,
+                        List.of())));
+
+        mockMvc.perform(get("/public/servicenavigator")
+                .queryParam("ids", SN_SERVICE_ID)
+                .queryParam("lang", "en"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.serviceName", is("I'm coming here from abroad.")))
+                .andExpect(jsonPath("$.lang", is("en")));
+    }
+
+    @Test
+    void givenUnsupportedLanguage_thenReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/public/servicenavigator")
+                .queryParam("ids", SN_SERVICE_ID)
+                .queryParam("lang", "unsupported"))
+                .andExpect(status().isBadRequest());
+    }
+}
