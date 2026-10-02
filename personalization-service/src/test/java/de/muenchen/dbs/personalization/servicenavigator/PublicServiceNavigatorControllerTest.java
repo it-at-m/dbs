@@ -35,7 +35,7 @@ class PublicServiceNavigatorControllerTest {
 
     @Test
     void givenLifeSituationIdAndLanguage_thenReturnLifeSituation() throws Exception {
-        String serviceName = "I'm coming here from abroad.";
+        final String serviceName = "I'm coming here from abroad.";
         final ServiceNavigatorResponse serviceNavigatorResponse = new ServiceNavigatorResponse(
                 serviceName,
                 "https://example.com",
