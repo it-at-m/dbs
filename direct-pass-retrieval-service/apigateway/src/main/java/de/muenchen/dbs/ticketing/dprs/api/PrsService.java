@@ -8,7 +8,6 @@ import de.muenchen.dbs.ticketing.dprs.clients.ticketingeai.model.User;
 import de.muenchen.dbs.ticketing.dprs.mail.EmailService;
 import de.muenchen.dbs.ticketing.dprs.util.ResetKeyGenerator;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
@@ -57,11 +56,6 @@ public class PrsService {
                     } else {
                         UpdateTicketDTO updateTicketDTO = new UpdateTicketDTO();
                         updateTicketDTO.setId(ticketInternal.getId());
-                        updateTicketDTO.setState(UpdateTicketDTO.StateEnum.fromValue(ticketInternal.getState()));
-                        if (ticketInternal.getPendingTime() != null) {
-                            updateTicketDTO.setPendingTime(OffsetDateTime.parse(ticketInternal.getPendingTime()));
-                        }
-
 
                         String uuidString = UUID.randomUUID().toString();
                         String dk = uuidString.substring(uuidString.lastIndexOf("-") + 1);
