@@ -35,10 +35,11 @@ class PublicServiceNavigatorControllerTest {
 
     @Test
     void givenLifeSituationIdAndLanguage_thenReturnLifeSituation() throws Exception {
+        String serviceName = "I'm coming here from abroad.";
         final ServiceNavigatorResponse serviceNavigatorResponse = new ServiceNavigatorResponse(
-                "I'm coming here from abroad.",
+                serviceName,
                 "https://example.com",
-                "I'm coming here from abroad.",
+                serviceName,
                 "10483467",
                 "en",
                 true,
@@ -50,7 +51,7 @@ class PublicServiceNavigatorControllerTest {
                 .thenReturn(Optional.of(serviceNavigatorResponse));
 
         final ChecklistItemServiceNavigatorDTO checklistItem = new ChecklistItemServiceNavigatorDTO();
-        checklistItem.setTitle("I'm coming here from abroad.");
+        checklistItem.setTitle(serviceName);
         checklistItem.setServiceID("10483467");
         when(checklistMapper.toChecklistItemServiceNavigatorDTO(serviceNavigatorResponse)).thenReturn(checklistItem);
 
@@ -58,7 +59,7 @@ class PublicServiceNavigatorControllerTest {
                 .queryParam("ids", SN_SERVICE_ID)
                 .queryParam("lang", "en"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].title", is("I'm coming here from abroad.")))
+                .andExpect(jsonPath("$.[0].title", is(serviceName)))
                 .andExpect(jsonPath("$.[0].serviceID", is("10483467")));
     }
 
