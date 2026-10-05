@@ -151,7 +151,6 @@ import {
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,
-  QUERY_PARAM_SN_RESULT_NAME,
   QUERY_PARAM_SN_RESULT_SERVICES,
   setAccessToken,
 } from "@/util/Constants.ts";
@@ -204,43 +203,49 @@ onMounted(async () => {
   const snResult = getSnResults();
 
   if (snResult) {
-    lebenslageTitle.value = snResult.name;
     lebenslageId.value = snResult.id;
 
-    if (snResult.services.length > 0) {
-      const snApi = usePublicServiceNavigatorEndpoints();
+    const snApi = usePublicServiceNavigatorEndpoints();
+    try {
+      let requestedLang;
       try {
-        let requestedLang;
-        try {
-          const requestedLocale = new Intl.Locale(locale.value);
-          if (requestedLocale) {
-            requestedLang = requestedLocale.language;
-          }
-        } catch {
-          console.debug(
-            "couldn't instantiate language with locale",
-            locale.value
-          );
+        const requestedLocale = new Intl.Locale(locale.value);
+        if (requestedLocale) {
+          requestedLang = requestedLocale.language;
         }
-
-        const delayPromise = new Promise<void>((resolve) =>
-          setTimeout(resolve, firstLoad.value ? minLoaderTimeInMs : 0)
+      } catch {
+        console.debug(
+          "couldn't instantiate language with locale",
+          locale.value
         );
-        const snResponsePromise = snApi.getServicesByIds({
-          ids: snResult.services.join(","),
-          lang: requestedLang ? requestedLang : undefined,
-        });
-
-        snServices.value = (
-          await Promise.all([delayPromise, snResponsePromise])
-        )[1];
-      } catch (error) {
-        console.debug("Error loading checklist: ", error);
-        loadingError.value = error as string;
-      } finally {
-        loadingServices.value = false;
       }
-    } else {
+
+      const delayPromise = new Promise<void>((resolve) =>
+        setTimeout(
+          resolve,
+          firstLoad.value && snResult.services.length > 0
+            ? minLoaderTimeInMs
+            : 0
+        )
+      );
+      const servicesPromise =
+        snResult.services.length > 0
+          ? snApi.getServicesByIds({
+              ids: snResult.id + "," + snResult.services.join(","),
+              lang: requestedLang,
+            })
+          : Promise.resolve([]);
+
+      const [, services] = await Promise.all([delayPromise, servicesPromise]);
+      const lifeSituationInfos = services.shift();
+      if (lifeSituationInfos && lifeSituationInfos.title) {
+        lebenslageTitle.value = lifeSituationInfos.title;
+      }
+      snServices.value = services;
+    } catch (error) {
+      console.debug("Error loading checklist: ", error);
+      loadingError.value = error as string;
+    } finally {
       loadingServices.value = false;
     }
   } else {
@@ -358,7 +363,8 @@ function setUrlParams(snResult: ServiceNavigatorResult) {
   if ("URLSearchParams" in window) {
     const url = new URL(window.location.href);
     url.searchParams.set(QUERY_PARAM_SN_RESULT_ID, snResult.id);
-    url.searchParams.set(QUERY_PARAM_SN_RESULT_NAME, snResult.name);
+    // fallback for old links
+    url.searchParams.delete("p13n-name");
     url.searchParams.set(
       QUERY_PARAM_SN_RESULT_SERVICES,
       snResult.services.join(",")
@@ -371,19 +377,16 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
   if ("URLSearchParams" in window) {
     const searchParams = new URLSearchParams(window.location.search);
     const snResultId = searchParams.get(QUERY_PARAM_SN_RESULT_ID);
-    const snResultName = searchParams.get(QUERY_PARAM_SN_RESULT_NAME);
     const snResultServices = searchParams.get(QUERY_PARAM_SN_RESULT_SERVICES);
-    if (snResultName && snResultId && snResultServices) {
+    if (snResultId && snResultServices) {
       return {
         id: snResultId,
-        name: snResultName,
         services: snResultServices.split(",").map((value) => parseInt(value)),
       } as ServiceNavigatorResult;
-    } else if (snResultName && snResultId) {
+    } else if (snResultId) {
       noResultsError.value = "No results for this query";
       return {
         id: snResultId,
-        name: snResultName,
         services: [],
       } as ServiceNavigatorResult;
     } else {
