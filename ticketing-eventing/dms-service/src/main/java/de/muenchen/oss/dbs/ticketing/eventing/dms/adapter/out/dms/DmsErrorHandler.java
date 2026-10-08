@@ -1,13 +1,12 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.adapter.out.dms;
 
-import de.muenchen.oss.eakte.v1.generated.model.DmsErrorResponse;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.exception.DmsException;
+import de.muenchen.oss.eakte.v1.generated.model.DmsErrorResponse;
+import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientResponseException;
-
-import java.util.concurrent.Callable;
 
 /**
  * Handles and translates errors from DMS requests.

@@ -1,25 +1,24 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.adapter.out.dms;
 
+import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.dms.DmsOutPort;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.exception.DmsException;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectInfo;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectRequest;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsTarget;
 import de.muenchen.oss.eakte.v1.generated.api.ContentObjectsApi;
 import de.muenchen.oss.eakte.v1.generated.api.IncomingsApi;
 import de.muenchen.oss.eakte.v1.generated.model.MetadataReferenz;
 import de.muenchen.oss.eakte.v1.generated.model.ReadIncomingAntwortDTO;
-import de.muenchen.oss.eakte.v1.generated.model.UpdateContentObjectDTO;
 import de.muenchen.oss.eakte.v1.generated.model.UpdateContentObjectAntwortDTO;
+import de.muenchen.oss.eakte.v1.generated.model.UpdateContentObjectDTO;
 import de.muenchen.oss.eakte.v1.generated.model.UpdateIncomingAnfrageDTO;
 import de.muenchen.oss.eakte.v1.generated.model.UpdateIncomingAntwortDTO;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.dms.DmsOutPort;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.exception.DmsException;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectInfo;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsTarget;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +43,7 @@ public class DmsAdapter implements DmsOutPort {
         if (response != null) {
             final List<MetadataReferenz> contentObjects = response.getGimetadatatype();
             log.info("Found ContentObjects {} for {}", contentObjects, dmsTarget);
-            if (contentObjects == null){
+            if (contentObjects == null) {
                 return List.of();
             }
             return contentObjects.stream()

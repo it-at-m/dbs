@@ -4,9 +4,8 @@ import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.validation.annotation.Validated;
-
 import java.util.List;
+import org.springframework.validation.annotation.Validated;
 
 @Validated
 public interface DmsOutPort {
@@ -25,8 +24,6 @@ public interface DmsOutPort {
      * @param contentObjectRequests The files to add as ContentObjects.
      */
     void addContentObjectsToIncoming(@NotNull @Valid DmsTarget dmsTarget, @NotEmpty List<@Valid DmsContentObjectRequest> contentObjectRequests);
-
-
 
     /**
      * Update ContentObject.

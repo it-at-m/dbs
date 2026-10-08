@@ -11,16 +11,15 @@ import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsTarget;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.in.EventHandlerInPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.domain.model.Event;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -81,7 +80,8 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                 //TODO add communication
             } else {
                 final DmsContentObjectInfo dmsHistoryContentObject = dmsContentObjectInfos.stream()
-                        .filter(object -> Objects.equals(object.getFilename(), HISTORY_FILENAME) && Objects.equals(object.getFileextension(), HISTORY_FILEEXTENSION))
+                        .filter(object -> Objects.equals(object.getFilename(), HISTORY_FILENAME)
+                                && Objects.equals(object.getFileextension(), HISTORY_FILEEXTENSION))
                         .findFirst()
                         .orElse(null);
 
@@ -92,7 +92,8 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                 }
 
                 final DmsContentObjectInfo dmsCommunicationContentObject = dmsContentObjectInfos.stream()
-                        .filter(object -> Objects.equals(object.getFilename(), COMMUNICATION_FILENAME) && Objects.equals(object.getFileextension(), COMMUNICATION_FILEEXTENSION))
+                        .filter(object -> Objects.equals(object.getFilename(), COMMUNICATION_FILENAME)
+                                && Objects.equals(object.getFileextension(), COMMUNICATION_FILEEXTENSION))
                         .findFirst()
                         .orElse(null);
 
@@ -146,9 +147,9 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         return new DmsContentObjectRequest(HISTORY_FILENAME + "." + HISTORY_FILEEXTENSION, new ByteArrayInputStream(bytes));
     }
 
-    private DmsContentObjectRequest genertateCommunicationContentObject (final List<ArticleInternal> articles) {
+    private DmsContentObjectRequest genertateCommunicationContentObject(final List<ArticleInternal> articles) {
         //TODO add communication
-        return new DmsContentObjectRequest();
+        return null;
     }
 
     private List<DmsContentObjectRequest> generateAttachmentsContentObjects(TicketInternal ticket, final List<ArticleInternal> articles) {

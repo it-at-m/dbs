@@ -2,13 +2,12 @@ package de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
 
 /**
  * Target for an DMS action.

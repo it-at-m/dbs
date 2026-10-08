@@ -1,10 +1,9 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.domain.exception;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-
-import java.io.Serializable;
 
 @SuppressWarnings("PMD.MissingSerialVersionUID")
 @Getter

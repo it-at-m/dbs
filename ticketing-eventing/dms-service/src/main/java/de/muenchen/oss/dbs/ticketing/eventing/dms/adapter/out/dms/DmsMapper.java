@@ -1,7 +1,7 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.adapter.out.dms;
 
-import de.muenchen.oss.eakte.v1.generated.model.DmsErrorResponse;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.exception.DmsException;
+import de.muenchen.oss.eakte.v1.generated.model.DmsErrorResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

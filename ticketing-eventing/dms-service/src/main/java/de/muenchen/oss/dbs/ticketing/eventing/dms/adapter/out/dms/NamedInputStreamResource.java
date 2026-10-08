@@ -1,10 +1,9 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.adapter.out.dms;
 
+import java.io.InputStream;
 import lombok.EqualsAndHashCode;
 import org.springframework.core.io.AbstractResource;
 import org.springframework.core.io.InputStreamResource;
-
-import java.io.InputStream;
 
 /**
  * Custom implementation of {@link AbstractResource} based on {@link InputStreamResource}.
