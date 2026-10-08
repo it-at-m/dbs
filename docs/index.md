@@ -1,18 +1,16 @@
-# Digital Citizen Service of the City of Munich
+# Digital Citizen Service of the City of Munich 🚧
 
-The **Digitaler Bürgerservice** _Digital Citizen Service_ (DBS) is a digital service provided by the municipality of the City of Munich, designed to facilitate access to municipal services for citizens. The platform employs a user-centered approach, allowing citizens to quickly identify relevant services by answering targeted, straightforward questions about their current life situations.
+The **Digitaler Bürgerservice** _Digital Citizen Service_ (DBS) is a digital service provided by the municipality of the
+City of Munich, designed to facilitate access to municipal services for citizens.
 
-This process generates a personalized checklist of services tailored to the user's inputs, enhancing the user experience through an intuitive interface optimized for mobile devices. The system is built on modern web technologies and follows an Open Source model, enabling other municipalities to leverage the source code and foster interoperability.
+![Screenshot of the overview view of the DBS](./assets/screenshots/screenshot_overview_desktop.png)
 
-It currently consists of these architecture modules:
+The platform employs a user-centered approach, allowing a citizen to
 
-- [DBS-Ticketing](/architecture#ticketing)
-- [DBS-P13N](/architecture#p13n)
-- [DBS-Login](/architecture#login)
-- [E-Appointment](https://github.com/it-at-m/eappointment) (Terminvereinbarung)
+- submit requests to the administration, track their progress, and submit supporting documents
+- booking and following up on appointments
+- quickly identify relevant services by answering targeted, straightforward questions about their current life
+  situations.
 
-<!--
-Local [Development](/development) with podman
-
-The DBS consists of multiple modules, each of which can be used independently. The [Deployment docs](/deployment) provide detailed instructions on how to set up and configure each of the modules.
--->
+The system is built on modern web technologies and follows an Open Source model, enabling other municipalities to
+leverage the source code and foster interoperability.
