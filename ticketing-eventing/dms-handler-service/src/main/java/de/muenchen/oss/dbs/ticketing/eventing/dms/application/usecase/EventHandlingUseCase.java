@@ -66,44 +66,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                 return;
             }
 
-            List<DmsContentObjectRequest> attachmentsContentObjects = new ArrayList<>(List.of());
-
-            final String ticketHistory = ticketHistoryOutPort.getTicketHistory(ticket.getId());
-            final DmsContentObjectRequest historyContentObject = genertateHistoryContentObject(ticketHistory);
-
-            final DmsContentObjectRequest communicationContentObject = genertateCommunicationContentObject(articles);
-
-            final List<DmsContentObjectInfo> dmsContentObjectInfos = dmsOutPort.getIncomingContentObjects(dmsTarget);
-
-            if (dmsContentObjectInfos.isEmpty()) {
-                attachmentsContentObjects.add(historyContentObject);
-                //TODO add communication
-            } else {
-                final DmsContentObjectInfo dmsHistoryContentObject = dmsContentObjectInfos.stream()
-                        .filter(object -> Objects.equals(object.getFilename(), HISTORY_FILENAME)
-                                && Objects.equals(object.getFileextension(), HISTORY_FILEEXTENSION))
-                        .findFirst()
-                        .orElse(null);
-
-                if (dmsHistoryContentObject == null) {
-                    attachmentsContentObjects.add(historyContentObject);
-                } else {
-                    dmsOutPort.updateContentObject(new DmsTarget(dmsHistoryContentObject.getCoo(), dmsTarget), historyContentObject);
-                }
-
-                final DmsContentObjectInfo dmsCommunicationContentObject = dmsContentObjectInfos.stream()
-                        .filter(object -> Objects.equals(object.getFilename(), COMMUNICATION_FILENAME)
-                                && Objects.equals(object.getFileextension(), COMMUNICATION_FILEEXTENSION))
-                        .findFirst()
-                        .orElse(null);
-
-                if (dmsCommunicationContentObject == null) {
-                    attachmentsContentObjects.add(communicationContentObject);
-                } else {
-                    dmsOutPort.updateContentObject(new DmsTarget(dmsCommunicationContentObject.getCoo(), dmsTarget), communicationContentObject);
-                }
-
-            }
+            final List<DmsContentObjectRequest> attachmentsContentObjects = processTicketHistoryAndCommunication(ticket, articles, dmsTarget);
 
             if (isArticleEvent(event)) {
                 attachmentsContentObjects.addAll(generateAttachmentsContentObjects(ticket, articles));
@@ -140,8 +103,52 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         return str != null && !str.isEmpty();
     }
 
+    private List<DmsContentObjectRequest> processTicketHistoryAndCommunication(final TicketInternal ticket, final List<ArticleInternal> articles,
+            final DmsTarget dmsTarget) {
+        final List<DmsContentObjectRequest> addToIncomingContentObject = new ArrayList<>(List.of());
+        final String ticketHistory = ticketHistoryOutPort.getTicketHistory(ticket.getId());
+        final DmsContentObjectRequest historyContentObject = genertateHistoryContentObject(ticketHistory);
+
+        final DmsContentObjectRequest communicationContentObject = genertateCommunicationContentObject(articles);
+
+        final List<DmsContentObjectInfo> dmsContentObjectInfos = dmsOutPort.getIncomingContentObjects(dmsTarget);
+
+        if (dmsContentObjectInfos.isEmpty()) {
+            addToIncomingContentObject.add(historyContentObject);
+            //TODO add communication
+        } else {
+            final DmsContentObjectInfo dmsHistoryContentObject = getContentObject(dmsContentObjectInfos, HISTORY_FILENAME, HISTORY_FILEEXTENSION);
+
+            if (dmsHistoryContentObject == null) {
+                addToIncomingContentObject.add(historyContentObject);
+            } else {
+                dmsOutPort.updateContentObject(new DmsTarget(dmsHistoryContentObject.getCoo(), dmsTarget), historyContentObject);
+            }
+
+            final DmsContentObjectInfo dmsCommunicationContentObject = getContentObject(dmsContentObjectInfos, COMMUNICATION_FILENAME,
+                    COMMUNICATION_FILEEXTENSION);
+
+            if (dmsCommunicationContentObject == null) {
+                addToIncomingContentObject.add(communicationContentObject);
+            } else {
+                dmsOutPort.updateContentObject(new DmsTarget(dmsCommunicationContentObject.getCoo(), dmsTarget), communicationContentObject);
+            }
+
+        }
+
+        return addToIncomingContentObject;
+    }
+
+    private DmsContentObjectInfo getContentObject(final List<DmsContentObjectInfo> dmsContentObjectInfos, final String filename, final String fileextension) {
+        return dmsContentObjectInfos.stream()
+                .filter(object -> Objects.equals(object.getFilename(), filename)
+                        && Objects.equals(object.getFileextension(), fileextension))
+                .findFirst()
+                .orElse(null);
+    }
+
     private DmsContentObjectRequest genertateHistoryContentObject(final String history) {
-        byte[] bytes = history.getBytes(StandardCharsets.UTF_8);
+        final byte[] bytes = history.getBytes(StandardCharsets.UTF_8);
         return new DmsContentObjectRequest(HISTORY_FILENAME + "." + HISTORY_FILEEXTENSION, new ByteArrayInputStream(bytes));
     }
 
@@ -150,16 +157,16 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         return null;
     }
 
-    private List<DmsContentObjectRequest> generateAttachmentsContentObjects(TicketInternal ticket, final List<ArticleInternal> articles) {
-        List<ArticleInternal> articlesToSave;
+    private List<DmsContentObjectRequest> generateAttachmentsContentObjects(final TicketInternal ticket, final List<ArticleInternal> articles) {
+        final List<ArticleInternal> articlesToSave;
         if (ticket.getEakteWiederaufsetzpunkt() != null) {
-            ArticleInternal lastSavedArticle = articles.stream()
+            final ArticleInternal lastSavedArticle = articles.stream()
                     .filter(article -> Objects.equals(article.getId(), ticket.getEakteWiederaufsetzpunkt()))
                     .findFirst()
                     .orElse(null);
 
             if (lastSavedArticle != null) {
-                int lastSavedArticleIndex = articles.indexOf(lastSavedArticle);
+                final int lastSavedArticleIndex = articles.indexOf(lastSavedArticle);
                 articlesToSave = articles.stream()
                         .skip(lastSavedArticleIndex + 1)
                         .toList();
@@ -170,7 +177,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             articlesToSave = articles;
         }
 
-        List<DmsContentObjectRequest> dmsContentObjectRequests = new ArrayList<>(List.of());
+        final List<DmsContentObjectRequest> dmsContentObjectRequests = new ArrayList<>(List.of());
 
         articlesToSave.forEach(article -> {
             if (article.getAttachments() != null) {

@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class DmsAdapter implements DmsOutPort {
     private final DmsErrorHandler errorHandler;
     private final ContentObjectsApi contentObjectsApi;
@@ -78,7 +77,7 @@ public class DmsAdapter implements DmsOutPort {
     public void updateContentObject(final DmsTarget dmsTarget, final DmsContentObjectRequest contentObjectRequest) {
         log.debug("Updating ContentObject {} ", dmsTarget);
         final UpdateContentObjectDTO request = new UpdateContentObjectDTO();
-        NamedInputStreamResource attachment = new NamedInputStreamResource(contentObjectRequest.name(), contentObjectRequest.inputStream());
+        final NamedInputStreamResource attachment = new NamedInputStreamResource(contentObjectRequest.name(), contentObjectRequest.inputStream());
         final UpdateContentObjectAntwortDTO response = errorHandler.handleError(() -> contentObjectsApi.updateContentObject(
                 dmsTarget.getUsername(),
                 dmsTarget.getCoo(),
