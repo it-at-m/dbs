@@ -34,13 +34,6 @@ spring:
     codecs:
       max-in-memory-size: 5MB
 
-dbs:
-  eventing:
-    mail:
-      smtp:
-        from-address: ${spring.mail.username}
-      ticket-change-action: "send_to_postbox"
-
 server:
   shutdown: "graceful"
   port: 8080
