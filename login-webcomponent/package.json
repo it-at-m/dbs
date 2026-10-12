@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@coreui/coreui": "5.9.1",
-    "@coreui/vue": "5.10.0",
+    "@coreui/vue": "5.10.1",
     "@muenchen/muc-patternlab-vue": "10.0.2",
     "@vueuse/core": "14.4.0",
     "keycloak-js": "26.2.4",
