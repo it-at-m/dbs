@@ -71,7 +71,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             final String ticketHistory = ticketHistoryOutPort.getTicketHistory(ticket.getId());
             final DmsContentObjectRequest historyContentObject = genertateHistoryContentObject(ticketHistory);
 
-            final DmsContentObjectRequest communicationHtml = genertateCommunicationContentObject(articles);
+            final DmsContentObjectRequest communicationContentObject = genertateCommunicationContentObject(articles);
 
             final List<DmsContentObjectInfo> dmsContentObjectInfos = dmsOutPort.getIncomingContentObjects(dmsTarget);
 
@@ -98,11 +98,9 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                         .orElse(null);
 
                 if (dmsCommunicationContentObject == null) {
-                    //TODO add communication
-                    attachmentsContentObjects.add(historyContentObject);
+                    attachmentsContentObjects.add(communicationContentObject);
                 } else {
-                    //TODO add communication
-                    dmsOutPort.updateContentObject(new DmsTarget(dmsCommunicationContentObject.getCoo(), dmsTarget), historyContentObject);
+                    dmsOutPort.updateContentObject(new DmsTarget(dmsCommunicationContentObject.getCoo(), dmsTarget), communicationContentObject);
                 }
 
             }

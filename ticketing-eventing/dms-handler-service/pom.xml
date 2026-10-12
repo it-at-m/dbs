@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>de.muenchen.oss.dbs.ticketing.eventing</groupId>
-    <artifactId>dms-service</artifactId>
+    <artifactId>dms-handler-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>dms-service</name>
     <description>DBS ticketing eventing service which handles events from eventing-service by creating and updating documents in a dms</description>
