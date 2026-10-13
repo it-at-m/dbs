@@ -39,6 +39,10 @@ const vitepressConfig = defineConfig({
             items: [
               { text: "Development", link: "/dbs-ticketing/development" },
               { text: "Deployment", link: "/dbs-ticketing/deployment" },
+              {
+                text: "Direct Pass Retrieval",
+                link: "/dbs-ticketing/direct-pass-retrieval-service",
+              },
             ],
           },
           {

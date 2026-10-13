@@ -1,0 +1,48 @@
+{
+    "name": "dbs-ticketing-prs-webcomponent",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "license": "MIT",
+    "scripts": {
+        "dev": "vite",
+        "preview": "vite preview",
+        "build": "vite build --mode production && npm run post-build",
+        "post-build": "node ./processes/post-build.js",
+        "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",
+        "lint": "prettier . --check && eslint . && npm run type-check",
+        "fix": "eslint . --fix && prettier . --write",
+        "test": "vitest run"
+    },
+    "engines": {
+        "node": ">=22.0.0"
+    },
+    "dependencies": {
+        "@coreui/coreui": "^5.0.0",
+        "@coreui/vue": "^5.0.0",
+        "@muenchen/muc-patternlab-vue": "11.0.1",
+        "vue": "^3.5.4",
+        "webfontloader": "^1.0.0"
+    },
+    "devDependencies": {
+        "@babel/types": "^7.21.4",
+        "@types/node": "^24.0.0",
+        "@types/webfontloader": "^1.6.35",
+        "@vitejs/plugin-vue": "^6.0.0",
+        "@vue/eslint-config-typescript": "14.9.0",
+        "@vue/test-utils": "^2.4.1",
+        "eslint": "^9.10.0",
+        "eslint-plugin-vue": "10.10.0",
+        "jsdom": "^27.0.1",
+        "prettier": "^3.6.2",
+        "typescript": "5.9.3",
+        "vite": "^8.0.0",
+        "vitest": "^4.0.0",
+        "vue-tsc": "^3.0.0"
+    },
+    "overrides": {
+        "vite-plugin-vuetify": {
+            "make-dir": "5.1.0"
+        }
+    }
+}

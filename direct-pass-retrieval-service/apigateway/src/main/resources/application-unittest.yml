@@ -1,0 +1,43 @@
+wiremock:
+  server:
+    port: 0
+    https-port: -1
+
+spring:
+  # spring cloud gateway config
+  cloud:
+    gateway:
+      server:
+        webflux:
+          actuator:
+            verbose:
+              enabled: false
+          default-filters:
+            - RemoveResponseHeader=Expires
+            - RemoveRequestHeader=cookie
+            - RemoveRequestHeader=x-xsrf-token
+            - TokenRelay=
+
+  # security config
+  security:
+    oauth2:
+      client:
+        provider:
+          sso:
+            token-uri: https://sso.invalid/token
+        registration:
+          sso:
+            authorization-grant-type: client_credentials
+            client-id: test-client
+            client-secret: test-client-secret
+
+  mvc:
+    log-request-details: on
+
+prs:
+  mail:
+    urlBase: "https://stadt.muenchen.de/buergerservice-prelive/anliegen/vergessenAnliegen.html?q="
+  eai:
+    urlBase: "https://dbs-ticketing-eai-integration-dbs-ticketing-eai.apps.capk.muenchen.de/"
+  aes:
+    key: "0000000000000000000000000000000000000000000000000000000000000000"
