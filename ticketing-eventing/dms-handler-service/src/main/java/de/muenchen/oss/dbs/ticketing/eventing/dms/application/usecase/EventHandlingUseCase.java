@@ -2,8 +2,10 @@ package de.muenchen.oss.dbs.ticketing.eventing.dms.application.usecase;
 
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.dms.DmsOutPort;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.ticketing.TicketHistoryOutPort;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.DmsOutPort;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.HtmlGenerationOutPort;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.TicketInfoOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.config.DmsProperties;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectInfo;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectRequest;
@@ -33,8 +35,9 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
     private final DmsProperties dmsProperties;
     private final DmsOutPort dmsOutPort;
+    private final HtmlGenerationOutPort htmlGenerationOutPort;
     private final TicketingOutPort ticketingOutPort;
-    private final TicketHistoryOutPort ticketHistoryOutPort;
+    private final TicketInfoOutPort ticketInfoOutPort;
 
     @Override
     public void handleEvent(final Event event) {
@@ -106,16 +109,16 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private List<DmsContentObjectRequest> processTicketHistoryAndCommunication(final TicketInternal ticket, final List<ArticleInternal> articles,
             final DmsTarget dmsTarget) {
         final List<DmsContentObjectRequest> addToIncomingContentObject = new ArrayList<>(List.of());
-        final String ticketHistory = ticketHistoryOutPort.getTicketHistory(ticket.getId());
-        final DmsContentObjectRequest historyContentObject = genertateHistoryContentObject(ticketHistory);
+        final String ticketHistory = ticketInfoOutPort.getTicketHistory(ticket.getId());
+        final DmsContentObjectRequest historyContentObject = generateHistoryContentObject(ticketHistory);
 
-        final DmsContentObjectRequest communicationContentObject = genertateCommunicationContentObject(articles);
+        final DmsContentObjectRequest communicationContentObject = generateCommunicationContentObject(ticket, articles);
 
         final List<DmsContentObjectInfo> dmsContentObjectInfos = dmsOutPort.getIncomingContentObjects(dmsTarget);
 
         if (dmsContentObjectInfos.isEmpty()) {
             addToIncomingContentObject.add(historyContentObject);
-            //TODO add communication
+            addToIncomingContentObject.add(communicationContentObject);
         } else {
             final DmsContentObjectInfo dmsHistoryContentObject = getContentObject(dmsContentObjectInfos, HISTORY_FILENAME, HISTORY_FILEEXTENSION);
 
@@ -147,14 +150,18 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                 .orElse(null);
     }
 
-    private DmsContentObjectRequest genertateHistoryContentObject(final String history) {
+    private DmsContentObjectRequest generateHistoryContentObject(final String history) {
         final byte[] bytes = history.getBytes(StandardCharsets.UTF_8);
         return new DmsContentObjectRequest(HISTORY_FILENAME + "." + HISTORY_FILEEXTENSION, new ByteArrayInputStream(bytes));
     }
 
-    private DmsContentObjectRequest genertateCommunicationContentObject(final List<ArticleInternal> articles) {
-        //TODO add communication
-        return null;
+    private DmsContentObjectRequest generateCommunicationContentObject(final TicketInternal ticket, final List<ArticleInternal> articles) {
+        final User customer = ticketInfoOutPort.getUserInfo(ticket.getCustomerId());
+        final User owner = ticketInfoOutPort.getUserInfo(ticket.getOwnerId());
+
+        final String html = htmlGenerationOutPort.generateCommunicationHtml(ticket, articles, customer, owner);
+        final byte[] bytes = html.getBytes(StandardCharsets.UTF_8);;
+        return new DmsContentObjectRequest(COMMUNICATION_FILENAME + "." + COMMUNICATION_FILEEXTENSION, new ByteArrayInputStream(bytes));
     }
 
     private List<DmsContentObjectRequest> generateAttachmentsContentObjects(final TicketInternal ticket, final List<ArticleInternal> articles) {

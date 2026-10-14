@@ -1,4 +1,4 @@
-package de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.dms;
+package de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out;
 
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.*;
 import jakarta.validation.Valid;

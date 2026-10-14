@@ -1,6 +1,6 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.adapter.out.dms;
 
-import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.dms.DmsOutPort;
+import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.DmsOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.exception.DmsException;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectInfo;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectRequest;
