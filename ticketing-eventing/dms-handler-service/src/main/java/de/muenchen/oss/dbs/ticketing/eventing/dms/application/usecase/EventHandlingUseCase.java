@@ -160,7 +160,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         final User owner = ticketInfoOutPort.getUserInfo(ticket.getOwnerId());
 
         final String html = htmlGenerationOutPort.generateCommunicationHtml(ticket, articles, customer, owner);
-        final byte[] bytes = html.getBytes(StandardCharsets.UTF_8);;
+        final byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
         return new DmsContentObjectRequest(COMMUNICATION_FILENAME + "." + COMMUNICATION_FILEEXTENSION, new ByteArrayInputStream(bytes));
     }
 
