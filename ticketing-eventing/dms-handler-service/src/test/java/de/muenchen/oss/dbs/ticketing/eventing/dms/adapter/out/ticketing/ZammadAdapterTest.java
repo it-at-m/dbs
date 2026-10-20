@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.UsersApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
+import de.muenchen.oss.dbs.ticketing.eventing.handlercore.adapter.out.zammad.ZammadAdapter;
+import de.muenchen.oss.dbs.ticketing.eventing.handlercore.adapter.out.zammad.ZammadApiException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -117,7 +117,7 @@
                         border-bottom:1px solid #d7d7d7;
                     ">
                         <strong>VON: </strong> <span th:text="${ticketInfo.from}"></span>, <span th:text="${ticketInfo.sender}"></span><br>
-                        <strong>ZEITPUNKT: </strong> <span th:text="${ticketInfo.created_at}"></span><br>
+                        <strong>ZEITPUNKT: </strong> <span th:text="${ticketInfo.createdAt}"></span><br>
                         <div th:if="${ticketInfo.subject}">
                             <strong>BETREFF: </strong> <span th:text="${ticketInfo.subject}"></span><br>
                         </div>
@@ -134,7 +134,7 @@
 
                     <hr style="border:0; border-top:1px solid #ddd;">
 
-                    <div th:if="${ticketInfo.attachments && ticketInfo.attachments.size() > 0}">
+                    <div th:if="${ticketInfo.attachments != null && ticketInfo.attachments.size() > 0}">
 
                         <div style="margin-top:20px;padding:15px;">
                             <strong>
@@ -190,7 +190,7 @@
                             <div th:if="${article.to}">
                                 <strong>AN: </strong> <span th:text="${article.to}"></span><br>
                             </div>
-                            <strong>ZEITPUNKT: </strong> <span th:text="${article.created_at}"></span><br>
+                            <strong>ZEITPUNKT: </strong> <span th:text="${article.createdAt}"></span><br>
                             <div th:if="${article.subject}">
                              <strong>BETREFF: </strong> <span th:text="${article.subject}"></span><br>
                             </div>
@@ -200,12 +200,12 @@
                         <div style="
                             padding:15px;
                         ">
-                            <span th:text="${article.body}"></span>
+                            <span th:utext="${article.body}"></span>
                         </div>
 
                         <hr style="border:0; border-top:1px solid #ddd;">
 
-                        <div th:if="${article.attachments && article.attachments.size() > 0}">
+                        <div th:if="${article.attachments != null && article.attachments.size() > 0}">
 
                             <div style="margin-top:20px;padding:15px;">
                                 <strong>

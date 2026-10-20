@@ -2,8 +2,10 @@ package de.muenchen.oss.dbs.ticketing.eventing.handlercore.adapter.out.zammad;
 
 import de.muenchen.oss.dbs.ticketing.eai.client.api.AttachmentsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
+import de.muenchen.oss.dbs.ticketing.eai.client.api.UsersApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import reactor.core.scheduler.Schedulers;
 public class ZammadAdapter implements TicketingOutPort {
     private final TicketsApi ticketsApi;
     private final AttachmentsApi attachmentsApi;
+    private final UsersApi usersApi;
 
     @Override
     public TicketInternal getTicket(final String ticketId) {
@@ -77,6 +80,26 @@ public class ZammadAdapter implements TicketingOutPort {
         } catch (final IOException e) {
             throw new ZammadApiException("Exception while streaming attachment (id: %s) content"
                     .formatted(attachmentId), e);
+        }
+    }
+
+    @Override
+    public String getTicketHistory(final String ticketId) {
+        try {
+            return ticketsApi.getTicketHistory(ticketId).block();
+        } catch (final WebClientResponseException e) {
+            throw new ZammadApiException("Getting ticket history with id %s failed: %s"
+                    .formatted(ticketId, e.getResponseBodyAsString()), e);
+        }
+    }
+
+    @Override
+    public User getUserInfo(final String userId) {
+        try {
+            return usersApi.getUserByUserId(userId).block();
+        } catch (final WebClientResponseException e) {
+            throw new ZammadApiException("Getting user with id %s failed: %s"
+                    .formatted(userId, e.getResponseBodyAsString()), e);
         }
     }
 }

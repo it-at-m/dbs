@@ -5,7 +5,6 @@ import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.DmsOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.HtmlGenerationOutPort;
-import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.TicketInfoOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.config.DmsProperties;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectInfo;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.model.DmsContentObjectRequest;
@@ -29,7 +28,8 @@ import org.springframework.stereotype.Component;
 public class EventHandlingUseCase implements EventHandlerInPort {
 
     private static final String HISTORY_FILENAME = "änderungshistorie";
-    private static final String HISTORY_FILEEXTENSION = "json";
+    //TODO wollen wir das json mit Endung txt hochladen, damit es der Fabasoft-Viewer anzeigt?
+    private static final String HISTORY_FILEEXTENSION = "txt";
     public static final String COMMUNICATION_FILENAME = "ticketverlauf";
     public static final String COMMUNICATION_FILEEXTENSION = "html";
 
@@ -37,7 +37,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private final DmsOutPort dmsOutPort;
     private final HtmlGenerationOutPort htmlGenerationOutPort;
     private final TicketingOutPort ticketingOutPort;
-    private final TicketInfoOutPort ticketInfoOutPort;
+    //    private final TicketInfoOutPort ticketInfoOutPort;
 
     @Override
     public void handleEvent(final Event event) {
@@ -109,7 +109,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private List<DmsContentObjectRequest> processTicketHistoryAndCommunication(final TicketInternal ticket, final List<ArticleInternal> articles,
             final DmsTarget dmsTarget) {
         final List<DmsContentObjectRequest> addToIncomingContentObject = new ArrayList<>(List.of());
-        final String ticketHistory = ticketInfoOutPort.getTicketHistory(ticket.getId());
+        final String ticketHistory = ticketingOutPort.getTicketHistory(ticket.getId());
         final DmsContentObjectRequest historyContentObject = generateHistoryContentObject(ticketHistory);
 
         final DmsContentObjectRequest communicationContentObject = generateCommunicationContentObject(ticket, articles);
@@ -156,8 +156,8 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private DmsContentObjectRequest generateCommunicationContentObject(final TicketInternal ticket, final List<ArticleInternal> articles) {
-        final User customer = ticketInfoOutPort.getUserInfo(ticket.getCustomerId());
-        final User owner = ticketInfoOutPort.getUserInfo(ticket.getOwnerId());
+        final User customer = ticketingOutPort.getUserInfo(ticket.getCustomerId());
+        final User owner = ticketingOutPort.getUserInfo(ticket.getOwnerId());
 
         final String html = htmlGenerationOutPort.generateCommunicationHtml(ticket, articles, customer, owner);
         final byte[] bytes = html.getBytes(StandardCharsets.UTF_8);

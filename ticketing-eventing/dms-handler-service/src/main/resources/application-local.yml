@@ -18,6 +18,16 @@ dbs:
   eai:
     client:
       eai-base-url: http://localhost:8082/
+  eventing:
+    dms:
+      articleActions:
+        - new_article_agent_public
+        - new_article_customer
+        - new_article_agent_internal
+      relevantActions:
+        - new_article_agent_public
+        - new_article_customer
+        - new_article_agent_internal
 
 logging:
   include-application-group: false # disabled because application group is only relevant when deployed
