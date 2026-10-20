@@ -1,0 +1,9 @@
+prs:
+  link:
+    validityInMinutes: 3
+  # Local hostnames do not match the production cookie domain.
+  xsrf:
+    disable: true
+
+server:
+  port: 8090

@@ -21,6 +21,8 @@ jobs:
             build-image: true
           - app-path: personalization-webcomponents
             build-image: true
+          - app-path: direct-pass-retrieval-service
+            build-image: false
           - app-path: ticketing-eai/api-client-internal
             build-image: false
           - app-path: ticketing-eventing/eventing-service
