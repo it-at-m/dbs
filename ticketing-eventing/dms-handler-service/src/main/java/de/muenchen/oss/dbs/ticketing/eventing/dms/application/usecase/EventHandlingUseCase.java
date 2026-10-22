@@ -29,7 +29,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
     private static final String HISTORY_FILENAME = "änderungshistorie";
     //TODO wollen wir das json mit Endung txt hochladen, damit es der Fabasoft-Viewer anzeigt?
-    private static final String HISTORY_FILEEXTENSION = "txt";
+    private static final String HISTORY_FILEEXTENSION = "html";
     public static final String COMMUNICATION_FILENAME = "ticketverlauf";
     public static final String COMMUNICATION_FILEEXTENSION = "html";
 
@@ -151,7 +151,8 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     }
 
     private DmsContentObjectRequest generateHistoryContentObject(final String history) {
-        final byte[] bytes = history.getBytes(StandardCharsets.UTF_8);
+        final String html = htmlGenerationOutPort.generateHistoryHtml(history);
+        final byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
         return new DmsContentObjectRequest(HISTORY_FILENAME + "." + HISTORY_FILEEXTENSION, new ByteArrayInputStream(bytes));
     }
 

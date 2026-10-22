@@ -7,6 +7,9 @@ import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import java.util.List;
 
 public interface HtmlGenerationOutPort {
+
+
+    String generateHistoryHtml(final String historyJson);
     /**
      * Generate communication html.
      *
