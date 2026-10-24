@@ -2,8 +2,7 @@ spring:
   security:
     user:
       name: zammad
-      # pw: password
-      password: "{bcrypt}$2a$12$eQgzAB2v.y8lkVqfOjOaL.acj1Zp8HW87CNdHzdyOaoYqnHL0Tppy"
+      pw: password
   cloud:
     stream:
       kafka:
@@ -41,3 +40,10 @@ dbs:
         action: "state_changed"
       - trigger-name: "T2805_Event_Nachricht_In_Postkorb"
         action: "send_to_postbox"
+      - trigger-name: "T2802_Event_Neuer_OeffentlicherArtikelAgent"
+        action: "new_article_agent_public"
+      - trigger-name: "T2803_Event_Neuer_Artikel_Kunde"
+        action: "new_article_customer"
+      - trigger-name: "T2804_Event_Neuer_InternerArtikel"
+        action: "new_article_agent_internal"
+

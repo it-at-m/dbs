@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Historie</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+        h1 { font-size: 20px; border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+        .history-group { border-left: 3px solid #007bff; padding-left: 12px; margin-bottom: 15px; }
+        .group-header { font-weight: bold; font-size: 14px; color: #444; margin-bottom: 5px; }
+        .timestamp { color: #666; font-weight: normal; font-size: 12px; }
+        .details { font-size: 13px; margin-top: 2px; color: #555; }
+        ul { margin: 5px 0 0 20px; padding: 0; }
+    </style>
+</head>
+<body>
+
+<h1>Ticket-Verlauf</h1>
+
+<div class="history-container">
+    <!-- Schleife über die gruppierten Einheiten nach Minute & Autor -->
+    <div th:each="group : ${historyGroups}" class="history-group">
+        <div class="group-header">
+            <span th:text="${group.authorName}">Autor Name</span>
+            <span class="timestamp" th:text="'(' + ${group.minute} + ')'">2026-05-11 13:25</span>
+        </div>
+
+        <ul>
+            <li th:each="item : ${group.items}" class="details">
+                <span th:text="${item.description}">Beschreibung der Aktion</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
