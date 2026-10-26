@@ -5,7 +5,7 @@ services:
   # ============= Kafka =============
   #
   kafka:
-    image: apache/kafka:4.1.2@sha256:5cc2a2fd93fa2687b44015eee04fb2c3edd9e526bd64bf8bec5ff1e268772e0e
+    image: apache/kafka:4.4.0@sha256:833b867a9585a141da455dc2b57431c65cbccb27f11c91f694444cca9f777e0f
     ports:
       - '29092:29092'
     environment:
