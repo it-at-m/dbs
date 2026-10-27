@@ -35,9 +35,8 @@ Was ich bisher geändert habe:
 - im communication-html-template.html ein paar Einträge korrigiert, z.B. 
    - createdDate statt created_date
    - article.body auf utext gestellt, damit das html richtig angezeigt wird
-- In EventHandlingUseCase die HISTORY_FILEEXTENSION auf txt gesetzt, damit in Fabasoft ein Notiz-Objekt entsteht (aber wollen wir das?) 
+- Mittels KI eine HTML-Repräsentation von Änderungshistorie erstellt 
 
 Aktuelle Beobachtung:
-- Warum gibt es eine extra Liste für "ArticleActions"?
-- änderungshistorie lässt sich nicht öffnen in eAkte --> Endung auf txt geändert, aber dann ist es halt kein json-File mehr, wollen wir das?
-- Änderungshistorie und html werden jedes Mal upgedatet, auch wenn sich gar nichts geändert hat; das müsste man vom wiederaufsetzpunkt ablesen können, ob es nötig ist
+- Änderungshistorie und html werden jedes Mal upgedatet, auch wenn sich gar nichts geändert hat? Macht das Sinn?
+- Die Artikel in der HTML-Repräsentation sollten die Artikel-ID sichtbar haben und die Attachments sollten diese ID als Präfix führen (vgl. Spec).

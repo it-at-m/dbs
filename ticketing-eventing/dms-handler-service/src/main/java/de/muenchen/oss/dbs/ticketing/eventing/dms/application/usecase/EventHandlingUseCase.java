@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
 public class EventHandlingUseCase implements EventHandlerInPort {
 
     private static final String HISTORY_FILENAME = "änderungshistorie";
-    //TODO wollen wir das json mit Endung txt hochladen, damit es der Fabasoft-Viewer anzeigt?
     private static final String HISTORY_FILEEXTENSION = "html";
     public static final String COMMUNICATION_FILENAME = "ticketverlauf";
     public static final String COMMUNICATION_FILEEXTENSION = "html";
