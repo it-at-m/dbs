@@ -2,8 +2,10 @@ package de.muenchen.oss.dbs.ticketing.eventing.mailhandler.application.usecase;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.CreateArticleDTOV2;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.in.EventHandlerInPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.domain.model.Event;
@@ -34,6 +36,8 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
     public static final String TO_POSTBOX_DEFAULT = "send";
     public static final String TO_POSTBOX_HIGH = "send_high_authlevel";
+    public static final String CONFIRMATION_ARTICLE_BODY = "Postkorb-Nachricht erzeugt für Kunde %s %s (%s) mit lhmExtID: %s.";
+    public static final String CONFIRMATION_ARTICLE_SUBJECT = "Postkorb Confirmation Article";
 
     private final XmlMapper xmlMapper = new XmlMapper();
     private final ZammadMapper zammadMapper;
@@ -65,6 +69,9 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
             //reset flag sende_nachricht_nach_extern
             resetTicket(ticket);
+
+            //add confirmation article to ticket
+            addConfirmationArticle(ticket);
 
             log.info("Event handled successfully");
         } catch (final NoValidArticleException e) {
@@ -118,13 +125,13 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             authlevel = TO_POSTBOX_HIGH.equals(ticket.getSendeNachrichtNachExtern()) ? "level3" : String.valueOf(form.get(TICKETING_VERTRAUENSNIVEAU));
         }
 
-        return "[%s;%s;%s;%s] Neue Nachricht zu Ihrem Anliegen '%s'"
+        return "[%s;%s;%s;%s] Neue Nachricht zu Ihrem Anliegen '%s' (LHM%s)"
                 .formatted(
                         form.get(LEGACY_POSTKORB_HANDLE),
                         form.get(ACCOUNT_SOURCE),
                         authlevel,
                         "Zammad-Eventing",
-                        ticket.getTitle());
+                        ticket.getTitle(), ticket.getNumber());
     }
 
     private String buildBody(final ArticleInternal article) {
@@ -192,5 +199,17 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         updateTicketDTO.setDirektkennwort(ticket.getDirektkennwort());
         updateTicketDTO.setSendeNachrichtNachExtern("");
         ticketingOutPort.updateTicket(updateTicketDTO, null);
+    }
+
+    private void addConfirmationArticle(final TicketInternal ticket) {
+        final User customer = ticketingOutPort.getUserInfo(ticket.getCustomerId());
+        final CreateArticleDTOV2 createArticleDTOV2 = new CreateArticleDTOV2();
+        createArticleDTOV2.setContentType("text/html");
+        createArticleDTOV2.setSubject(CONFIRMATION_ARTICLE_SUBJECT);
+        createArticleDTOV2.setInternal(true);
+        createArticleDTOV2.setBody(CONFIRMATION_ARTICLE_BODY.formatted(customer.getFirstname(), customer.getLastname(),
+                customer.getEmail(), customer.getLhmextid()));
+        ticketingOutPort.createNewArticle(ticket.getId(), createArticleDTOV2,
+                null, null, null, null);
     }
 }

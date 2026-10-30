@@ -1,9 +1,14 @@
 package de.muenchen.oss.dbs.ticketing.eventing.handlercore.adapter.out.zammad;
 
+import de.muenchen.oss.dbs.ticketing.eai.client.api.ArticlesApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.AttachmentsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
+import de.muenchen.oss.dbs.ticketing.eai.client.api.UsersApi;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.Article;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.CreateArticleDTOV2;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out.TicketingOutPort;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
@@ -27,7 +32,9 @@ import reactor.core.scheduler.Schedulers;
 @Slf4j
 public class ZammadAdapter implements TicketingOutPort {
     private final TicketsApi ticketsApi;
+    private final ArticlesApi articlesApi;
     private final AttachmentsApi attachmentsApi;
+    private final UsersApi usersApi;
 
     @Override
     public TicketInternal getTicket(final String ticketId) {
@@ -48,6 +55,22 @@ public class ZammadAdapter implements TicketingOutPort {
             final ResponseEntity<TicketInternal> response = ticketsApi
                     .updateTicketWithHttpInfo(updateTicketDTO.getId(), updateTicketDTO, null, null, attachments).block();
             log.info("Updated ticket {}", updateTicketDTO.getId());
+            return response != null ? response.getBody() : null;
+        } catch (WebClientResponseException e) {
+            log.error(e.getResponseBodyAsString());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("PMD.UseObjectForClearerAPI") //keeping the same API as in the ticketing-EAI for consistency
+    public Article createNewArticle(final String ticketId, final CreateArticleDTOV2 createArticleDTO,
+            final String lhmExtID, final String lhmObjectID, final String userid, final Collection<Resource> attachments) {
+        assert createArticleDTO != null;
+        try {
+            final ResponseEntity<Article> response = articlesApi
+                    .createNewArticleWithHttpInfo(ticketId, createArticleDTO, lhmExtID, lhmObjectID, userid, attachments).block();
+            log.info("Created new article in ticket {}", ticketId);
             return response != null ? response.getBody() : null;
         } catch (WebClientResponseException e) {
             log.error(e.getResponseBodyAsString());
@@ -77,6 +100,16 @@ public class ZammadAdapter implements TicketingOutPort {
         } catch (final IOException e) {
             throw new ZammadApiException("Exception while streaming attachment (id: %s) content"
                     .formatted(attachmentId), e);
+        }
+    }
+
+    @Override
+    public User getUserInfo(final String userId) {
+        try {
+            return usersApi.getUserByUserId(userId).block();
+        } catch (final WebClientResponseException e) {
+            throw new ZammadApiException("Getting user with id %s failed: %s"
+                    .formatted(userId, e.getResponseBodyAsString()), e);
         }
     }
 }
