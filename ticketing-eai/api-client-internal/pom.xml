@@ -106,7 +106,7 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/api-spec-internal-without-security.json</inputSpec>
                             <library>webclient</library>
-                            <generatorName>spring</generatorName>
+                            <generatorName>java</generatorName>
 
                             <apiPackage>de.muenchen.oss.dbs.ticketing.eai.client.api</apiPackage>
                             <modelPackage>de.muenchen.oss.dbs.ticketing.eai.client.model</modelPackage>
@@ -117,7 +117,6 @@
                                 <useAbstractionForFiles>true</useAbstractionForFiles>
                                 <useSpringBoot4>true</useSpringBoot4>
                                 <useJackson3>true</useJackson3>
-                                <clientRegistrationId>zammad</clientRegistrationId>
                             </configOptions>
                         </configuration>
                     </execution>
