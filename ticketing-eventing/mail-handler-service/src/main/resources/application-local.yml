@@ -23,18 +23,19 @@ spring:
       client:
         provider:
           zammad:
-            issuer-uri: https://ssodev.muenchen.de/auth/realms/KM81
+            issuer-uri: https://ssodev.muenchen.de/auth/realms/ccse
         registration:
           zammad:
             provider: zammad
             authorization-grant-type: client_credentials
-            client-id: mpdz-ticketing-fk
+            client-id: dbs-ticketing-fk
             client-secret: V8zmjkcqgXE9xIWhljjVT45Bxli2c02B
 
 dbs:
   eai:
     client:
-      eai-base-url: http://localhost:8082/
+      eai-base-url: https://dbs-ticketing-eai-integration.apps.test.capk.muenchen.de/
+#      eai-base-url: https://dbs-ticketing-eai-integration.apps.test.capk.muenchen.de/
   eventing:
     mail:
       recipient: test@example.com
