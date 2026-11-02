@@ -36,6 +36,10 @@
     </developers>
 
     <properties>
+        <!-- Compilation -->
+        <java.version>21</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+
         <openapi-generator-maven-plugin.version>7.26.0</openapi-generator-maven-plugin.version>
         <jackson-databind-nullable.version>0.2.13</jackson-databind-nullable.version>
 
@@ -102,7 +106,7 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/api-spec-internal-without-security.json</inputSpec>
                             <library>webclient</library>
-                            <generatorName>java</generatorName>
+                            <generatorName>spring</generatorName>
 
                             <apiPackage>de.muenchen.oss.dbs.ticketing.eai.client.api</apiPackage>
                             <modelPackage>de.muenchen.oss.dbs.ticketing.eai.client.model</modelPackage>
@@ -110,10 +114,10 @@
 
                             <serverVariableOverrides />
                             <configOptions>
-                                <useJakartaEe>true</useJakartaEe>
                                 <useAbstractionForFiles>true</useAbstractionForFiles>
                                 <useSpringBoot4>true</useSpringBoot4>
                                 <useJackson3>true</useJackson3>
+                                <clientRegistrationId>zammad</clientRegistrationId>
                             </configOptions>
                         </configuration>
                     </execution>
