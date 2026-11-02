@@ -31,7 +31,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private static final String INTERNAL_ATTACHMENTS_ARTICLE_TITLE = "Interner Artikel für interne Anhänge.";
     private static final String FORM_ATTACHMENT_NAME = "XML-Daten.xml";
     public static final String TICKETING_VERTRAUENSNIVEAU = "ticketingVertrauensniveau";
-    public static final String LEGACY_POSTKORB_HANDLE = "legacyPostkorbHandle";
+    public static final String POSTKORB_HANDLE = "postkorbHandle";
     public static final String ACCOUNT_SOURCE = "accountSource";
 
     public static final String TO_POSTBOX_DEFAULT = "send";
@@ -127,7 +127,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
         return "[%s;%s;%s;%s] Neue Nachricht zu Ihrem Anliegen '%s' (LHM%s)"
                 .formatted(
-                        form.get(LEGACY_POSTKORB_HANDLE),
+                        form.get(POSTKORB_HANDLE),
                         form.get(ACCOUNT_SOURCE),
                         authlevel,
                         "Zammad-Eventing",
