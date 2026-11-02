@@ -8,29 +8,16 @@
     <service-info-modal
       :open="serviceInfoModalOpen"
       :service="selectedService!"
+      :t="t"
       @close="serviceInfoModalOpen = false"
       @cancel="serviceInfoModalOpen = false"
     />
 
-    <muc-modal
+    <request-login-modal
       :open="requestLoginModalOpen"
       @close="requestLoginModalOpen = false"
-      @cancel="requestLoginModalOpen = false"
-    >
-      <template #title>Bürgerservice-Anmeldung</template>
-      <template #body
-        >Melden Sie sich an, um die für Sie ermittelten Leistungen als
-        Checkliste in Ihrem Bereich zu speichern.
-      </template>
-      <template #buttons>
-        <muc-button
-          icon="sign-in"
-          @click="_requestLogin"
-        >
-          Anmelden
-        </muc-button>
-      </template>
-    </muc-modal>
+      @sign-in="_requestLogin"
+    />
 
     <save-as-checklist-modal
       :title="lebenslageTitle"
@@ -53,33 +40,13 @@
         <p v-else>
           {{ t("preview.introText") }}
         </p>
-        <div
+
+        <checklist-preview-action-buttons
           v-if="!loadingServices"
-          style="padding-top: 32px"
-        >
-          <muc-button
-            v-if="currentLang == DEFAULT_LANGUAGE"
-            icon="order-bool-ascending"
-            style="margin-right: 16px; margin-bottom: 16px"
-            @click="saveChecklistClicked"
-          >
-            Als Checkliste speichern
-          </muc-button>
-          <muc-button
-            @click="copyUrl"
-            variant="secondary"
-            icon="copy-link"
-            spin-icon-on-click
-          >
-            {{ t("preview.copyLink") }}
-          </muc-button>
-          <p
-            class="visually-hidden"
-            role="status"
-          >
-            {{ linkStateMessage }}
-          </p>
-        </div>
+          :currentLang="currentLang"
+          :t="t"
+          @save="saveChecklistClicked"
+        />
       </div>
     </muc-intro>
 
@@ -89,12 +56,12 @@
     >
       <div class="m-intro-vertical__grid">
         <div class="m-intro-vertical__grid-inner">
-          <div v-if="loadingServices && !showLoader">
+          <div v-if="loadingServices && (!firstLoad || !showLoader)">
             <skeleton-loader />
           </div>
 
           <div
-            v-if="loadingServices && showLoader"
+            v-if="loadingServices && firstLoad && showLoader"
             class="bluebox"
           >
             <div class="center-container">
@@ -108,94 +75,41 @@
             </div>
           </div>
 
-          <div v-else-if="localStorageError">
-            <h2 style="padding-bottom: 16px">
-              Wir konnten Ihre Abfrage-Ergebnisse nicht finden.
-            </h2>
-            <p style="padding-bottom: 16px">
-              Wenn Sie eine Abfrage zu Ihrer Lebenslage durchgeführt haben,
-              sollten hier für Sie passende Leistungen gelistet sein. Wir
-              konnten aber Ihre Ergebnisse nicht finden.
-            </p>
-            <p style="padding-bottom: 32px">
-              Vielleicht haben Sie Ihre Browserdaten (Chronik) gelöscht oder die
-              Speicherung von Cookies blockiert? Um Ihre Ergebnisse zu erhalten,
-              passen Sie bitte Ihre Browser-Einstellungen an und starten Sie
-              dann die Abfrage erneut.
-            </p>
-            <a :href="newChecklistUrl">
-              <muc-button
-                icon="arrow-right"
-                iconAnimated
-              >
-                Abfrage neu starten
-              </muc-button>
-            </a>
-          </div>
+          <local-storage-callout
+            v-else-if="localStorageError"
+            :newChecklistUrl="newChecklistUrl"
+            :t="t"
+          />
 
-          <muc-callout
+          <no-results-callout
             v-else-if="noResultsError"
-            type="warning"
-          >
-            <template #header> Keine Leistungen gefunden.</template>
-            <template #content>
-              <p>
-                Für die eingegeben Angaben haben wir keine passenden Leistungen
-                gefunden. Wir beraten Sie gerne zu Ihrem speziellen Fall über
-                unseren Chatbot <span class="mde-bold">Muckl</span> oder unsere
-                anderen
-                <muc-link
-                  class="mde-bold"
-                  href="https://stadt.muenchen.de/rathaus/kontakt.html"
-                  label="Kontaktkanäle"
-                  noUnderline
-                />
-                .
-              </p>
-            </template>
-          </muc-callout>
+            :currentLang="currentLang"
+            :t="t"
+          />
 
-          <div v-else-if="!localStorageError && !loadingError && snServices">
-            <h2 style="padding-bottom: 32px">
-              {{ t("preview.suggestedServices") }} ({{ snServices.length }})
-            </h2>
-            <ul class="snServiceList">
-              <li
-                class="snServiceElement mde-b2 mde-bold"
-                v-for="service in snServices"
-                :key="service.serviceID"
-                @click="openService(service)"
-                tabindex="0"
-                @keydown.enter="openService(service)"
-                :aria-label="
-                  service.required
-                    ? service.title + ' – verpflichtend'
-                    : service.title
-                "
-              >
-                {{ service.title }}
-                <span
-                  class="required-label mde-b2"
-                  v-if="service.required"
-                  >– verpflichtend</span
-                >
-              </li>
-            </ul>
-          </div>
+          <checklist-preview-list
+            v-else-if="!localStorageError && !loadingError && snServices"
+            :snServices="snServices"
+            :t="t"
+            @openService="openService($event)"
+            style="padding-bottom: 40px"
+          />
 
-          <div v-else-if="loadingError">
-            <muc-callout type="error">
-              <template #header>
-                Die Checkliste kann nicht geladen werden.
-              </template>
-              <template #content>
-                <p>
-                  Es gibt aktuell leider ein technisches Problem mit dieser
-                  Funktion. Bitte versuchen Sie es später noch einmal.
-                </p>
-              </template>
-            </muc-callout>
-          </div>
+          <technical-issues-callout
+            v-else-if="loadingError"
+            :t="t"
+          />
+
+          <save-as-checklist-callout
+            class="p13n-hide-in-print"
+            v-if="
+              !localStorageError &&
+              !loadingError &&
+              snServices &&
+              currentLang !== DEFAULT_LANGUAGE
+            "
+            :t="t"
+          />
         </div>
       </div>
     </div>
@@ -210,14 +124,7 @@ import type {
 import type { ServiceNavigatorResult } from "@/api/servicenavigator/ServiceNavigatorResult.ts";
 import type AuthorizationEventDetails from "@/types/AuthorizationEventDetails.ts";
 
-import {
-  MucButton,
-  MucCallout,
-  MucIntro,
-  MucLink,
-  MucModal,
-  MucSpinner,
-} from "@muenchen/muc-patternlab-vue";
+import { MucIntro, MucSpinner } from "@muenchen/muc-patternlab-vue";
 import customIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/custom-icons.svg?raw";
 import mucIconsSprite from "@muenchen/muc-patternlab-vue/assets/icons/muc-icons.svg?raw";
 import { onMounted, ref } from "vue";
@@ -227,6 +134,13 @@ import {
   useChecklistsApi,
   usePublicServiceNavigatorEndpoints,
 } from "@/api/compositions/UseChecklistsApi.ts";
+import ChecklistPreviewActionButtons from "@/components/checklistPreview/ChecklistPreviewActionButtons.vue";
+import ChecklistPreviewList from "@/components/checklistPreview/ChecklistPreviewList.vue";
+import LocalStorageCallout from "@/components/checklistPreview/LocalStorageCallout.vue";
+import NoResultsCallout from "@/components/checklistPreview/NoResultsCallout.vue";
+import RequestLoginModal from "@/components/checklistPreview/RequestLoginModal.vue";
+import SaveAsChecklistCallout from "@/components/checklistPreview/SaveAsChecklistCallout.vue";
+import TechnicalIssuesCallout from "@/components/checklistPreview/TechnicalIssuesCallout.vue";
 import SkeletonLoader from "@/components/common/SkeletonLoader.vue";
 import SaveAsChecklistModal from "@/components/SaveAsChecklistModal.vue";
 import ServiceInfoModal from "@/components/ServiceInfoModal.vue";
@@ -237,7 +151,6 @@ import {
   LOCALSTORAGE_KEY_SERVICENAVIGATOR_RESULT,
   QUERY_PARAM_CHECKLIST_ID,
   QUERY_PARAM_SN_RESULT_ID,
-  QUERY_PARAM_SN_RESULT_NAME,
   QUERY_PARAM_SN_RESULT_SERVICES,
   setAccessToken,
 } from "@/util/Constants.ts";
@@ -261,13 +174,13 @@ const lebenslageTitle = ref("Meine Lebenslage");
 const lebenslageId = ref("");
 const snServices = ref<ChecklistItemServiceNavigatorDTO[] | null>(null);
 const selectedService = ref<ChecklistItemServiceNavigatorDTO | null>(null);
-const linkStateMessage = ref("");
+const firstLoad = ref(true);
 
 /**
  * Minimum time the loader is shown in milliseconds
  * even if the request to load the services is faster
  */
-const minLoaderTimeInMs = 1500;
+const minLoaderTimeInMs = 3000;
 
 const { loggedIn } = useDBSLoginWebcomponentPlugin(_authChangedCallback);
 const { currentLang } = useLanguageObserver();
@@ -290,47 +203,49 @@ onMounted(async () => {
   const snResult = getSnResults();
 
   if (snResult) {
-    lebenslageTitle.value = snResult.name;
     lebenslageId.value = snResult.id;
 
-    if (snResult.services.length > 0) {
-      const snApi = usePublicServiceNavigatorEndpoints();
+    const snApi = usePublicServiceNavigatorEndpoints();
+    try {
+      let requestedLang;
       try {
-        let requestedLang;
-        try {
-          const requestedLocale = new Intl.Locale(locale.value);
-          if (requestedLocale) {
-            requestedLang = requestedLocale.language;
-          }
-        } catch {
-          console.debug(
-            "couldn't instantiate language with locale",
-            locale.value
-          );
+        const requestedLocale = new Intl.Locale(locale.value);
+        if (requestedLocale) {
+          requestedLang = requestedLocale.language;
         }
-
-        const delayPromise = new Promise<void>((resolve) =>
-          setTimeout(resolve, minLoaderTimeInMs)
+      } catch {
+        console.debug(
+          "couldn't instantiate language with locale",
+          locale.value
         );
-        const snResponsePromise = snApi.getServicesByIds({
-          ids: snResult.services.join(","),
-          lang: requestedLang ? requestedLang : undefined,
-        });
-
-        const snServicesBody = (
-          await Promise.all([delayPromise, snResponsePromise])
-        )[1];
-
-        snServices.value = snServicesBody.sort((a, b) => {
-          return a.required === b.required ? 0 : a.required ? -1 : 1;
-        });
-      } catch (error) {
-        console.debug("Error loading checklist: ", error);
-        loadingError.value = error as string;
-      } finally {
-        loadingServices.value = false;
       }
-    } else {
+
+      const delayPromise = new Promise<void>((resolve) =>
+        setTimeout(
+          resolve,
+          firstLoad.value && snResult.services.length > 0
+            ? minLoaderTimeInMs
+            : 0
+        )
+      );
+      const servicesPromise =
+        snResult.services.length > 0
+          ? snApi.getServicesByIds({
+              ids: snResult.id + "," + snResult.services.join(","),
+              lang: requestedLang,
+            })
+          : Promise.resolve([]);
+
+      const [, services] = await Promise.all([delayPromise, servicesPromise]);
+      const lifeSituationInfos = services.shift();
+      if (lifeSituationInfos && lifeSituationInfos.title) {
+        lebenslageTitle.value = lifeSituationInfos.title;
+      }
+      snServices.value = services;
+    } catch (error) {
+      console.debug("Error loading checklist: ", error);
+      loadingError.value = error as string;
+    } finally {
       loadingServices.value = false;
     }
   } else {
@@ -349,11 +264,15 @@ onMounted(async () => {
     ".m-breadcrumb__list-item-current"
   );
   if (updateLebenslage) {
-    updateLebenslage.textContent = "Lebenslage: " + lebenslageTitle.value;
+    updateLebenslage.textContent =
+      t("preview.pageTitleLifeSituation") + " " + lebenslageTitle.value;
   }
 
   document.title =
-    "Lebenslage: " + lebenslageTitle.value + " - Landeshauptstadt München";
+    t("preview.pageTitleLifeSituation") +
+    " " +
+    lebenslageTitle.value +
+    " - Landeshauptstadt München";
 });
 
 function _authChangedCallback(authEventDetails?: AuthorizationEventDetails) {
@@ -419,6 +338,7 @@ function saveChecklistClicked() {
 function getSnResults(): ServiceNavigatorResult | null {
   const snResultsFromUrl = getSnResultFromUrl();
   if (snResultsFromUrl) {
+    firstLoad.value = false;
     return snResultsFromUrl;
   }
   const serviceNavigatorResultString = localStorage.getItem(
@@ -443,7 +363,8 @@ function setUrlParams(snResult: ServiceNavigatorResult) {
   if ("URLSearchParams" in window) {
     const url = new URL(window.location.href);
     url.searchParams.set(QUERY_PARAM_SN_RESULT_ID, snResult.id);
-    url.searchParams.set(QUERY_PARAM_SN_RESULT_NAME, snResult.name);
+    // fallback for old links
+    url.searchParams.delete("p13n-name");
     url.searchParams.set(
       QUERY_PARAM_SN_RESULT_SERVICES,
       snResult.services.join(",")
@@ -456,19 +377,16 @@ function getSnResultFromUrl(): ServiceNavigatorResult | undefined {
   if ("URLSearchParams" in window) {
     const searchParams = new URLSearchParams(window.location.search);
     const snResultId = searchParams.get(QUERY_PARAM_SN_RESULT_ID);
-    const snResultName = searchParams.get(QUERY_PARAM_SN_RESULT_NAME);
     const snResultServices = searchParams.get(QUERY_PARAM_SN_RESULT_SERVICES);
-    if (snResultName && snResultId && snResultServices) {
+    if (snResultId && snResultServices) {
       return {
         id: snResultId,
-        name: snResultName,
         services: snResultServices.split(",").map((value) => parseInt(value)),
       } as ServiceNavigatorResult;
-    } else if (snResultName && snResultId) {
+    } else if (snResultId) {
       noResultsError.value = "No results for this query";
       return {
         id: snResultId,
-        name: snResultName,
         services: [],
       } as ServiceNavigatorResult;
     } else {
@@ -481,26 +399,18 @@ function openService(service: ChecklistItemServiceNavigatorDTO) {
   selectedService.value = service;
   serviceInfoModalOpen.value = true;
 }
-
-async function copyUrl() {
-  const type = "text/plain";
-  const clipboardItemData = {
-    [type]: window.location.href,
-  };
-  const clipboardItem = new ClipboardItem(clipboardItemData);
-  await navigator.clipboard.write([clipboardItem]).then(() => {
-    linkStateMessage.value = "Link wurde kopiert";
-    setTimeout(() => {
-      linkStateMessage.value = "";
-    }, 5000);
-  });
-}
 </script>
 
 <style>
 @import url("https://assets.muenchen.de/mde/1.1.23/css/style.css");
 @import "@muenchen/muc-patternlab-vue/assets/css/custom-style.css";
 @import "@muenchen/muc-patternlab-vue/style.css";
+
+@media print {
+  .p13n-hide-in-print {
+    display: none;
+  }
+}
 </style>
 
 <style scoped>
@@ -519,33 +429,6 @@ async function copyUrl() {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
-
-.snServiceList {
-  list-style-type: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-.snServiceElement {
-  cursor: pointer;
-  padding: 16px 0;
-  border-top: 1px solid var(--mde-color-neutral-beau-blue-x-light);
-  color: var(--mde-color-brand-mde-blue);
-}
-
-.snServiceElement:hover,
-.snServiceElement:focus {
-  text-decoration: underline;
-}
-
-.snServiceElement .required-label {
-  color: var(--mde-color-neutral-grey);
-}
-
-.snServiceElement:hover .required-label,
-.snServiceElement:focus .required-label {
-  color: var(--mde-color-neutral-grey-light);
 }
 
 /* CSS for desktop */

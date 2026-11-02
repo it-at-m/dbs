@@ -1,6 +1,8 @@
 spring:
   application.name: @project.artifactId@
   banner.location: banner.txt
+  main:
+    web-application-type: reactive
   cloud:
     stream:
       default:

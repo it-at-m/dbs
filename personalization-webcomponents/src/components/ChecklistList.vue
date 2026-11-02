@@ -80,6 +80,7 @@
       :open="dialogVisible"
       :service="dialogItem"
       :show-actions="true"
+      :t="t"
       @close="closeDialog"
       @cancel="closeDialog"
       @task-delete="onDeleteItem(dialogItem)"
@@ -106,6 +107,7 @@ const props = withDefaults(
     checklistItems: ChecklistItemServiceNavigatorDTO[];
     isDraggable?: boolean;
     disabled?: boolean;
+    t: (key: string) => string;
   }>(),
   {
     isDraggable: true,

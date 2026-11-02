@@ -10,7 +10,7 @@
         v-if="service?.required"
         class="required-label mde-b1"
       >
-        – verpflichtend
+        – {{ t("preview.mandatory") }}
       </span>
     </template>
 
@@ -37,15 +37,6 @@
       </a>
 
       <a
-        v-if="service?.appointmentService"
-        :href="service.appointmentServiceUrl"
-        target="_blank"
-        tabindex="-1"
-      >
-        <muc-button icon="calendar"> Termin vereinbaren </muc-button>
-      </a>
-
-      <a
         v-if="service?.publicUrl"
         :href="service.publicUrl"
         target="_blank"
@@ -56,7 +47,7 @@
           icon-animated
           variant="secondary"
         >
-          Mehr erfahren
+          {{ t("preview.learnMore") }}
         </muc-button>
       </a>
     </template>
@@ -103,6 +94,7 @@ const { open = false, showActions = false } = defineProps<{
   open?: boolean;
   service: ChecklistItemServiceNavigatorDTO;
   showActions?: boolean;
+  t: (key: string) => string;
 }>();
 
 const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);

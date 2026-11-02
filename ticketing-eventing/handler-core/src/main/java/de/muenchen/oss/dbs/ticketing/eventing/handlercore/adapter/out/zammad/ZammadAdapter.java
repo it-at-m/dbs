@@ -13,7 +13,7 @@ import java.io.PipedOutputStream;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.AbstractResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +41,7 @@ public class ZammadAdapter implements TicketingOutPort {
 
     @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     @Override
-    public TicketInternal updateTicket(final UpdateTicketDTOV2 updateTicketDTO, final Collection<AbstractResource> attachments) {
+    public TicketInternal updateTicket(final UpdateTicketDTOV2 updateTicketDTO, final Collection<Resource> attachments) {
         assert updateTicketDTO != null && updateTicketDTO.getId() != null;
         log.debug("Updating ticket {}: {}, attachments: {}", updateTicketDTO.getId(), updateTicketDTO, attachments);
         try {
