@@ -55,7 +55,7 @@ The no-security profile is for local development only. It does not make the serv
 Production and local credentials are supplied through environment variables. Do not put values in tracked YAML files.
 
 | Variable                | Purpose                                              |
-|-------------------------|------------------------------------------------------|
+| ----------------------- | ---------------------------------------------------- |
 | `PRS_SSO_BASE_URL`      | SSO server base URL                                  |
 | `PRS_SSO_REALM`         | OAuth realm                                          |
 | `PRS_SSO_CLIENT_ID`     | OAuth client identifier                              |
