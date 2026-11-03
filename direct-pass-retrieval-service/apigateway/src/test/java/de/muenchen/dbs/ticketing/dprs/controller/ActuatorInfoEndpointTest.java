@@ -32,7 +32,9 @@ class ActuatorInfoEndpointTest {
         webTestClient.get().uri("/actuator/info").exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                    .jsonPath("$.appswitcher.url").isEqualTo("https://test-url-appswitcher.muenchen.de");
+                    .jsonPath("$.name").isEqualTo("direct-pass-retrieval-apigateway")
+                    .jsonPath("$.commitHash").exists();
+
         //@formatter:on
     }
 
