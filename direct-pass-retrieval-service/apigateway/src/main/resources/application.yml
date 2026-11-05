@@ -1,0 +1,109 @@
+spring:
+  application.name: @project.artifactId@
+  banner.location: banner.txt
+  main:
+    web-application-type: reactive
+  jackson:
+    serialization:
+      indent-output: on
+  session:
+    timeout: 36000  # in seconds; Goal: same lifetime as SSO Session (e.g. 10 hours)
+
+  # spring cloud gateway config
+  cloud:
+    gateway:
+      server:
+        webflux:
+          actuator:
+            verbose:
+              enabled: false
+          default-filters:
+            - RemoveResponseHeader=Expires
+            - RemoveRequestHeader=cookie
+            - RemoveRequestHeader=x-xsrf-token
+
+  # security config
+  security:
+    oauth2:
+      client:
+        provider:
+          sso:
+            token-uri: ${prs.sso.baseurl}/auth/realms/${prs.sso.realm}/protocol/openid-connect/token
+        registration:
+          sso:
+            authorization-grant-type: client_credentials
+            client-id: ${prs.sso.client-id}
+            client-secret: ${prs.sso.client-secret}
+            scope:
+              - openid
+
+  mvc:
+    log-request-details: on
+
+  mail:
+    host: mail.muenchen.de
+    port: 25
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          port: 25
+          auth: false
+          startls.enable: true
+
+server:
+  port: 8080
+  error:
+    include-exception: false
+    include-stacktrace: never
+    include-message: always
+    whitelabel:
+      enabled: false
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health, info, prometheus
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    health:
+      enabled: on
+      probes:
+        enabled: true
+    info:
+      enabled: on
+    prometheus:
+      enabled: on
+  info:
+    env:
+      enabled: true
+info:
+  application:
+    name: @project.artifactId@
+    version: @project.version@
+    commitHash: ${buildNumber}
+    commitTimestamp: ${timestamp}
+
+prs:
+  link:
+    validityInMinutes: 30
+  mail:
+    from: "noreply@muenchen.de"
+    subject: "Anforderung Ihres Passworts"
+    urlBase: ${PRS_MAIL_URL_BASE}
+  ## To allow other API-GW to communicate with us, we need to disable xsrf
+  xsrf:
+    disable: true
+  sso:
+    baseurl: ${PRS_SSO_BASE_URL}
+    realm: ${PRS_SSO_REALM}
+    client-id: ${PRS_SSO_CLIENT_ID}
+    client-secret: ${PRS_SSO_CLIENT_SECRET}
+  eai:
+    urlBase: ${PRS_EAI_URL_BASE}
+  aes:
+    key: ${PRS_AES_KEY}
