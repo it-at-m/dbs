@@ -7,6 +7,7 @@ public record ServiceNavigatorResponse(
         String publicUrl,
         String summary,
         String id,
+        String lang,
         Boolean isExternal,
         Boolean appointmentService,
         String appointmentServiceUrl,

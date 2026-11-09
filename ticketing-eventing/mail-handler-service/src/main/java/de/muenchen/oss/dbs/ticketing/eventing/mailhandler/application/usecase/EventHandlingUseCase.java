@@ -190,7 +190,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         final UpdateTicketDTOV2 updateTicketDTO = new UpdateTicketDTOV2();
         updateTicketDTO.setId(ticket.getId());
         updateTicketDTO.setDirektkennwort(ticket.getDirektkennwort());
-        updateTicketDTO.setSendeNachrichtNachExtern(null);
+        updateTicketDTO.setSendeNachrichtNachExtern("");
         ticketingOutPort.updateTicket(updateTicketDTO, null);
     }
 }
