@@ -63,7 +63,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
             final List<ArticleInternal> articles = ticket.getArticles();
 
-            if (articles == null) {
+            if (articles == null || articles.isEmpty()) {
                 log.debug("Articles empty");
                 return;
             }

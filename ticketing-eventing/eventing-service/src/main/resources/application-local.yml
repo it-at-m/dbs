@@ -2,7 +2,7 @@ spring:
   security:
     user:
       name: zammad
-      pw: password
+      password: password
   cloud:
     stream:
       kafka:
