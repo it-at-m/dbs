@@ -36,7 +36,6 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private final DmsOutPort dmsOutPort;
     private final HtmlGenerationOutPort htmlGenerationOutPort;
     private final TicketingOutPort ticketingOutPort;
-    //    private final TicketInfoOutPort ticketInfoOutPort;
 
     @Override
     public void handleEvent(final Event event) {
