@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface HtmlGenerationOutPort {
 
+    String generateHistoryHtml(String historyJson);
 
-    String generateHistoryHtml(final String historyJson);
     /**
      * Generate communication html.
      *

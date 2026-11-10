@@ -55,6 +55,8 @@ class EventHandlingUseCaseTest {
     private static final String GENERATED_COMMUNICATION = "generated_communication";
     private static final String CUSTOMER_ID = "customer_id";
     private static final String OWNER_ID = "owner_id";
+    private static final String ARTICLE_1 = "article1";
+    private static final String ARTICLE_2 = "article2";
 
     private static final String HISTORY_FILENAME = "änderungshistorie";
     private static final String HISTORY_FILEEXTENSION = "html";
@@ -88,7 +90,7 @@ class EventHandlingUseCaseTest {
         // When
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
 
-        Event event = new Event(NOT_RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(NOT_RELEVANT_ACTION, TICKET_ID, null, null, null, null);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -135,9 +137,9 @@ class EventHandlingUseCaseTest {
     @Test
     void addsHistoryAndCommunication_whenIncomingIsEmpty() {
         // Given
-        final ArticleInternal article1 = createArticle("article1", null);
+        final ArticleInternal article1 = createArticle(ARTICLE_1, null);
 
-        final ArticleInternal article2 = createArticle("article2", null);
+        final ArticleInternal article2 = createArticle(ARTICLE_2, null);
 
         final TicketInternal ticket = createTicket(INCOMING_COO_EMPTY_CONTENT_OBJECTS, null, List.of(article1, article2));
 
@@ -164,14 +166,14 @@ class EventHandlingUseCaseTest {
 
         // Then
 
-        ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
+        final ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
 
         verify(ticketingOutPort).getTicket(TICKET_ID);
         verify(dmsOutPort).addContentObjectsToIncoming(eq(INCOMING_TARGET_EMPTY_CONTENT_OBJECTS), captor.capture());
         verify(ticketingOutPort, never()).getAttachmentContent(any(), any(), any());
         verify(dmsOutPort, never()).updateContentObject(any(), any());
 
-        List<DmsContentObjectRequest> actual = captor.getValue();
+        final List<DmsContentObjectRequest> actual = captor.getValue();
 
         assertThat(actual)
                 .extracting(DmsContentObjectRequest::name)
@@ -185,13 +187,13 @@ class EventHandlingUseCaseTest {
     void addsAttachments_whenIncomingAlreadyContainsGeneratedFiles() {
         // Given
 
-        final ArticleInternal article1 = createArticle("article1", null);
+        final ArticleInternal article1 = createArticle(ARTICLE_1, null);
 
         final ArticleAttachment attachment1 = createAttachment("id1", "filename_1");
 
         final ArticleAttachment attachment2 = createAttachment("id2", "filename_2");
 
-        final ArticleInternal article2 = createArticle("article2", List.of(attachment1, attachment2));
+        final ArticleInternal article2 = createArticle(ARTICLE_2, List.of(attachment1, attachment2));
 
         final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, null, List.of(article1, article2));
 
@@ -242,15 +244,15 @@ class EventHandlingUseCaseTest {
 
         final ArticleAttachment attachmentSaved2 = createAttachment("idSaved2", "filename_saved_2");
 
-        final ArticleInternal article1 = createArticle("article1", List.of(attachmentSaved1, attachmentSaved2));
+        final ArticleInternal article1 = createArticle(ARTICLE_1, List.of(attachmentSaved1, attachmentSaved2));
 
         final ArticleAttachment attachment1 = createAttachment("id1", "filename_1");
 
         final ArticleAttachment attachment2 = createAttachment("id2", "filename_2");
 
-        final ArticleInternal article2 = createArticle("article2", List.of(attachment1, attachment2));
+        final ArticleInternal article2 = createArticle(ARTICLE_2, List.of(attachment1, attachment2));
 
-        final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, "article1", List.of(article1, article2));
+        final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, ARTICLE_1, List.of(article1, article2));
 
         final User customer = new User();
         customer.setId(CUSTOMER_ID);
@@ -292,8 +294,8 @@ class EventHandlingUseCaseTest {
                         attachment2.getId() + "_" + attachment2.getFilename());
     }
 
-    private TicketInternal createTicket(String eakteCooTarget, String eakteWiederaufsetzpunkt, List<ArticleInternal> articles) {
-        TicketInternal ticket = new TicketInternal();
+    private TicketInternal createTicket(final String eakteCooTarget, final String eakteWiederaufsetzpunkt, final List<ArticleInternal> articles) {
+        final TicketInternal ticket = new TicketInternal();
         ticket.setId(TICKET_ID);
         ticket.setEakteUserlogin(USERNAME);
         ticket.setEakteJoboe(JOBOE);
@@ -305,8 +307,8 @@ class EventHandlingUseCaseTest {
         return ticket;
     }
 
-    private ArticleInternal createArticle(String articleId, List<ArticleAttachment> attachments) {
-        ArticleInternal article = new ArticleInternal();
+    private ArticleInternal createArticle(final String articleId, final List<ArticleAttachment> attachments) {
+        final ArticleInternal article = new ArticleInternal();
         article.setId(articleId);
         article.setTicketId(TICKET_ID);
         article.setBody("Text");
@@ -314,8 +316,8 @@ class EventHandlingUseCaseTest {
         return article;
     }
 
-    private ArticleAttachment createAttachment(String attachmentId, String filename) {
-        ArticleAttachment attachment = new ArticleAttachment();
+    private ArticleAttachment createAttachment(final String attachmentId, final String filename) {
+        final ArticleAttachment attachment = new ArticleAttachment();
         attachment.setId(attachmentId);
         attachment.setFilename(filename);
         return attachment;
