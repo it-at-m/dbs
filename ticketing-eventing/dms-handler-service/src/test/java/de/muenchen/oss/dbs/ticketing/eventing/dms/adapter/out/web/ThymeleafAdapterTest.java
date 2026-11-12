@@ -45,14 +45,13 @@ class ThymeleafAdapterTest {
         final String historyJson = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
 
         final String resultHtml = thymeleafAdapter.generateHistoryHtml(historyJson);
-        log.info(resultHtml);
 
         assertThat(resultHtml).isNotNull();
         assertThat(resultHtml).isNotEmpty();
 
         assertThat(resultHtml).contains("Ticket-Verlauf");
 
-        assertThat(resultHtml).contains("Roland Werner");
+        assertThat(resultHtml).contains("Alex Huber");
 
         assertThat(resultHtml).contains("2026-05-11 13:25");
     }
