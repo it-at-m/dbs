@@ -18,7 +18,7 @@
 <h1>Ticket-Verlauf</h1>
 
 <div class="history-container">
-    <!-- Schleife über die gruppierten Einheiten nach Minute & Autor -->
+    <!-- iterate the historyGroups -->
     <div th:each="group : ${historyGroups}" class="history-group">
         <div class="group-header">
             <span th:text="${group.authorName}">Autor Name</span>
