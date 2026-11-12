@@ -1,0 +1,39 @@
+server:
+  port: 39147
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+          configuration:
+            security:
+              protocol: PLAINTEXT
+      bindings:
+        event-in-0:
+          group: dbs-dms-handler
+          destination: dbs-ticketing-event
+
+dbs:
+  eai:
+    client:
+      eai-base-url: http://localhost:8082/
+  eventing:
+    dms:
+      articleActions:
+        - new_article_agent_public
+        - new_article_customer
+        - new_article_agent_internal
+      relevantActions:
+        - new_article_agent_public
+        - new_article_customer
+        - new_article_agent_internal
+
+logging:
+  include-application-group: false # disabled because application group is only relevant when deployed
+  structured:
+    format:
+      console: # set to empty to disable structured logging locally
+  level:
+    root: INFO
+    de.muenchen.oss.dbs.ticketing.eventing: debug
