@@ -63,6 +63,16 @@ public class ZammadAdapter implements TicketingOutPort {
     }
 
     @Override
+    public String getTicketHistory(final String ticketId) {
+        try {
+            return ticketsApi.getTicketHistory(ticketId).block();
+        } catch (final WebClientResponseException e) {
+            throw new ZammadApiException("Getting ticket history with id %s failed: %s"
+                    .formatted(ticketId, e.getResponseBodyAsString()), e);
+        }
+    }
+
+    @Override
     @SuppressWarnings("PMD.UseObjectForClearerAPI") //keeping the same API as in the ticketing-EAI for consistency
     public Article createNewArticle(final String ticketId, final CreateArticleDTOV2 createArticleDTO,
             final String lhmExtID, final String lhmObjectID, final String userid, final Collection<Resource> attachments) {
