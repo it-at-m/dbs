@@ -36,7 +36,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
     public static final String TO_POSTBOX_DEFAULT = "send";
     public static final String TO_POSTBOX_HIGH = "send_high_authlevel";
-    public static final String CONFIRMATION_ARTICLE_BODY = "Postkorb-Nachricht erzeugt für Kunde %s %s (%s) mit lhmExtID: %s.";
+    public static final String CONFIRMATION_ARTICLE_BODY = "Postkorb-Nachricht erzeugt für %s %s (%s) mit lhmExtID: %s.";
     public static final String CONFIRMATION_ARTICLE_SUBJECT = "Postkorb Confirmation Article";
 
     private final XmlMapper xmlMapper = new XmlMapper();
