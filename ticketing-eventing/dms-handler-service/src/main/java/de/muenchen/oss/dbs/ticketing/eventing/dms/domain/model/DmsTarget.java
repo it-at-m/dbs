@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class DmsTarget extends DmsRequestContext {
+public final class DmsTarget extends DmsRequestContext {
     /**
      * COO of an object.
      */

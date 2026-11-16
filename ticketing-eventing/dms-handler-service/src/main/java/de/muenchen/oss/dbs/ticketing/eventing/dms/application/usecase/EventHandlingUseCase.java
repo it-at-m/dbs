@@ -1,5 +1,6 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.application.usecase;
 
+import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleAttachment;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
@@ -186,8 +187,9 @@ public class EventHandlingUseCase implements EventHandlerInPort {
         final List<DmsContentObjectRequest> dmsContentObjectRequests = new ArrayList<>(List.of());
 
         articlesToSave.forEach(article -> {
-            if (article.getAttachments() != null) {
-                article.getAttachments().forEach(attachment -> {
+            final List<ArticleAttachment> attachments = article.getAttachments();
+            if (attachments != null) {
+                attachments.forEach(attachment -> {
                     final InputStream content = ticketingOutPort.getAttachmentContent(article.getTicketId(), article.getId(), attachment.getId());
                     dmsContentObjectRequests.add(new DmsContentObjectRequest(attachment.getId() + "_" + attachment.getFilename(), content));
                 });

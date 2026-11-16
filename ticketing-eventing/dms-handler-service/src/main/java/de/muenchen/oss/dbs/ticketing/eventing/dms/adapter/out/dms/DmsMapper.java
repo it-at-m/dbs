@@ -4,11 +4,17 @@ import de.muenchen.oss.dbs.ticketing.eventing.dms.domain.exception.DmsException;
 import de.muenchen.oss.eakte.v1.generated.model.DmsErrorResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper
 interface DmsMapper {
     @Mapping(source = "status", target = "code")
     @Mapping(source = "text", target = "message")
-    @Mapping(source = "fehlerQuelle", target = "source")
+    @Mapping(source = "fehlerQuelle", target = "source", qualifiedByName = "fehlerQuelleToString")
     DmsException.DmsError toDomain(DmsErrorResponse dmsErrorResponse);
+
+    @Named("fehlerQuelleToString")
+    default String fehlerQuelleToString(final DmsErrorResponse.FehlerQuelleEnum fehlerQuelle) {
+        return fehlerQuelle == null ? null : fehlerQuelle.name();
+    }
 }

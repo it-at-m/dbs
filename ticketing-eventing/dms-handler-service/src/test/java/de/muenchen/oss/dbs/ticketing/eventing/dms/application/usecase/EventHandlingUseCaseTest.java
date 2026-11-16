@@ -138,26 +138,11 @@ class EventHandlingUseCaseTest {
     void addsHistoryAndCommunication_whenIncomingIsEmpty() {
         // Given
         final ArticleInternal article1 = createArticle(ARTICLE_1, null);
-
         final ArticleInternal article2 = createArticle(ARTICLE_2, null);
-
         final TicketInternal ticket = createTicket(INCOMING_COO_EMPTY_CONTENT_OBJECTS, null, List.of(article1, article2));
 
-        final User customer = new User();
-        customer.setId(CUSTOMER_ID);
-
-        final User owner = new User();
-        owner.setId(OWNER_ID);
-
         // When
-        when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
-        when(dmsProperties.getArticleActions()).thenReturn(ARTICLE_ACTIONS);
-        when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
-        when(ticketingOutPort.getTicketHistory(TICKET_ID)).thenReturn(HISTORY);
-        when(ticketingOutPort.getUserInfo(CUSTOMER_ID)).thenReturn(customer);
-        when(ticketingOutPort.getUserInfo(OWNER_ID)).thenReturn(owner);
-        when(htmlGenerationOutPort.generateHistoryHtml(HISTORY)).thenReturn(GENERATED_HISTORY);
-        when(htmlGenerationOutPort.generateCommunicationHtml(ticket, ticket.getArticles(), customer, owner)).thenReturn(GENERATED_COMMUNICATION);
+        mockingByGivenTicket(ticket);
         when(dmsOutPort.getIncomingContentObjects(INCOMING_TARGET_EMPTY_CONTENT_OBJECTS)).thenReturn(List.of());
 
         final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
@@ -165,7 +150,6 @@ class EventHandlingUseCaseTest {
         eventHandlingUseCase.handleEvent(event);
 
         // Then
-
         final ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
 
         verify(ticketingOutPort).getTicket(TICKET_ID);
@@ -186,108 +170,72 @@ class EventHandlingUseCaseTest {
     @Test
     void addsAttachments_whenIncomingAlreadyContainsGeneratedFiles() {
         // Given
-
         final ArticleInternal article1 = createArticle(ARTICLE_1, null);
-
         final ArticleAttachment attachment1 = createAttachment("id1", "filename_1");
-
         final ArticleAttachment attachment2 = createAttachment("id2", "filename_2");
-
         final ArticleInternal article2 = createArticle(ARTICLE_2, List.of(attachment1, attachment2));
-
         final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, null, List.of(article1, article2));
 
-        final User customer = new User();
-        customer.setId(CUSTOMER_ID);
-
-        final User owner = new User();
-        owner.setId(OWNER_ID);
-
         // When
-        when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
-        when(dmsProperties.getArticleActions()).thenReturn(ARTICLE_ACTIONS);
-        when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
-        when(ticketingOutPort.getTicketHistory(TICKET_ID)).thenReturn(HISTORY);
-        when(ticketingOutPort.getUserInfo(CUSTOMER_ID)).thenReturn(customer);
-        when(ticketingOutPort.getUserInfo(OWNER_ID)).thenReturn(owner);
-        when(ticketingOutPort.getAttachmentContent(TICKET_ID, article2.getId(), attachment1.getId())).thenReturn(new ByteArrayInputStream(ATTACHMENT_1_BYTES));
-        when(ticketingOutPort.getAttachmentContent(TICKET_ID, article2.getId(), attachment2.getId())).thenReturn(new ByteArrayInputStream(ATTACHMENT_2_BYTES));
-        when(htmlGenerationOutPort.generateHistoryHtml(HISTORY)).thenReturn(GENERATED_HISTORY);
-        when(htmlGenerationOutPort.generateCommunicationHtml(ticket, ticket.getArticles(), customer, owner)).thenReturn(GENERATED_COMMUNICATION);
-        when(dmsOutPort.getIncomingContentObjects(INCOMING_TARGET_WITH_CONTENT_OBJECTS)).thenReturn(List.of(HISTORY_FILE_INFO, COMMUNICATION_FILE_INFO));
-
-        final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
-
-        eventHandlingUseCase.handleEvent(event);
+        mockingByGivenAttachments(ticket, article2, attachment1, attachment2);
 
         // Then
-
-        final ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
-
-        verify(ticketingOutPort).getTicket(TICKET_ID);
-        verify(dmsOutPort).addContentObjectsToIncoming(eq(INCOMING_TARGET_WITH_CONTENT_OBJECTS), captor.capture());
-        verify(dmsOutPort, times(2)).updateContentObject(any(DmsTarget.class), any(DmsContentObjectRequest.class));
-
-        final List<DmsContentObjectRequest> actual = captor.getValue();
-
-        assertThat(actual)
-                .extracting(DmsContentObjectRequest::name)
-                .containsExactly(
-                        attachment1.getId() + "_" + attachment1.getFilename(),
-                        attachment2.getId() + "_" + attachment2.getFilename());
+        assertByGivenAttachments(attachment1, attachment2);
     }
 
     @Test
     void addsAttachments_whenWiederaufsetzpunktIsSet() {
         // Given
         final ArticleAttachment attachmentSaved1 = createAttachment("idSaved1", "filename_saved_1");
-
         final ArticleAttachment attachmentSaved2 = createAttachment("idSaved2", "filename_saved_2");
-
         final ArticleInternal article1 = createArticle(ARTICLE_1, List.of(attachmentSaved1, attachmentSaved2));
-
         final ArticleAttachment attachment1 = createAttachment("id1", "filename_1");
-
         final ArticleAttachment attachment2 = createAttachment("id2", "filename_2");
-
         final ArticleInternal article2 = createArticle(ARTICLE_2, List.of(attachment1, attachment2));
-
         final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, ARTICLE_1, List.of(article1, article2));
 
+        // When
+        mockingByGivenAttachments(ticket, article2, attachment1, attachment2);
+
+        // Then
+        assertByGivenAttachments(attachment1, attachment2);
+    }
+
+    private void mockingByGivenTicket(final TicketInternal ticket) {
         final User customer = new User();
         customer.setId(CUSTOMER_ID);
 
         final User owner = new User();
         owner.setId(OWNER_ID);
 
-        // When
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
         when(dmsProperties.getArticleActions()).thenReturn(ARTICLE_ACTIONS);
         when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
         when(ticketingOutPort.getTicketHistory(TICKET_ID)).thenReturn(HISTORY);
         when(ticketingOutPort.getUserInfo(CUSTOMER_ID)).thenReturn(customer);
         when(ticketingOutPort.getUserInfo(OWNER_ID)).thenReturn(owner);
-        when(ticketingOutPort.getAttachmentContent(TICKET_ID, article2.getId(), attachment1.getId())).thenReturn(new ByteArrayInputStream(ATTACHMENT_1_BYTES));
-        when(ticketingOutPort.getAttachmentContent(TICKET_ID, article2.getId(), attachment2.getId())).thenReturn(new ByteArrayInputStream(ATTACHMENT_2_BYTES));
         when(htmlGenerationOutPort.generateHistoryHtml(HISTORY)).thenReturn(GENERATED_HISTORY);
         when(htmlGenerationOutPort.generateCommunicationHtml(ticket, ticket.getArticles(), customer, owner)).thenReturn(GENERATED_COMMUNICATION);
+    }
+
+    private void mockingByGivenAttachments(final TicketInternal ticket, final ArticleInternal article, final ArticleAttachment attachment1,
+            final ArticleAttachment attachment2) {
+        mockingByGivenTicket(ticket);
+        when(ticketingOutPort.getAttachmentContent(TICKET_ID, article.getId(), attachment1.getId())).thenReturn(new ByteArrayInputStream(ATTACHMENT_1_BYTES));
+        when(ticketingOutPort.getAttachmentContent(TICKET_ID, article.getId(), attachment2.getId())).thenReturn(new ByteArrayInputStream(ATTACHMENT_2_BYTES));
         when(dmsOutPort.getIncomingContentObjects(INCOMING_TARGET_WITH_CONTENT_OBJECTS)).thenReturn(List.of(HISTORY_FILE_INFO, COMMUNICATION_FILE_INFO));
+    }
 
+    private void assertByGivenAttachments(final ArticleAttachment attachment1,
+            final ArticleAttachment attachment2) {
         final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
-
         eventHandlingUseCase.handleEvent(event);
 
-        // Then
-
         final ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
-
         verify(ticketingOutPort).getTicket(TICKET_ID);
         verify(dmsOutPort).addContentObjectsToIncoming(eq(INCOMING_TARGET_WITH_CONTENT_OBJECTS), captor.capture());
         verify(dmsOutPort, times(2)).updateContentObject(any(DmsTarget.class), any(DmsContentObjectRequest.class));
-
-        final List<DmsContentObjectRequest> actual = captor.getValue();
-
-        assertThat(actual)
+        assertThat(captor.getValue())
                 .extracting(DmsContentObjectRequest::name)
                 .containsExactly(
                         attachment1.getId() + "_" + attachment1.getFilename(),
