@@ -1,5 +1,5 @@
 server:
-  port: 39147
+  port: 8085
 spring:
   cloud:
     stream:
@@ -41,6 +41,7 @@ dbs:
       recipient: test@example.com
       relevant-ticket-types:
         - "technischer Bürgersupport"
+        - "Dienstleistung beantragen"
 
 logging:
   include-application-group: false # disabled because application group is only relevant when deployed

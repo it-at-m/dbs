@@ -25,3 +25,8 @@ X-Zammad-Delivery: myID
 Important:
 - Use supported `anliegenart` (see`relevant-ticket-types` in `application-local.yml`)
 - Have `lhmextid` set (also in ticket)
+
+Inspect
+
+- http://localhost:8025/ - Mailpit, see the created mail
+- http://localhost:8089/ - Kafka-ui, see the created event
