@@ -46,4 +46,6 @@ dbs:
         action: "new_article_customer"
       - trigger-name: "T2804_Event_Neuer_InternerArtikel"
         action: "new_article_agent_internal"
+      - trigger-name: "T2807_Coo_target_geaendert"
+        action: "coo_target_changed"
 
