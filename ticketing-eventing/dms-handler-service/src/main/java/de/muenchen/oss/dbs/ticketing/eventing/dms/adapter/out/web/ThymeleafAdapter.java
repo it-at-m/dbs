@@ -226,7 +226,7 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
     }
 
     private record HistoryGroupViewModel(
-            String minute,
+            String timestamp,
             String authorName,
             List<EnrichedItem> items) {
     }
@@ -261,8 +261,8 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
             data.put("ticketOwner", "-");
         }
 
-        data.put("customerFamilyName", customer.getLastname());
-        data.put("customerGivenName", customer.getFirstname());
+        data.put("customerLastName", customer.getLastname());
+        data.put("customerFirstName", customer.getFirstname());
         data.put("customerEMail", customer.getEmail());
         data.put("customerLhmExtId", customer.getLhmextid());
         data.put("customerNote", customer.getNote());

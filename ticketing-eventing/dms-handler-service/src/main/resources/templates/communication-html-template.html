@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title th:text="${ticketTitle}"></title>
+        <title th:text="${ticketTitle}">Title</title>
     </head>
 
     <body style="margin:0; background:#f4f4f4; font-family:Arial, Helvetica, sans-serif; color:#333;">
@@ -15,14 +15,14 @@
                 margin:20px 0 10px 0;
                 font-weight:bold;
             ">
-                <span th:text="${ticketTitle}"></span>: <span th:text="${customerFamilyName}"></span>, <span th:text="${customerGivenName}"></span>
+                <span th:text="${ticketTitle}">Title</span>: <span th:text="${customerLastName}">Customer last name</span>, <span th:text="${customerFirstName}">Customer first name</span>
             </h1>
 
             <div style="
                 color:gray;
                 font-size:14px;
             ">
-                LHM<span th:text="${ticketNumber}"></span>
+                LHM<span th:text="${ticketNumber}">1234</span>
             </div>
 
         </header>
@@ -49,15 +49,15 @@
                         padding:15px;
                         border-bottom:1px solid #d7d7d7;
                     ">
-                        <strong>KUND*IN: </strong> <span th:text="${customerGivenName}"></span>  <span th:text="${customerFamilyName}"></span><br>
+                        <strong>KUND*IN: </strong> <span th:text="${customerFirstName}">Customer first name</span>  <span th:text="${customerLastName}">Customer last name</span><br>
                     </header>
 
                     <div style="
                         padding:15px;
                     ">
-                        E-Mail: <span th:text="${customerEMail}"></span> <br/>
-                        lhmExtID: <span th:text="${customerLhmExtId}"></span> <br/>
-                        Notiz: <span th:text="${customerNote}"></span> <br/>
+                        E-Mail: <span th:text="${customerEMail}">customer@mail.com</span> <br/>
+                        lhmExtID: <span th:text="${customerLhmExtId}">customerLhmExtId</span> <br/>
+                        Notiz: <span th:text="${customerNote}">Customer note</span> <br/>
                     </div>
 
                 </article>
@@ -81,17 +81,17 @@
                         padding:15px;
                         border-bottom:1px solid #d7d7d7;
                     ">
-                        <strong>TICKET: </strong> LHM<span th:text="${ticketNumber}"></span><br>
+                        <strong>TICKET: </strong> LHM<span th:text="${ticketNumber}">1234</span><br>
                     </header>
 
                     <div style="
                         padding:15px;
                     ">
-                        Besitzer*in: <span th:text="${ticketOwner}"></span> <br/>
-                        Status: <span th:text="${ticketState}"></span> <br/>
-                        Priorität: <span th:text="${ticketPriority}"></span> <br/>
-                        Vertrauensniveau des Formulars: <span th:text="${ticketVertrauensniveau}"></span> <br/>
-                        Vertrauensniveau des Tickets: <span th:text="${ticketVertrauensniveauTicket}"></span> <br/>
+                        Besitzer*in: <span th:text="${ticketOwner}">Ticket owner</span> <br/>
+                        Status: <span th:text="${ticketState}">open</span> <br/>
+                        Priorität: <span th:text="${ticketPriority}">low</span> <br/>
+                        Vertrauensniveau des Formulars: <span th:text="${ticketVertrauensniveau}">low</span> <br/>
+                        Vertrauensniveau des Tickets: <span th:text="${ticketVertrauensniveauTicket}">low</span> <br/>
 
                     </div>
 
@@ -116,19 +116,19 @@
                         padding:15px;
                         border-bottom:1px solid #d7d7d7;
                     ">
-                        <strong>VON: </strong> <span th:text="${ticketInfo.from}"></span>, <span th:text="${ticketInfo.sender}"></span><br>
-                        <strong>ZEITPUNKT: </strong> <span th:text="${ticketInfo.createdAt}"></span><br>
+                        <strong>VON: </strong> <span th:text="${ticketInfo.from}">Intern</span>, <span th:text="${ticketInfo.sender}">System</span><br>
+                        <strong>ZEITPUNKT: </strong> <span th:text="${ticketInfo.createdAt}">2026-05-11 13:25</span><br>
                         <div th:if="${ticketInfo.subject}">
-                            <strong>BETREFF: </strong> <span th:text="${ticketInfo.subject}"></span><br>
+                            <strong>BETREFF: </strong> <span th:text="${ticketInfo.subject}">Subject</span><br>
                         </div>
-                        <strong>NACHRICHT-ID: </strong> <span th:text="${ticketInfo.id}"></span>
+                        <strong>NACHRICHT-ID: </strong> <span th:text="${ticketInfo.id}">articleId</span>
                     </header>
 
                     <div style="
                         padding:15px;
                     ">
 
-                        <div th:utext="${ticketInfo.body}"></div>
+                        <div th:utext="${ticketInfo.body}">Content of the article</div>
 
                     </div>
 
@@ -138,7 +138,7 @@
 
                         <div style="margin-top:20px;padding:15px;">
                             <strong>
-                                <span th:text="${ticketInfo.attachments.size()}"></span> ANHÄNGENDE DATEI(EN)
+                                <span th:text="${ticketInfo.attachments.size()}">2</span> ANHÄNGENDE DATEI(EN)
                             </strong>
 
                             <br><br>
@@ -146,7 +146,7 @@
                             <div th:each="attachment : ${ticketInfo.attachments}">
 
                                 <span style="color:#2d8cff;">
-                                    <span th:text="${attachment.filename}"></span>
+                                    <span th:text="${attachment.filename}">filename</span>
                                 </span>
 
                                 <br><br>
@@ -162,7 +162,7 @@
                         border-top:1px solid #d7d7d7;
                         padding:15px;
                     ">
-                        Kanal: <span th:text="${ticketInfo.type}"></span>
+                        Kanal: <span th:text="${ticketInfo.type}">web</span>
                     </footer>
 
                 </article>
@@ -186,21 +186,21 @@
                             padding:15px;
                             border-bottom:1px solid #d7d7d7;
                         ">
-                            <strong>VON: </strong> <span th:text="${article.from}"></span>, <span th:text="${article.sender}"></span><br>
+                            <strong>VON: </strong> <span th:text="${article.from}">Intern</span>, <span th:text="${article.sender}">System</span><br>
                             <div th:if="${article.to}">
-                                <strong>AN: </strong> <span th:text="${article.to}"></span><br>
+                                <strong>AN: </strong> <span th:text="${article.to}">customer@mail.com</span><br>
                             </div>
-                            <strong>ZEITPUNKT: </strong> <span th:text="${article.createdAt}"></span><br>
+                            <strong>ZEITPUNKT: </strong> <span th:text="${article.createdAt}">2026-05-11 13:25</span><br>
                             <div th:if="${article.subject}">
-                             <strong>BETREFF: </strong> <span th:text="${article.subject}"></span><br>
+                             <strong>BETREFF: </strong> <span th:text="${article.subject}">Subject</span><br>
                             </div>
-                            <strong>NACHRICHT-ID: </strong> <span th:text="${article.id}"></span>
+                            <strong>NACHRICHT-ID: </strong> <span th:text="${article.id}">articleId</span>
                         </header>
 
                         <div style="
                             padding:15px;
                         ">
-                            <span th:utext="${article.body}"></span>
+                            <span th:utext="${article.body}">Content of the article</span>
                         </div>
 
                         <hr style="border:0; border-top:1px solid #ddd;">
@@ -209,7 +209,7 @@
 
                             <div style="margin-top:20px;padding:15px;">
                                 <strong>
-                                    <span th:text="${article.attachments.size()}"></span> ANHÄNGENDE DATEI(EN)
+                                    <span th:text="${article.attachments.size()}">2</span> ANHÄNGENDE DATEI(EN)
                                 </strong>
 
                                 <br><br>
@@ -217,7 +217,7 @@
                                 <div th:each="attachment : ${article.attachments}">
 
                                     <span style="color:#2d8cff;">
-                                        <span th:text="${attachment.filename}"></span>
+                                        <span th:text="${attachment.filename}">filename</span>
                                     </span>
 
                                 </div>
@@ -231,7 +231,7 @@
                             border-top:1px solid #d7d7d7;
                             padding:15px;
                         ">
-                            Kanal: <span th:text="${article.type}"></span>
+                            Kanal: <span th:text="${article.type}">web</span>
                         </footer>
 
                     </article>

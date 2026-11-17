@@ -25,9 +25,11 @@ dbs:
         - new_article_customer
         - new_article_agent_internal
       relevantActions:
+        - state_changed
         - new_article_agent_public
         - new_article_customer
         - new_article_agent_internal
+        - coo_target_changed
 
 logging:
   include-application-group: false # disabled because application group is only relevant when deployed
