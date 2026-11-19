@@ -96,9 +96,12 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
     private boolean ticketMeetsRequirements(final TicketInternal ticket) {
         log.debug("Checking ticket requirements: {}", ticket.getEakteCooTarget());
-        return isPresent(ticket.getEakteUserlogin())
-                && isPresent(ticket.getEakteJoboe())
-                && isPresent(ticket.getEakteCooTarget());
+        if (isPresent(ticket.getEakteUserlogin()) && isPresent(ticket.getEakteCooTarget())) {
+            return (isPresent(ticket.getEakteJoboe()) && isPresent(ticket.getEakteJobposition()))
+                    || (!isPresent(ticket.getEakteJoboe()) && !isPresent(ticket.getEakteJobposition()));
+        } else {
+            return false;
+        }
     }
 
     private boolean isPresent(final String str) {
