@@ -47,9 +47,7 @@ class EventHandlingUseCaseTest {
 
     private static final List<String> RELEVANT_ACTIONS = List.of("ARTICLE_ACTION", "STATUS_ACTION", "RELEVANT_ACTION");
     private static final String RELEVANT_ACTION = "RELEVANT_ACTION";
-    private static final String ARTICLE_ACTION = "ARTICLE_ACTION";
     private static final String NOT_RELEVANT_ACTION = "NOT_RELEVANT_ACTION";
-    private static final List<String> ARTICLE_ACTIONS = List.of("ARTICLE_ACTION", "ARTICLE_ACTION_2", "ARTICLE_ACTION_3");
     private static final String TICKET_ID = "ticketId";
     private static final String HISTORY = "history";
     private static final String GENERATED_HISTORY = "generated_history";
@@ -144,7 +142,7 @@ class EventHandlingUseCaseTest {
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
         when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
 
-        final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -164,7 +162,7 @@ class EventHandlingUseCaseTest {
         mockingByGivenTicket(ticket);
         when(dmsOutPort.getIncomingContentObjects(INCOMING_TARGET_EMPTY_CONTENT_OBJECTS)).thenReturn(List.of());
 
-        final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -228,7 +226,6 @@ class EventHandlingUseCaseTest {
         owner.setId(OWNER_ID);
 
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
-        when(dmsProperties.getArticleActions()).thenReturn(ARTICLE_ACTIONS);
         when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
         when(ticketingOutPort.getTicketHistory(TICKET_ID)).thenReturn(HISTORY);
         when(ticketingOutPort.getUserInfo(CUSTOMER_ID)).thenReturn(customer);
@@ -247,7 +244,7 @@ class EventHandlingUseCaseTest {
 
     private void assertByGivenAttachments(final ArticleAttachment attachment1,
             final ArticleAttachment attachment2) {
-        final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
         eventHandlingUseCase.handleEvent(event);
 
         final ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
