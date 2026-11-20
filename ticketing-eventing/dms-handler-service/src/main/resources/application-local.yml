@@ -20,10 +20,6 @@ dbs:
       eai-base-url: http://localhost:8082/
   eventing:
     dms:
-      articleActions:
-        - new_article_agent_public
-        - new_article_customer
-        - new_article_agent_internal
       relevantActions:
         - state_changed
         - new_article_agent_public

@@ -28,6 +28,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class EventHandlingUseCase implements EventHandlerInPort {
 
+    private static final String ACTION_STATE_CHANGED = "state_changed";
+    private static final String STATE_CLOSED = "closed";
+
     private static final String HISTORY_FILENAME = "änderungshistorie";
     private static final String HISTORY_FILEEXTENSION = "html";
     public static final String COMMUNICATION_FILENAME = "ticketverlauf";
@@ -45,10 +48,12 @@ public class EventHandlingUseCase implements EventHandlerInPort {
             log.debug("Event not relevant");
             return;
         }
+
         log.info("Handling event");
         try {
             // find event ticket
             final TicketInternal ticket = ticketingOutPort.getTicket(event.ticket());
+
             //check if the ticket contains all relevant data
             if (!ticketMeetsRequirements(ticket)) {
                 log.debug("Ticket not relevant");
@@ -70,9 +75,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
             final List<DmsContentObjectRequest> attachmentsContentObjects = processTicketHistoryAndCommunication(ticket, articles, dmsTarget);
 
-            if (isArticleEvent(event)) {
-                attachmentsContentObjects.addAll(generateAttachmentsContentObjects(ticket, articles));
-            }
+            attachmentsContentObjects.addAll(generateAttachmentsContentObjects(ticket, articles));
 
             if (!attachmentsContentObjects.isEmpty()) {
                 dmsOutPort.addContentObjectsToIncoming(dmsTarget, attachmentsContentObjects);
@@ -86,19 +89,21 @@ public class EventHandlingUseCase implements EventHandlerInPort {
 
     private boolean isRelevantEvent(final Event event) {
         log.debug("checking event: {}", event);
-        return dmsProperties.getRelevantActions().contains(event.action());
-    }
-
-    private boolean isArticleEvent(final Event event) {
-        log.debug("checking article event: {}", event);
-        return dmsProperties.getArticleActions().contains(event.action());
+        if (dmsProperties.getRelevantActions().contains(event.action())) {
+            return !ACTION_STATE_CHANGED.equals(event.action()) || STATE_CLOSED.equals(event.status());
+        } else {
+            return false;
+        }
     }
 
     private boolean ticketMeetsRequirements(final TicketInternal ticket) {
         log.debug("Checking ticket requirements: {}", ticket.getEakteCooTarget());
-        return isPresent(ticket.getEakteUserlogin())
-                && isPresent(ticket.getEakteJoboe())
-                && isPresent(ticket.getEakteCooTarget());
+        if (isPresent(ticket.getEakteUserlogin()) && isPresent(ticket.getEakteCooTarget())) {
+            return (isPresent(ticket.getEakteJoboe()) && isPresent(ticket.getEakteJobposition()))
+                    || (!isPresent(ticket.getEakteJoboe()) && !isPresent(ticket.getEakteJobposition()));
+        } else {
+            return false;
+        }
     }
 
     private boolean isPresent(final String str) {

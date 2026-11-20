@@ -36,19 +36,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class EventHandlingUseCaseTest {
     private static final String USERNAME = "user";
     private static final String JOBOE = "oe";
+    private static final String JOBPOSITION = "jobposition";
     private static final String INCOMING_COO_EMPTY_CONTENT_OBJECTS = "COO.incoming.empty";
     private static final String INCOMING_COO_WITH_CONTENT_OBJECTS = "COO.incoming.content";
     private static final String HISTORY_FILE_COO = "COO.history.file";
     private static final String COMMUNICATION_FILE_COO = "COO.communication.file";
-    private static final DmsRequestContext REQUEST_CONTEXT = new DmsRequestContext(USERNAME, JOBOE, null);
+    private static final DmsRequestContext REQUEST_CONTEXT = new DmsRequestContext(USERNAME, JOBOE, JOBPOSITION);
     private static final DmsTarget INCOMING_TARGET_EMPTY_CONTENT_OBJECTS = new DmsTarget(INCOMING_COO_EMPTY_CONTENT_OBJECTS, REQUEST_CONTEXT);
     private static final DmsTarget INCOMING_TARGET_WITH_CONTENT_OBJECTS = new DmsTarget(INCOMING_COO_WITH_CONTENT_OBJECTS, REQUEST_CONTEXT);
 
     private static final List<String> RELEVANT_ACTIONS = List.of("ARTICLE_ACTION", "STATUS_ACTION", "RELEVANT_ACTION");
     private static final String RELEVANT_ACTION = "RELEVANT_ACTION";
-    private static final String ARTICLE_ACTION = "ARTICLE_ACTION";
     private static final String NOT_RELEVANT_ACTION = "NOT_RELEVANT_ACTION";
-    private static final List<String> ARTICLE_ACTIONS = List.of("ARTICLE_ACTION", "ARTICLE_ACTION_2", "ARTICLE_ACTION_3");
     private static final String TICKET_ID = "ticketId";
     private static final String HISTORY = "history";
     private static final String GENERATED_HISTORY = "generated_history";
@@ -99,9 +98,27 @@ class EventHandlingUseCaseTest {
     }
 
     @Test
-    void ignoresEvent_whenTicketDoesNotMeetRequirements() {
+    void ignoresEvent_whenTicketHasNoEakteCoo() {
         // Given
-        final TicketInternal ticket = createTicket(null, null, null);
+        final TicketInternal ticket = createTicket(null, null, null, null);
+
+        // When
+        when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
+        when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
+
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+
+        eventHandlingUseCase.handleEvent(event);
+
+        // Then
+        verify(ticketingOutPort).getTicket(TICKET_ID);
+        verifyNoInteractions(dmsOutPort, htmlGenerationOutPort);
+    }
+
+    @Test
+    void ignoresEvent_whenTicketHasNoJobposition() {
+        // Given
+        final TicketInternal ticket = createTicket(INCOMING_COO_EMPTY_CONTENT_OBJECTS, null, null, null);
 
         // When
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
@@ -119,13 +136,13 @@ class EventHandlingUseCaseTest {
     @Test
     void ignoresEvent_whenTicketHasNoArticles() {
         // Given
-        final TicketInternal ticket = createTicket(INCOMING_COO_EMPTY_CONTENT_OBJECTS, null, null);
+        final TicketInternal ticket = createTicket(INCOMING_COO_EMPTY_CONTENT_OBJECTS, JOBPOSITION, null, null);
 
         // When
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
         when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
 
-        final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -139,13 +156,13 @@ class EventHandlingUseCaseTest {
         // Given
         final ArticleInternal article1 = createArticle(ARTICLE_1, null);
         final ArticleInternal article2 = createArticle(ARTICLE_2, null);
-        final TicketInternal ticket = createTicket(INCOMING_COO_EMPTY_CONTENT_OBJECTS, null, List.of(article1, article2));
+        final TicketInternal ticket = createTicket(INCOMING_COO_EMPTY_CONTENT_OBJECTS, JOBPOSITION, null, List.of(article1, article2));
 
         // When
         mockingByGivenTicket(ticket);
         when(dmsOutPort.getIncomingContentObjects(INCOMING_TARGET_EMPTY_CONTENT_OBJECTS)).thenReturn(List.of());
 
-        final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -174,7 +191,7 @@ class EventHandlingUseCaseTest {
         final ArticleAttachment attachment1 = createAttachment("id1", "filename_1");
         final ArticleAttachment attachment2 = createAttachment("id2", "filename_2");
         final ArticleInternal article2 = createArticle(ARTICLE_2, List.of(attachment1, attachment2));
-        final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, null, List.of(article1, article2));
+        final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, JOBPOSITION, null, List.of(article1, article2));
 
         // When
         mockingByGivenAttachments(ticket, article2, attachment1, attachment2);
@@ -192,7 +209,7 @@ class EventHandlingUseCaseTest {
         final ArticleAttachment attachment1 = createAttachment("id1", "filename_1");
         final ArticleAttachment attachment2 = createAttachment("id2", "filename_2");
         final ArticleInternal article2 = createArticle(ARTICLE_2, List.of(attachment1, attachment2));
-        final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, ARTICLE_1, List.of(article1, article2));
+        final TicketInternal ticket = createTicket(INCOMING_COO_WITH_CONTENT_OBJECTS, JOBPOSITION, ARTICLE_1, List.of(article1, article2));
 
         // When
         mockingByGivenAttachments(ticket, article2, attachment1, attachment2);
@@ -209,7 +226,6 @@ class EventHandlingUseCaseTest {
         owner.setId(OWNER_ID);
 
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
-        when(dmsProperties.getArticleActions()).thenReturn(ARTICLE_ACTIONS);
         when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
         when(ticketingOutPort.getTicketHistory(TICKET_ID)).thenReturn(HISTORY);
         when(ticketingOutPort.getUserInfo(CUSTOMER_ID)).thenReturn(customer);
@@ -228,7 +244,7 @@ class EventHandlingUseCaseTest {
 
     private void assertByGivenAttachments(final ArticleAttachment attachment1,
             final ArticleAttachment attachment2) {
-        final Event event = new Event(ARTICLE_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
         eventHandlingUseCase.handleEvent(event);
 
         final ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
@@ -242,11 +258,13 @@ class EventHandlingUseCaseTest {
                         attachment2.getId() + "_" + attachment2.getFilename());
     }
 
-    private TicketInternal createTicket(final String eakteCooTarget, final String eakteWiederaufsetzpunkt, final List<ArticleInternal> articles) {
+    private TicketInternal createTicket(final String eakteCooTarget, final String eakteJobposition, final String eakteWiederaufsetzpunkt,
+            final List<ArticleInternal> articles) {
         final TicketInternal ticket = new TicketInternal();
         ticket.setId(TICKET_ID);
         ticket.setEakteUserlogin(USERNAME);
         ticket.setEakteJoboe(JOBOE);
+        ticket.setEakteJobposition(eakteJobposition);
         ticket.setEakteCooTarget(eakteCooTarget);
         ticket.setEakteWiederaufsetzpunkt(eakteWiederaufsetzpunkt);
         ticket.setArticles(articles);
