@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="utf-8">
+        <title th:text="${ticketTitle}">Title</title>
+    </head>
+
+    <body style="margin:0; background:#f4f4f4; font-family:Arial, Helvetica, sans-serif; color:#333;">
+
+        <header style="text-align:center; padding-top:40px;">
+
+            <h1 style="
+                font-size:24px;
+                margin:20px 0 10px 0;
+                font-weight:bold;
+            ">
+                <span th:text="${ticketTitle}">Title</span>: <span th:text="${customerLastName}">Customer last name</span>, <span th:text="${customerFirstName}">Customer first name</span>
+            </h1>
+
+            <div style="
+                color:gray;
+                font-size:14px;
+            ">
+                LHM<span th:text="${ticketNumber}">1234</span>
+            </div>
+
+        </header>
+
+        <main style="
+            width:90%;
+            margin:40px auto;
+        ">
+
+            <section style="
+                background:#eef5f8;
+                padding:20px;
+            ">
+
+                <article style="
+                    width:95%;
+                    margin:20px auto;
+                    background:white;
+                    border:1px solid #d7d7d7;
+                ">
+
+                    <header style="
+                        background:#e8eef2;
+                        padding:15px;
+                        border-bottom:1px solid #d7d7d7;
+                    ">
+                        <strong>KUND*IN: </strong> <span th:text="${customerFirstName}">Customer first name</span>  <span th:text="${customerLastName}">Customer last name</span><br>
+                    </header>
+
+                    <div style="
+                        padding:15px;
+                    ">
+                        E-Mail: <span th:text="${customerEMail}">customer@mail.com</span> <br/>
+                        lhmExtID: <span th:text="${customerLhmExtId}">customerLhmExtId</span> <br/>
+                        Notiz: <span th:text="${customerNote}">Customer note</span> <br/>
+                    </div>
+
+                </article>
+
+            </section>
+
+            <section style="
+                background:#eef5f8;
+                padding:20px;
+            ">
+
+                <article style="
+                    width:95%;
+                    margin:20px auto;
+                    background:white;
+                    border:1px solid #d7d7d7;
+                ">
+
+                    <header style="
+                        background:#e8eef2;
+                        padding:15px;
+                        border-bottom:1px solid #d7d7d7;
+                    ">
+                        <strong>TICKET: </strong> LHM<span th:text="${ticketNumber}">1234</span><br>
+                    </header>
+
+                    <div style="
+                        padding:15px;
+                    ">
+                        Besitzer*in: <span th:text="${ticketOwner}">Ticket owner</span> <br/>
+                        Status: <span th:text="${ticketState}">open</span> <br/>
+                        Priorität: <span th:text="${ticketPriority}">low</span> <br/>
+                        Vertrauensniveau des Formulars: <span th:text="${ticketVertrauensniveau}">low</span> <br/>
+                        Vertrauensniveau des Tickets: <span th:text="${ticketVertrauensniveauTicket}">low</span> <br/>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+            <section style="
+                background:#eef5f8;
+                padding:20px;
+            ">
+
+                <article style="
+                    width:95%;
+                    margin:20px auto;
+                    background:white;
+                    border:1px solid #d7d7d7;
+                ">
+
+                    <header style="
+                        background:#e8eef2;
+                        padding:15px;
+                        border-bottom:1px solid #d7d7d7;
+                    ">
+                        <strong>VON: </strong> <span th:text="${ticketInfo.from}">Intern</span>, <span th:text="${ticketInfo.sender}">System</span><br>
+                        <strong>ZEITPUNKT: </strong> <span th:text="${ticketInfo.createdAt}">2026-05-11 13:25</span><br>
+                        <div th:if="${ticketInfo.subject}">
+                            <strong>BETREFF: </strong> <span th:text="${ticketInfo.subject}">Subject</span><br>
+                        </div>
+                        <strong>NACHRICHT-ID: </strong> <span th:text="${ticketInfo.id}">articleId</span>
+                    </header>
+
+                    <div style="
+                        padding:15px;
+                    ">
+
+                        <div th:utext="${ticketInfo.body}">Content of the article</div>
+
+                    </div>
+
+                    <hr style="border:0; border-top:1px solid #ddd;">
+
+                    <div th:if="${ticketInfo.attachments != null && ticketInfo.attachments.size() > 0}">
+
+                        <div style="margin-top:20px;padding:15px;">
+                            <strong>
+                                <span th:text="${ticketInfo.attachments.size()}">2</span> ANHÄNGENDE DATEI(EN)
+                            </strong>
+
+                            <br><br>
+
+                            <div th:each="attachment : ${ticketInfo.attachments}">
+
+                                <span style="color:#2d8cff;">
+                                    <span th:text="${attachment.filename}">filename</span>
+                                </span>
+
+                                <br><br>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <br>
+
+                    <footer style="
+                        background:#f4f4f4;
+                        border-top:1px solid #d7d7d7;
+                        padding:15px;
+                    ">
+                        Kanal: <span th:text="${ticketInfo.type}">web</span>
+                    </footer>
+
+                </article>
+
+            </section>
+
+            <section style="
+                background:#eef5f8;
+                padding:20px;
+            ">
+                <div th:each="article : ${articles}">
+                    <article style="
+                        width:95%;
+                        margin:20px auto;
+                        background:white;
+                        border:5px dashed orange;
+                    ">
+
+                        <header style="
+                            background:#e8eef2;
+                            padding:15px;
+                            border-bottom:1px solid #d7d7d7;
+                        ">
+                            <strong>VON: </strong> <span th:text="${article.from}">Intern</span>, <span th:text="${article.sender}">System</span><br>
+                            <div th:if="${article.to}">
+                                <strong>AN: </strong> <span th:text="${article.to}">customer@mail.com</span><br>
+                            </div>
+                            <strong>ZEITPUNKT: </strong> <span th:text="${article.createdAt}">2026-05-11 13:25</span><br>
+                            <div th:if="${article.subject}">
+                             <strong>BETREFF: </strong> <span th:text="${article.subject}">Subject</span><br>
+                            </div>
+                            <strong>NACHRICHT-ID: </strong> <span th:text="${article.id}">articleId</span>
+                        </header>
+
+                        <div style="
+                            padding:15px;
+                        ">
+                            <span th:utext="${article.body}">Content of the article</span>
+                        </div>
+
+                        <hr style="border:0; border-top:1px solid #ddd;">
+
+                        <div th:if="${article.attachments != null && article.attachments.size() > 0}">
+
+                            <div style="margin-top:20px;padding:15px;">
+                                <strong>
+                                    <span th:text="${article.attachments.size()}">2</span> ANHÄNGENDE DATEI(EN)
+                                </strong>
+
+                                <br><br>
+
+                                <div th:each="attachment : ${article.attachments}">
+
+                                    <span style="color:#2d8cff;">
+                                        <span th:text="${attachment.filename}">filename</span>
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <br>
+
+                        <footer style="
+                            background:#f4f4f4;
+                            border-top:1px solid #d7d7d7;
+                            padding:15px;
+                        ">
+                            Kanal: <span th:text="${article.type}">web</span>
+                        </footer>
+
+                    </article>
+
+                </div>
+
+            </section>
+        </main>
+    </body>
+</html>
