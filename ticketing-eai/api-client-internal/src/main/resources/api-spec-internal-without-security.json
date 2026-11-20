@@ -21,6 +21,10 @@
       "description": "Reading and Creating Articles in Zammad."
     },
     {
+      "name": "Groups",
+      "description": "Reading groups in Zammad."
+    },
+    {
       "name": "Users",
       "description": "Endpoints regarding the reading and creating of Users in Zammad."
     },
@@ -39,6 +43,10 @@
     {
       "name": "Tickets",
       "description": "Reading and Creating Tickets in Zammad."
+    },
+    {
+      "name": "Knowledge Bases",
+      "description": "Managing knowledge bases in Zammad."
     }
   ],
   "paths": {
@@ -147,6 +155,58 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets/{ticketId}/shared_draft": {
+      "put": {
+        "tags": [
+          "Tickets"
+        ],
+        "summary": "Create a shared draft for a ticket.",
+        "description": "Authorization: WRITE_TICKETS",
+        "operationId": "createSharedDraft",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSharedDraftDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharedDraftDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharedDraftDTO"
                 }
               }
             }
@@ -465,7 +525,7 @@
         "tags": [
           "Tickets"
         ],
-        "summary": "Create a new User and a corresponding Ticket for this new user.",
+        "summary": "Create a new User and a corresponding Ticket for this new user.If the user already exists (checked by lhmExtId) the existing user gets the new ticket assigned.",
         "description": "Exposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
         "operationId": "createNewTicketWithUser",
         "requestBody": {
@@ -785,12 +845,44 @@
         }
       }
     },
+    "/knowledgeBases/{knowledgeBaseId}/update": {
+      "post": {
+        "tags": [
+          "Knowledge Bases"
+        ],
+        "summary": "Refresh the entries of a knowledgebase in zammad. Needed as a workaround currently to make new articles appear when reading with the api.",
+        "operationId": "updateKBById",
+        "parameters": [
+          {
+            "name": "knowledgeBaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeBaseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/composition/userAndTicket": {
       "post": {
         "tags": [
           "Tickets"
         ],
-        "summary": "Create a new User and a corresponding Ticket for this new user.",
+        "summary": "Create a new User and a corresponding Ticket for this new user.If the user already exists (checked by lhmExtId) the existing user gets the new ticket assigned.",
         "description": "Exposes all available attributes.\n\nAuthorization: WRITE_TICKETS",
         "operationId": "createNewTicketWithUser_1",
         "requestBody": {
@@ -980,7 +1072,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/TicketHistory"
                 }
               }
             }
@@ -1170,6 +1262,185 @@
         }
       }
     },
+    "/knowledgeBases/{knowledgeBaseId}": {
+      "get": {
+        "tags": [
+          "Knowledge Bases"
+        ],
+        "summary": "Get a KnowledgeBase in Zammad by it's ID.",
+        "operationId": "getKBById",
+        "parameters": [
+          {
+            "name": "knowledgeBaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeBaseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledgeBases/{knowledgeBaseId}/rss": {
+      "get": {
+        "tags": [
+          "Knowledge Bases"
+        ],
+        "summary": "Get a RSS Feed of all changes of the KnowledgeBase with the given knowledgeBaseId.",
+        "operationId": "getKBRssFeed",
+        "parameters": [
+          {
+            "name": "knowledgeBaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledgeBases/{knowledgeBaseId}/categories/{categoryId}": {
+      "get": {
+        "tags": [
+          "Knowledge Bases"
+        ],
+        "summary": "Get a KnowledgeBase Categories Answers and Children in Zammad by the KB-ID and the Category-ID.",
+        "operationId": "getKBCategoryByKBIdAndCategoryId",
+        "parameters": [
+          {
+            "name": "knowledgeBaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeBaseCategoryDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledgeBases/{knowledgeBaseId}/answer/{answerId}": {
+      "get": {
+        "tags": [
+          "Knowledge Bases"
+        ],
+        "summary": "Get a KnowledgeBases Answer in Zammad by the KB-ID and the Answer-ID.",
+        "operationId": "getKBAnswerByKBIdAndAnswerId",
+        "parameters": [
+          {
+            "name": "knowledgeBaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "answerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeBaseAnswerDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Find groups in Zammad by name.",
+        "description": "Authorization: READ_GROUPS",
+        "operationId": "getGroupByName",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/attachments/{ticketID}/{articleID}/{attachmentID}": {
       "get": {
         "tags": [
@@ -1195,6 +1466,39 @@
               "type": "string"
             }
           },
+          {
+            "name": "attachmentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Attachment as binary data.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "octet-stream"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attachments/{attachmentID}": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Get Attachment by given attachment id.",
+        "description": "Receives the attachment with the ID attachmentID and forwards it as a binary data stream.",
+        "operationId": "getAttachment_1",
+        "parameters": [
           {
             "name": "attachmentID",
             "in": "path",
@@ -1535,6 +1839,65 @@
           }
         }
       },
+      "CreateSharedDraftDTO": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "internal": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "email",
+              "phone",
+              "web",
+              "note",
+              "sms",
+              "chat",
+              "fax"
+            ]
+          }
+        },
+        "required": [
+          "body",
+          "type"
+        ]
+      },
+      "SharedDraftDTO": {
+        "type": "object",
+        "properties": {
+          "ticketId": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "internal": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "email",
+              "phone",
+              "web",
+              "note",
+              "sms",
+              "chat",
+              "fax"
+            ]
+          }
+        }
+      },
       "UpdateOrganizationDTO": {
         "type": "object",
         "properties": {
@@ -1804,7 +2167,17 @@
             "type": "string"
           },
           "state_external": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "EINGEGANGEN",
+              "IN_BEARBEITUNG",
+              "AKTION_NOETIG",
+              "ABSCHLUSS_GEPLANT",
+              "ABGESCHLOSSEN",
+              "LOESCHUNG_GEPLANT",
+              "GELOESCHT",
+              "UNKOWN"
+            ]
           },
           "number": {
             "type": "string"
@@ -1838,6 +2211,10 @@
             "type": "string"
           },
           "close_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_close_at": {
             "type": "string",
             "format": "date-time"
           },
@@ -1904,10 +2281,6 @@
           "update_diff_in_min": {
             "type": "number",
             "format": "double"
-          },
-          "last_close_at": {
-            "type": "string",
-            "format": "date-time"
           },
           "last_contact_agent_at": {
             "type": "string",
@@ -2126,6 +2499,20 @@
           }
         }
       },
+      "AttachmentDTO": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          },
+          "mime-type": {
+            "type": "string"
+          }
+        }
+      },
       "CreateTicketDTO": {
         "type": "object",
         "properties": {
@@ -2232,6 +2619,40 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          }
+        }
+      },
+      "KnowledgeBaseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "categoryIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "answerIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         }
@@ -2360,6 +2781,187 @@
           }
         }
       },
+      "Assets": {
+        "type": "object",
+        "properties": {
+          "User": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "Ticket": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TicketInternal"
+            }
+          },
+          "TicketArticle": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ArticleInternal"
+            }
+          }
+        }
+      },
+      "History": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "history_attribute_id": {
+            "type": "string"
+          },
+          "sourceable_type": {
+            "type": "string"
+          },
+          "sourceable_id": {
+            "type": "string"
+          },
+          "sourceable_name": {
+            "type": "string"
+          },
+          "o_id": {
+            "type": "string"
+          },
+          "related_history_object_id": {
+            "type": "string"
+          },
+          "id_to": {
+            "type": "string"
+          },
+          "id_from": {
+            "type": "string"
+          },
+          "related_o_id": {
+            "type": "string"
+          },
+          "value_from": {
+            "type": "string"
+          },
+          "value_to": {
+            "type": "string"
+          },
+          "created_by_id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "related_object": {
+            "type": "string"
+          },
+          "attribute": {
+            "type": "string"
+          }
+        }
+      },
+      "TicketHistory": {
+        "type": "object",
+        "properties": {
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/History"
+            }
+          },
+          "assets": {
+            "$ref": "#/components/schemas/Assets"
+          }
+        }
+      },
+      "KnowledgeBaseCategoryDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "knowledgeBaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "answerIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "childIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "KnowledgeBaseAnswerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "answerTitle": {
+            "type": "string"
+          },
+          "answerBody": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentDTO"
+            }
+          }
+        }
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
       "Link": {
         "type": "object",
         "properties": {
@@ -2367,22 +2969,40 @@
             "type": "string"
           },
           "hreflang": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "title": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "type": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "deprecation": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "profile": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "name": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "templated": {
             "type": "boolean"
@@ -2397,7 +3017,7 @@
         "in": "header",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "openIdConnectUrl": "https://ssodev.muenchen.de/auth/realms/KM81/.well-known/openid-configuration"
+        "openIdConnectUrl": "https://ssodev.muenchen.de/auth/realms/ccse/.well-known/openid-configuration"
       }
     }
   }
