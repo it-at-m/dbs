@@ -1,0 +1,12 @@
+@host = 127.0.0.1:8089
+@ticketnumber = 11000423
+@resetkey = 984F617B6FCF9C6FA9C761414633DAAC8EC95F40583F89C3EA50D9659851DE7CE6AC6AAEFBEFFEB99FC1880B70FF911505AB79E0BF87
+
+### Request Password reset
+POST {{host}}/password/reset?ticketnumber={{ticketnumber}}
+
+### Request Password reset with nonexisting ticketnumber
+POST {{host}}/password/reset?ticketnumber=1234notexisting
+
+### Get Password from ticket
+GET {{host}}/password/{{resetkey}}
