@@ -6,6 +6,7 @@ import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.UsersApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.Article;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.CreateArticleDTOV2;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketHistory;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
@@ -63,7 +64,7 @@ public class ZammadAdapter implements TicketingOutPort {
     }
 
     @Override
-    public String getTicketHistory(final String ticketId) {
+    public TicketHistory getTicketHistory(final String ticketId) {
         try {
             return ticketsApi.getTicketHistory(ticketId).block();
         } catch (final WebClientResponseException e) {

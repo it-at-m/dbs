@@ -2944,21 +2944,21 @@
       "Assets": {
         "type": "object",
         "properties": {
-          "user": {
-            "type": "array",
-            "items": {
+          "User": {
+            "type": "object",
+            "additionalProperties": {
               "$ref": "#/components/schemas/User"
             }
           },
-          "ticket": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Ticket"
+          "Ticket": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TicketInternal"
             }
           },
-          "ticketArticle": {
-            "type": "array",
-            "items": {
+          "TicketArticle": {
+            "type": "object",
+            "additionalProperties": {
               "$ref": "#/components/schemas/ArticleInternal"
             }
           }
@@ -2985,6 +2985,15 @@
           "o_id": {
             "type": "string"
           },
+          "related_history_object_id": {
+            "type": "string"
+          },
+          "id_to": {
+            "type": "string"
+          },
+          "id_from": {
+            "type": "string"
+          },
           "related_o_id": {
             "type": "string"
           },
@@ -3008,96 +3017,9 @@
           },
           "related_object": {
             "type": "string"
-          }
-        }
-      },
-      "Ticket": {
-        "type": "object",
-        "properties": {
-          "id": {
+          },
+          "attribute": {
             "type": "string"
-          },
-          "group_id": {
-            "type": "string"
-          },
-          "priority_id": {
-            "type": "string"
-          },
-          "state_id": {
-            "type": "string"
-          },
-          "state_external": {
-            "type": "string",
-            "enum": [
-              "EINGEGANGEN",
-              "IN_BEARBEITUNG",
-              "AKTION_NOETIG",
-              "ABSCHLUSS_GEPLANT",
-              "ABGESCHLOSSEN",
-              "LOESCHUNG_GEPLANT",
-              "GELOESCHT",
-              "UNKOWN"
-            ]
-          },
-          "number": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "dbs_title": {
-            "type": "string"
-          },
-          "mail_title": {
-            "type": "string"
-          },
-          "organization_id": {
-            "type": "string"
-          },
-          "organizationName": {
-            "type": "string"
-          },
-          "customer_id": {
-            "type": "string"
-          },
-          "note": {
-            "type": "string"
-          },
-          "last_contact_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "pending_time": {
-            "type": "string"
-          },
-          "close_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "last_close_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "article_count": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "article_ids": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "durchschnittliche_bearbeitungsdauer": {
-            "type": "string"
-          },
-          "additionalData": {
-            "type": "object",
-            "additionalProperties": {}
           }
         }
       },

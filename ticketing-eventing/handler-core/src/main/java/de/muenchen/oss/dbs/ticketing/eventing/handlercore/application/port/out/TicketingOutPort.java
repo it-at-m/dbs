@@ -2,13 +2,12 @@ package de.muenchen.oss.dbs.ticketing.eventing.handlercore.application.port.out;
 
 import de.muenchen.oss.dbs.ticketing.eai.client.model.Article;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.CreateArticleDTOV2;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketHistory;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.UpdateTicketDTOV2;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
-
 import java.io.InputStream;
 import java.util.Collection;
-
 import org.springframework.core.io.Resource;
 
 public interface TicketingOutPort {
@@ -36,7 +35,7 @@ public interface TicketingOutPort {
      * @param ticketId The id of the ticket.
      * @return The ticket history as string.
      */
-    String getTicketHistory(String ticketId);
+    TicketHistory getTicketHistory(String ticketId);
 
     /**
      * Create new article for a ticket.
