@@ -91,6 +91,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private boolean isRelevantEvent(final Event event) {
         log.debug("checking event: {}", event);
         if (dmsProperties.getRelevantActions().contains(event.action())) {
+            //if state-changed then only true if state is now closed
             return !ACTION_STATE_CHANGED.equals(event.action()) || STATE_CLOSED.equals(event.status());
         } else {
             return false;
