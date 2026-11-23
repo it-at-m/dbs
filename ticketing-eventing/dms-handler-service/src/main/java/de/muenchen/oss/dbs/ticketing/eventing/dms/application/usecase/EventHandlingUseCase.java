@@ -101,6 +101,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private boolean ticketMeetsRequirements(final TicketInternal ticket) {
         log.debug("Checking ticket requirements: {}", ticket.getEakteCooTarget());
         if (isPresent(ticket.getEakteUserlogin()) && isPresent(ticket.getEakteCooTarget())) {
+            //either joboe AND jobposition need to be present or none of the two
             return (isPresent(ticket.getEakteJoboe()) && isPresent(ticket.getEakteJobposition()))
                     || (!isPresent(ticket.getEakteJoboe()) && !isPresent(ticket.getEakteJobposition()));
         } else {
