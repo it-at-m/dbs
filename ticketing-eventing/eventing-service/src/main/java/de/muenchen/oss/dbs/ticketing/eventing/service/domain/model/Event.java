@@ -8,7 +8,8 @@ public record Event(
         String status,
         String statusId,
         String anliegenart,
-        String lhmExtId
+        String lhmExtId,
+        String eakteCooTarget
 // TODO additional payload or everything/partial as map?
 ) {
 }

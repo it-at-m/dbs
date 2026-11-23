@@ -5,7 +5,8 @@ public record EventDTO(
         String status,
         String status_id,
         String anliegenart,
-        String lhmextid
+        String lhmextid,
+        String eakte_coo_target
 // TODO additional payload or everything/partial as map?
 ) {
 }
