@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import de.muenchen.oss.dbs.ticketing.eai.client.api.TicketsApi;
 import de.muenchen.oss.dbs.ticketing.eai.client.api.UsersApi;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketHistory;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.adapter.out.zammad.ZammadAdapter;
 import de.muenchen.oss.dbs.ticketing.eventing.handlercore.adapter.out.zammad.ZammadApiException;
@@ -34,12 +35,12 @@ class ZammadAdapterTest {
     void givenTicketId_thenReturnTicketHistory() {
         // Given
         final String ticketId = "ticket_id";
-        final String ticketHistory = "Ticket history data";
+        final TicketHistory ticketHistory = new TicketHistory();
 
         when(ticketsApi.getTicketHistory(ticketId)).thenReturn(Mono.just(ticketHistory));
 
         // When
-        final String result = zammadAdapter.getTicketHistory(ticketId);
+        final TicketHistory result = zammadAdapter.getTicketHistory(ticketId);
 
         // Then
         assertThat(result).isEqualTo(ticketHistory);

@@ -2,6 +2,7 @@ package de.muenchen.oss.dbs.ticketing.eventing.dms.application.usecase;
 
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleAttachment;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketHistory;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.DmsOutPort;
@@ -113,7 +114,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
     private List<DmsContentObjectRequest> processTicketHistoryAndCommunication(final TicketInternal ticket, final List<ArticleInternal> articles,
             final DmsTarget dmsTarget) {
         final List<DmsContentObjectRequest> addToIncomingContentObject = new ArrayList<>(List.of());
-        final String ticketHistory = ticketingOutPort.getTicketHistory(ticket.getId());
+        final TicketHistory ticketHistory = ticketingOutPort.getTicketHistory(ticket.getId());
         final DmsContentObjectRequest historyContentObject = generateHistoryContentObject(ticketHistory);
 
         final DmsContentObjectRequest communicationContentObject = generateCommunicationContentObject(ticket, articles);
@@ -154,7 +155,7 @@ public class EventHandlingUseCase implements EventHandlerInPort {
                 .orElse(null);
     }
 
-    private DmsContentObjectRequest generateHistoryContentObject(final String history) {
+    private DmsContentObjectRequest generateHistoryContentObject(final TicketHistory history) {
         final String html = htmlGenerationOutPort.generateHistoryHtml(history);
         final byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
         return new DmsContentObjectRequest(HISTORY_FILENAME + "." + HISTORY_FILEEXTENSION, new ByteArrayInputStream(bytes));

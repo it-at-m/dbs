@@ -1,11 +1,12 @@
 package de.muenchen.oss.dbs.ticketing.eventing.dms.adapter.out.web;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.History;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketHistory;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.HtmlGenerationOutPort;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -16,7 +17,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.StreamSupport;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,6 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
     private static final String TRIGGER = "Trigger";
     private static final String MENTION = "Mention";
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     private static final Map<String, String> OBJECT_NAMES = Map.of(
             "Ticket", "Ticket",
             "Ticket::Article", "Artikel",
@@ -47,30 +46,26 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
             "Mention", "Mention");
 
     @Override
-    public String generateHistoryHtml(final String historyJson) {
+    @SuppressWarnings("PMD.CyclomaticComplexity")
+    @SuppressFBWarnings(
+            value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+            justification = "Null check is performed explicitly before dereferencing"
+    )
+    public String generateHistoryHtml(final TicketHistory history) {
         try {
-            final JsonNode rootNode = objectMapper.readTree(historyJson);
-            final JsonNode historyArray = rootNode.get("history");
-            final JsonNode usersNode = rootNode.path("assets").path("User");
-
-            // Load users into a map (id -> name)
-            final Map<String, String> userNames = new HashMap<>();
-            if (usersNode.isObject()) {
-                usersNode.properties().forEach(entry -> {
-                    final String userId = entry.getKey();
-                    final JsonNode user = entry.getValue();
-                    final String firstname = user.path("firstname").asText("");
-                    final String lastname = user.path("lastname").asText("");
-                    final String fullName = (firstname + " " + lastname).trim();
-                    userNames.put(userId, fullName.isEmpty() ? "Unbekannt" : fullName);
-                });
+            if (history == null || history.getHistory() == null || history.getAssets() == null || history.getAssets().getUser() == null) {
+                log.warn("history not complete. cannot generate html");
+                return "";
             }
 
+            // Load users into a map (id -> name)
+            final Map<String, User> users = history.getAssets().getUser();
+
             // Import all events, filter by ‘notification,’ enrich them, and sort them chronologically
-            final List<EnrichedItem> allItems = StreamSupport.stream(historyArray.spliterator(), false)
-                    .map(node -> new EnrichedItem(node, enrichItemDescription(node, usersNode)))
+            final List<EnrichedItem> allItems = history.getHistory().stream()
+                    .map(el -> new EnrichedItem(el, enrichItemDescription(el, users)))
                     .filter(item -> item.description() != null)
-                    .sorted(Comparator.comparing(item -> item.node().path("created_at").asText("")))
+                    .sorted(Comparator.comparing(item -> Objects.toString(item.history().getCreatedAt(), "")))
                     .toList();
 
             if (allItems.isEmpty()) {
@@ -83,15 +78,15 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
             final List<HistoryGroupViewModel> groupedEntries = new ArrayList<>();
 
             final EnrichedItem firstItem = allItems.getFirst();
-            String currentAuthorKey = getAuthorKey(firstItem.node());
-            String currentAuthorName = resolveAuthorName(firstItem.node(), userNames);
-            String firstTimestamp = truncateToMinute(firstItem.node().path("created_at").asText(""));
+            String currentAuthorKey = getAuthorKey(firstItem.history());
+            String currentAuthorName = resolveAuthorName(firstItem.history(), users);
+            String firstTimestamp = truncateToMinute(Objects.toString(firstItem.history().getCreatedAt(), ""));
             List<EnrichedItem> currentGroupItems = new ArrayList<>();
             currentGroupItems.add(firstItem);
 
             for (int i = 1; i < allItems.size(); i++) {
                 final EnrichedItem currentItem = allItems.get(i);
-                final String authorKey = getAuthorKey(currentItem.node());
+                final String authorKey = getAuthorKey(currentItem.history());
 
                 if (authorKey.equals(currentAuthorKey)) {
                     currentGroupItems.add(currentItem);
@@ -99,8 +94,8 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
                     groupedEntries.add(new HistoryGroupViewModel(firstTimestamp, currentAuthorName, currentGroupItems));
 
                     currentAuthorKey = authorKey;
-                    currentAuthorName = resolveAuthorName(currentItem.node(), userNames);
-                    firstTimestamp = truncateToMinute(currentItem.node().path("created_at").asText(""));
+                    currentAuthorName = resolveAuthorName(currentItem.history(), users);
+                    firstTimestamp = truncateToMinute(Objects.toString(currentItem.history().getCreatedAt(), ""));
                     currentGroupItems = new ArrayList<>();
                     currentGroupItems.add(currentItem);
                 }
@@ -120,38 +115,38 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
     /**
      * Generates an ID for the author
      */
-    private String getAuthorKey(final JsonNode node) {
-        final String sourceableType = node.path("sourceable_type").asText("");
-        final String sourceableId = node.path("sourceable_id").asText("");
+    private String getAuthorKey(final History history) {
+        final String sourceableType = Objects.toString(history.getSourceableType(), "");
+        final String sourceableId = Objects.toString(history.getSourceableId(), "");
         if (!sourceableType.isEmpty() && !sourceableId.isEmpty()) {
             return sourceableType + ":" + sourceableId;
         }
-        return "user:" + node.path("created_by_id").asText("0");
+        return "user:" + Objects.toString(history.getCreatedById(), "0");
     }
 
     /**
      * Returns the display name
      */
-    private String resolveAuthorName(final JsonNode node, final Map<String, String> userNames) {
+    private String resolveAuthorName(final History history, final Map<String, User> users) {
 
-        final String sourceableType = node.path("sourceable_type").asText("");
-        final String sourceableName = node.path("sourceable_name").asText("");
+        final String sourceableType = Objects.toString(history.getSourceableType(), "");
+        final String sourceableName = Objects.toString(history.getSourceableName(), "");
         if (TRIGGER.equals(sourceableType) && !sourceableName.isEmpty()) {
             return "Trigger: " + sourceableName;
         }
         if (!sourceableName.isEmpty()) {
             return sourceableName;
         }
-        final String createdById = node.path("created_by_id").asText("0");
-        return userNames.getOrDefault(createdById, createdById);
+        final String createdById = Objects.toString(history.getCreatedById(), "0");
+        return users.get(createdById) != null ? (users.get(createdById).getFirstname() + " " + users.get(createdById).getLastname()).trim() : createdById;
     }
 
-    private String enrichItemDescription(final JsonNode node, final JsonNode usersNode) {
-        final String type = node.path("type").asText("");
-        final String object = node.path("object").asText("");
-        final String attribute = node.path("attribute").asText("");
-        final String valueFrom = node.path("value_from").asText("");
-        final String valueTo = node.path("value_to").asText("");
+    private String enrichItemDescription(final History history, final Map<String, User> users) {
+        final String type = Objects.toString(history.getType(), "");
+        final String object = Objects.toString(history.getObject(), "");
+        final String attribute = Objects.toString(history.getAttribute(), "");
+        final String valueFrom = Objects.toString(history.getValueFrom(), "");
+        final String valueTo = Objects.toString(history.getValueTo(), "");
 
         final String targetName = OBJECT_NAMES.getOrDefault(object, object);
 
@@ -160,7 +155,7 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
         case "email" -> "E-Mail gesendet an '" + valueTo + "'";
         case "created" -> {
             if (MENTION.equals(object)) {
-                final String mentionedUserName = resolveMentionUser(valueTo, usersNode);
+                final String mentionedUserName = resolveMentionUser(valueTo, users);
                 yield "erstellt Mention  → '" + mentionedUserName + "'";
             }
             yield "erstellt " + targetName;
@@ -196,11 +191,11 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
     }
 
     @SuppressWarnings("PMD.LiteralsFirstInComparisons")
-    private String resolveMentionUser(final String userId, final JsonNode usersNode) {
-        if (usersNode != null && usersNode.has(userId)) {
-            final JsonNode user = usersNode.get(userId);
-            final String firstname = user.path("firstname").asText("");
-            final String lastname = user.path("lastname").asText("");
+    private String resolveMentionUser(final String userId, final Map<String, User> userNames) {
+        if (userNames.get(userId) != null) {
+            final User user = userNames.get(userId);
+            final String firstname = Objects.toString(user.getFirstname(), "");
+            final String lastname = Objects.toString(user.getLastname(), "");
             final String fullName = (firstname + " " + lastname).trim();
             if (!fullName.isEmpty() && !fullName.equals("-")) {
                 return fullName;
@@ -222,7 +217,7 @@ public class ThymeleafAdapter implements HtmlGenerationOutPort {
         }
     }
 
-    private record EnrichedItem(JsonNode node, String description) {
+    private record EnrichedItem(History history, String description) {
     }
 
     private record HistoryGroupViewModel(

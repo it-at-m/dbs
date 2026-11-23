@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleAttachment;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketHistory;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import de.muenchen.oss.dbs.ticketing.eventing.dms.application.port.out.DmsOutPort;
@@ -49,7 +50,7 @@ class EventHandlingUseCaseTest {
     private static final String RELEVANT_ACTION = "RELEVANT_ACTION";
     private static final String NOT_RELEVANT_ACTION = "NOT_RELEVANT_ACTION";
     private static final String TICKET_ID = "ticketId";
-    private static final String HISTORY = "history";
+    private static final TicketHistory HISTORY = new TicketHistory();
     private static final String GENERATED_HISTORY = "generated_history";
     private static final String GENERATED_COMMUNICATION = "generated_communication";
     private static final String CUSTOMER_ID = "customer_id";

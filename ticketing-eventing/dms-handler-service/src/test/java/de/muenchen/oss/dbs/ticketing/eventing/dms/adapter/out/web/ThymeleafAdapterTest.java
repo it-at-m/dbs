@@ -2,8 +2,16 @@ package de.muenchen.oss.dbs.ticketing.eventing.dms.adapter.out.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.cfg.CoercionAction;
+import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.type.LogicalType;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleAttachment;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.ArticleInternal;
+import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketHistory;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.TicketInternal;
 import de.muenchen.oss.dbs.ticketing.eai.client.model.User;
 import java.io.IOException;
@@ -13,6 +21,8 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.jackson.nullable.JsonNullable;
+import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StreamUtils;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -44,7 +54,17 @@ class ThymeleafAdapterTest {
         final ClassPathResource resource = new ClassPathResource("history.json");
         final String historyJson = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
 
-        final String resultHtml = thymeleafAdapter.generateHistoryHtml(historyJson);
+        final ObjectMapper mapper = JsonMapper.builder()
+                .addModule(new JsonNullableModule())
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .withCoercionConfig(JsonNullable.class, config -> config.setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull))
+                .withCoercionConfig(LogicalType.POJO, config -> config.setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull))
+                .build().registerModule(new JavaTimeModule());
+
+        final TicketHistory ticketHistory = mapper.readValue(historyJson, TicketHistory.class);
+
+        final String resultHtml = thymeleafAdapter.generateHistoryHtml(ticketHistory);
+        log.info(resultHtml);
 
         assertThat(resultHtml).isNotNull();
         assertThat(resultHtml).isNotEmpty();
@@ -53,7 +73,7 @@ class ThymeleafAdapterTest {
 
         assertThat(resultHtml).contains("Alex Huber");
 
-        assertThat(resultHtml).contains("2026-05-11 13:25");
+        assertThat(resultHtml).contains("2026-05-11 15:25");
     }
 
     @Test
@@ -68,7 +88,7 @@ class ThymeleafAdapterTest {
         final TicketInternal ticket = new TicketInternal();
         ticket.setTitle("Test Title");
         ticket.setNumber("Test Number");
-        ticket.setStateExternal("Test State");
+        ticket.setStateExternal(TicketInternal.StateExternalEnum.EINGEGANGEN);
         ticket.setPriorityId("Test Priority");
         ticket.setVertrauensniveau("Test Vertrauensniveau");
         ticket.setVertrauensniveauTicket("Test Vertrauensniveau Ticket");
