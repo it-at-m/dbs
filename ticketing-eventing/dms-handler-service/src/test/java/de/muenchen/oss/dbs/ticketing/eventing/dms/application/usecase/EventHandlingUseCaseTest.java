@@ -90,7 +90,7 @@ class EventHandlingUseCaseTest {
         // When
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
 
-        final Event event = new Event(NOT_RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(NOT_RELEVANT_ACTION, TICKET_ID, null, null, null, null, INCOMING_COO_EMPTY_CONTENT_OBJECTS);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -100,20 +100,15 @@ class EventHandlingUseCaseTest {
 
     @Test
     void ignoresEvent_whenTicketHasNoEakteCoo() {
-        // Given
-        final TicketInternal ticket = createTicket(null, null, null, null);
-
         // When
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
-        when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
 
-        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null, null);
 
         eventHandlingUseCase.handleEvent(event);
 
         // Then
-        verify(ticketingOutPort).getTicket(TICKET_ID);
-        verifyNoInteractions(dmsOutPort, htmlGenerationOutPort);
+        verifyNoInteractions(dmsOutPort, htmlGenerationOutPort, ticketingOutPort);
     }
 
     @Test
@@ -125,7 +120,7 @@ class EventHandlingUseCaseTest {
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
         when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
 
-        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null, INCOMING_COO_EMPTY_CONTENT_OBJECTS);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -143,7 +138,7 @@ class EventHandlingUseCaseTest {
         when(dmsProperties.getRelevantActions()).thenReturn(RELEVANT_ACTIONS);
         when(ticketingOutPort.getTicket(TICKET_ID)).thenReturn(ticket);
 
-        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null, INCOMING_COO_EMPTY_CONTENT_OBJECTS);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -163,7 +158,7 @@ class EventHandlingUseCaseTest {
         mockingByGivenTicket(ticket);
         when(dmsOutPort.getIncomingContentObjects(INCOMING_TARGET_EMPTY_CONTENT_OBJECTS)).thenReturn(List.of());
 
-        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null, INCOMING_COO_EMPTY_CONTENT_OBJECTS);
 
         eventHandlingUseCase.handleEvent(event);
 
@@ -245,7 +240,7 @@ class EventHandlingUseCaseTest {
 
     private void assertByGivenAttachments(final ArticleAttachment attachment1,
             final ArticleAttachment attachment2) {
-        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null);
+        final Event event = new Event(RELEVANT_ACTION, TICKET_ID, null, null, null, null, INCOMING_COO_WITH_CONTENT_OBJECTS);
         eventHandlingUseCase.handleEvent(event);
 
         final ArgumentCaptor<List<DmsContentObjectRequest>> captor = ArgumentCaptor.forClass(List.class);
