@@ -64,7 +64,7 @@ class E2ETest {
         embeddedKafkaBroker.consumeFromEmbeddedTopics(consumer, "event-out");
 
         // setup call
-        final EventDTO eventDTO = new EventDTO("123", "open", "1", "test-anliegen", "test-lhm-1");
+        final EventDTO eventDTO = new EventDTO("123", "open", "1", "test-anliegen", "test-lhm-1", "coo-123");
         final String basicAuth = "Basic %s".formatted(Base64.getEncoder().encodeToString("test-user:test-password".getBytes(StandardCharsets.UTF_8)));
         final HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", basicAuth);
@@ -88,6 +88,7 @@ class E2ETest {
             assertEquals("1", capturedEvent.statusId());
             assertEquals("test-anliegen", capturedEvent.anliegenart());
             assertEquals("test-lhm-1", capturedEvent.lhmExtId());
+            assertEquals("coo-123", capturedEvent.eakteCooTarget());
         });
     }
 }
