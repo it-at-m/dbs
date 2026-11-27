@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.muenchen.oss.dbs.ticketing.dprs</groupId>
+        <artifactId>direct-pass-retrieval-service</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>direct-pass-retrieval-webcomponents</artifactId>
+    <packaging>jar</packaging>
+    <name>Direct Pass Retrieval Webcomponent</name>
+
+
+    <properties>
+        <exec.maven.plugin>3.6.3</exec.maven.plugin>
+        <maven.clean.plugin>3.5.0</maven.clean.plugin>
+        <sonar.sources>src</sonar.sources>
+        <sonar.coverage.exclusions>src</sonar.coverage.exclusions>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>build-frontend</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <build>
+
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec.maven.plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>npm install</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>ci</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run build</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>build</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run lint</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>lint</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm test</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>test</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven.clean.plugin}</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>dist</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                    <followSymlinks>false</followSymlinks>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+
+                <resources>
+                    <resource>
+                        <directory>dist</directory>
+                        <targetPath>static</targetPath>
+                    </resource>
+                </resources>
+
+            </build>
+
+        </profile>
+
+        <profile>
+            <id>ci</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven.clean.plugin}</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>dist</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                    <followSymlinks>false</followSymlinks>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                </plugins>
+
+                <resources>
+                    <resource>
+                        <directory>dist</directory>
+                        <targetPath>static</targetPath>
+                    </resource>
+                </resources>
+
+            </build>
+        </profile>
+    </profiles>
+
+</project>

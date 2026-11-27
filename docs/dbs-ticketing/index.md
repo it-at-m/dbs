@@ -32,3 +32,4 @@ flowchart LR
 ### Components
 
 - eventing-service: Takes Zammad webhook event via REST and forwards it to Apache Kafka
+- [Direct Pass Retrieval Service](./direct-pass-retrieval-service) creates time-limited links that let ticket owners retrieve a ticket direct password.
