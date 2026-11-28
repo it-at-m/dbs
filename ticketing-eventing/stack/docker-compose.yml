@@ -38,7 +38,7 @@ services:
       - no-new-privileges:true
 
   kafka-ui:
-    image: ghcr.io/kafbat/kafka-ui:v1.5.0@sha256:7cda86a33344160309fdb65146332e4da65db81a945614f2fe32e210803f6fd1
+    image: ghcr.io/kafbat/kafka-ui:v1.5.1@sha256:c0585fdfed6a9b8adedc3b0965113d4a84f292d61e58a2c7dcc603394defb7d1
     ports:
       - '8089:8080'
     depends_on:
